@@ -57,7 +57,10 @@ class AppConstants {
       "For your safety, please use our face recognition feature to verify your identity. This helps ensure a secure and genuine dating experience. ",
   linkingYourInstagram =
       "Linking your Instagram will showcase your most recent post on your profile, but your username won't be displayed.",
-  LinkingSpotify =
+  linkingSpotify =
       "Linking your Spotify will showcase your music test on your profile.",
+  takePictureDes = "Take a picture so we can make sure it's really you!",
+  faceRecognisationTitle =
+      "We're verifying your identity to keep our community safe",
   letSMatchsterPeople = "Let’s Matchster people around you";
 }

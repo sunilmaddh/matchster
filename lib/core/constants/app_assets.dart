@@ -36,5 +36,6 @@ class AppAssets {
       gymAssets2 = "$baseUrlSvg/gym2.svg",
       locationAssets = "$baseUrlSvg/location.svg",
       circleInstagramAssets = "$baseUrlSvg/circle_instagram.svg",
+      camera2 = "$baseUrlSvg/camera-1.svg",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

@@ -31,6 +31,7 @@ class ImageUploadServices {
     } catch (e) {
       debugPrint(e.toString());
     }
+    return null;
   }
 
   Future<File?> getImageFromGallery() async {
@@ -43,6 +44,7 @@ class ImageUploadServices {
     } catch (e) {
       debugPrint(e.toString());
     }
+    return null;
   }
 
   Future<File> fixExifRotation(File file) async {
