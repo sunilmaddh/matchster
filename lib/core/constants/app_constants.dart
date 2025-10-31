@@ -62,5 +62,12 @@ class AppConstants {
   takePictureDes = "Take a picture so we can make sure it's really you!",
   faceRecognisationTitle =
       "We're verifying your identity to keep our community safe",
+  humanRecognization2 = "Welcome to a safer, more genuine dating community!",
+  humanRecognization1 = "This will help us keep Matchster safe and authentic",
+  checkingForHuman = "Checking for human recognization",
+  successfullyVerified = "Successfully Verified",
+  copyThePosture = "Copy the posture shown below ",
+  matchYourPose =
+      "Match your pose as closely as possible to the sample. Make sure your photo is clear and captures you in the same gesture",
   letSMatchsterPeople = "Let’s Matchster people around you";
 }

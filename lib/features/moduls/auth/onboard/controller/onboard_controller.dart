@@ -16,6 +16,9 @@ class OnboardController extends GetxController {
   RxBool isNotFeet = false.obs;
   RxBool isDateSelected = false.obs;
   RxInt selectedIndexDate = 0.obs;
+  RxBool isHumanProccessing = false.obs;
+  RxBool isHumanProccessingStep2 = false.obs;
+  RxBool isFaceRecognigation = false.obs;
 
   /// Text controllers
   final nameController = TextEditingController();
@@ -24,6 +27,7 @@ class OnboardController extends GetxController {
 
   /// Face detection related
   Rx<File?> faceImage = Rx<File?>(null);
+  Rx<File?> postureImage = Rx<File?>(null);
   Rx<Face?> detectedFace = Rx<Face?>(null);
   Rx<ui.Size?> imageSize = Rx<ui.Size?>(null);
 
@@ -76,7 +80,44 @@ class OnboardController extends GetxController {
       final imageFile = await _imageService.getImageFromCamera();
 
       if (imageFile != null) {
+        faceImage.value = imageFile;
         await detectFaceFromImage(imageFile);
+        Future.delayed(Duration(seconds: 1), () {
+          isFaceRecognigation.value = true;
+        });
+        Future.delayed(Duration(seconds: 3), () {
+          isHumanProccessing.value = true;
+        });
+        Future.delayed(Duration(seconds: 6), () {
+          isHumanProccessingStep2.value = true;
+        });
+      } else {
+        Get.snackbar("Error", "No image captured");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Camera failed: $e");
+    } finally {
+      isProcessing.value = false;
+    }
+  }
+
+  Future<void> pickImageFromCameraForPosture() async {
+    try {
+      isProcessing.value = true;
+      final imageFile = await _imageService.getImageFromCamera();
+
+      if (imageFile != null) {
+        postureImage.value = imageFile;
+        // await detectFaceFromImage(imageFile);
+        // Future.delayed(Duration(seconds: 1), () {
+        //   isFaceRecognigation.value = true;
+        // });
+        // Future.delayed(Duration(seconds: 3), () {
+        //   isHumanProccessing.value = true;
+        // });
+        // Future.delayed(Duration(seconds: 6), () {
+        //   isHumanProccessingStep2.value = true;
+        // });
       } else {
         Get.snackbar("Error", "No image captured");
       }
@@ -152,7 +193,9 @@ class OnboardController extends GetxController {
   }
 
   Future<void> analyzeFace(File image) async {
-    detectedFace.value = await _faceService.detectPrimaryFace(image);
+    Future.delayed(Duration(seconds: 2), () async {
+      detectedFace.value = await _faceService.detectPrimaryFace(image);
+    });
   }
 
   void resetData() {

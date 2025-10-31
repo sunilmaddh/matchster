@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 
@@ -32,16 +33,17 @@ class MatchsterProgressIndicator extends StatelessWidget {
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width:
-                      isCurrent
-                          ? (isLarge ? 28.w : 20.w)
-                          : (isLarge ? 22.w : 16.w),
-                  height: isLarge ? 8.h : 6.h,
+                  width: isCurrent ? 20.w : 16.w,
+                  height: 6.h,
                   decoration: BoxDecoration(
-                    color:
+                    gradient:
                         isCompleted || isCurrent
-                            ? const Color(0xff1B8CF5)
-                            : const Color(0xffD1E8FD),
+                            ? AppColors.gradiantPrimary
+                            : LinearGradient(
+                              colors: [Color(0xffD1E8FD), Color(0xffD1E8FD)],
+                            ),
+
+                    // color:
                     borderRadius: BorderRadius.circular(6),
                   ),
                 );

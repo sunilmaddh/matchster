@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:lottie/lottie.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 
@@ -20,15 +21,19 @@ class FaceOverlayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (face == null) {
-      // Show centered face detector when no face is detected
-      return Center(
-        child: SvgPicture.asset(
-          AppAssets.faceDetector,
-          color: AppColors.whiteColor,
-        ),
-      );
-    }
+    // if (face == null) {
+    //   // Show centered face detector when no face is detected
+    //   return Center(
+    //     child: LottieBuilder.asset(
+    //       AppAssets.scanning,
+    //       width: 150,
+    //       height: 150,
+    //       repeat: true,
+    //       reverse: false,
+    //       animate: true,
+    //     ),
+    //   );
+    // }
 
     final rect = face!.boundingBox;
 
@@ -45,9 +50,13 @@ class FaceOverlayWidget extends StatelessWidget {
         width: width,
         height: height,
         child: Center(
-          child: SvgPicture.asset(
-            AppAssets.faceDetector,
-            color: AppColors.whiteColor,
+          child: LottieBuilder.asset(
+            'assets/animations/loading.json',
+            width: 150,
+            height: 150,
+            repeat: true,
+            reverse: false,
+            animate: true,
           ),
         ),
       );
@@ -83,9 +92,13 @@ class FaceOverlayWidget extends StatelessWidget {
       width: width,
       height: height,
       child: Center(
-        child: SvgPicture.asset(
-          AppAssets.faceDetector,
-          color: AppColors.whiteColor,
+        child: LottieBuilder.asset(
+          fit: BoxFit.cover,
+          AppAssets.scanning,
+
+          repeat: true,
+          reverse: false,
+          animate: true,
         ),
       ),
     );

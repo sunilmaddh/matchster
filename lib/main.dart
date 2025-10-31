@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       ensureScreenSize: true,
       child: GetMaterialApp(
         useInheritedMediaQuery: true,
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: false,
         initialBinding: AppBinding(),
         title: 'Matchster',
         navigatorKey: NavigationHelper.navigatorKey,

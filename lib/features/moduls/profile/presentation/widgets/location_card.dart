@@ -17,13 +17,13 @@ class LocationCard extends StatelessWidget {
       child: ListTile(
         leading: SvgPicture.asset(AppAssets.locationAssets),
         title: CommonText.text(
-          "Workout",
+          "Current Location",
           fontSize: 14.sp,
           fontWeight: FontWeight.w700,
           fontFamily: "Caros",
         ),
         subtitle: CommonText.text(
-          "Workout",
+          "Jamnagar, IND",
           fontSize: 12.sp,
           fontWeight: FontWeight.w300,
           fontFamily: "Caros",

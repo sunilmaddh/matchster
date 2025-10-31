@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
-import 'package:matchster/core/widgets/bar/linear_progress_bar_with_badge.dart';
-import 'package:matchster/core/widgets/circular_image_with_shimmer.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/moduls/home/profile/widgets/add_instagram_card.dart';
-import 'package:matchster/features/moduls/home/profile/widgets/add_spotify_card.dart';
-import 'package:matchster/features/moduls/home/profile/widgets/interest_card.dart';
-import 'package:matchster/features/moduls/home/profile/widgets/location_card.dart';
-import 'package:matchster/features/moduls/home/profile/widgets/profile_photo_card.dart';
+import 'package:matchster/core/utils/extensions.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/interest/alcohal_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/interest/interest_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/interest/looking_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/interest/religion_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/interest/smoke_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/interest/visibility_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/interest/workout_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/interest/zodiac_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/location/current_location.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/profile/education_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/profile/height_screen.dart';
+import 'package:matchster/shared/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/shared/widgets/bar/linear_progress_bar_with_badge.dart';
+import 'package:matchster/shared/widgets/circular_image_with_shimmer.dart';
+import 'package:matchster/shared/widgets/fields/common_text.dart';
+import 'package:matchster/features/moduls/profile/presentation/widgets/add_instagram_card.dart';
+import 'package:matchster/features/moduls/profile/presentation/widgets/add_spotify_card.dart';
+import 'package:matchster/features/moduls/profile/presentation/widgets/interest_card.dart';
+import 'package:matchster/features/moduls/profile/presentation/widgets/location_card.dart';
+import 'package:matchster/features/moduls/profile/presentation/widgets/profile_photo_card.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -128,20 +140,60 @@ class ProfileScreen extends StatelessWidget {
                 5.hBox,
                 Padding(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  child: InterestCard(),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(WorkoutScreen());
+                    },
+                    child: InterestCard(
+                      title: "Workout",
+                      subTitle: 'Sometime',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  child: InterestCard(),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(SmokeScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Smoking',
+                      subTitle: 'Sometime',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  child: InterestCard(),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(AlcohalScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Drinking',
+                      subTitle: 'Sometime',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 15.h),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(InterestScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Interest',
+                      subTitle: 'Sometime',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
                 ),
 
                 10.hBox,
                 CommonText.text(
-                  "Location",
+                  "Profile Details",
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   fontFamily: "Caros",
@@ -149,16 +201,102 @@ class ProfileScreen extends StatelessWidget {
                 5.hBox,
                 Padding(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  child: LocationCard(),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(ZodiacScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Zodiac Sign',
+                      subTitle: 'Cancer',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  child: LocationCard(),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(ReligionScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Religion',
+                      subTitle: 'Hindu',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  child: LocationCard(),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(VisibilityScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Profile Visibility',
+                      subTitle: 'Everyone',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
                 ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 15.h),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(LookingScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Looking For',
+                      subTitle: 'Friendship',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 15.h),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(HeightScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Height',
+                      subTitle: '6.6, 187.96cms',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 15.h),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(EducationScreen());
+                    },
+                    child: InterestCard(
+                      title: 'Education',
+                      subTitle: 'Bachelors',
+                      image: AppAssets.gymAssets2,
+                    ),
+                  ),
+                ),
+
+                10.hBox,
+
+                CommonText.text(
+                  "Location",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "Caros",
+                ),
+                5.hBox,
+                InkWell(
+                  onTap: () {
+                    Get.to(CurrentLocation());
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 15.h),
+                    child: LocationCard(),
+                  ),
+                ),
+
                 10.hBox,
                 CommonText.text(
                   "Make it short & funky",

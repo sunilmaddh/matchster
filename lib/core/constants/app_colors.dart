@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
 class AppColors {
-  static Gradient gradiantPrimary = LinearGradient(
+  static Gradient gradiantPrimary2 = LinearGradient(
         colors: [Color(0xff1B8CF5), Color(0xff83AAF7), Color(0xffB9CBFA)],
       ),
       circleGradiantColor = LinearGradient(
         colors: [Color(0xffD9D9D9), Color(0xff000000).withOpacity(0.33)],
+      ),
+      gradiantPrimary = LinearGradient(
+        colors: [Color(0xff1B8CF5), Color(0xff1D48EF)],
       ),
       appGradiantColor = LinearGradient(
         colors: [Color(0xffEDEDED), Color(0xffEDEDED)],

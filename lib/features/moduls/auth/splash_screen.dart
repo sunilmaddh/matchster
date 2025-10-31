@@ -78,10 +78,10 @@ class _SplashScreenState extends State<SplashScreen>
             const Center(child: CircularProgressIndicator()),
 
           // Fade overlay
-          FadeTransition(
-            opacity: _fadeAnimation,
-            child: Container(color: Colors.black),
-          ),
+          // FadeTransition(
+          //   opacity: _fadeAnimation,
+          //   child: Container(color: Colors.black),
+          // ),
         ],
       ),
     );

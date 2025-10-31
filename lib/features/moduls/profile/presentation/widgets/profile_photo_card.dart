@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/utils/extensions.dart';
+import 'package:matchster/shared/widgets/fields/common_text.dart';
 
+// ignore: must_be_immutable
 class ProfilePhotoCard extends StatelessWidget {
   // final Rx<File?> image;
   // final VoidCallback? onDelete;

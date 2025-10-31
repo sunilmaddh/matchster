@@ -6,7 +6,17 @@ import 'package:matchster/core/utils/extensions.dart';
 import 'package:matchster/shared/widgets/fields/common_text.dart';
 
 class InterestCard extends StatelessWidget {
-  const InterestCard({super.key});
+  InterestCard({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.image,
+    this.color = const Color(0xffCEB4DE),
+  });
+  final String title;
+  final String subTitle;
+  final String image;
+  Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +32,19 @@ class InterestCard extends StatelessWidget {
           height: 36.h,
           width: 36.w,
           decoration: BoxDecoration(
-            color: Color(0xffCEB4DE),
+            color: color,
             borderRadius: BorderRadius.circular(12.r),
           ),
-          child: SvgPicture.asset(AppAssets.gymAssets2),
+          child: SvgPicture.asset(image),
         ),
         title: CommonText.text(
-          "Workout",
+          title,
           fontSize: 14.sp,
           fontWeight: FontWeight.w700,
           fontFamily: "Caros",
         ),
         subtitle: CommonText.text(
-          "Workout",
+          subTitle,
           fontSize: 12.sp,
           fontWeight: FontWeight.w300,
           fontFamily: "Caros",
