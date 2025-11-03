@@ -51,5 +51,7 @@ class AppAssets {
       zodiac2 = "$baseUrlPng/zodiac.png",
       looking = "$baseUrlPng/looking.png",
       locations = "$baseUrlSvg/locations.svg",
+      loctionMarker = "$baseUrlSvg/loction_marker.svg",
+      profileImage = "$baseUrlPng/profile_image.png",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

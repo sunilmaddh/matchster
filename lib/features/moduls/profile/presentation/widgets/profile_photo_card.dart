@@ -17,7 +17,7 @@ class ProfilePhotoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 110.w,
+      // width: 110.w,
       height: 108.h,
       decoration: BoxDecoration(
         color: Color(0xffF1F1F1),
@@ -27,6 +27,7 @@ class ProfilePhotoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.add, color: Color(0xff464646).withOpacity(0.44)),
           CommonText.text(

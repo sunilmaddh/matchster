@@ -12,6 +12,7 @@ import 'package:matchster/features/moduls/profile/presentation/pages/interest/sm
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/visibility_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/workout_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/zodiac_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/location/add_location_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/location/current_location.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/education_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/height_screen.dart';
@@ -58,14 +59,26 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Stack(
                             children: [
-                              Container(
-                                height: 69.h,
-                                width: 69.w,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Color(0xffE6D534),
-                                    width: 3,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Container(
+                                  padding: EdgeInsets.all(2.r),
+                                  height: 69.h,
+                                  width: 69.w,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Color(0xffE6D534),
+                                      width: 3,
+                                    ),
+                                  ),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      height: 69.h,
+                                      width: 69.w,
+                                      AppAssets.posture1,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -124,7 +137,19 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
 
-          Padding(padding: 15.horizontalPadding, child: ProfilePhotoCard()),
+          GridView.builder(
+            padding: 10.horizontalPadding,
+            shrinkWrap: true,
+            itemCount: 6,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              return ProfilePhotoCard();
+            },
+          ),
           20.hBox,
           Padding(
             padding: 15.horizontalPadding,
@@ -289,7 +314,7 @@ class ProfileScreen extends StatelessWidget {
                 5.hBox,
                 InkWell(
                   onTap: () {
-                    Get.to(CurrentLocation());
+                    Get.to(AddLocationScreen());
                   },
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 15.h),

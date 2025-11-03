@@ -32,7 +32,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           isLeading
               ? Padding(
                 padding: const EdgeInsets.only(left: 10.0),
-                child: RoundedButton(onPressed: onTop),
+                child: IconButton(
+                  onPressed: onTop,
+                  icon: Icon(Icons.arrow_back),
+                ),
               )
               : SizedBox.shrink(),
       title: Text(

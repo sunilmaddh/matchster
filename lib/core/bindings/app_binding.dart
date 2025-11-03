@@ -8,6 +8,6 @@ class AppBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<OnboardController>(() => OnboardController());
-    Get.lazyPut<ProfileController>(() => ProfileController());
+    Get.put(ProfileController());
   }
 }
