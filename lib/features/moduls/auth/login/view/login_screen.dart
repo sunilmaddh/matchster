@@ -78,6 +78,17 @@ class LoginScreen extends StatelessWidget {
                   30.hBox,
                   DeviderWidget(),
                   30.hBox,
+                  Align(
+                    alignment: Alignment.center,
+                    child: CommonText.text(
+                      textAlign: TextAlign.center,
+                      "Login with social media",
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xff709EFE),
+                    ),
+                  ),
+                  20.hBox,
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,

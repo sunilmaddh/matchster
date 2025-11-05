@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:matchster/features/moduls/profile/data/repositories/location_services.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/location_card.dart';
 
@@ -11,6 +14,7 @@ class ProfileController extends GetxController {
   RxInt selectedIndex = 1.obs;
   RxDouble lattitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
+  final RxList<File> images = <File>[].obs;
 
   Future<void> fetchLocation() async {
     try {

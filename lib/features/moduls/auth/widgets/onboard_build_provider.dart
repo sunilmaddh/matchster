@@ -5,7 +5,6 @@ import 'package:get/state_manager.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/face_recognisation.dart';
 import 'package:matchster/features/moduls/auth/widgets/matchster_progress_indicator.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile_screen.dart';
 

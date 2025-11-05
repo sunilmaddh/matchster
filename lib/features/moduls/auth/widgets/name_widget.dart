@@ -34,7 +34,7 @@ class NameWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          10.hBox,
+          // 10.hBox,
           CommonText.text(
             AppConstants.whatYourname,
             fontSize: 24.sp,
@@ -60,7 +60,7 @@ class NameWidget extends StatelessWidget {
                       text: TextSpan(
                         style: TextStyle(
                           color: AppColors.blackColor,
-                          fontSize: 14.sp,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w300,
                           fontFamily: "Caros",
                         ),
@@ -101,11 +101,11 @@ class GenderWidget extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontFamily: "Caros",
           ),
-          20.hBox,
+          // 20.hBox,
           CommonText.text(
             maxLines: 2,
             AppConstants.genderDiscription,
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
@@ -124,10 +124,10 @@ class GenderWidget extends StatelessWidget {
               );
             },
           ),
-          10.hBox,
 
+          // 10.hBox,
           SwitchWidget(),
-          20.hBox,
+          10.hBox,
           RichText(
             text: TextSpan(
               style: TextStyle(
@@ -172,15 +172,15 @@ class DobWidget extends StatelessWidget {
             fontFamily: "Caros",
           ),
 
-          20.hBox,
+          // 20.hBox,
           CommonText.text(
             maxLines: 2,
             AppConstants.dobDiscription,
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
-          40.hBox,
+          20.hBox,
           InkWell(
             onTap: () {
               CustomBottomSheet.show(
@@ -302,15 +302,15 @@ class _LikeWidgetState extends State<LikeWidget> {
             fontFamily: "Caros",
           ),
 
-          20.hBox,
+          // 20.hBox,
           CommonText.text(
-            maxLines: 2,
+            maxLines: 4,
             AppConstants.likeDescr,
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
-          40.hBox,
+          20.hBox,
           Wrap(
             alignment: WrapAlignment.start,
             spacing: 10,
@@ -380,15 +380,15 @@ class YourHeightWidget extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontFamily: "Caros",
           ),
-          20.hBox,
+          // 20.hBox,
           CommonText.text(
             maxLines: 2,
-            AppConstants.dobDiscription,
-            fontSize: 16.sp,
+            AppConstants.heightDescription,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
-          40.hBox,
+          20.hBox,
           Align(
             alignment: Alignment.topRight,
             child: ToggleWithText(
@@ -411,8 +411,8 @@ class YourHeightWidget extends StatelessWidget {
 
                 listInch:
                     _controller.isNotFeet.isTrue
-                        ? OnboardHalper.heightListCmDecimal
-                        : OnboardHalper.heightListInch,
+                        ? OnboardHalper.heightListInch
+                        : OnboardHalper.heightListCmDecimal,
 
                 listFeet:
                     _controller.isNotFeet.isTrue
@@ -455,8 +455,8 @@ class YourHeightWidget extends StatelessWidget {
                   TextSpan(
                     text:
                         _controller.isNotFeet.isTrue
-                            ? AppConstants.heightNote2
-                            : AppConstants.heightNote5,
+                            ? AppConstants.heightNote5
+                            : AppConstants.heightNote2,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
@@ -475,8 +475,8 @@ class YourHeightWidget extends StatelessWidget {
                   TextSpan(
                     text:
                         _controller.isNotFeet.isTrue
-                            ? AppConstants.heightNote4
-                            : AppConstants.heightNote6,
+                            ? AppConstants.heightNote6
+                            : AppConstants.heightNote4,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
@@ -517,15 +517,16 @@ class _LanguageListWidgetState extends State<LanguageListWidget> {
             fontFamily: "Caros",
           ),
 
-          20.hBox,
+          // 20.hBox,
           CommonText.text(
-            maxLines: 2,
+            maxLines: 3,
+
             AppConstants.langDescr,
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
-          40.hBox,
+          20.hBox,
           Wrap(
             alignment: WrapAlignment.start,
             spacing: 10,
@@ -602,16 +603,16 @@ class ReligionWidget extends StatelessWidget {
             fontFamily: "Caros",
           ),
 
-          10.hBox,
+          // 10.hBox,
           CommonText.text(
-            maxLines: 2,
+            maxLines: 3,
             AppConstants.relegionDesc,
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
 
-          30.hBox,
+          20.hBox,
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
@@ -645,22 +646,23 @@ class DateWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CommonText.text(
-            AppConstants.religionTitle,
+            maxLines: 2,
+            AppConstants.datingTitle,
             fontSize: 24.sp,
             fontWeight: FontWeight.w600,
             fontFamily: "Caros",
           ),
 
-          10.hBox,
+          // 10.hBox,
           CommonText.text(
             maxLines: 2,
-            AppConstants.relegionDesc,
-            fontSize: 16.sp,
+            AppConstants.dateDescription,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
 
-          30.hBox,
+          20.hBox,
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
@@ -728,17 +730,19 @@ class AddPhotoWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CommonText.text(
-            "Add Photos",
+            maxLines: 2,
+            "Show off your best photos and videos!",
             fontSize: 24.sp,
             fontWeight: FontWeight.w600,
           ),
-          10.hBox,
+          // 10.hBox,
           CommonText.text(
-            "Select 4 photos to complete your profile",
-            fontSize: 16.sp,
+            maxLines: 3,
+            "Upload 5-6 favorite photos or a video to let your personality shine. Make sure your uploads are clear and capture the real you!",
+            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
           ),
-          30.hBox,
+          20.hBox,
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

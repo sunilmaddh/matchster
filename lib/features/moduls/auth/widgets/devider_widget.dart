@@ -10,7 +10,7 @@ class DeviderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: 15.horizontalPadding,
+      padding: 20.horizontalPadding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -19,22 +19,22 @@ class DeviderWidget extends StatelessWidget {
           Expanded(
             child: SizedBox(
               height: 3.h,
-              child: Divider(color: AppColors.deviderColor),
+              child: Divider(color: AppColors.blackColor),
             ),
           ),
           20.wBox,
           CommonText.text(
             AppConstants.oRcontinue,
             fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w400,
             fontFamily: "DM Sans",
-            color: AppColors.deviderColor,
+            color: AppColors.blackColor,
           ),
           20.wBox,
           Expanded(
             child: SizedBox(
-              height: 3.h,
-              child: Divider(color: AppColors.deviderColor),
+              height: 1.h,
+              child: Divider(color: AppColors.blackColor),
             ),
           ),
         ],

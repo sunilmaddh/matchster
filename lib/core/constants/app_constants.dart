@@ -13,17 +13,19 @@ class AppConstants {
   verifyNumber = "Verify Number",
   dontSend = "Don’t receive code?",
   resend = "Re-send",
-  whatYourname = "What's your name?",
+  whatYourname = "Your name, Please",
   nameDiscription =
       "This is how it’ll appear on your profile, so make it memorable! Choose carefully –",
   nameDisSpan = 'it can’t be changed later. ',
   whatYourGender = "What is your Gender?",
-  whatYourDob = "What is your DOB?",
+  whatYourDob = "When is your Birthday?",
   dobDiscription =
       "Your date of birth helps us connect you with the right matches.",
-  dobNote1 = "Minimum age ",
-  dobNote2 = "18 years",
-  dobNote3 = ", we won’t accept any profile below 18.",
+  heightDescription =
+      "Share your height to help others to get to know you better",
+  dobNote1 = "Note: You must be at least ",
+  dobNote2 = "18 years ",
+  dobNote3 = "old to join. Profiles under 18 are not accepted",
   hintDob = "Select your DOB",
   hintHeight = "Select your Height",
   heightNote1 = "Minimum height should be ",
@@ -34,22 +36,26 @@ class AppConstants {
   heightNote6 = " 213.36cm.",
   genderDiscription = "Choose the option that best represents you. ",
   genderNote =
-      "After enabling show on your profile, It will show on your profile page.",
-  whatYourHeight = "What is your Height?",
+      "If you choose to enable this, your gender will appear on your profile",
+  whatYourHeight = "How tall are you?",
   heightDiscription =
       "Choose your height to help others get to know you better. ",
   heightNote = "Minimum height should be 3 feet and maximum should be 7 feet.",
   otpDiscription = "A verification code has been sent to 9876543210",
-  loginSubtile = "Fill your information below or register",
+  loginSubtile =
+      "Fill in your details below or register to join - where meaningful connections begin",
   likeTitle = "Select Your Likes...",
   likeDescr =
-      "Choose up to 4 things you love to share your personality, and you can also update this later. ",
+      "Choose up to 4 things reflect your personality. Share what you're passionate about! You can update these anytime",
   languageTitle = "Select Your Languages...",
   langDescr =
       "Choose the language you’re most comfortable with to enhance your experience. ",
+  datingTitle = "Who are you interested in dating?",
+  dateDescription =
+      "Select the type of relationships you're looking for to help us find your ideal match",
   religionTitle = "Select Your Religion...",
   relegionDesc =
-      "Choose your religion to help connect with like-minded individuals. ",
+      "Pick the option that reflects your beliefs to connect with like-minded individuals. You can always update this later ",
   dateTitle = "Whom you want to date?",
   dateDesc =
       "Select the type of relationship you're interested in to find your perfect match. ",

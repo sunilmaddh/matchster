@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/extensions.dart';
+import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
+import 'package:matchster/features/moduls/profile/presentation/controllers/profile_controller.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/alcohal_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/interest_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/looking_screen.dart';
@@ -16,9 +23,9 @@ import 'package:matchster/features/moduls/profile/presentation/pages/location/ad
 import 'package:matchster/features/moduls/profile/presentation/pages/location/current_location.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/education_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/height_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/widgets/add_image_grid_widget.dart';
 import 'package:matchster/shared/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/shared/widgets/bar/linear_progress_bar_with_badge.dart';
-import 'package:matchster/shared/widgets/circular_image_with_shimmer.dart';
 import 'package:matchster/shared/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/add_instagram_card.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/add_spotify_card.dart';
@@ -27,12 +34,19 @@ import 'package:matchster/features/moduls/profile/presentation/widgets/location_
 import 'package:matchster/features/moduls/profile/presentation/widgets/profile_photo_card.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
+
+  final _controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Profile", onTop: () {}),
+      appBar: CustomAppBar(
+        title: "Profile",
+        onTop: () {
+          Get.back();
+        },
+      ),
       body: ListView(
         children: [
           Padding(
@@ -137,19 +151,91 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
 
-          GridView.builder(
-            padding: 10.horizontalPadding,
-            shrinkWrap: true,
-            itemCount: 6,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              return ProfilePhotoCard();
+          AddImageGrid(
+            imageList: _controller.images,
+            onTop: () {
+              CustomBottomSheet.show(
+                borderRadius: 40.r,
+                backgroundColor: const Color(0xffF4F4F4),
+                padding: EdgeInsets.zero,
+                context: context,
+                child: SafeArea(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: 15.horizontalPadding + 30.verticalPadding,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children:
+                              OnboardHalper.addPhotoOption.map((v) {
+                                return InkWell(
+                                  onTap: () async {
+                                    File? selectedImage;
+
+                                    if (v["text"] == "Camera") {
+                                      selectedImage =
+                                          await ImageUploadServices()
+                                              .getImageFromCamera();
+                                    } else if (v["text"] == "File") {
+                                      selectedImage =
+                                          await ImageUploadServices()
+                                              .getImageFromGallery();
+                                    }
+
+                                    if (selectedImage != null) {
+                                      _controller.images.add(selectedImage);
+                                    }
+                                    Get.back();
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(v["image"]),
+                                      CommonText.text(
+                                        v["text"],
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      10.hBox,
+                      TextButton(
+                        onPressed: () => Get.back(),
+                        child: CommonText.text(
+                          "Cancel",
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            onTopRemove: (index) {
+              // _controller.images.removeAt(index);
             },
           ),
+
+          // GridView.builder(
+          //   padding: 10.horizontalPadding,
+          //   shrinkWrap: true,
+          //   itemCount: 6,
+          //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: 3,
+          //     mainAxisSpacing: 12,
+          //     crossAxisSpacing: 12,
+          //   ),
+          //   itemBuilder: (BuildContext context, int index) {
+          //     return ProfilePhotoCard();
+          //   },
+          // ),
           20.hBox,
           Padding(
             padding: 15.horizontalPadding,
@@ -314,7 +400,7 @@ class ProfileScreen extends StatelessWidget {
                 5.hBox,
                 InkWell(
                   onTap: () {
-                    Get.to(AddLocationScreen());
+                    Get.to(CurrentLocation());
                   },
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 15.h),

@@ -8,6 +8,7 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/profile/presentation/controllers/profile_controller.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/location/add_location_screen.dart';
 import 'package:matchster/shared/widgets/bar/custom_app_bar.dart';
 
 class CurrentLocation extends StatelessWidget {
@@ -93,7 +94,9 @@ class CurrentLocation extends StatelessWidget {
                 child: AppButton(
                   isEnable: true,
                   name: 'Upgrade to Change',
-                  onTop: () {},
+                  onTop: () {
+                    Get.to(AddLocationScreen());
+                  },
                 ),
               ),
             ],
