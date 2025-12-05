@@ -60,7 +60,7 @@ class CommonWidget extends StatelessWidget {
             Obx(
               () => Wrap(
                 spacing: 10,
-                runSpacing: 10,
+                // runSpacing: 10,
                 children:
                     list.map((v) {
                       final selected = isSelected(v);

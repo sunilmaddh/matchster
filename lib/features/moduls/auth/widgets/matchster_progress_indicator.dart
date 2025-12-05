@@ -32,8 +32,8 @@ class MatchsterProgressIndicator extends StatelessWidget {
 
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: isCurrent ? 20.w : 16.w,
+                  // margin: 5.horizontalPadding,
+                  width: isCurrent ? 50.w : 50.w,
                   height: 6.h,
                   decoration: BoxDecoration(
                     gradient:
@@ -53,11 +53,11 @@ class MatchsterProgressIndicator extends StatelessWidget {
             10.wBox,
 
             CommonText.text(
-              '${currentIndex + 1} / ${pages.length}',
+              '${currentIndex + 1}/${pages.length}',
 
               fontSize: isLarge ? 16.sp : 14.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xff1B8CF5),
+              color: AppColors.blackColor,
             ),
           ],
         );

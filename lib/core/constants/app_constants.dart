@@ -4,8 +4,14 @@ class AppConstants {
   static Size deviceSize = Size(375, 812);
   static const String
   commonFont = "DM Sans",
-  continueWith = "Continue with Mobile Number",
+  continueWith = "Continue with",
   oRcontinue = "or continue with",
+  createMyAccount = "Create My Account",
+  accessMyAccount = "Access My Account",
+  instagram = "$continueWith Instagram",
+  facebook = "$continueWith facebook",
+  google = "$continueWith Google",
+  number = "$continueWith Number",
   login = "Login",
   hintLoginMessage = "Enter mobile Number",
   verify = "Verify",
@@ -19,13 +25,12 @@ class AppConstants {
   nameDisSpan = 'it can’t be changed later. ',
   whatYourGender = "What is your Gender?",
   whatYourDob = "When is your Birthday?",
-  dobDiscription =
-      "Your date of birth helps us connect you with the right matches.",
+  dobDiscription = "Your birthdate helps us connect you with the best matches.",
   heightDescription =
       "Share your height to help others to get to know you better",
-  dobNote1 = "Note: You must be at least ",
+  dobNote1 = "You must be at least ",
   dobNote2 = "18 years ",
-  dobNote3 = "old to join. Profiles under 18 are not accepted",
+  dobNote3 = "old to join Matchster. Profiles under 18 are not accepted",
   hintDob = "Select your DOB",
   hintHeight = "Select your Height",
   heightNote1 = "Minimum height should be ",
@@ -34,10 +39,10 @@ class AppConstants {
   heightNote4 = " 7 feet.",
   heightNote5 = "91.77cm ",
   heightNote6 = " 213.36cm.",
-  genderDiscription = "Choose the option that best represents you. ",
+  genderDiscription = "Select the option that best represents you",
   genderNote =
       "If you choose to enable this, your gender will appear on your profile",
-  whatYourHeight = "How tall are you?",
+  whatYourHeight = "What is your height?",
   heightDiscription =
       "Choose your height to help others get to know you better. ",
   heightNote = "Minimum height should be 3 feet and maximum should be 7 feet.",
@@ -50,7 +55,7 @@ class AppConstants {
   languageTitle = "Select Your Languages...",
   langDescr =
       "Choose the language you’re most comfortable with to enhance your experience. ",
-  datingTitle = "Who are you interested in dating?",
+  datingTitle = "Whom you want to date?",
   dateDescription =
       "Select the type of relationships you're looking for to help us find your ideal match",
   religionTitle = "Select Your Religion...",
@@ -75,5 +80,6 @@ class AppConstants {
   copyThePosture = "Copy the posture shown below ",
   matchYourPose =
       "Match your pose as closely as possible to the sample. Make sure your photo is clear and captures you in the same gesture",
-  letSMatchsterPeople = "Let’s Matchster people around you";
+  letSMatchsterPeople = "Let’s Matchster people around you",
+  discoverSolumates = "Discover Soulmates Near You";
 }

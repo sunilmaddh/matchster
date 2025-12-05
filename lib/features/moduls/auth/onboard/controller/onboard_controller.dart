@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
+import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 
 class OnboardController extends GetxController {
   /// State variables
@@ -19,6 +20,8 @@ class OnboardController extends GetxController {
   RxBool isHumanProccessing = false.obs;
   RxBool isHumanProccessingStep2 = false.obs;
   RxBool isFaceRecognigation = false.obs;
+  RxList<int> selectedDates = <int>[].obs;
+  Rx<File?> imageFile = Rx<File?>(null);
 
   /// Text controllers
   final nameController = TextEditingController();
@@ -34,7 +37,7 @@ class OnboardController extends GetxController {
   final FaceDetectionService _faceService = FaceDetectionService();
 
   /// Multi-image handling
-  RxList<Rx<File?>> fileList = List.generate(4, (_) => Rx<File?>(null)).obs;
+  RxList<Rx<File?>> fileList = List.generate(6, (_) => Rx<File?>(null)).obs;
 
   void updateFile(int index, File file) {
     if (index < fileList.length) {
@@ -51,9 +54,29 @@ class OnboardController extends GetxController {
   }
 
   void toggleSwitch(bool value) => isSwitchOn.value = value;
+  void toggleDateSwitch(bool value) {
+    isSwitchOn.value = value;
+
+    if (value) {
+      selectedDates.value = List.generate(
+        OnboardHalper.dateList.length,
+        (i) => i,
+      );
+    } else {
+      selectedDates.clear();
+    }
+  }
 
   void toggleSelection(int index) {
     selectedIndex.value = (selectedIndex.value == index) ? null : index;
+  }
+
+  void toggleDateSelection(int index) {
+    if (selectedDates.contains(index)) {
+      selectedDates.remove(index);
+    } else {
+      selectedDates.add(index);
+    }
   }
 
   final ImageUploadServices _imageService = ImageUploadServices();

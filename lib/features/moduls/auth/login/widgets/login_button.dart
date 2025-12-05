@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extensions.dart';
-import 'package:matchster/shared/widgets/fields/common_text.dart';
+import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/widgets/fields/common_text.dart';
 
-// ignore: must_be_immutable
-class AppButton extends StatelessWidget {
-  AppButton({
+class LoginButton extends StatelessWidget {
+  const LoginButton({
     super.key,
     required this.name,
     required this.onTop,
-    this.isEnable = false,
-    this.image = '',
+    this.image = "",
   });
   final String name;
-  final VoidCallback onTop;
   final String image;
-  bool isEnable;
+  final VoidCallback onTop;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +23,8 @@ class AppButton extends StatelessWidget {
         alignment: Alignment.center,
         height: 48,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient:
-              isEnable ? AppColors.gradiantPrimary : AppColors.appGradiantColor,
+          color: Color(0xff161E3E),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,8 +37,7 @@ class AppButton extends StatelessWidget {
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
               name,
-              color:
-                  isEnable ? AppColors.whiteColor : AppColors.appDisableButton,
+              color: AppColors.whiteColor,
             ),
           ],
         ),

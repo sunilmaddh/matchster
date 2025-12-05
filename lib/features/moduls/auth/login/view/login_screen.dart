@@ -8,10 +8,9 @@ import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
-import 'package:matchster/features/moduls/auth/login/halper/login_halper.dart';
-import 'package:matchster/features/moduls/auth/widgets/devider_widget.dart';
-import 'package:matchster/features/moduls/auth/widgets/login_button.dart';
-import 'package:matchster/features/moduls/auth/widgets/login_field_with_button.dart';
+import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
+import 'package:matchster/features/moduls/auth/login/widgets/login_field_with_button.dart';
+import 'package:matchster/shared/widgets/buttons/app_button.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
@@ -39,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  40.hBox,
+                  30.hBox,
                   Obx(
                     () =>
                         _controller.isLoginWithMobile.isTrue
@@ -51,57 +50,125 @@ class LoginScreen extends StatelessWidget {
                                   child: Image.asset(AppAssets.loginAssets),
                                 ),
                                 30.hBox,
-                                CommonText.text(
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  AppConstants.letSMatchsterPeople,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blackColor,
-                                  fontSize: 30.sp,
-                                  fontFamily: "Caros",
-                                ),
-                                40.hBox,
                                 Padding(
                                   padding: 15.horizontalPadding,
-                                  child: LoginButton(
-                                    name: AppConstants.continueWith,
-                                    onTop: () {
-                                      _controller.isLoginWithMobile.value =
-                                          true;
-                                    },
+                                  child: CommonText.text(
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    AppConstants.discoverSolumates,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.blackColor,
+                                    fontSize: 28.sp,
+                                    fontFamily: "Caros",
                                   ),
                                 ),
+                                _controller.isAccessMyAccount.isTrue
+                                    ? 10.hBox
+                                    : 30.hBox,
+                                _controller.isAccessMyAccount.isTrue
+                                    ? Padding(
+                                      padding: 28.horizontalPadding,
+                                      child: Column(
+                                        children: [
+                                          LoginButton(
+                                            image: AppAssets.instagramAssets,
+                                            name: AppConstants.instagram,
+                                            onTop: () {
+                                              _controller
+                                                  .isLoginWithMobile
+                                                  .value = true;
+                                            },
+                                          ),
+                                          10.hBox,
+                                          LoginButton(
+                                            image: AppAssets.facebookAssets,
+                                            name: AppConstants.facebook,
+                                            onTop: () {
+                                              _controller
+                                                  .isLoginWithMobile
+                                                  .value = true;
+                                            },
+                                          ),
+                                          10.hBox,
+                                          LoginButton(
+                                            image: AppAssets.googleAssets,
+                                            name: AppConstants.google,
+                                            onTop: () {
+                                              _controller
+                                                  .isLoginWithMobile
+                                                  .value = true;
+                                            },
+                                          ),
+                                          10.hBox,
+                                          AppButton(
+                                            image: AppAssets.contactAssets,
+                                            isEnable: true,
+                                            name: AppConstants.number,
+                                            onTop: () {
+                                              _controller
+                                                  .isLoginWithMobile
+                                                  .value = true;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                    : Padding(
+                                      padding: 28.horizontalPadding,
+                                      child: Column(
+                                        children: [
+                                          AppButton(
+                                            isEnable: true,
+                                            name: AppConstants.createMyAccount,
+                                            onTop: () {
+                                              _controller
+                                                  .isLoginWithMobile
+                                                  .value = true;
+                                            },
+                                          ),
+                                          10.hBox,
+                                          LoginButton(
+                                            name: AppConstants.accessMyAccount,
+                                            onTop: () {
+                                              _controller
+                                                  .isAccessMyAccount
+                                                  .value = true;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                               ],
                             ),
                   ),
 
-                  30.hBox,
-                  DeviderWidget(),
-                  30.hBox,
-                  Align(
-                    alignment: Alignment.center,
-                    child: CommonText.text(
-                      textAlign: TextAlign.center,
-                      "Login with social media",
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff709EFE),
-                    ),
-                  ),
-                  20.hBox,
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children:
-                        LoginHalper().socialMediaList
-                            .map(
-                              (v) => Padding(
-                                padding: 20.horizontalPadding,
-                                child: SvgPicture.asset(v),
-                              ),
-                            )
-                            .toList(),
-                  ),
+                  // 20.hBox,
+                  // DeviderWidget(),
+                  // 20.hBox,
+                  // Align(
+                  //   alignment: Alignment.center,
+                  //   child: CommonText.text(
+                  //     textAlign: TextAlign.center,
+                  //     "Login with social media",
+                  //     fontSize: 14.sp,
+                  //     fontWeight: FontWeight.w400,
+                  //     color: Color(0xff709EFE),
+                  //   ),
+                  // ),
+                  // 20.hBox,
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children:
+                  //       LoginHalper().socialMediaList
+                  //           .map(
+                  //             (v) => Padding(
+                  //               padding: 20.horizontalPadding,
+                  //               child: SvgPicture.asset(v),
+                  //             ),
+                  //           )
+                  //           .toList(),
+                  // ),
                 ],
               ),
             ),

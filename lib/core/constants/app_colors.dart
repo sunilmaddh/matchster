@@ -8,13 +8,17 @@ class AppColors {
         colors: [Color(0xffD9D9D9), Color(0xff000000).withOpacity(0.33)],
       ),
       gradiantPrimary = LinearGradient(
-        colors: [Color(0xff1B8CF5), Color(0xff1D48EF)],
+        colors: [Color(0xff1D48EF), Color(0xff1B8CF5)],
       ),
       appGradiantColor = LinearGradient(
         colors: [Color(0xffEDEDED), Color(0xffEDEDED)],
+      ),
+      homeCardGradiantColor = LinearGradient(
+        colors: [Color(0xff292929), Color(0xff858585)],
       );
 
   static const Color progressDissableColor = Color(0xffD9D9D9),
+      primary = Color(0xff1D48EF),
       borderColor = Color(0xffEBEBEB),
       blackColor = Color(0xff000000),
       whiteColor = Color(0xffffffff),

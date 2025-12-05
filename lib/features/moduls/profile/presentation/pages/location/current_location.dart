@@ -12,7 +12,8 @@ import 'package:matchster/features/moduls/profile/presentation/pages/location/ad
 import 'package:matchster/shared/widgets/bar/custom_app_bar.dart';
 
 class CurrentLocation extends StatelessWidget {
-  const CurrentLocation({super.key});
+  CurrentLocation({super.key});
+  final RxBool isEnable = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,7 @@ class CurrentLocation extends StatelessWidget {
               Padding(
                 padding: 20.horizontalPadding,
                 child: AppButton(
-                  isEnable: true,
+                  isEnable: isEnable,
                   name: 'Upgrade to Change',
                   onTop: () {
                     Get.to(AddLocationScreen());

@@ -6,6 +6,7 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/widgets/matchster_progress_indicator.dart';
+import 'package:matchster/features/moduls/home/view/landing_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile_screen.dart';
 
 // ignore: must_be_immutable
@@ -33,7 +34,7 @@ class OnboardPageViewBuilder extends StatelessWidget {
                   onTap: () {
                     if (currentIndex == pages.length - 1) {
                       // var data = AppMethods.getstoreQuestionAnswer();
-                      Get.to(ProfileScreen());
+                      Get.to(LandingScreen());
                       // AppNavigation.to(AppRoutes.congratulationsScreen);
                     } else {
                       _pageController.nextPage(

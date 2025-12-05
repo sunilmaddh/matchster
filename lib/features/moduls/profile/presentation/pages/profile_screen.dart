@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/extensions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/face_recognisation.dart';
 import 'package:matchster/features/moduls/profile/presentation/controllers/profile_controller.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/alcohal_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/interest_screen.dart';
@@ -19,7 +19,6 @@ import 'package:matchster/features/moduls/profile/presentation/pages/interest/sm
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/visibility_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/workout_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/interest/zodiac_screen.dart';
-import 'package:matchster/features/moduls/profile/presentation/pages/location/add_location_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/location/current_location.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/education_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/height_screen.dart';
@@ -31,7 +30,6 @@ import 'package:matchster/features/moduls/profile/presentation/widgets/add_insta
 import 'package:matchster/features/moduls/profile/presentation/widgets/add_spotify_card.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/interest_card.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/location_card.dart';
-import 'package:matchster/features/moduls/profile/presentation/widgets/profile_photo_card.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
@@ -236,7 +234,37 @@ class ProfileScreen extends StatelessWidget {
           //     return ProfilePhotoCard();
           //   },
           // ),
-          20.hBox,
+          // 20.hBox,
+          Padding(
+            padding: 15.horizontalPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CommonText.text(
+                  "Verify your profile",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "Caros",
+                ),
+                5.hBox,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 15.h),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(FaceRecogonizationWidget());
+                    },
+                    child: InterestCard(
+                      color: Color(0xff1D48EF),
+                      title: "Get Verified",
+                      subTitle: 'Show others you’re real',
+                      image: AppAssets.verified2,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           Padding(
             padding: 15.horizontalPadding,
             child: Column(

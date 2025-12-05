@@ -35,7 +35,7 @@ class PhotoCard extends StatelessWidget {
             image.value!,
             fit: BoxFit.cover,
             width: 167.w,
-            height: 133.h,
+            height: 110.h,
           ),
         );
       }

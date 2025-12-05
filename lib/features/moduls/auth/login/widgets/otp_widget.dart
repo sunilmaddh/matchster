@@ -4,7 +4,8 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 
 class OtpWidget extends StatelessWidget {
-  const OtpWidget({super.key});
+  const OtpWidget({super.key, required this.onCodeChanged});
+  final Function(String otpCode) onCodeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +27,17 @@ class OtpWidget extends StatelessWidget {
       borderColor: AppColors.otpFieldColor,
       showFieldAsBox: true,
       showCursor: false,
-      onCodeChanged: (String code) {},
+      onCodeChanged: onCodeChanged,
       onSubmit: (String verificationCode) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Verification Code"),
-              content: Text('Code entered is $verificationCode'),
-            );
-          },
-        );
+        // showDialog(
+        //   context: context,
+        //   builder: (context) {
+        //     return AlertDialog(
+        //       title: Text("Verification Code"),
+        //       content: Text('Code entered is $verificationCode'),
+        //     );
+        //   },
+        // );
       }, // end onSubmit
     );
   }

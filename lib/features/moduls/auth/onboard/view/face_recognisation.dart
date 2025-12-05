@@ -9,6 +9,7 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/face_recognisation_page.dart';
+import 'package:matchster/shared/widgets/bar/custom_app_bar.dart';
 
 class FaceRecogonizationWidget extends StatelessWidget {
   FaceRecogonizationWidget({super.key});
@@ -16,21 +17,28 @@ class FaceRecogonizationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () =>
-          _controller.isProcessing.isTrue
-              ? SizedBox(
-                width: 60,
-                height: 60,
-                child: LoadingIndicator(
-                  strokeWidth: 1,
-                  colors: [AppColors.appDisableButton],
-                  indicatorType: Indicator.lineSpinFadeLoader,
-                ),
-              )
-              : _controller.faceImage.value != null
-              ? FaceRecognisationPage()
-              : FaceTakePictureWidget(),
+    return Scaffold(
+      appBar: CustomAppBar(
+        isCenterTitle: false,
+        title: "Face Recognisation",
+        onTop: () {},
+      ),
+      body: Obx(
+        () =>
+            _controller.isProcessing.isTrue
+                ? SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: LoadingIndicator(
+                    strokeWidth: 1,
+                    colors: [AppColors.appDisableButton],
+                    indicatorType: Indicator.lineSpinFadeLoader,
+                  ),
+                )
+                : _controller.faceImage.value != null
+                ? FaceRecognisationPage()
+                : FaceTakePictureWidget(),
+      ),
     );
   }
 }

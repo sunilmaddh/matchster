@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
@@ -7,6 +8,7 @@ import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/core/widgets/fields/custom_form_field.dart';
+import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
 import 'package:matchster/features/moduls/auth/login/view/otp_screen.dart';
 
 // ignore: must_be_immutable
@@ -14,6 +16,7 @@ class LoginFieldWithButton extends StatelessWidget {
   LoginFieldWithButton({super.key});
 
   TextEditingController controller = TextEditingController();
+  final RxBool isEnable = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +47,21 @@ class LoginFieldWithButton extends StatelessWidget {
               ),
               90.hBox,
               CustomFormField(
+                keyboardType: TextInputType.number,
                 label: "",
                 hint: AppConstants.hintLoginMessage,
                 controller: controller,
+                onChanged: (mobileNUmber) {
+                  if (mobileNUmber != null && mobileNUmber.length == 10) {
+                    isEnable.value = true;
+                  } else {
+                    isEnable.value = false;
+                  }
+                },
               ),
               30.hBox,
               AppButton(
+                isEnable: isEnable,
                 name: AppConstants.verify,
                 onTop: () {
                   NavigationHelper.push(OtpScreen());

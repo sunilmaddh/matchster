@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/state_manager.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 
@@ -8,27 +10,34 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.name,
     required this.onTop,
-    this.isEnable = false,
+    required this.isEnable,
   });
   final String name;
   final VoidCallback onTop;
-  bool isEnable;
+  final RxBool isEnable;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTop,
-      child: Container(
-        alignment: Alignment.center,
-        height: 48,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient:
-              isEnable ? AppColors.gradiantPrimary : AppColors.appGradiantColor,
-        ),
-        child: CommonText.text(
-          name,
-          color: isEnable ? AppColors.whiteColor : AppColors.appDisableButton,
+      child: Obx(
+        () => Container(
+          alignment: Alignment.center,
+          height: 48,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient:
+                isEnable.isTrue
+                    ? AppColors.gradiantPrimary
+                    : AppColors.appGradiantColor,
+          ),
+          child: CommonText.text(
+            name,
+            color:
+                isEnable.isTrue
+                    ? AppColors.whiteColor
+                    : AppColors.appDisableButton,
+          ),
         ),
       ),
     );

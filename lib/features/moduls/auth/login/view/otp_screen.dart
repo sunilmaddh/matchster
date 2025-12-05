@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
@@ -7,10 +8,12 @@ import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/onboard_screen.dart';
-import 'package:matchster/features/moduls/auth/widgets/otp_widget.dart';
+import 'package:matchster/features/moduls/auth/login/widgets/otp_widget.dart';
 
 class OtpScreen extends StatelessWidget {
-  const OtpScreen({super.key});
+  OtpScreen({super.key});
+
+  final RxBool isEnable = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +36,19 @@ class OtpScreen extends StatelessWidget {
               AppConstants.otpDiscription,
             ),
             40.hBox,
-            OtpWidget(),
+            OtpWidget(
+              onCodeChanged: (String otpCode) {
+                isEnable.value = true;
+                // if (otpCode.length == 4) {
+                //   isEnable.value = true;
+                // } else {
+                //   isEnable.value = false;
+                // }
+              },
+            ),
             32.hBox,
             AppButton(
+              isEnable: isEnable,
               name: AppConstants.verifyNumber,
               onTop: () {
                 NavigationHelper.push(OnboardScreen());

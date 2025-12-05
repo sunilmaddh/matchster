@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
@@ -18,10 +17,10 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/core/widgets/fields/custom_form_field.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
-import 'package:matchster/features/moduls/auth/widgets/photo_card.dart';
+import 'package:matchster/features/moduls/auth/onboard/widgets/photo_card.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
 import 'package:matchster/features/moduls/auth/widgets/radio_widget.dart';
 import 'package:matchster/features/moduls/auth/widgets/switch_widget.dart';
-import 'package:matchster/features/moduls/auth/widgets/toggle_button_widget.dart';
 
 class NameWidget extends StatelessWidget {
   NameWidget({super.key});
@@ -161,7 +160,7 @@ class DobWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: 15.horizontalPadding,
+      padding: 16.horizontalPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -233,43 +232,55 @@ class DobWidget extends StatelessWidget {
             ),
           ),
           10.hBox,
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: AppColors.blackColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Caros",
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.info_outline),
+              10.wBox,
+              Flexible(
+                child: RichText(
+                  maxLines: 3,
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: AppColors.blackColor,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Caros",
+                    ),
+
+                    children: [
+                      TextSpan(
+                        text: AppConstants.dobNote1,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w300,
+                          fontFamily: "Caros",
+                        ),
+                      ),
+                      TextSpan(
+                        text: AppConstants.dobNote2,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "Caros",
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      TextSpan(
+                        text: AppConstants.dobNote3,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w300,
+                          fontFamily: "Caros",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              text: "Note: ",
-              children: [
-                TextSpan(
-                  text: AppConstants.dobNote1,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w300,
-                    fontFamily: "Caros",
-                  ),
-                ),
-                TextSpan(
-                  text: AppConstants.dobNote2,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Caros",
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-                TextSpan(
-                  text: AppConstants.dobNote3,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w300,
-                    fontFamily: "Caros",
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
         ],
       ),
@@ -388,21 +399,21 @@ class YourHeightWidget extends StatelessWidget {
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
+          // 20.hBox,
+          // Align(
+          //   alignment: Alignment.topRight,
+          //   child: ToggleWithText(
+          //     onTop: () {
+          //       if (_controller.isNotFeet.isTrue) {
+          //         _controller.isNotFeet.value = false;
+          //       } else {
+          //         _controller.isNotFeet.value = true;
+          //       }
+          //     },
+          //     isFeet: _controller.isNotFeet,
+          //   ),
+          // ),
           20.hBox,
-          Align(
-            alignment: Alignment.topRight,
-            child: ToggleWithText(
-              onTop: () {
-                if (_controller.isNotFeet.isTrue) {
-                  _controller.isNotFeet.value = false;
-                } else {
-                  _controller.isNotFeet.value = true;
-                }
-              },
-              isFeet: _controller.isNotFeet,
-            ),
-          ),
-          10.hBox,
           InkWell(
             onTap: () {
               CommonBottomSheet.showFullWidthCupertinoPicker(
@@ -432,62 +443,62 @@ class YourHeightWidget extends StatelessWidget {
               controller: _controller.heightController,
             ),
           ),
-          10.hBox,
-          Obx(
-            () => RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  color: AppColors.blackColor,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: "Caros",
-                ),
-                text: "Note: ",
-                children: [
-                  TextSpan(
-                    text: AppConstants.heightNote1,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Caros",
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                        _controller.isNotFeet.isTrue
-                            ? AppConstants.heightNote5
-                            : AppConstants.heightNote2,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: "Caros",
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                  TextSpan(
-                    text: AppConstants.heightNote3,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w300,
-                      fontFamily: "Caros",
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                        _controller.isNotFeet.isTrue
-                            ? AppConstants.heightNote6
-                            : AppConstants.heightNote4,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: "Caros",
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // 10.hBox,
+          // Obx(
+          //   () => RichText(
+          //     text: TextSpan(
+          //       style: TextStyle(
+          //         color: AppColors.blackColor,
+          //         fontSize: 14.sp,
+          //         fontWeight: FontWeight.w500,
+          //         fontFamily: "Caros",
+          //       ),
+          //       text: "Note: ",
+          //       children: [
+          //         TextSpan(
+          //           text: AppConstants.heightNote1,
+          //           style: TextStyle(
+          //             fontSize: 14.sp,
+          //             fontWeight: FontWeight.w300,
+          //             fontFamily: "Caros",
+          //           ),
+          //         ),
+          //         TextSpan(
+          //           text:
+          //               _controller.isNotFeet.isTrue
+          //                   ? AppConstants.heightNote5
+          //                   : AppConstants.heightNote2,
+          //           style: TextStyle(
+          //             fontSize: 14.sp,
+          //             fontWeight: FontWeight.w600,
+          //             fontFamily: "Caros",
+          //             fontStyle: FontStyle.italic,
+          //           ),
+          //         ),
+          //         TextSpan(
+          //           text: AppConstants.heightNote3,
+          //           style: TextStyle(
+          //             fontSize: 14.sp,
+          //             fontWeight: FontWeight.w300,
+          //             fontFamily: "Caros",
+          //           ),
+          //         ),
+          //         TextSpan(
+          //           text:
+          //               _controller.isNotFeet.isTrue
+          //                   ? AppConstants.heightNote6
+          //                   : AppConstants.heightNote4,
+          //           style: TextStyle(
+          //             fontSize: 14.sp,
+          //             fontWeight: FontWeight.w600,
+          //             fontFamily: "Caros",
+          //             fontStyle: FontStyle.italic,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -634,6 +645,7 @@ class ReligionWidget extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class DateWidget extends StatelessWidget {
   DateWidget({super.key});
   final _controller = Get.find<OnboardController>();
@@ -661,49 +673,71 @@ class DateWidget extends StatelessWidget {
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
-
           20.hBox,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CommonText.text(
+                "Open to Date Everybody",
+                fontSize: 17.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              Obx(
+                () => Switch(
+                  focusColor: Color(0xff1D48EF),
+                  activeTrackColor: Color(0xff1D48EF),
+                  padding: EdgeInsets.zero,
+                  value: _controller.isSwitchOn.value,
+                  onChanged:
+                      _controller
+                          .toggleDateSwitch, // ← Select All / Unselect All
+                ),
+              ),
+            ],
+          ),
+
+          10.hBox,
+
           Expanded(
             child: ListView.builder(
-              shrinkWrap: true,
               itemCount: OnboardHalper.dateList.length,
               itemBuilder: (context, index) {
                 return Obx(
                   () => Padding(
                     padding: 5.verticalPadding,
                     child: InkWell(
-                      onTap: () {
-                        _controller.selectedIndexDate.value = index;
-                        if (_controller.isDateSelected.isTrue) {
-                          _controller.isDateSelected.value = false;
-                        } else {
-                          _controller.isDateSelected.value = true;
-                        }
-                      },
+                      onTap: () => _controller.toggleDateSelection(index),
                       child: Container(
                         padding: 10.horizontalPadding + 8.verticalPadding,
                         decoration: BoxDecoration(
-                          gradient:
-                              _controller.selectedIndexDate.value == index
-                                  ? AppColors.gradiantPrimary
-                                  : LinearGradient(
-                                    colors: [
-                                      Color(0xffffffff),
-                                      Color(0xffffffff),
-                                    ],
-                                  ),
-
                           borderRadius: BorderRadius.circular(20.r),
-                          border: Border.all(color: AppColors.borderColor),
+                          border: Border.all(
+                            color:
+                                _controller.selectedDates.contains(index)
+                                    ? Color(0xff1D48EF)
+                                    : _controller.isSwitchOn.value
+                                    ? Color(0xff1D48EF)
+                                    : Color(0xffEBEBEB),
+                          ),
                         ),
-                        child: CommonText.text(
-                          color:
-                              _controller.selectedIndexDate.value == index
-                                  ? AppColors.whiteColor
-                                  : AppColors.blackColor,
-                          OnboardHalper.dateList[index],
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.w600,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CommonText.text(
+                              fontFamily: "DM Sans",
+                              color: AppColors.blackColor,
+                              OnboardHalper.dateList[index],
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+
+                            // ✔ filled checkbox if selected, else outline
+                            _controller.selectedDates.contains(index)
+                                ? SvgPicture.asset(AppAssets.checkboxFill)
+                                : _controller.isSwitchOn.value
+                                ? SvgPicture.asset(AppAssets.checkboxFill)
+                                : SvgPicture.asset(AppAssets.checkBoxOutline),
+                          ],
                         ),
                       ),
                     ),
@@ -746,12 +780,12 @@ class AddPhotoWidget extends StatelessWidget {
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 4,
+            itemCount: 6,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 20,
               mainAxisSpacing: 20,
-              childAspectRatio: 1,
+              childAspectRatio: 1.2,
             ),
             itemBuilder: (context, index) {
               final file = _controller.fileList[index];
@@ -759,6 +793,7 @@ class AddPhotoWidget extends StatelessWidget {
               return InkWell(
                 onTap: () {
                   _controller.selectedImageIndex.value = index;
+                  _controller.imageFile = _controller.fileList[index];
 
                   CustomBottomSheet.show(
                     borderRadius: 40.r,
@@ -796,6 +831,8 @@ class AddPhotoWidget extends StatelessWidget {
                                           );
                                         }
                                         Get.back();
+                                        Get.to(PhotoPreviewScreen());
+                                        // Get.back();
                                       },
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
