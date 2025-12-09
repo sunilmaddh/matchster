@@ -5,7 +5,7 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extensions.dart';
-import 'package:matchster/shared/widgets/fields/common_text.dart';
+import 'package:matchster/core/widgets/fields/common_text.dart';
 
 class AddSpotifyCard extends StatelessWidget {
   const AddSpotifyCard({super.key});

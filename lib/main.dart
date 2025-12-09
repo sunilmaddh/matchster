@@ -21,6 +21,11 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       ensureScreenSize: true,
       child: GetMaterialApp(
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(color: Colors.white),
+          useMaterial3: true,
+          scaffoldBackgroundColor: Colors.white,
+        ),
         useInheritedMediaQuery: true,
         debugShowCheckedModeBanner: false,
         initialBinding: AppBinding(),

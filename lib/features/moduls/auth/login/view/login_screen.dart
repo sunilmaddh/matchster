@@ -6,11 +6,11 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_field_with_button.dart';
-import 'package:matchster/shared/widgets/buttons/app_button.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
@@ -102,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                                           10.hBox,
                                           AppButton(
                                             image: AppAssets.contactAssets,
-                                            isEnable: true,
+                                            isEnable: true.obs,
                                             name: AppConstants.number,
                                             onTop: () {
                                               _controller
@@ -118,7 +118,7 @@ class LoginScreen extends StatelessWidget {
                                       child: Column(
                                         children: [
                                           AppButton(
-                                            isEnable: true,
+                                            isEnable: true.obs,
                                             name: AppConstants.createMyAccount,
                                             onTop: () {
                                               _controller

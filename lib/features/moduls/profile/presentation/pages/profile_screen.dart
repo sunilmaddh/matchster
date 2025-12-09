@@ -7,7 +7,10 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/extensions.dart';
+import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/core/widgets/bar/linear_progress_bar_with_badge.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/face_recognisation.dart';
 import 'package:matchster/features/moduls/profile/presentation/controllers/profile_controller.dart';
@@ -22,10 +25,8 @@ import 'package:matchster/features/moduls/profile/presentation/pages/interest/zo
 import 'package:matchster/features/moduls/profile/presentation/pages/location/current_location.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/education_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/height_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/profile_preview_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/add_image_grid_widget.dart';
-import 'package:matchster/shared/widgets/bar/custom_app_bar.dart';
-import 'package:matchster/shared/widgets/bar/linear_progress_bar_with_badge.dart';
-import 'package:matchster/shared/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/add_instagram_card.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/add_spotify_card.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/interest_card.dart';
@@ -122,19 +123,26 @@ class ProfileScreen extends StatelessWidget {
                                 ],
                               ),
                               5.hBox,
-                              Container(
-                                padding:
-                                    15.horizontalPadding + 2.verticalPadding,
-                                decoration: BoxDecoration(
-                                  color: AppColors.whiteColor,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: Color(0xffDEDEDE)),
-                                ),
-                                child: CommonText.text(
-                                  "Preview Profile",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xffBFBFBF),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(ProfilePreviewScreen());
+                                },
+                                child: Container(
+                                  padding:
+                                      15.horizontalPadding + 2.verticalPadding,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.whiteColor,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: Color(0xffDEDEDE),
+                                    ),
+                                  ),
+                                  child: CommonText.text(
+                                    "Preview Profile",
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xffBFBFBF),
+                                  ),
                                 ),
                               ),
                             ],

@@ -31,7 +31,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.withOpacity(0.01),
+      extendBody: true,
+      backgroundColor: Colors.transparent,
       body: PageView(
         controller: _controller.pageController,
         onPageChanged: (index) {
@@ -59,8 +60,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           child: BottomAppBar(
             // padding: EdgeInsets.only(top: 18.0),
             shape: CircularNotchedRectangle(),
-            color: Colors.grey.withOpacity(0.0),
-            elevation: 8,
+            color: Colors.transparent,
+            elevation: 0,
             child: Container(
               height: 70.h,
               padding: EdgeInsets.all(3.0),

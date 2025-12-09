@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:matchster/features/moduls/home/view/chat_list_matches_screen.dart';
 import 'package:matchster/features/moduls/home/view/home_screen.dart';
+import 'package:matchster/features/moduls/home/view/likes_screen.dart';
 import 'package:matchster/features/moduls/home/view/premium_screen.dart';
 import 'package:matchster/features/moduls/home/widgets/custom_bottom_sheet_navigation_bar.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile_screen.dart';
@@ -10,7 +12,13 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomBottomNavigationBar(
-      pageList: [HomeScreen(), ProfileScreen(), PremiumScreen()],
+      pageList: [
+        HomeScreen(),
+        LikesScreen(),
+        PremiumScreen(),
+        ChatListMetchesScreen(),
+        ProfileScreen(),
+      ],
     );
   }
 }

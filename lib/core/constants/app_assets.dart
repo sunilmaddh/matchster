@@ -75,10 +75,15 @@ class AppAssets {
       cancerAssets = "$baseUrlPng/cancer.png",
       nonSmokerAssets = "$baseUrlPng/non_smoker.png",
       profilePicture = "$baseUrlSvg/profile_picture.svg",
-      profile2 = "$baseUrlPng/profile_2.png",
+      profile2 = "$baseUrlPng/image1.png",
       imageAssets2 = "$baseUrlPng/image2.png",
       imageAssets3 = "$baseUrlPng/image3.png",
       imageAssets4 = "$baseUrlPng/image4.png",
       imageAssets5 = "$baseUrlPng/image5.png",
+      imageAssets6 = "$baseUrlPng/image_pr.png",
+      imageAssets7 = "$baseUrlPng/image_pr1.png",
+      imageAssets8 = "$baseUrlPng/image_pr2.png",
+      imageAssets9 = "$baseUrlPng/image_pr3.png",
+      imageAssets10 = "$baseUrlPng/image_pr4.png",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

@@ -8,7 +8,6 @@ import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/core/widgets/fields/custom_form_field.dart';
-import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
 import 'package:matchster/features/moduls/auth/login/view/otp_screen.dart';
 
 // ignore: must_be_immutable
