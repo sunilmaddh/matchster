@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/utils/extensions.dart';
+import 'package:matchster/core/utils/extentions.dart';
 
 class SearchWidget extends StatelessWidget {
   const SearchWidget({super.key, required this.onChanged});
