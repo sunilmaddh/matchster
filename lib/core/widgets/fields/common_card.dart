@@ -26,7 +26,7 @@ class CommonCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius.r),
         border: Border.all(
           width: 1.w,
-          color: Color(0xff363636).withOpacity(0.13),
+          color: const Color(0xff363636).withAlpha(33),
         ),
       ),
       child: widget,

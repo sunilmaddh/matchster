@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:lottie/lottie.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/core/constants/app_colors.dart';
 
 class FaceOverlayWidget extends StatelessWidget {
   final Face? face;
@@ -21,24 +19,9 @@ class FaceOverlayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (face == null) {
-    //   // Show centered face detector when no face is detected
-    //   return Center(
-    //     child: LottieBuilder.asset(
-    //       AppAssets.scanning,
-    //       width: 150,
-    //       height: 150,
-    //       repeat: true,
-    //       reverse: false,
-    //       animate: true,
-    //     ),
-    //   );
-    // }
-
     final rect = face!.boundingBox;
 
     if (imageSize == null) {
-      // Fallback positioning
       final left = rect.left.clamp(0.0, maxW).toDouble();
       final top = rect.top.clamp(0.0, maxH).toDouble();
       final width = rect.width.clamp(50.0, maxW - left).toDouble();

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:matchster/core/utils/extensions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 
+// ignore: must_be_immutable
 class VerifiedCard extends StatelessWidget {
   VerifiedCard({
     super.key,
@@ -23,7 +24,7 @@ class VerifiedCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: DottedBorder(
         options: RoundedRectDottedBorderOptions(
-          color: Colors.black.withOpacity(0.20),
+          color: Colors.black.withAlpha(53),
           radius: Radius.circular(20.r),
           dashPattern: const [4, 5],
         ),

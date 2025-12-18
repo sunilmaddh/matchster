@@ -5,7 +5,7 @@ class AppColors {
         colors: [Color(0xff1B8CF5), Color(0xff83AAF7), Color(0xffB9CBFA)],
       ),
       circleGradiantColor = LinearGradient(
-        colors: [Color(0xffD9D9D9), Color(0xff000000).withOpacity(0.33)],
+        colors: [Color(0xffD9D9D9), Color(0xff000000).withAlpha(84)],
       ),
       gradiantPrimary = LinearGradient(
         colors: [Color(0xff1D48EF), Color(0xff1B8CF5)],
@@ -28,6 +28,6 @@ class AppColors {
       circleColor = Color(0xffF4F4F4),
       otpFieldColor = Color(0xff002DDC),
       loginTitleColor = Color(0xff2B2B2B);
-  static Color hintColor = Color(0xff000000).withOpacity(0.50);
-  static Color loginBorderColor = Color(0xff000000).withOpacity(0.25);
+  static Color hintColor = Color(0xff000000).withAlpha(128);
+  static Color loginBorderColor = Color(0xff000000).withAlpha(64);
 }

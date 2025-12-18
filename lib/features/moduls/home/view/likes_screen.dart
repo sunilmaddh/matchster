@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/core/widgets/rectangle_card_widget.dart';
 import 'package:matchster/features/moduls/home/widgets/like_card.dart';

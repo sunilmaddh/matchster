@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 
@@ -67,7 +66,7 @@ class ChatCard extends StatelessWidget {
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w300,
                 fontFamily: "Caros",
-                color: Colors.black.withOpacity(0.50),
+                color: Colors.black.withAlpha(128),
               ),
             ],
           ),

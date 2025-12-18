@@ -3,7 +3,7 @@ import 'dart:ui';
 class AppConstants {
   static Size deviceSize = Size(375, 812);
   static const String
-  commonFont = "DM Sans",
+  commonFont = "Caros",
   continueWith = "Continue with",
   oRcontinue = "or continue with",
   createMyAccount = "Create My Account",

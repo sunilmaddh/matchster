@@ -194,31 +194,12 @@ class DobWidget extends StatelessWidget {
                     initialDateTime: DateTime.now(),
                     minimumDate: DateTime(1925),
                     maximumDate: DateTime(2050),
-                    // DateTime(
-                    //   DateTime.now().year - 18,
-                    //   DateTime.now().month,
-                    //   DateTime.now().day,
-                    // ),
+
                     onDateTimeChanged: (DateTime newDate) {
                       final formattedDate = DateFormat(
                         'dd/MM/yyyy',
                       ).format(newDate);
                       _controller.dobController.text = formattedDate;
-                      // if (isNotDob == false) {
-                      //   if (newDate.isAfter(initialDate)) {
-                      //     AppSnackbar.show(
-                      //       isError: true,
-                      //       title: "Error",
-                      //       message: "You must be at least 18 years old",
-                      //     );
-                      //     isFutureDate = true;
-                      //   } else {
-                      //     isFutureDate = false;
-                      //     selectedDate = newDate;
-                      //   }
-                      // } else {
-                      //   selectedDate = newDate;
-                      // }
                     },
                   ),
                 ),
@@ -292,6 +273,7 @@ class LikeWidget extends StatefulWidget {
   const LikeWidget({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LikeWidgetState createState() => _LikeWidgetState();
 }
 
@@ -399,20 +381,7 @@ class YourHeightWidget extends StatelessWidget {
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
-          // 20.hBox,
-          // Align(
-          //   alignment: Alignment.topRight,
-          //   child: ToggleWithText(
-          //     onTop: () {
-          //       if (_controller.isNotFeet.isTrue) {
-          //         _controller.isNotFeet.value = false;
-          //       } else {
-          //         _controller.isNotFeet.value = true;
-          //       }
-          //     },
-          //     isFeet: _controller.isNotFeet,
-          //   ),
-          // ),
+
           20.hBox,
           InkWell(
             onTap: () {
@@ -443,62 +412,6 @@ class YourHeightWidget extends StatelessWidget {
               controller: _controller.heightController,
             ),
           ),
-          // 10.hBox,
-          // Obx(
-          //   () => RichText(
-          //     text: TextSpan(
-          //       style: TextStyle(
-          //         color: AppColors.blackColor,
-          //         fontSize: 14.sp,
-          //         fontWeight: FontWeight.w500,
-          //         fontFamily: "Caros",
-          //       ),
-          //       text: "Note: ",
-          //       children: [
-          //         TextSpan(
-          //           text: AppConstants.heightNote1,
-          //           style: TextStyle(
-          //             fontSize: 14.sp,
-          //             fontWeight: FontWeight.w300,
-          //             fontFamily: "Caros",
-          //           ),
-          //         ),
-          //         TextSpan(
-          //           text:
-          //               _controller.isNotFeet.isTrue
-          //                   ? AppConstants.heightNote5
-          //                   : AppConstants.heightNote2,
-          //           style: TextStyle(
-          //             fontSize: 14.sp,
-          //             fontWeight: FontWeight.w600,
-          //             fontFamily: "Caros",
-          //             fontStyle: FontStyle.italic,
-          //           ),
-          //         ),
-          //         TextSpan(
-          //           text: AppConstants.heightNote3,
-          //           style: TextStyle(
-          //             fontSize: 14.sp,
-          //             fontWeight: FontWeight.w300,
-          //             fontFamily: "Caros",
-          //           ),
-          //         ),
-          //         TextSpan(
-          //           text:
-          //               _controller.isNotFeet.isTrue
-          //                   ? AppConstants.heightNote6
-          //                   : AppConstants.heightNote4,
-          //           style: TextStyle(
-          //             fontSize: 14.sp,
-          //             fontWeight: FontWeight.w600,
-          //             fontFamily: "Caros",
-          //             fontStyle: FontStyle.italic,
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -572,20 +485,6 @@ class _LanguageListWidgetState extends State<LanguageListWidget> {
                         fontWeight: FontWeight.w600,
                         fontFamily: "Caros",
                       ),
-                      //  Row(
-                      //   mainAxisSize: MainAxisSize.min,
-                      //   children: [
-                      //     SvgPicture.asset(v['image'], width: 24, height: 24),
-                      //     5.wBox,
-                      //     CommonText.text(
-                      //       value,
-                      //       color: AppColors.whiteColor,
-                      //       fontSize: 17.sp,
-                      //       fontWeight: FontWeight.w600,
-                      //       fontFamily: "Caros",
-                      //     ),
-                      //   ],
-                      // ),
                     ),
                   );
                 }).toList(),
@@ -593,7 +492,6 @@ class _LanguageListWidgetState extends State<LanguageListWidget> {
         ],
       ),
     );
-    ;
   }
 }
 
@@ -883,6 +781,7 @@ class ScanningScreen extends StatefulWidget {
   const ScanningScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ScanningScreenState createState() => _ScanningScreenState();
 }
 
@@ -941,10 +840,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                     right: 0,
                     child: Center(
                       child: FloatingActionButton(
-                        onPressed: () async {
-                          final image = await _controller!.takePicture();
-                          print("Image Path: ${image.path}");
-                        },
+                        onPressed: () async {},
                         child: Icon(Icons.camera),
                       ),
                     ),

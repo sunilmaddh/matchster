@@ -30,6 +30,7 @@ dependencies:
   gradient_borders: ^1.0.2
   google_maps_flutter: ^2.13.1
   geolocator: ^14.0.2
+  country_picker: ^2.0.27
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/widgets/buttons/rounded_button.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

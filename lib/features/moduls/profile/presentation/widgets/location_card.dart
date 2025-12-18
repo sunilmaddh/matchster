@@ -11,7 +11,7 @@ class LocationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black.withOpacity(0.20)),
+        border: Border.all(color: Colors.black.withAlpha(51)),
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: ListTile(

@@ -4,6 +4,7 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 
+// ignore: must_be_immutable
 class LinearProgressBarWithBadge extends StatelessWidget {
   LinearProgressBarWithBadge({super.key});
   double progress = 0.50;

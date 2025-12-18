@@ -20,19 +20,25 @@ class MyApp extends StatelessWidget {
       designSize: AppConstants.deviceSize,
       minTextAdapt: true,
       ensureScreenSize: true,
-      child: GetMaterialApp(
-        theme: ThemeData(
-          appBarTheme: AppBarTheme(color: Colors.white),
-          useMaterial3: true,
-          scaffoldBackgroundColor: Colors.white,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: GetMaterialApp(
+          theme: ThemeData(
+            appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+            useMaterial3: true,
+            scaffoldBackgroundColor: Colors.white,
+          ),
+          useInheritedMediaQuery: true,
+          debugShowCheckedModeBanner: false,
+          initialBinding: AppBinding(),
+          title: 'Matchster',
+          navigatorKey: NavigationHelper.navigatorKey,
+          home: SplashScreen(),
+          getPages: AppPages.getPages,
         ),
-        useInheritedMediaQuery: true,
-        debugShowCheckedModeBanner: false,
-        initialBinding: AppBinding(),
-        title: 'Matchster',
-        navigatorKey: NavigationHelper.navigatorKey,
-        home: SplashScreen(),
-        getPages: AppPages.getPages,
       ),
     );
   }

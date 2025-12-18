@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extensions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 
 // ignore: must_be_immutable
 class AppButton extends StatelessWidget {
-  AppButton({
+  const AppButton({
     super.key,
     required this.name,
     required this.onTop,
-    required this.isEnable,
+    this.isEnable = false,
     this.image = '',
   });
   final String name;
   final VoidCallback onTop;
   final String image;
-  RxBool isEnable = false.obs;
+  final bool isEnable;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +28,7 @@ class AppButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           gradient:
-              isEnable.value
-                  ? AppColors.gradiantPrimary
-                  : AppColors.appGradiantColor,
+              isEnable ? AppColors.gradiantPrimary : AppColors.appGradiantColor,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,9 +42,7 @@ class AppButton extends StatelessWidget {
               fontSize: 16.sp,
               name,
               color:
-                  isEnable.value
-                      ? AppColors.whiteColor
-                      : AppColors.appDisableButton,
+                  isEnable ? AppColors.whiteColor : AppColors.appDisableButton,
             ),
           ],
         ),

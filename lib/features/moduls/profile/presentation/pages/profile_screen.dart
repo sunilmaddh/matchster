@@ -25,6 +25,7 @@ import 'package:matchster/features/moduls/profile/presentation/pages/interest/zo
 import 'package:matchster/features/moduls/profile/presentation/pages/location/current_location.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/education_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile/height_screen.dart';
+import 'package:matchster/features/moduls/profile/presentation/pages/profile/setting_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/pages/profile_preview_screen.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/add_image_grid_widget.dart';
 import 'package:matchster/features/moduls/profile/presentation/widgets/add_instagram_card.dart';
@@ -41,10 +42,23 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        isCenterTitle: false,
+        isLeading: false,
         title: "Profile",
         onTop: () {
           Get.back();
         },
+        actions: [
+          Padding(
+            padding: 15.horizontalPadding,
+            child: IconButton(
+              onPressed: () {
+                Get.to(SettingScreen());
+              },
+              icon: Icon(Icons.settings),
+            ),
+          ),
+        ],
       ),
       body: ListView(
         children: [
@@ -455,7 +469,7 @@ class ProfileScreen extends StatelessWidget {
                 Container(
                   height: 90.h,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black.withOpacity(0.20)),
+                    border: Border.all(color: Colors.black.withAlpha(51)),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Padding(
@@ -479,7 +493,7 @@ class ProfileScreen extends StatelessWidget {
           ),
 
           20.hBox,
-          Divider(color: Colors.black.withOpacity(0.20)),
+          Divider(color: Colors.black.withAlpha(51)),
           10.hBox,
           Padding(
             padding: 15.horizontalPadding,

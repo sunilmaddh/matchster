@@ -32,7 +32,7 @@ class CurrentLocation extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: Colors.black.withOpacity(0.30)),
+            border: Border.all(color: Colors.black.withAlpha(77)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,7 +93,7 @@ class CurrentLocation extends StatelessWidget {
               Padding(
                 padding: 20.horizontalPadding,
                 child: AppButton(
-                  isEnable: isEnable,
+                  isEnable: true,
                   name: 'Upgrade to Change',
                   onTop: () {
                     Get.to(AddLocationScreen());
@@ -225,12 +225,12 @@ class SubscriptionRow extends StatelessWidget {
                             end: Alignment.bottomCenter,
                           ),
                         )
-                        : Border.all(color: Colors.black.withOpacity(0.3)),
+                        : Border.all(color: Colors.black.withAlpha(77)),
                 boxShadow:
                     isSelected
                         ? [
                           BoxShadow(
-                            color: const Color(0xff1B8CF5).withOpacity(0.3),
+                            color: const Color(0xff1B8CF5).withAlpha(77),
                             blurRadius: 8,
                             spreadRadius: 1,
                             offset: const Offset(0, 4),
@@ -249,8 +249,8 @@ class SubscriptionRow extends StatelessWidget {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            const Color(0xffFFC592).withOpacity(0.5),
-                            const Color(0xff1B8CF5).withOpacity(0.5),
+                            const Color(0xffFFC592).withAlpha(128),
+                            const Color(0xff1B8CF5).withAlpha(128),
                           ],
                         ),
                       ),

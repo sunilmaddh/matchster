@@ -4,11 +4,7 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 
 // ignore: must_be_immutable
 class ProfilePhotoCard extends StatelessWidget {
-  // final File? image;
-  // final VoidCallback? onDelete;
-  // String image = "";
-  ProfilePhotoCard({super.key});
-  // required this.image, this.onDelete
+  const ProfilePhotoCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +21,7 @@ class ProfilePhotoCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.add, color: Color(0xff464646).withOpacity(0.44)),
+          Icon(Icons.add, color: Color(0xff464646).withAlpha(112)),
           CommonText.text(
             "Add Photos",
             fontSize: 10.sp,

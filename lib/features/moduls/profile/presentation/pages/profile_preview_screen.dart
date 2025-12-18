@@ -169,7 +169,7 @@ class ProfilePreviewScreen extends StatelessWidget {
                     ),
 
                     CommonWrapWidget(
-                      borderColor: Color(0xff363636).withOpacity(0.13),
+                      borderColor: Color(0xff363636).withAlpha(33),
                       list: HomeHelper.list,
                     ),
                   ],
@@ -188,7 +188,7 @@ class ProfilePreviewScreen extends StatelessWidget {
                     ),
 
                     CommonWrapWidget(
-                      borderColor: Color(0xff363636).withOpacity(0.13),
+                      borderColor: Color(0xff363636).withAlpha(33),
                       list: HomeHelper.list,
                     ),
                   ],
@@ -237,10 +237,10 @@ class ProfilePreviewScreen extends StatelessWidget {
                             return Container(
                               padding: 10.horizontalPadding + 4.verticalPadding,
                               decoration: BoxDecoration(
-                                color: Color(0xffD9D9D9).withOpacity(0.13),
+                                color: Color(0xffD9D9D9).withAlpha(33),
                                 borderRadius: BorderRadius.circular(20.r),
                                 border: Border.all(
-                                  color: Color(0xff363636).withOpacity(0.13),
+                                  color: Color(0xff363636).withAlpha(33),
                                   width: 1.w,
                                 ),
                               ),

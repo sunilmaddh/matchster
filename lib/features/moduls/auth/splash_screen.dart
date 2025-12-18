@@ -5,7 +5,10 @@ import 'package:matchster/routes/app_routes.dart';
 import 'package:video_player/video_player.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -13,7 +16,6 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late VideoPlayerController _controller;
   late AnimationController _fadeController;
-  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
@@ -24,10 +26,10 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    _fadeAnimation = CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeInOut,
-    );
+    // _fadeAnimation = CurvedAnimation(
+    //   parent: _fadeController,
+    //   curve: Curves.easeInOut,
+    // );
 
     // Initialize video
     _controller = VideoPlayerController.asset(AppAssets.splashAsset)

@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:matchster/features/moduls/profile/data/repositories/location_services.dart';
-import 'package:matchster/features/moduls/profile/presentation/widgets/location_card.dart';
 
 class ProfileController extends GetxController {
   final LocationService _locationService = LocationService();

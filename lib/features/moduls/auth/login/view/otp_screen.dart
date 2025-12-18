@@ -7,14 +7,14 @@ import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/onboard_screen.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/otp_widget.dart';
 
 class OtpScreen extends StatelessWidget {
   OtpScreen({super.key});
 
-  final RxBool isEnable = false.obs;
-
+  final _controller = Get.find<LoginController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,22 +37,22 @@ class OtpScreen extends StatelessWidget {
             ),
             40.hBox,
             OtpWidget(
-              onCodeChanged: (String otpCode) {
-                isEnable.value = true;
-                // if (otpCode.length == 4) {
-                //   isEnable.value = true;
-                // } else {
-                //   isEnable.value = false;
-                // }
+              onCodeChanged: (value) {
+                _controller.isOtpEnable.value = value.length == 4;
+              },
+              onCompleted: (otp) {
+                _controller.isOtpEnable.value = true;
               },
             ),
             32.hBox,
-            AppButton(
-              isEnable: isEnable,
-              name: AppConstants.verifyNumber,
-              onTop: () {
-                NavigationHelper.push(OnboardScreen());
-              },
+            Obx(
+              () => AppButton(
+                isEnable: _controller.isOtpEnable.value,
+                name: AppConstants.verifyNumber,
+                onTop: () {
+                  NavigationHelper.push(OnboardScreen());
+                },
+              ),
             ),
             10.hBox,
             Row(

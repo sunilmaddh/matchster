@@ -141,7 +141,7 @@ class PostureGestureScreen extends StatelessWidget {
                           // Get.to(FaceRecognisationPage());
                         }
                       },
-                      isEnable: true.obs,
+                      isEnable: true,
                     ),
                   ],
                 ),

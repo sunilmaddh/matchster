@@ -28,7 +28,7 @@ class PhotoPreviewScreen extends StatelessWidget {
                   onTop: () {
                     Get.back();
                   },
-                  isEnable: isEnable,
+                  isEnable: _controller.isEnable.value,
                 ),
               ),
               Column(

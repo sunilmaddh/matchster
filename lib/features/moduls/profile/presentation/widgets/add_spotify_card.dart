@@ -54,7 +54,7 @@ class AddSpotifyCard extends StatelessWidget {
                       height: 46.h,
                       child: DottedBorder(
                         options: RoundedRectDottedBorderOptions(
-                          color: Colors.black.withOpacity(0.50),
+                          color: Colors.black.withAlpha(128),
                           radius: Radius.circular(20.r),
                           dashPattern: [3, 4],
                         ),

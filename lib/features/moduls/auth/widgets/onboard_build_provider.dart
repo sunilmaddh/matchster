@@ -7,7 +7,6 @@ import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/widgets/matchster_progress_indicator.dart';
 import 'package:matchster/features/moduls/home/view/landing_screen.dart';
-import 'package:matchster/features/moduls/profile/presentation/pages/profile_screen.dart';
 
 // ignore: must_be_immutable
 class OnboardPageViewBuilder extends StatelessWidget {

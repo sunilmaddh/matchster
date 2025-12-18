@@ -6,6 +6,7 @@ class ToggleWithText extends StatefulWidget {
   final VoidCallback onTop;
   final RxBool isFeet;
   @override
+  // ignore: library_private_types_in_public_api
   _ToggleWithTextState createState() => _ToggleWithTextState();
 }
 

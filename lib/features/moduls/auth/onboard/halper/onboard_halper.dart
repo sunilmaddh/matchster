@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/face_recognisation.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/posture_gesture_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/name_widget.dart';
 
 class OnboardHalper {

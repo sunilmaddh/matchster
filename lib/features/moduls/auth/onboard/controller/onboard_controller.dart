@@ -20,6 +20,7 @@ class OnboardController extends GetxController {
   RxBool isHumanProccessing = false.obs;
   RxBool isHumanProccessingStep2 = false.obs;
   RxBool isFaceRecognigation = false.obs;
+
   RxList<int> selectedDates = <int>[].obs;
   Rx<File?> imageFile = Rx<File?>(null);
 
@@ -211,7 +212,7 @@ class OnboardController extends GetxController {
         frame.image.height.toDouble(),
       );
     } catch (e) {
-      print('Error loading image size: $e');
+      debugPrint(e.toString());
     }
   }
 

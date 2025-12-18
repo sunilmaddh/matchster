@@ -4,8 +4,13 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 
 class OtpWidget extends StatelessWidget {
-  const OtpWidget({super.key, required this.onCodeChanged});
+  const OtpWidget({
+    super.key,
+    required this.onCodeChanged,
+    required this.onCompleted,
+  });
   final Function(String otpCode) onCodeChanged;
+  final Function(String otp) onCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +21,8 @@ class OtpWidget extends StatelessWidget {
         fontWeight: FontWeight.w400,
       ),
       borderRadius: BorderRadius.circular(20.0.r),
-      fieldHeight: 58,
-      fieldWidth: 68,
+      fieldHeight: 62.h,
+      fieldWidth: 62.w,
       fillColor: AppColors.otpFieldColor,
       filled: false,
       autoFocus: true,
@@ -27,18 +32,14 @@ class OtpWidget extends StatelessWidget {
       borderColor: AppColors.otpFieldColor,
       showFieldAsBox: true,
       showCursor: false,
-      onCodeChanged: onCodeChanged,
-      onSubmit: (String verificationCode) {
-        // showDialog(
-        //   context: context,
-        //   builder: (context) {
-        //     return AlertDialog(
-        //       title: Text("Verification Code"),
-        //       content: Text('Code entered is $verificationCode'),
-        //     );
-        //   },
-        // );
-      }, // end onSubmit
+      onSubmit: (otp) {
+        onCompleted(otp);
+      },
+
+      // Optional: partial change
+      onCodeChanged: (v) {
+        onCodeChanged(v);
+      },
     );
   }
 }

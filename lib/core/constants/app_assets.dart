@@ -85,5 +85,10 @@ class AppAssets {
       imageAssets8 = "$baseUrlPng/image_pr2.png",
       imageAssets9 = "$baseUrlPng/image_pr3.png",
       imageAssets10 = "$baseUrlPng/image_pr4.png",
+      privacySettingAssets = "$baseUrlSvg/privacy_setting.svg",
+      accountSettingAssets = "$baseUrlSvg/account_setting.svg",
+      privacyPolicyAssets = "$baseUrlSvg/privacy_policy.svg",
+      termAssets = "$baseUrlSvg/terms.svg",
+      faqAssets = "$baseUrlSvg/faq.svg",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

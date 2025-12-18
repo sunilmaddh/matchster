@@ -59,7 +59,7 @@ class SearchLocationScreen extends StatelessWidget {
                         "New Delhi, DL India",
                         fontWeight: FontWeight.w500,
                         fontSize: 16.sp,
-                        color: Colors.black.withOpacity(0.61),
+                        color: Colors.black.withAlpha(156),
                       ),
                     ],
                   ),

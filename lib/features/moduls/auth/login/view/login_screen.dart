@@ -6,9 +6,11 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
+import 'package:matchster/features/moduls/auth/login/view/otp_screen.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_field_with_button.dart';
 
@@ -16,11 +18,28 @@ import 'package:matchster/features/moduls/auth/login/widgets/login_field_with_bu
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
   bool isLoginWithMobileNumber = true;
+  final RxBool isEnable = false.obs;
 
   final _controller = Get.find<LoginController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Obx(
+        () =>
+            _controller.isLoginWithMobile.isTrue
+                ? Padding(
+                  padding: 20.horizontalPadding,
+                  child: AppButton(
+                    isEnable: _controller.isEnable.value,
+                    name: AppConstants.verify,
+                    onTop: () {
+                      NavigationHelper.push(OtpScreen());
+                    },
+                  ),
+                )
+                : SizedBox.shrink(),
+      ),
       body: SafeArea(
         child: ListView(
           children: [
@@ -102,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                                           10.hBox,
                                           AppButton(
                                             image: AppAssets.contactAssets,
-                                            isEnable: true.obs,
+                                            isEnable: true,
                                             name: AppConstants.number,
                                             onTop: () {
                                               _controller
@@ -118,7 +137,7 @@ class LoginScreen extends StatelessWidget {
                                       child: Column(
                                         children: [
                                           AppButton(
-                                            isEnable: true.obs,
+                                            isEnable: true,
                                             name: AppConstants.createMyAccount,
                                             onTop: () {
                                               _controller

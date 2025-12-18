@@ -97,7 +97,7 @@ class FaceRecognisationPage extends StatelessWidget {
               child: Positioned.fill(
                 child: Container(
                   alignment: Alignment.center,
-                  color: Color(0xff636363).withOpacity(0.90),
+                  color: Color(0xff636363).withAlpha(230),
                   child: Padding(
                     padding: 30.horizontalPadding,
                     child: Column(
@@ -146,37 +146,6 @@ class FaceRecognisationPage extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomSection() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          90.hBox,
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CommonText.text(
-              maxLines: 2,
-              color: Colors.white,
-              AppConstants.faceRecognisationTitle,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 60,
-            height: 60,
-            child: LoadingIndicator(
-              strokeWidth: 1,
-              colors: [AppColors.appDisableButton],
-              indicatorType: Indicator.lineSpinFadeLoader,
             ),
           ),
         ],
