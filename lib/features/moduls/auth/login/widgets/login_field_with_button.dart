@@ -69,7 +69,7 @@ class LoginFieldWithButton extends StatelessWidget {
                             color:
                                 _loginController.isEnable.isTrue
                                     ? AppColors.textFieldColor
-                                    : Colors.black.withAlpha(64),
+                                    : AppColors.borderColor,
                           ),
                         ),
                         child: Row(

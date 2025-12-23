@@ -9,6 +9,9 @@ class HomeController extends GetxController {
     pageController.jumpToPage(index);
   }
 
+  RxBool isOverlay = false.obs;
+  RxBool isLike = false.obs;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final currentIndex = 0.obs;
 }

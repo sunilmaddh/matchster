@@ -90,5 +90,10 @@ class AppAssets {
       privacyPolicyAssets = "$baseUrlSvg/privacy_policy.svg",
       termAssets = "$baseUrlSvg/terms.svg",
       faqAssets = "$baseUrlSvg/faq.svg",
+      appLogoBg = "$baseUrlSvg/app_logo_bg.svg",
+      sendAssets = "$baseUrlSvg/send_message.svg",
+      loveAssets = "$baseUrlLottie/love_animation.json",
+      loveMatchAssets = "$baseUrlSvg/love.svg",
+      rightLIkes = "$baseUrlSvg/right_likes.svg",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

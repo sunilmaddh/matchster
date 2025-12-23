@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/widgets/card/circle_gradiant_card.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/home/controller/home_controller.dart';
 
@@ -34,18 +35,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          /// 🔹 Home gradient background
           _homeBackground(),
-
-          /// 🔹 Page content
           PageView(
             controller: _controller.pageController,
             onPageChanged: _controller.onTabTapped,
             children: widget.pageList,
           ),
-          //  _homeBackground(),
-
-          /// 🔹 Top fade (VERY IMPORTANT)
           Positioned(
             left: 0,
             right: 0,
@@ -70,6 +65,31 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             right: 0,
             bottom: 0,
             child: Obx(() => _bottomNavigation()),
+          ),
+          Obx(
+            () =>
+                _controller.isOverlay.isTrue
+                    ? Container(
+                      alignment: Alignment.center,
+                      color: Colors.white.withAlpha(153),
+                      child: Hero(
+                        tag: "like_dislike",
+                        transitionOnUserGestures: true,
+
+                        child: CircleGradiantCard(
+                          isGradiant: _controller.isLike.isTrue ? true : false,
+                          widget: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SvgPicture.asset(
+                              _controller.isLike.isTrue
+                                  ? AppAssets.likeAssets
+                                  : AppAssets.dislike,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    : SizedBox.shrink(),
           ),
         ],
       ),

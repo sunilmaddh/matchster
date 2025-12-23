@@ -1,60 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:matchster/core/constants/app_constants.dart';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_assets.dart';
+import 'package:matchster/core/utils/extentions.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: AppConstants.deviceSize,
-      minTextAdapt: true,
-      ensureScreenSize: true,
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: GetMaterialApp(
-          theme: ThemeData(
-            appBarTheme: AppBarTheme(backgroundColor: Colors.white),
-            useMaterial3: true,
-            scaffoldBackgroundColor: Colors.white,
-          ),
-          useInheritedMediaQuery: true,
-          debugShowCheckedModeBanner: false,
-
-          title: 'Matchster',
-
-          home: MyWidget(),
-        ),
-      ),
-    );
-  }
-}
-
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(child: Center(child: MatchCardWidgetTest())),
-    );
-  }
-}
-
-class MatchCardWidgetTest extends StatelessWidget {
-  const MatchCardWidgetTest({super.key, this.isBlur = false});
+class MatchCardWidget extends StatelessWidget {
+  const MatchCardWidget({super.key, this.isBlur = false});
 
   final bool isBlur;
 
@@ -63,7 +14,7 @@ class MatchCardWidgetTest extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          left: 149.w,
+          left: 135.w,
           top: 1.h,
           child: Transform.rotate(
             angle: 0.1,
@@ -90,7 +41,7 @@ class MatchCardWidgetTest extends StatelessWidget {
 
         Positioned(
           left: 10.w,
-          top: 80.h,
+          top: 101.h,
           child: Transform.rotate(
             angle: -0.1,
             child: Container(

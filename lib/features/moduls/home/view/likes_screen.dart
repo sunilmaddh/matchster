@@ -11,12 +11,6 @@ class LikesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: CustomAppBar(
-      //   title: "Likes",
-      //   onTop: () {},
-      //   isCenterTitle: false,
-      //   isLeading: false,
-      // ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
