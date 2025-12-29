@@ -44,7 +44,11 @@ class AppColors {
       textFieldColor = Color(0xff1B8CF5),
       circleColor = Color(0xffF4F4F4),
       otpFieldColor = Color(0xff002DDC),
-      loginTitleColor = Color(0xff2B2B2B);
+      filterHearderCardColor = Color(0xffBABABA),
+      filterCardColor = Color(0xffFBFAFF),
+      loginTitleColor = Color(0xff2B2B2B),
+      distenceSwitchTextColor = Color(0xff666666),
+      commonLightColor = Color(0xffBABABA);
   static Color hintColor = Color(0xff000000).withAlpha(128);
   static Color loginBorderColor = Color(0xff000000).withAlpha(64);
 }

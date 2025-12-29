@@ -11,6 +11,7 @@ import 'package:matchster/core/widgets/fields/common_home_card.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/home/controller/home_controller.dart';
 import 'package:matchster/features/moduls/home/helper/home_helper.dart';
+import 'package:matchster/features/moduls/home/view/filter/filter_screen.dart';
 import 'package:matchster/features/moduls/home/view/match_screen.dart';
 import 'package:matchster/features/moduls/home/widgets/circle_widget.dart';
 import 'package:matchster/features/moduls/home/widgets/dark_circle_widget.dart';
@@ -48,6 +49,7 @@ class HomeScreen extends StatelessWidget {
                                 Icons.notifications_outlined,
                                 color: AppColors.whiteColor,
                               ),
+                              onTop: () {},
                             ),
                             20.wBox,
                             DarkCircleWidget(
@@ -55,6 +57,9 @@ class HomeScreen extends StatelessWidget {
                                 Icons.filter_list_sharp,
                                 color: AppColors.whiteColor,
                               ),
+                              onTop: () {
+                                Get.to(FilterScreen());
+                              },
                             ),
                           ],
                         ),

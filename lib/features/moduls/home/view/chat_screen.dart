@@ -7,6 +7,9 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Row(children: [
+        
+      ],),
       appBar: CustomAppBar(title: "Chat", onTop: () {}),
       body: Column(children: [
       

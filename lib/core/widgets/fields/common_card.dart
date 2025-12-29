@@ -9,12 +9,14 @@ class CommonCard extends StatelessWidget {
     this.radius = 20.0,
     this.color = AppColors.whiteColor,
     this.height = 200,
+    this.isBorder = true,
   });
 
   final Widget widget;
   final double radius;
   final Color color;
   final double height;
+  final bool isBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +25,15 @@ class CommonCard extends StatelessWidget {
       // height: height.h,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
+        color: color,
         borderRadius: BorderRadius.circular(radius.r),
-        border: Border.all(
-          width: 1.w,
-          color: const Color(0xff363636).withAlpha(33),
-        ),
+        border:
+            isBorder
+                ? Border.all(
+                  width: 1.w,
+                  color: const Color(0xff363636).withAlpha(33),
+                )
+                : Border(),
       ),
       child: widget,
     );

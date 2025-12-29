@@ -39,6 +39,8 @@ class AppConstants {
   heightNote4 = " 7 feet.",
   heightNote5 = "91.77cm ",
   heightNote6 = " 213.36cm.",
+  isFilterTypeBasic = "Basic Filter",
+  isFilterTypeAdvance = "Advance Filter",
   genderDiscription = "Select the option that best represents you",
   genderNote =
       "If you choose to enable this, your gender will appear on your profile",

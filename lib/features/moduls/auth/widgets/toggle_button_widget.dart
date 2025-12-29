@@ -1,68 +1,94 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/features/moduls/home/controller/filter_controller.dart';
 
-class ToggleWithText extends StatefulWidget {
-  const ToggleWithText({super.key, required this.onTop, required this.isFeet});
-  final VoidCallback onTop;
-  final RxBool isFeet;
-  @override
-  // ignore: library_private_types_in_public_api
-  _ToggleWithTextState createState() => _ToggleWithTextState();
-}
+class ToggleWithText extends StatelessWidget {
+  const ToggleWithText({
+    super.key,
+    required this.controller,
+    required this.onTop1,
+    required this.onTop2,
+  });
 
-class _ToggleWithTextState extends State<ToggleWithText> {
+  final FilterController controller;
+  final VoidCallback onTop1;
+  final VoidCallback onTop2;
+
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => GestureDetector(
-        onTap: widget.onTop,
-        child: Container(
-          width: 90,
-          height: 40,
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
-            border: Border.all(color: Colors.grey),
-          ),
-          child: Stack(
-            children: [
-              // Text
-              Align(
-                alignment:
-                    widget.isFeet.isTrue
-                        ? Alignment.centerLeft
-                        : Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    widget.isFeet.isTrue ? "cm" : "feet",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              // Toggle Circle
-              AnimatedAlign(
-                duration: Duration(milliseconds: 200),
-                curve: Curves.easeIn,
-                alignment:
-                    widget.isFeet.isTrue
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
-            ],
-          ),
+      () => Container(
+        padding: EdgeInsets.all(4.r),
+        decoration: BoxDecoration(
+          color: const Color(0xffD5D5D5),
+          borderRadius: BorderRadius.circular(13.89.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(26),
+              blurRadius: 2.22.r,
+              spreadRadius: 0.83.r,
+              offset: const Offset(0, 1.67),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _ToggleItem(
+              text: 'km',
+              isSelected: controller.isKm.value,
+              onTap: onTop1,
+            ),
+            4.wBox,
+            _ToggleItem(
+              text: 'mi',
+              isSelected: !controller.isKm.value,
+              onTap: onTop2,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ToggleItem extends StatelessWidget {
+  const _ToggleItem({
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(20.r),
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(4.r),
+        alignment: Alignment.center,
+        decoration:
+            isSelected
+                ? BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.blackColor,
+                )
+                : null,
+        child: CommonText.text(
+          text,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color:
+              isSelected
+                  ? AppColors.whiteColor
+                  : AppColors.distenceSwitchTextColor,
         ),
       ),
     );

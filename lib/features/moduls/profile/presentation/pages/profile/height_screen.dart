@@ -45,16 +45,16 @@ class HeightScreen extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   fontFamily: "Caros",
                 ),
-                ToggleWithText(
-                  onTop: () {
-                    if (_controller.isNotFeet.isTrue) {
-                      _controller.isNotFeet.value = false;
-                    } else {
-                      _controller.isNotFeet.value = true;
-                    }
-                  },
-                  isFeet: _controller.isNotFeet,
-                ),
+                // ToggleWithText(
+                //   onTop: () {
+                //     if (_controller.isNotFeet.isTrue) {
+                //       _controller.isNotFeet.value = false;
+                //     } else {
+                //       _controller.isNotFeet.value = true;
+                //     }
+                //   },
+                //   isFeet: _controller.isNotFeet,
+                // ),
               ],
             ),
 
