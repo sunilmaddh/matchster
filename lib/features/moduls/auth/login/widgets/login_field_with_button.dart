@@ -15,7 +15,6 @@ import 'package:matchster/features/moduls/auth/login/view/country_list_screen.da
 class LoginFieldWithButton extends StatelessWidget {
   LoginFieldWithButton({super.key});
 
-  TextEditingController controller = TextEditingController();
   final _countryController = Get.find<CountryController>();
   final _loginController = Get.find<LoginController>();
   final RxBool isEnable = false.obs;
@@ -24,10 +23,7 @@ class LoginFieldWithButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: Image.asset(AppAssets.loginImage2),
-        ),
+        Padding(padding: const EdgeInsets.only(right: 10), child: SizedBox()),
 
         Padding(
           padding: EdgeInsets.only(top: 60.0.h, left: 20.w, right: 20.w),
@@ -58,6 +54,8 @@ class LoginFieldWithButton extends StatelessWidget {
                             .value = await Get.to<Country>(
                           () => const CountryListScreen(),
                         );
+                        _loginController.countryCode.value =
+                            "+${_countryController.selectedCountry.value!.phoneCode}";
                       },
                       child: Container(
                         padding: 10.horizontalPadding,
@@ -100,7 +98,7 @@ class LoginFieldWithButton extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       label: "",
                       hint: AppConstants.hintLoginMessage,
-                      controller: controller,
+                      controller: _loginController.controller,
                       onChanged: (mobileNUmber) {
                         if (mobileNUmber != null && mobileNUmber.length == 10) {
                           _loginController.isEnable.value = true;

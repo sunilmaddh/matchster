@@ -5,6 +5,7 @@ import 'package:get/state_manager.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
@@ -33,8 +34,14 @@ class LoginScreen extends StatelessWidget {
                   child: AppButton(
                     isEnable: _controller.isEnable.value,
                     name: AppConstants.verify,
-                    onTop: () {
-                      NavigationHelper.push(OtpScreen());
+                    onTop: () async {
+                      final number =
+                          _controller.countryCode + _controller.controller.text;
+
+                      _controller.phoneNumber.value = number;
+
+                      await _controller.sendOtp(number);
+                      // NavigationHelper.push(OtpScreen());
                     },
                   ),
                 )
@@ -112,10 +119,11 @@ class LoginScreen extends StatelessWidget {
                                           LoginButton(
                                             image: AppAssets.googleAssets,
                                             name: AppConstants.google,
-                                            onTop: () {
-                                              _controller
-                                                  .isLoginWithMobile
-                                                  .value = true;
+                                            onTop: () async {
+                                              _controller.signWithGoogle();
+                                              // _controller
+                                              //     .isLoginWithMobile
+                                              //     .value = true;
                                             },
                                           ),
                                           10.hBox,
@@ -160,34 +168,6 @@ class LoginScreen extends StatelessWidget {
                               ],
                             ),
                   ),
-
-                  // 20.hBox,
-                  // DeviderWidget(),
-                  // 20.hBox,
-                  // Align(
-                  //   alignment: Alignment.center,
-                  //   child: CommonText.text(
-                  //     textAlign: TextAlign.center,
-                  //     "Login with social media",
-                  //     fontSize: 14.sp,
-                  //     fontWeight: FontWeight.w400,
-                  //     color: Color(0xff709EFE),
-                  //   ),
-                  // ),
-                  // 20.hBox,
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children:
-                  //       LoginHalper().socialMediaList
-                  //           .map(
-                  //             (v) => Padding(
-                  //               padding: 20.horizontalPadding,
-                  //               child: SvgPicture.asset(v),
-                  //             ),
-                  //           )
-                  //           .toList(),
-                  // ),
                 ],
               ),
             ),

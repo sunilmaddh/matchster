@@ -4,7 +4,10 @@ class AppConstants {
   static Size deviceSize = Size(375, 812);
   static const String
   commonFont = "Caros",
+  serverClientId =
+      "502306764854-fifglmpf5vkd9b80tv84kbr4t30oi859.apps.googleusercontent.com",
   continueWith = "Continue with",
+  errorTitle = "Error",
   oRcontinue = "or continue with",
   createMyAccount = "Create My Account",
   accessMyAccount = "Access My Account",

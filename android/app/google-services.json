@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "502306764854",
+    "project_id": "matchster-53774",
+    "storage_bucket": "matchster-53774.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:502306764854:android:06200033dca6fd0f80c097",
+        "android_client_info": {
+          "package_name": "com.matchster.matchster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "502306764854-cuke08r2e4fpqq348i23stjdlnhvem3v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.matchster.matchster",
+            "certificate_hash": "2c179e60d6f275b0c6698c25f6653ec35d10b350"
+          }
+        },
+        {
+          "client_id": "502306764854-fifglmpf5vkd9b80tv84kbr4t30oi859.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATfwQTWSyU7bVz1GKqBHwH8KwANxDUPHY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "502306764854-fifglmpf5vkd9b80tv84kbr4t30oi859.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "502306764854-tqqiout2sskg2m1lqh2f0ktpaui87pgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.matchster.matchster"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

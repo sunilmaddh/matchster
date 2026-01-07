@@ -13,9 +13,7 @@ class OnboardPageViewBuilder extends StatelessWidget {
   final PageController _pageController = PageController();
   final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
   final List<Widget> pages;
-
   OnboardPageViewBuilder({super.key, required this.pages});
-
   final _onboardController = Get.find<OnboardController>();
   @override
   Widget build(BuildContext context) {
@@ -32,13 +30,12 @@ class OnboardPageViewBuilder extends StatelessWidget {
                   isEnable: _onboardController.isEnable.value,
                   onTap: () {
                     if (currentIndex == pages.length - 1) {
-                      // var data = AppMethods.getstoreQuestionAnswer();
                       Get.to(LandingScreen());
-                      // AppNavigation.to(AppRoutes.congratulationsScreen);
                     } else {
+                      _onboardController.submitStep(currentIndex);
                       _pageController.nextPage(
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeOut,
                       );
                     }
                   },

@@ -1,4 +1,4 @@
-package com.example.matchster
+package com.matchster.matchster
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/features/moduls/auth/onboard/widgets/name_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/data_with_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/dob_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/gender_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/hieght_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/name_screen.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/name_widget.dart';
+
+enum OnboardStep { name, gender, dob, height, dateWith }
 
 class OnboardHalper {
   static const List<String> radioList = ["Man", "Woman", "Non-Binary"];
@@ -90,5 +97,12 @@ class OnboardHalper {
     "Buddhist",
     "Jain",
     "Sikh",
+  ];
+  static final List<OnboardStep> steps = [
+    OnboardStep.name,
+    OnboardStep.gender,
+    OnboardStep.dob,
+    OnboardStep.height,
+    OnboardStep.dateWith,
   ];
 }

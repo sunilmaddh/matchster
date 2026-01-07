@@ -4,11 +4,16 @@ import 'dart:ui' as ui;
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
+import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
+import 'package:matchster/features/moduls/auth/onboard/services/onboard_service.dart';
 
 class OnboardController extends GetxController {
+  final OnboardService _onboardService = OnboardService();
+
   /// State variables
   RxBool isEnable = false.obs;
   var selectedIndex = RxnInt();
@@ -34,10 +39,8 @@ class OnboardController extends GetxController {
   Rx<File?> postureImage = Rx<File?>(null);
   Rx<Face?> detectedFace = Rx<Face?>(null);
   Rx<ui.Size?> imageSize = Rx<ui.Size?>(null);
-
+  RxList<String> dateWithList = <String>[].obs;
   final FaceDetectionService _faceService = FaceDetectionService();
-
-  /// Multi-image handling
   RxList<Rx<File?>> fileList = List.generate(6, (_) => Rx<File?>(null)).obs;
 
   void updateFile(int index, File file) {
@@ -54,7 +57,15 @@ class OnboardController extends GetxController {
     }
   }
 
-  void toggleSwitch(bool value) => isSwitchOn.value = value;
+  void toggleSwitch(bool value) {
+    isSwitchOn.value = value;
+    if (value) {
+      genderPreview.value = true;
+    } else {
+      genderPreview.value = false;
+    }
+  }
+
   void toggleDateSwitch(bool value) {
     isSwitchOn.value = value;
 
@@ -63,20 +74,25 @@ class OnboardController extends GetxController {
         OnboardHalper.dateList.length,
         (i) => i,
       );
+      dateWithList.assignAll(OnboardHalper.dateList);
     } else {
+      dateWithList.clear();
       selectedDates.clear();
     }
   }
 
   void toggleSelection(int index) {
     selectedIndex.value = (selectedIndex.value == index) ? null : index;
+    selectedGender.value = OnboardHalper.radioList[selectedIndex.value!];
   }
 
   void toggleDateSelection(int index) {
     if (selectedDates.contains(index)) {
       selectedDates.remove(index);
+      dateWithList.remove(OnboardHalper.dateList[index]);
     } else {
       selectedDates.add(index);
+      dateWithList.add(OnboardHalper.dateList[index]);
     }
   }
 
@@ -233,5 +249,124 @@ class OnboardController extends GetxController {
     _faceDetector.close();
     _faceService.dispose();
     super.onClose();
+  }
+
+  Future<void> addName({required String name}) async {
+    try {
+      final response = await _onboardService.addName(name: name);
+      if (response.success) {
+        AppToastMessage.show(title: "Success", message: response.message);
+      } else {
+        AppToastMessage.show(
+          title: AppConstants.errorTitle,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> addGender({
+    required String gender,
+    required genderPreview,
+  }) async {
+    try {
+      final response = await _onboardService.addGender(
+        gender: gender,
+        genderPreview: genderPreview,
+      );
+      if (response.success) {
+        AppToastMessage.show(title: "Success", message: response.message);
+      } else {
+        AppToastMessage.show(
+          title: AppConstants.errorTitle,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> addDob({required String dob}) async {
+    try {
+      final response = await _onboardService.addDob(dob: dob);
+      if (response.success) {
+        AppToastMessage.show(title: "Success", message: response.message);
+      } else {
+        AppToastMessage.show(
+          title: AppConstants.errorTitle,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> addHieght({required double feet, required double cm}) async {
+    try {
+      final response = await _onboardService.addHieght(feet: feet, cm: cm);
+      if (response.success) {
+        AppToastMessage.show(title: "Success", message: response.message);
+      } else {
+        AppToastMessage.show(
+          title: AppConstants.errorTitle,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> addDatewith({required List dateWith}) async {
+    try {
+      final response = await _onboardService.addDateWith(dateWith: dateWith);
+      if (response.success) {
+        AppToastMessage.show(title: "Success", message: response.message);
+      } else {
+        AppToastMessage.show(
+          title: AppConstants.errorTitle,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  RxString selectedGender = "".obs;
+  RxBool genderPreview = false.obs;
+  RxString selectedDob = "".obs;
+  RxDouble feet = 0.0.obs;
+  RxDouble cm = 0.0.obs;
+  RxString selectedDateWith = "".obs;
+  void submitStep(int index) {
+    switch (OnboardHalper.steps[index]) {
+      case OnboardStep.name:
+        addName(name: nameController.text);
+        break;
+
+      case OnboardStep.gender:
+        addGender(
+          gender: selectedGender.value,
+          genderPreview: genderPreview.value,
+        );
+        break;
+
+      case OnboardStep.dob:
+        addDob(dob: selectedDob.value);
+        break;
+
+      case OnboardStep.height:
+        addHieght(feet: feet.value, cm: cm.value);
+        break;
+
+      case OnboardStep.dateWith:
+        addDatewith(dateWith: dateWithList);
+        break;
+    }
   }
 }

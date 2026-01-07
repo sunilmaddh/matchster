@@ -19,7 +19,6 @@ class RadioWidget extends StatelessWidget {
 
     return Obx(() {
       final isSelected = controller.selectedIndex.value == index;
-
       return GestureDetector(
         onTap: () => controller.toggleSelection(index),
         child: Container(

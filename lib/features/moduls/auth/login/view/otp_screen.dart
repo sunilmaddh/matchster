@@ -42,6 +42,7 @@ class OtpScreen extends StatelessWidget {
               },
               onCompleted: (otp) {
                 _controller.isOtpEnable.value = true;
+                _controller.otpValue.value = otp;
               },
             ),
             32.hBox,
@@ -50,7 +51,10 @@ class OtpScreen extends StatelessWidget {
                 isEnable: _controller.isOtpEnable.value,
                 name: AppConstants.verifyNumber,
                 onTop: () {
-                  NavigationHelper.push(OnboardScreen());
+                  _controller.verifyOtp(
+                    number: _controller.phoneNumber.value,
+                    otp: _controller.otpValue.value,
+                  );
                 },
               ),
             ),

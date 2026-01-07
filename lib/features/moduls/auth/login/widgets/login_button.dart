@@ -30,7 +30,7 @@ class LoginButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(image),
+            image.isNotEmpty ? SvgPicture.asset(image) : SizedBox.shrink(),
             10.wBox,
             CommonText.text(
               fontFamily: "Caros",
