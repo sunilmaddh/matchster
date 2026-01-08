@@ -178,7 +178,7 @@ class ProfileScreen extends StatelessWidget {
                 borderRadius: 40.r,
                 backgroundColor: const Color(0xffF4F4F4),
                 padding: EdgeInsets.zero,
-                context: context,
+
                 child: SafeArea(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

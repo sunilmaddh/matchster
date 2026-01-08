@@ -47,7 +47,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
     return CustomBottomSheet.show(
       padding: 0.horizontalPadding + 20.verticalPadding,
       borderRadius: 40.r,
-      context: context,
+
       child: SizedBox(
         height: 300.h,
         width: MediaQuery.of(context).size.width,

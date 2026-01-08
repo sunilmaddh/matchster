@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
@@ -37,24 +38,20 @@ class YourHeightWidget extends StatelessWidget {
           20.hBox,
           InkWell(
             onTap: () {
-              CommonBottomSheet.showFullWidthCupertinoPicker(
-                isNotFeet: _controller.isNotFeet,
+              CommonBottomSheet.showHeightPicker(
                 context: context,
+                heightList: OnboardHalper().generateHeightList(),
+                defaultValue: OnboardHalper().generateHeightList()[0],
 
-                listInch:
-                    _controller.isNotFeet.isTrue
-                        ? OnboardHalper.heightListInch
-                        : OnboardHalper.heightListCmDecimal,
-
-                listFeet:
-                    _controller.isNotFeet.isTrue
-                        ? OnboardHalper.heightListCm
-                        : OnboardHalper.heightListFeet,
-                onSelected: (String feet, String inch) {
-                  _controller.heightController.text = feet;
+                onSelected: (height) {
+                  _controller.feet.value = double.parse(
+                    '${height.feet}.${height.inch}',
+                  );
+                  _controller.cm.value = height.cm;
+                  print(
+                    "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
+                  );
                 },
-                defaultFeet: '',
-                defaultInch: '',
               );
             },
             child: CustomFormField(

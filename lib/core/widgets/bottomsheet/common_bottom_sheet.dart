@@ -1,127 +1,47 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 
 class CommonBottomSheet {
-  static void showFullWidthCupertinoPicker({
+  static void showHeightPicker({
     required BuildContext context,
-    required List<String> listFeet,
-    required List<String> listInch,
-    required Function(String feet, String inch) onSelected,
-    required String defaultFeet,
-    required String defaultInch,
-    required RxBool isNotFeet,
+    required List<HeightItem> heightList,
+    required HeightItem defaultValue,
+    required Function(HeightItem value) onSelected,
   }) {
-    int selectedFeetIndex = listFeet.indexOf(defaultFeet);
-    int selectedInchIndex = listInch.indexOf(defaultInch);
-
-    if (selectedFeetIndex == -1) selectedFeetIndex = 0;
-    if (selectedInchIndex == -1) selectedInchIndex = 0;
-
-    FixedExtentScrollController feetController = FixedExtentScrollController(
-      initialItem: selectedFeetIndex,
-    );
-    FixedExtentScrollController inchController = FixedExtentScrollController(
-      initialItem: selectedInchIndex,
+    int selectedIndex = heightList.indexWhere(
+      (e) => e.feet == defaultValue.feet && e.inch == defaultValue.inch,
     );
 
-    String selectedFeet = listFeet[selectedFeetIndex];
-    String selectedInch = listInch[selectedInchIndex];
+    if (selectedIndex < 0) selectedIndex = 0;
+
+    final controller = FixedExtentScrollController(initialItem: selectedIndex);
 
     CustomBottomSheet.show(
-      context: context,
       child: SizedBox(
         height: 300.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Obx(
-              () => Expanded(
-                child: CupertinoPicker(
-                  scrollController: feetController,
-                  looping: true,
-                  itemExtent: 50,
-                  squeeze: 1.0,
-                  diameterRatio: 2.0,
-                  onSelectedItemChanged: (int index) {
-                    selectedFeet = listFeet[index];
-                    onSelected(selectedFeet, selectedInch);
-                  },
-                  children:
-                      listFeet.map((e) {
-                        return Center(
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: e,
-                              style: TextStyle(
-                                fontSize: 20.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: isNotFeet.isTrue ? "" : " feet",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                ),
-              ),
-            ),
-
-            // Inch Picker
-            Obx(
-              () => Expanded(
-                child: CupertinoPicker(
-                  scrollController: inchController,
-                  looping: true,
-                  itemExtent: 50,
-                  squeeze: 1.0,
-                  diameterRatio: 2.0,
-                  onSelectedItemChanged: (int index) {
-                    selectedInch = listInch[index];
-                    onSelected(selectedFeet, selectedInch);
-                  },
-                  children:
-                      listInch.map((e) {
-                        return Center(
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: isNotFeet.isTrue ? ".$e" : e,
-                              style: TextStyle(
-                                fontSize: 20.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: isNotFeet.isTrue ? "Cm" : " inch",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                ),
-              ),
-            ),
-          ],
+        child: CupertinoPicker(
+          scrollController: controller,
+          itemExtent: 50,
+          looping: true,
+          onSelectedItemChanged: (index) {
+            onSelected(heightList[index]);
+          },
+          children:
+              heightList.map((item) {
+                return Center(
+                  child: Text(
+                    item.label, // 🔥 5 feet 1 inch (154.94 cm)
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  ),
+                );
+              }).toList(),
         ),
       ),
     );

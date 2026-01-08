@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/features/moduls/auth/login/services/login_service.dart';
@@ -12,6 +13,7 @@ import 'package:matchster/routes/app_routes.dart';
 
 class LoginController extends GetxController {
   final LoginService _loginService = LoginService();
+
   RxBool isLoginWithMobile = false.obs;
   RxString otpValue = "".obs;
   RxBool isEnable = false.obs;
@@ -43,6 +45,9 @@ class LoginController extends GetxController {
       final response = await _loginService.verifyOtp(number: number, otp: otp);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        await MatchsterLocalStorage.instance.saveAccessToken(
+          response.data!.accessToken.toString(),
+        );
         AppNavigation.off(AppRoutes.onboardScreen);
       } else {
         AppToastMessage.show(

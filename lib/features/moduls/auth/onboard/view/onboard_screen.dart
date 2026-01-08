@@ -5,8 +5,8 @@ import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dar
 import 'package:matchster/features/moduls/auth/widgets/onboard_build_provider.dart';
 
 class OnboardScreen extends StatelessWidget {
-  const OnboardScreen({super.key});
-
+  OnboardScreen({super.key});
+  // final onboardPages = Get.arguments["pages"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

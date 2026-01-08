@@ -61,24 +61,17 @@ class HeightScreen extends StatelessWidget {
             20.hBox,
             InkWell(
               onTap: () {
-                CommonBottomSheet.showFullWidthCupertinoPicker(
-                  isNotFeet: _controller.isNotFeet,
+                CommonBottomSheet.showHeightPicker(
                   context: context,
+                  heightList: OnboardHalper().generateHeightList(),
+                  defaultValue: OnboardHalper().generateHeightList()[0],
 
-                  listInch:
-                      _controller.isNotFeet.isTrue
-                          ? OnboardHalper.heightListCmDecimal
-                          : OnboardHalper.heightListInch,
-
-                  listFeet:
-                      _controller.isNotFeet.isTrue
-                          ? OnboardHalper.heightListCm
-                          : OnboardHalper.heightListFeet,
-                  onSelected: (String feet, String inch) {
-                    _controller.heightController.text = feet;
+                  onSelected: (height) {
+                    // _controller.feet.value = height.feet;
+                    print(
+                      "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
+                    );
                   },
-                  defaultFeet: '',
-                  defaultInch: '',
                 );
               },
               child: CustomFormField(

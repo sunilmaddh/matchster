@@ -1,8 +1,10 @@
 // lib/core/network/base_service.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
+import 'package:matchster/features/moduls/auth/login/models/upload_photo_response.dart';
 import 'base_response.dart';
 
 class BaseService {
@@ -11,6 +13,24 @@ class BaseService {
       BaseOptions(
         baseUrl: ApiEndpoints.baseUrl,
         headers: {'Content-Type': 'application/json'},
+      ),
+    );
+
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await MatchsterLocalStorage.instance.getAccessToken();
+
+          if (token != null && token.toString().isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+
+          return handler.next(options);
+        },
+        onError: (DioException e, handler) {
+          // Optional: handle 401 / refresh token
+          return handler.next(e);
+        },
       ),
     );
   }
@@ -70,7 +90,6 @@ class BaseService {
     Map<String, dynamic>? queryParameters,
     T Function(dynamic json)? fromJsonT,
   }) {
-    AppToastMessage.show(title: "Api", message: path);
     return request<T>(
       apiCall: () => _post(path, data: data, queryParameters: queryParameters),
       fromJsonT: fromJsonT,

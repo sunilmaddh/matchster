@@ -39,7 +39,6 @@ class DobWidget extends StatelessWidget {
           InkWell(
             onTap: () {
               CustomBottomSheet.show(
-                context: context,
                 child: SizedBox(
                   height: 300.h,
 
@@ -53,9 +52,11 @@ class DobWidget extends StatelessWidget {
 
                     onDateTimeChanged: (DateTime newDate) {
                       final formattedDate = DateFormat(
-                        'dd/MM/yyyy',
+                        'yyyy-MM-dd',
                       ).format(newDate);
                       _controller.dobController.text = formattedDate;
+                      _controller.selectedDob.value =
+                          _controller.dobController.text;
                     },
                   ),
                 ),

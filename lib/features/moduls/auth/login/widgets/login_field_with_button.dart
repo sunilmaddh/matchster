@@ -23,7 +23,10 @@ class LoginFieldWithButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Padding(padding: const EdgeInsets.only(right: 10), child: SizedBox()),
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: Image.asset(AppAssets.loginImage2),
+        ),
 
         Padding(
           padding: EdgeInsets.only(top: 60.0.h, left: 20.w, right: 20.w),

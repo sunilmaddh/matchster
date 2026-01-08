@@ -12,7 +12,7 @@ OtpVerificationResponse otpVerificationResponseFromJson(String str) =>
 class OtpVerificationResponse {
   bool? verified;
   String? accessToken;
-  Pages? pages;
+  OnboardPages? pages;
 
   OtpVerificationResponse({this.verified, this.accessToken, this.pages});
 
@@ -20,11 +20,14 @@ class OtpVerificationResponse {
       OtpVerificationResponse(
         verified: UtilMethods.boolValueParser(json["verified"]),
         accessToken: UtilMethods.stringParser(json["accessToken"]),
-        pages: json["pages"] == null ? Pages() : Pages.fromJson(json["pages"]),
+        pages:
+            json["pages"] == null
+                ? OnboardPages()
+                : OnboardPages.fromJson(json["pages"]),
       );
 }
 
-class Pages {
+class OnboardPages {
   bool? name;
   bool? gender;
   bool? dob;
@@ -32,7 +35,7 @@ class Pages {
   bool? dateWith;
   bool? allOfame;
 
-  Pages({
+  OnboardPages({
     this.name,
     this.gender,
     this.dob,
@@ -41,7 +44,7 @@ class Pages {
     this.allOfame,
   });
 
-  factory Pages.fromJson(Map<String, dynamic> json) => Pages(
+  factory OnboardPages.fromJson(Map<String, dynamic> json) => OnboardPages(
     name: UtilMethods.boolValueParser(json["name"]),
     gender: UtilMethods.boolValueParser(json["gender"]),
     dob: UtilMethods.boolValueParser(json["dob"]),

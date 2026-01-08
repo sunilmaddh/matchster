@@ -86,5 +86,9 @@ class AppConstants {
   matchYourPose =
       "Match your pose as closely as possible to the sample. Make sure your photo is clear and captures you in the same gesture",
   letSMatchsterPeople = "Let’s Matchster people around you",
+  photoReviewText = "Photo Review Unsuccessful",
+  photoReviewDis =
+      "Your recent upload didn’t pass our photo standards. Try submitting a clear picture of yourself.",
+  uploadAnOtherPhoto = "Upload another Photo",
   discoverSolumates = "Discover Soulmates Near You";
 }

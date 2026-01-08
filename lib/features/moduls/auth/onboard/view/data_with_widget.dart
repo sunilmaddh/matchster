@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
@@ -89,7 +90,9 @@ class DateWidget extends StatelessWidget {
                             CommonText.text(
                               fontFamily: "DM Sans",
                               color: AppColors.blackColor,
-                              OnboardHalper.dateList[index],
+                              AppMethods.capitalizeFirst(
+                                OnboardHalper.dateList[index],
+                              ),
                               fontSize: 17.sp,
                               fontWeight: FontWeight.w600,
                             ),

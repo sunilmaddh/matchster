@@ -5,11 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/enum/enum.dart';
 import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 import 'package:matchster/features/moduls/auth/onboard/services/onboard_service.dart';
+import 'package:matchster/features/moduls/auth/onboard/widgets/photo_review_bottomsheet.dart';
 
 class OnboardController extends GetxController {
   final OnboardService _onboardService = OnboardService();
@@ -337,6 +339,46 @@ class OnboardController extends GetxController {
     }
   }
 
+  Future<void> uploadPhotoWithCamera() async {
+    try {
+      final imageUrl = await ImageUploadServices().getImageFromCamera();
+      if (imageUrl != null) {
+        final file = File(imageUrl.path);
+        final response = await _onboardService.uploadImageWithDio(file.path);
+        if (response!.success) {
+          AppToastMessage.show(title: "Success", message: response.message);
+        } else {
+          AppToastMessage.show(
+            title: AppConstants.errorTitle,
+            message: response.message,
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> uploadPhotoWithGallery({required String imagePath}) async {
+    try {
+      AppToastMessage.show(title: "Success", message: imagePath);
+      final response = await _onboardService.uploadImageWithDio(imagePath);
+      if (response!.success) {
+        AppToastMessage.show(title: "Success", message: response.message);
+        Get.back();
+      } else {
+        Get.back();
+        PhotoReviewBottomsheet.show();
+        // AppToastMessage.show(
+        //   title: AppConstants.errorTitle,
+        //   message: response.message,
+        // );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   RxString selectedGender = "".obs;
   RxBool genderPreview = false.obs;
   RxString selectedDob = "".obs;
@@ -351,7 +393,7 @@ class OnboardController extends GetxController {
 
       case OnboardStep.gender:
         addGender(
-          gender: selectedGender.value,
+          gender: selectedGender.value.toLowerCase(),
           genderPreview: genderPreview.value,
         );
         break;

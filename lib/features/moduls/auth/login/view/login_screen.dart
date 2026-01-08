@@ -5,13 +5,10 @@ import 'package:get/state_manager.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
-import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
-import 'package:matchster/features/moduls/auth/login/view/otp_screen.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_field_with_button.dart';
 
@@ -100,9 +97,9 @@ class LoginScreen extends StatelessWidget {
                                             image: AppAssets.instagramAssets,
                                             name: AppConstants.instagram,
                                             onTop: () {
-                                              _controller
-                                                  .isLoginWithMobile
-                                                  .value = true;
+                                              // _controller
+                                              //     .isLoginWithMobile
+                                              //     .value = true;
                                             },
                                           ),
                                           10.hBox,

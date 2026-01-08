@@ -8,6 +8,7 @@ import 'package:matchster/features/moduls/auth/onboard/controller/onboard_contro
 
 // ignore: must_be_immutable
 class PhotoPreviewScreen extends StatelessWidget {
+  final _onboardController = Get.find<OnboardController>();
   PhotoPreviewScreen({super.key});
   RxBool isEnable = true.obs;
 
@@ -16,33 +17,31 @@ class PhotoPreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: 15.horizontalPadding + 20.verticalPadding,
+        child: AppButton(
+          name: "Upload",
+          onTop: () {
+            final file = File(_controller.imageFile.value!.path);
+            _onboardController.uploadPhotoWithGallery(imagePath: file.path);
+          },
+          isEnable: _controller.isEnable.value,
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: 16.horizontalPadding + 16.verticalPadding,
-          child: Stack(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: AppButton(
-                  name: "Upload",
-                  onTop: () {
-                    Get.back();
-                  },
-                  isEnable: _controller.isEnable.value,
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconButton(onPressed: () {}, icon: Icon(Icons.close)),
-                  60.hBox,
-                  Image.file(
-                    _controller.imageFile.value ?? File(""),
-                    fit: BoxFit.cover,
-                    // width: 167.w,
-                    // height: 133.h,
-                  ),
-                ],
+              IconButton(onPressed: () {}, icon: Icon(Icons.close)),
+              60.hBox,
+              Image.file(
+                _controller.imageFile.value ?? File(""),
+                fit: BoxFit.cover,
+                // width: 167.w,
+                // height: 133.h,
               ),
             ],
           ),
