@@ -6,6 +6,7 @@ import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/features/moduls/auth/login/services/login_service.dart';
 import 'package:matchster/features/moduls/auth/login/view/otp_screen.dart';
+import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/onboard_screen.dart';
 import 'package:matchster/features/moduls/auth/services/firebase_services.dart';
 import 'package:matchster/routes/app_navigation.dart';
@@ -45,9 +46,12 @@ class LoginController extends GetxController {
       final response = await _loginService.verifyOtp(number: number, otp: otp);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+
         await MatchsterLocalStorage.instance.saveAccessToken(
           response.data!.accessToken.toString(),
         );
+        final pages = response.data!.pages;
+        Get.find<OnboardController>().setOnboardPages(pages!);
         AppNavigation.off(AppRoutes.onboardScreen);
       } else {
         AppToastMessage.show(

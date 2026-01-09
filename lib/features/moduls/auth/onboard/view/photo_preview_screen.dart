@@ -1,52 +1,182 @@
-import 'dart:io';
+// import 'dart:io';
 
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path_provider/path_provider.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart' as path;
 
-// ignore: must_be_immutable
-class PhotoPreviewScreen extends StatelessWidget {
-  final _onboardController = Get.find<OnboardController>();
-  PhotoPreviewScreen({super.key});
-  RxBool isEnable = true.obs;
+class CropGridOverlay extends StatelessWidget {
+  const CropGridOverlay({super.key});
 
-  final _controller = Get.find<OnboardController>();
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: SizedBox.expand(child: CustomPaint(painter: _GridPainter())),
+    );
+  }
+}
 
+class _GridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint =
+        Paint()
+          ..color = Colors.white
+          ..strokeWidth = 1;
+
+    final thirdWidth = size.width / 3;
+    final thirdHeight = size.height / 3;
+
+    // Vertical lines
+    canvas.drawLine(
+      Offset(thirdWidth, 0),
+      Offset(thirdWidth, size.height),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(thirdWidth * 2, 0),
+      Offset(thirdWidth * 2, size.height),
+      paint,
+    );
+
+    // Horizontal lines
+    canvas.drawLine(
+      Offset(0, thirdHeight),
+      Offset(size.width, thirdHeight),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(0, thirdHeight * 2),
+      Offset(size.width, thirdHeight * 2),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class PhotoPreviewScreen extends StatefulWidget {
+  final File imageFile;
+  final int index;
+  const PhotoPreviewScreen({
+    super.key,
+    required this.imageFile,
+    required this.index,
+  });
+
+  @override
+  State<PhotoPreviewScreen> createState() => _CustomCropScreenState();
+}
+
+class _CustomCropScreenState extends State<PhotoPreviewScreen> {
+  final TransformationController _controller = TransformationController();
+  final GlobalKey _cropKey = GlobalKey();
+  final _onboarController = Get.find<OnboardController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
         padding: 15.horizontalPadding + 20.verticalPadding,
-        child: AppButton(
-          name: "Upload",
-          onTop: () {
-            final file = File(_controller.imageFile.value!.path);
-            _onboardController.uploadPhotoWithGallery(imagePath: file.path);
-          },
-          isEnable: _controller.isEnable.value,
+        child: Obx(
+          () =>
+              _onboarController.isImageUploading.isTrue
+                  ? CircularProgressIndicator()
+                  : AppButton(
+                    name: "Upload",
+                    onTop: () async {
+                      final file = await _cropImage();
+
+                      _onboarController.uploadPhotoW(
+                        imagePath: file.path,
+                        index: widget.index,
+                      );
+                    },
+                    isEnable: true,
+                  ),
         ),
       ),
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: 16.horizontalPadding + 16.verticalPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.close)),
-              60.hBox,
-              Image.file(
-                _controller.imageFile.value ?? File(""),
-                fit: BoxFit.cover,
-                // width: 167.w,
-                // height: 133.h,
+        child: Column(
+          children: [
+            /// Close
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
-            ],
-          ),
+            ),
+
+            /// Crop Area
+            Expanded(
+              child: Center(
+                child: AspectRatio(
+                  aspectRatio: 3 / 4,
+                  child: Stack(
+                    fit: StackFit.expand, // ❗ IMPORTANT
+                    children: [
+                      /// Image (pan & zoom)
+                      RepaintBoundary(
+                        key: _cropKey,
+                        child: InteractiveViewer(
+                          transformationController: _controller,
+                          minScale: 1,
+                          maxScale: 4,
+                          child: Image.file(
+                            widget.imageFile,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+
+                      /// Grid overlay (ALWAYS ON TOP)
+                      const CropGridOverlay(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            /// Upload
+          ],
         ),
       ),
     );
+  }
+
+  Future<File> _cropImage() async {
+    final boundary =
+        _cropKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+
+    final ui.Image image = await boundary.toImage(pixelRatio: 3);
+
+    final ByteData? byteData = await image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+
+    final Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+    final directory = await getTemporaryDirectory();
+    final filePath = path.join(directory.path, 'cropped.png');
+
+    final file = File(filePath);
+    await file.writeAsBytes(pngBytes);
+
+    return file;
   }
 }

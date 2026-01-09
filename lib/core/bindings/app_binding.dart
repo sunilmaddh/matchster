@@ -10,10 +10,10 @@ import 'package:matchster/features/moduls/profile/presentation/controllers/profi
 class AppBinding extends Bindings {
   @override
   void dependencies() {
+    Get.put(OnboardController(), permanent: true);
     Get.lazyPut<LoginController>(() => LoginController());
-    Get.put(OnboardController());
-    Get.put(HomeController());
-    Get.put(ProfileController());
+    Get.put(HomeController(), permanent: true);
+    Get.put(ProfileController(), permanent: true);
     Get.put(CountryController());
     Get.put(FilterController());
     Get.put<BaseService>(BaseService(), permanent: true);

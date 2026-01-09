@@ -51,6 +51,7 @@ class YourHeightWidget extends StatelessWidget {
                   print(
                     "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
                   );
+                  _controller.isEnable.value = true;
                 },
               );
             },

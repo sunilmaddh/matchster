@@ -57,6 +57,8 @@ class DobWidget extends StatelessWidget {
                       _controller.dobController.text = formattedDate;
                       _controller.selectedDob.value =
                           _controller.dobController.text;
+
+                      _controller.isEnable.value = true;
                     },
                   ),
                 ),

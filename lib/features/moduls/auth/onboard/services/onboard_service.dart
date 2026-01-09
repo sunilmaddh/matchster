@@ -64,6 +64,15 @@ class OnboardService {
     );
   }
 
+  Future<BaseResponse<AddDateWithResponse>> allOfFame({
+    required List imageUrlList,
+  }) async {
+    return _baseService.postRequest<AddDateWithResponse>(
+      path: ApiEndpoints.allOfFame,
+      data: {"urls": imageUrlList},
+    );
+  }
+
   Future<BaseResponse<UploadPhotoResponse>?> uploadImageWithDio(
     String filePath,
   ) async {

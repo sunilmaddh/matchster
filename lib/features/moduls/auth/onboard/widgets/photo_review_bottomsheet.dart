@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
@@ -10,11 +12,10 @@ import 'package:matchster/core/widgets/bottomsheet/image_picker_bottom_sheet.dar
 import 'package:matchster/core/widgets/fields/common_text.dart';
 
 class PhotoReviewBottomsheet {
-  static void show() {
+  static void show({required Function(File file) onImageSelected}) {
     CustomBottomSheet.show(
       padding: EdgeInsets.zero,
       borderRadius: 40.r,
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

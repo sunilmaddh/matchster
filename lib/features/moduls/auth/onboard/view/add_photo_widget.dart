@@ -1,16 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
-import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/photo_card.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
+import 'package:matchster/features/moduls/auth/onboard/widgets/photo_review_bottomsheet.dart';
 
 class AddPhotoWidget extends StatelessWidget {
   AddPhotoWidget({super.key});
@@ -53,81 +48,101 @@ class AddPhotoWidget extends StatelessWidget {
               return InkWell(
                 onTap: () {
                   _controller.selectedImageIndex.value = index;
-                  _controller.imageFile = _controller.fileList[index];
+                  // _controller.imageFile.value = _controller.fileList[index]!;
+                  PhotoReviewBottomsheet.show(
+                    onImageSelected: (selectedImage) {
+                      Get.back();
 
-                  CustomBottomSheet.show(
-                    borderRadius: 40.r,
-                    backgroundColor: const Color(0xffF4F4F4),
-                    padding: EdgeInsets.zero,
-
-                    child: SafeArea(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: 15.horizontalPadding + 30.verticalPadding,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children:
-                                  OnboardHalper.addPhotoOption.map((v) {
-                                    return InkWell(
-                                      onTap: () async {
-                                        File? selectedImage;
-
-                                        if (v["text"] == "Camera") {
-                                          selectedImage =
-                                              await ImageUploadServices()
-                                                  .getImageFromCamera();
-                                        } else if (v["text"] == "File") {
-                                          selectedImage =
-                                              await ImageUploadServices()
-                                                  .getImageFromGallery();
-                                        }
-
-                                        if (selectedImage != null) {
-                                          _controller.updateFile(
-                                            index,
-                                            selectedImage,
-                                          );
-                                        }
-                                        Get.back();
-                                        Get.to(PhotoPreviewScreen());
-                                        // Get.back();
-                                      },
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SvgPicture.asset(v["image"]),
-                                          CommonText.text(
-                                            v["text"],
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList(),
-                            ),
-                          ),
-                          const Divider(height: 1),
-                          10.hBox,
-                          TextButton(
-                            onPressed: () => Get.back(),
-                            child: CommonText.text(
-                              "Cancel",
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                      Get.to(
+                        PhotoPreviewScreen(
+                          imageFile: selectedImage,
+                          index: index,
+                        ),
+                      );
+                    },
                   );
+
+                  // CustomBottomSheet.show(
+                  //   borderRadius: 40.r,
+                  //   backgroundColor: const Color(0xffF4F4F4),
+                  //   padding: EdgeInsets.zero,
+
+                  //   child: SafeArea(
+                  //     child: Column(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: [
+                  //         Padding(
+                  //           padding: 15.horizontalPadding + 30.verticalPadding,
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //             children:
+                  //                 OnboardHalper.addPhotoOption.map((v) {
+                  //                   return InkWell(
+                  //                     onTap: () async {
+                  //                       File? selectedImage;
+
+                  //                       if (v["text"] == "Camera") {
+                  //                         selectedImage =
+                  //                             await ImageUploadServices()
+                  //                                 .getImageFromCamera();
+                  //                       } else if (v["text"] == "File") {
+                  //                         selectedImage =
+                  //                             await ImageUploadServices()
+                  //                                 .getImageFromGallery();
+                  //                       }
+
+                  //                       // if (selectedImage != null) {
+                  //                       //   _controller.updateFile(
+                  //                       //     index,
+                  //                       //     selectedImage,
+                  //                       //   );
+                  //                       // }
+                  //                       Get.back();
+
+                  //                       Get.to(
+                  //                         PhotoPreviewScreen(
+                  //                           imageFile: selectedImage!,
+                  //                           index: index,
+                  //                         ),
+                  //                       );
+
+                  //                       // Get.to(PhotoPreviewScreen());
+                  //                       // Get.back();
+                  //                     },
+                  //                     child: Column(
+                  //                       mainAxisSize: MainAxisSize.min,
+                  //                       children: [
+                  //                         SvgPicture.asset(v["image"]),
+                  //                         CommonText.text(
+                  //                           v["text"],
+                  //                           fontSize: 14.sp,
+                  //                           fontWeight: FontWeight.w400,
+                  //                         ),
+                  //                       ],
+                  //                     ),
+                  //                   );
+                  //                 }).toList(),
+                  //           ),
+                  //         ),
+                  //         const Divider(height: 1),
+                  //         10.hBox,
+                  //         TextButton(
+                  //           onPressed: () => Get.back(),
+                  //           child: CommonText.text(
+                  //             "Cancel",
+                  //             fontSize: 18.sp,
+                  //             fontWeight: FontWeight.w600,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // );
                 },
                 child: PhotoCard(
-                  image: file,
+                  image: file.toString(),
                   onDelete: () {
-                    _controller.removeFile(index);
+                    // _controller.removeFile(index);
                   },
                 ),
               );
