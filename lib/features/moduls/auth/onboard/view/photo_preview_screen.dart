@@ -95,12 +95,16 @@ class _CustomCropScreenState extends State<PhotoPreviewScreen> {
                   : AppButton(
                     name: "Upload",
                     onTop: () async {
+                      _onboarController.isImageUploading(true);
                       final file = await _cropImage();
 
-                      _onboarController.uploadPhotoW(
+                      final success = await _onboarController.uploadPhotoW(
                         imagePath: file.path,
                         index: widget.index,
                       );
+                      if (success) {
+                        Get.back();
+                      }
                     },
                     isEnable: true,
                   ),

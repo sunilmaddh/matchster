@@ -3,12 +3,10 @@ import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/onboard_screen.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/otp_widget.dart';
 
 class OtpScreen extends StatelessWidget {
@@ -33,7 +31,7 @@ class OtpScreen extends StatelessWidget {
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
               color: Color(0xff0C0C0C),
-              AppConstants.otpDiscription,
+              " AppConstants.otpDiscription ${_controller.phoneNumber.value}",
             ),
             40.hBox,
             OtpWidget(
@@ -47,16 +45,19 @@ class OtpScreen extends StatelessWidget {
             ),
             32.hBox,
             Obx(
-              () => AppButton(
-                isEnable: _controller.isOtpEnable.value,
-                name: AppConstants.verifyNumber,
-                onTop: () {
-                  _controller.verifyOtp(
-                    number: _controller.phoneNumber.value,
-                    otp: _controller.otpValue.value,
-                  );
-                },
-              ),
+              () =>
+                  _controller.isLoading.isTrue
+                      ? CircularProgressIndicator(color: AppColors.primary)
+                      : AppButton(
+                        isEnable: _controller.isOtpEnable.value,
+                        name: AppConstants.verifyNumber,
+                        onTop: () {
+                          _controller.verifyOtp(
+                            number: _controller.phoneNumber.value,
+                            otp: _controller.otpValue.value,
+                          );
+                        },
+                      ),
             ),
             10.hBox,
             Row(

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_field_with_button.dart';
+import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/current_loading_screen.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
@@ -26,22 +28,24 @@ class LoginScreen extends StatelessWidget {
       floatingActionButton: Obx(
         () =>
             _controller.isLoginWithMobile.isTrue
-                ? Padding(
-                  padding: 20.horizontalPadding,
-                  child: AppButton(
-                    isEnable: _controller.isEnable.value,
-                    name: AppConstants.verify,
-                    onTop: () async {
-                      final number =
-                          _controller.countryCode + _controller.controller.text;
-
-                      _controller.phoneNumber.value = number;
-
-                      await _controller.sendOtp(number);
-                      // NavigationHelper.push(OtpScreen());
-                    },
-                  ),
-                )
+                ? _controller.isLoading.isTrue
+                    ? CircularProgressIndicator(color: AppColors.primary)
+                    : Padding(
+                      padding: 20.horizontalPadding,
+                      child: AppButton(
+                        isEnable: _controller.isEnable.value,
+                        name: AppConstants.verify,
+                        onTop: () async {
+                          final number =
+                              _controller.countryCode +
+                              _controller.controller.text;
+                          _controller.phoneNumber.value = number;
+                          await _controller.sendOtp(number);
+                          //  Get.to(CurrentLoadingScreen());
+                          // Get.find<OnboardController>().getLocation();
+                        },
+                      ),
+                    )
                 : SizedBox.shrink(),
       ),
       body: SafeArea(
@@ -51,7 +55,7 @@ class LoginScreen extends StatelessWidget {
               padding: EdgeInsets.only(top: 10.h),
               child: Align(
                 alignment: Alignment.topCenter,
-                child: SvgPicture.asset(AppAssets.appLogo),
+                child: CommonAssets.svgAsset(AppAssets.appLogo),
               ),
             ),
             Align(

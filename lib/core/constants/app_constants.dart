@@ -51,7 +51,7 @@ class AppConstants {
   heightDiscription =
       "Choose your height to help others get to know you better. ",
   heightNote = "Minimum height should be 3 feet and maximum should be 7 feet.",
-  otpDiscription = "A verification code has been sent to 9876543210",
+  otpDiscription = "A verification code has been sent to",
   loginSubtile =
       "Fill in your details below or register to join - where meaningful connections begin",
   likeTitle = "Select Your Likes...",

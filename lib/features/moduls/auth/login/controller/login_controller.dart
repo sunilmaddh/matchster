@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/features/moduls/auth/login/services/login_service.dart';
@@ -22,9 +23,11 @@ class LoginController extends GetxController {
   RxBool isAccessMyAccount = false.obs;
   RxString countryCode = "+91".obs;
   RxString phoneNumber = "".obs;
+  RxBool isLoading = false.obs;
   TextEditingController controller = TextEditingController();
   Future<void> sendOtp(String number) async {
     try {
+      isLoading(true);
       final response = await _loginService.sendOtp(number: number);
       if (response.success) {
         debugPrint(response.message);
@@ -34,33 +37,49 @@ class LoginController extends GetxController {
           title: AppConstants.errorTitle,
           message: response.message,
         );
+
+        isLoading(false);
       }
     } catch (e) {
+      isLoading(false);
       debugPrint(e.toString());
+    } finally {
+      isLoading(false);
     }
   }
 
   Future<void> verifyOtp({required String number, required String otp}) async {
     try {
-      AppToastMessage.show(title: "Otp", message: number + otp);
+      isLoading(true);
       final response = await _loginService.verifyOtp(number: number, otp: otp);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
-
         await MatchsterLocalStorage.instance.saveAccessToken(
           response.data!.accessToken.toString(),
         );
         final pages = response.data!.pages;
-        Get.find<OnboardController>().setOnboardPages(pages!);
-        AppNavigation.off(AppRoutes.onboardScreen);
+        if (pages != null) {
+          final onboardController = Get.find<OnboardController>();
+          await onboardController.setOnboardPages(pages);
+          final allCompleted = onboardController.allCompleted;
+          if (allCompleted) {
+            AppNavigation.off(AppRoutes.landingScreen);
+          } else {
+            AppNavigation.off(AppRoutes.onboardScreen);
+          }
+        }
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
           message: response.message,
         );
+        isLoading(false);
       }
     } catch (e) {
       debugPrint(e.toString());
+      isLoading(false);
+    } finally {
+      isLoading(false);
     }
   }
 

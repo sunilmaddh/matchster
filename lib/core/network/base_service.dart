@@ -3,8 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
-import 'package:matchster/core/utils/app_toast_message.dart';
-import 'package:matchster/features/moduls/auth/login/models/upload_photo_response.dart';
 import 'base_response.dart';
 
 class BaseService {
@@ -77,7 +75,6 @@ class BaseService {
     Map<String, dynamic>? queryParameters,
     T Function(dynamic json)? fromJsonT,
   }) {
-    AppToastMessage.show(title: "Api", message: path);
     return request<T>(
       apiCall: () => _get(path, queryParameters: queryParameters),
       fromJsonT: fromJsonT,

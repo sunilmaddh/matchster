@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:matchster/core/network/base_response.dart';
 import 'package:matchster/core/network/base_service.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
-import 'package:matchster/features/moduls/auth/login/models/add_date_with_response.dart';
-import 'package:matchster/features/moduls/auth/login/models/add_dob_response.dart';
-import 'package:matchster/features/moduls/auth/login/models/add_gender_response.dart';
-import 'package:matchster/features/moduls/auth/login/models/add_hieght_response.dart';
-import 'package:matchster/features/moduls/auth/login/models/add_name_response.dart';
-import 'package:matchster/features/moduls/auth/login/models/upload_photo_response.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/add_date_with_response.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/add_dob_response.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/add_gender_response.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/add_hieght_response.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/add_name_response.dart';
+import 'package:matchster/features/moduls/auth/login/models/reverse_geocode_response.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/upload_photo_response.dart';
 
 class OnboardService {
   final BaseService _baseService = BaseService();
@@ -70,6 +71,66 @@ class OnboardService {
     return _baseService.postRequest<AddDateWithResponse>(
       path: ApiEndpoints.allOfFame,
       data: {"urls": imageUrlList},
+    );
+  }
+
+  Future<BaseResponse<ReverseGeocodeResponse>> getAddress({
+    required double lat,
+    required double lng,
+  }) async {
+    return _baseService.postRequest<ReverseGeocodeResponse>(
+      path: "${ApiEndpoints.reverseGeocoding}?lat=$lat&lng=$lng",
+      fromJsonT: (json) => ReverseGeocodeResponse.fromJson(json),
+    );
+  }
+
+  Future<BaseResponse<AddDateWithResponse>> addCurrentLocation({
+    required double lat,
+    required double lng,
+    required String label,
+    required String city,
+    required String state,
+    required String country,
+  }) async {
+    return _baseService.postRequest<AddDateWithResponse>(
+      path: ApiEndpoints.addCurrentLocation,
+      data: {
+        "currentLocation": {
+          "lat": lat,
+          "lng": lng,
+          "address": {
+            "label": label,
+            "city": city,
+            "state": state,
+            "country": country,
+          },
+        },
+      },
+    );
+  }
+
+  Future<BaseResponse<AddDateWithResponse>> addHomeLocation({
+    required double lat,
+    required double lng,
+    required String label,
+    required String city,
+    required String state,
+    required String country,
+  }) async {
+    return _baseService.postRequest<AddDateWithResponse>(
+      path: ApiEndpoints.addHomeTownLocation,
+      data: {
+        "homeTown": {
+          "lat": lat,
+          "lng": lng,
+          "address": {
+            "label": label,
+            "city": city,
+            "state": state,
+            "country": country,
+          },
+        },
+      },
     );
   }
 

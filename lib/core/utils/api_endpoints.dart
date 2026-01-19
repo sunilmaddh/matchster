@@ -1,9 +1,10 @@
 class ApiEndpoints {
-  static const String baseUrl =
-      "https://studio-blue-pierre-participants.trycloudflare.com";
+  static const String baseUrl = "http://209.38.123.49:8002/";
+  //  "https://watt-clan-cabinet-formats.trycloudflare.com";
   static const String apiPrefix = "/api/v1/matchster";
   static const String urlUserType = "$apiPrefix/user-auth";
   static const String urlProfileType = "$apiPrefix/user-profile";
+  static const String urlGoogleMap = "$apiPrefix/google-map";
 
   static const String sendOtp = "$urlUserType/send-otp",
       verifyOtp = "$urlUserType/verify-otp",
@@ -20,10 +21,16 @@ class ApiEndpoints {
       addInterests = "$urlProfileType/add-interests",
       addLanguages = "$urlProfileType/add-languages",
       addZodiacsign = "$urlProfileType/add-zodiacsign",
-      addReligion = "/$urlProfileType-religion",
+      addReligion = "$urlProfileType/add-religion",
       addVisibility = "$urlProfileType/add-visibility",
       addLookingfor = "$urlProfileType/add-lookingfor",
       addQualification = "$urlProfileType/add-qualification",
       addWork = "$urlProfileType/add-work",
+      addCurrentLocation = "$urlUserType/add-current-location",
+      addHomeTownLocation = "$urlUserType/add-home-town-location",
+      reverseGeocoding = "$urlGoogleMap/reverse-geocode",
+      autoComplete = "$urlGoogleMap/auto-complete",
+      placeDetails = "$urlGoogleMap/place-details",
+      myProfile = "$urlProfileType/my-profile",
       addAbout = "$urlProfileType/add-about";
 }

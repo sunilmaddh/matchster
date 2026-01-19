@@ -44,7 +44,7 @@ class ImagePickerBottomSheet {
                             onImageSelected(selectedImage);
                           }
 
-                          Get.back();
+                          // Get.back();
                         },
                       );
                     }).toList(),

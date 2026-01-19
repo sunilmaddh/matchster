@@ -51,7 +51,12 @@ class PhotoReviewBottomsheet {
           10.hBox,
           InkWell(
             onTap: () {
-              ImagePickerBottomSheet.show(onImageSelected: (v) {});
+              Get.back();
+              ImagePickerBottomSheet.show(
+                onImageSelected: (v) {
+                  onImageSelected(v);
+                },
+              );
             },
             child: CommonText.text(
               textAlign: TextAlign.center,

@@ -1,4 +1,3 @@
-import 'package:matchster/core/enum/enum.dart';
 import 'package:matchster/features/moduls/auth/login/models/otp_verification_response.dart';
 
 extension OnboardPagesExtension on OnboardPages {
@@ -12,18 +11,18 @@ extension OnboardPagesExtension on OnboardPages {
       allOfame ?? false,
     ];
   }
+}
 
-  Map<OnboardSteps, bool> toStepMap() {
-    return {
-      OnboardSteps.name: name ?? false,
-      OnboardSteps.gender: gender ?? false,
-      OnboardSteps.dob: dob ?? false,
-      OnboardSteps.height: height ?? false,
-      OnboardSteps.dateWith: dateWith ?? false,
-      OnboardSteps.allOfame: allOfame ?? false,
-    };
-  }
+extension OnboardPagesExt on OnboardPages {
+  bool get allCompleted =>
+      name! && gender! && dob! && height! && dateWith! && allOfame!;
 
-  int get firstIncompleteIndex =>
-      toStepStatusList().indexWhere((e) => e == false);
+  List<bool> toStepStatusLists() => [
+    name!,
+    gender!,
+    dob!,
+    height!,
+    dateWith!,
+    allOfame!,
+  ];
 }

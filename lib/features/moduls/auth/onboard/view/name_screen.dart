@@ -27,6 +27,7 @@ class NameWidget extends StatelessWidget {
           ),
           10.hBox,
           CustomFormField(
+            enableBorder: true.obs,
             label: "",
             hint: "Enter first name",
             controller: _onboardController.nameController,

@@ -2,23 +2,27 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:matchster/core/constants/app_constants.dart';
-import 'package:matchster/core/enum/enum.dart';
 import 'package:matchster/core/extentions/onboard_pages_ext.dart';
 import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
-import 'package:matchster/core/utils/image_crop.dart';
 import 'package:matchster/core/utils/navigation_helper.dart';
 import 'package:matchster/features/moduls/auth/login/models/otp_verification_response.dart';
+import 'package:matchster/features/moduls/auth/login/models/reverse_geocode_response.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 import 'package:matchster/features/moduls/auth/onboard/services/onboard_service.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/current_loading_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/photo_review_bottomsheet.dart';
 import 'package:matchster/features/moduls/home/view/landing_screen.dart';
+import 'package:matchster/features/moduls/profile/services/location_services.dart'
+    show LocationService;
 
 class OnboardController extends GetxController {
   final OnboardService _onboardService = OnboardService();
@@ -27,7 +31,7 @@ class OnboardController extends GetxController {
   RxBool isEnable = false.obs;
   var selectedIndex = RxnInt();
   var selectedImageIndex = RxnInt();
-  RxBool isSwitchOn = true.obs;
+  RxBool isSwitchOn = false.obs;
   RxBool isNotFeet = false.obs;
   RxBool isDateSelected = false.obs;
   RxInt selectedIndexDate = 0.obs;
@@ -35,6 +39,9 @@ class OnboardController extends GetxController {
   RxBool isHumanProccessingStep2 = false.obs;
   RxBool isFaceRecognigation = false.obs;
   RxBool isImageUploading = false.obs;
+  RxBool isNextPageEnable = false.obs;
+  RxBool isPageLoading = false.obs;
+  RxBool isSelectingImage = false.obs;
 
   RxList<int> selectedDates = <int>[].obs;
   RxString imageFile = "".obs;
@@ -43,6 +50,7 @@ class OnboardController extends GetxController {
   final nameController = TextEditingController();
   final dobController = TextEditingController();
   final heightController = TextEditingController();
+  final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
 
   /// Face detection related
   Rx<File?> faceImage = Rx<File?>(null);
@@ -57,11 +65,13 @@ class OnboardController extends GetxController {
   RxDouble cm = 0.0.obs;
   RxString selectedDateWith = "".obs;
   final FaceDetectionService _faceService = FaceDetectionService();
+  RxString gridImage = "".obs;
   RxList<String> fileList = List.generate(6, (_) => '').obs;
   void updateFile(int index, String imageUrl) {
     if (index < fileList.length) {
       fileList[index] = imageUrl;
       fileList.refresh();
+      if (index == fileList.length - 1) isEnable.value = true;
     } else {
       isEnable.value = true;
     }
@@ -92,6 +102,7 @@ class OnboardController extends GetxController {
         (i) => i,
       );
       dateWithList.assignAll(OnboardHalper.dateList);
+      isEnable.value = true;
     } else {
       dateWithList.clear();
       selectedDates.clear();
@@ -111,6 +122,7 @@ class OnboardController extends GetxController {
     } else {
       selectedDates.add(index);
       dateWithList.add(OnboardHalper.dateList[index]);
+      isEnable.value = true;
     }
   }
 
@@ -123,15 +135,8 @@ class OnboardController extends GetxController {
     ),
   );
 
-  // 🔹 Reactive states
-
   RxBool isProcessing = false.obs;
 
-  // ---------------------------------------------------------------------------
-  // IMAGE SELECTION METHODS
-  // ---------------------------------------------------------------------------
-
-  /// Capture image from camera and detect face
   Future<void> pickImageFromCamera() async {
     try {
       isProcessing.value = true;
@@ -166,16 +171,6 @@ class OnboardController extends GetxController {
 
       if (imageFile != null) {
         postureImage.value = imageFile;
-        // await detectFaceFromImage(imageFile);
-        // Future.delayed(Duration(seconds: 1), () {
-        //   isFaceRecognigation.value = true;
-        // });
-        // Future.delayed(Duration(seconds: 3), () {
-        //   isHumanProccessing.value = true;
-        // });
-        // Future.delayed(Duration(seconds: 6), () {
-        //   isHumanProccessingStep2.value = true;
-        // });
       } else {
         Get.snackbar("Error", "No image captured");
       }
@@ -269,182 +264,423 @@ class OnboardController extends GetxController {
     super.onClose();
   }
 
-  Future<void> addName({required String name}) async {
+  Future<bool> addName({required String name}) async {
     try {
+      isPageLoading(true);
       final response = await _onboardService.addName(name: name);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        goToNextPage();
+        return true;
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
           message: response.message,
         );
+        isPageLoading(false);
+        return false;
       }
     } catch (e) {
       debugPrint(e.toString());
+      isPageLoading(false);
+      return false;
+    } finally {
+      isPageLoading(false);
     }
   }
 
-  Future<void> addGender({
+  Future<bool> addGender({
     required String gender,
     required genderPreview,
   }) async {
     try {
+      isPageLoading(true);
       final response = await _onboardService.addGender(
         gender: gender,
         genderPreview: genderPreview,
       );
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        goToNextPage();
+        isPageLoading(false);
+        return true;
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
           message: response.message,
         );
+        isPageLoading(false);
+        return false;
       }
     } catch (e) {
       debugPrint(e.toString());
+      isPageLoading(false);
+      return false;
+    } finally {
+      isPageLoading(false);
     }
   }
 
-  Future<void> addDob({required String dob}) async {
+  Future<bool> addDob({required String dob}) async {
     try {
+      isPageLoading(true);
       final response = await _onboardService.addDob(dob: dob);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        goToNextPage();
+        isPageLoading(false);
+        return true;
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
           message: response.message,
         );
+        isPageLoading(false);
+        return false;
       }
     } catch (e) {
       debugPrint(e.toString());
+      return false;
     }
   }
 
-  Future<void> addHieght({required double feet, required double cm}) async {
+  Future<bool> addHieght({required double feet, required double cm}) async {
     try {
+      isPageLoading(true);
       final response = await _onboardService.addHieght(feet: feet, cm: cm);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        goToNextPage();
+        isPageLoading(false);
+        return true;
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
           message: response.message,
         );
+        isPageLoading(false);
+        return false;
       }
     } catch (e) {
       debugPrint(e.toString());
+      isPageLoading(false);
+      return false;
+    } finally {
+      isPageLoading(false);
     }
   }
 
-  Future<void> addDatewith({required List dateWith}) async {
+  Future<bool> addDatewith({required List dateWith}) async {
     try {
+      isPageLoading(true);
       final response = await _onboardService.addDateWith(dateWith: dateWith);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        goToNextPage();
+        isPageLoading(false);
+        return true;
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
           message: response.message,
         );
+        isPageLoading(false);
+        return false;
       }
     } catch (e) {
       debugPrint(e.toString());
+      isPageLoading(false);
+      return false;
+    } finally {
+      isPageLoading(false);
     }
   }
 
-  Future<void> uploadPhotoW({
+  Future<bool> uploadPhotoW({
     required String imagePath,
     required int index,
   }) async {
     try {
-      isImageUploading(true);
       final response = await _onboardService.uploadImageWithDio(imagePath);
       if (response!.success) {
-        AppToastMessage.show(title: "Success", message: response.message);
+        // AppToastMessage.show(title: "Success", message: response.message);
         final image = response.data!.url ?? '';
         updateFile(index, image.toString());
-        isImageUploading(false);
-        Get.back();
+        // isImageUploading(false);
+        return true;
       } else {
         isImageUploading(false);
         Get.back();
         PhotoReviewBottomsheet.show(
           onImageSelected: (selectedImage) {
+            Get.back();
             Get.to(PhotoPreviewScreen(imageFile: selectedImage, index: index));
           },
         );
+        return false;
       }
     } catch (e) {
       isImageUploading(false);
       debugPrint(e.toString());
+      return false;
     } finally {
       isImageUploading(false);
     }
   }
 
-  Future<void> allOfFame({required List<String> imageUrlList}) async {
+  Future<bool> allOfFame({required List<String> imageUrlList}) async {
     try {
+      isPageLoading(true);
       final response = await _onboardService.allOfFame(
         imageUrlList: imageUrlList,
       );
       if (response.success) {
-        NavigationHelper.pushAndRemoveUntil(LandingScreen());
+        AppToastMessage.show(
+          title: "Success",
+          message: "Success ${response.success}",
+        );
+        isPageLoading(false);
+        return true;
+      } else {
+        isPageLoading(false);
+        AppToastMessage.show(
+          title: "Error",
+          message: "Success ${response.message}",
+        );
       }
     } catch (e) {
+      isPageLoading(false);
       debugPrint(e.toString());
-    } finally {}
+      return false;
+    }
+    return false;
   }
 
-  void submitStep(int index) {
-    switch (OnboardHalper.steps[index]) {
-      case OnboardStep.name:
-        addName(name: nameController.text);
-        break;
-
-      case OnboardStep.gender:
-        addGender(
-          gender: selectedGender.value.toLowerCase(),
-          genderPreview: genderPreview.value,
+  Future<bool> currentLocation({
+    required double lat,
+    required double lng,
+    required String label,
+    required String city,
+    required String state,
+    required String country,
+  }) async {
+    try {
+      isPageLoading(true);
+      final response = await _onboardService.addCurrentLocation(
+        lat: lat,
+        lng: lng,
+        label: label,
+        city: city,
+        state: state,
+        country: country,
+      );
+      if (response.success) {
+        isPageLoading(false);
+        AppToastMessage.show(
+          title: "Success",
+          message: "Success ${response.success}",
         );
-        break;
 
-      case OnboardStep.dob:
-        addDob(dob: selectedDob.value);
-        break;
+        return true;
+      }
+    } catch (e) {
+      isPageLoading(false);
+      debugPrint(e.toString());
+      return false;
+    }
+    return false;
+  }
 
-      case OnboardStep.height:
-        addHieght(feet: feet.value, cm: cm.value);
-        break;
+  Future<bool> submitStep(int index) async {
+    try {
+      switch (OnboardHalper.steps[index]) {
+        case OnboardStep.name:
+          return await addName(name: nameController.text);
 
-      case OnboardStep.dateWith:
-        addDatewith(dateWith: dateWithList);
-        break;
+        case OnboardStep.gender:
+          return await addGender(
+            gender: selectedGender.value.toLowerCase(),
+            genderPreview: genderPreview.value,
+          );
+
+        case OnboardStep.dob:
+          return await addDob(dob: selectedDob.value);
+
+        case OnboardStep.height:
+          return await addHieght(feet: feet.value, cm: cm.value);
+
+        case OnboardStep.dateWith:
+          return await addDatewith(dateWith: dateWithList);
+        case OnboardStep.allOfame:
+          return await allOfFame(imageUrlList: fileList);
+      }
+    } catch (e) {
+      debugPrint("submitStep error: $e");
+      return false;
     }
   }
 
+  void goToNextPage() {
+    isNextPageEnable.value = true;
+  }
+
   RxList<bool> stepStatus = <bool>[].obs;
-  late PageController pageController;
+  // late PageController pageController;
+  late PageController pageController = PageController(
+    initialPage: firstIncompleteIndex,
+  );
 
-  void setOnboardPages(OnboardPages pages) {
+  Future<void> setOnboardPages(OnboardPages pages) async {
     stepStatus.assignAll(pages.toStepStatusList());
-
     pageController = PageController(initialPage: firstIncompleteIndex);
   }
 
+  bool get allCompleted => stepStatus.every((e) => e);
   int get firstIncompleteIndex {
     final index = stepStatus.indexWhere((e) => e == false);
     return index == -1 ? 0 : index;
   }
 
-  void completeStep(int index) {
-    if (index < 0 || index >= stepStatus.length) return;
-    stepStatus[index] = true;
-  }
+  // Future<void> completeStep(int index) async {
+  //   if (index < 0 || index >= stepStatus.length) return;
+  //   stepStatus[index] = true;
+  // }
 
   int get nextIncompleteIndex {
     return stepStatus.indexWhere((e) => e == false);
+  }
+
+  Future<void> completeStep(int index) async {
+    AppToastMessage.show(title: 'Step Status', message: stepStatus.toString());
+    if (index < 0 || index >= stepStatus.length) return;
+
+    stepStatus[index] = true;
+    AppMethods.appPrint(message: stepStatus.toString());
+    AppToastMessage.show(title: 'Step Status', message: stepStatus.toString());
+
+    _goToNextStepOrFinish();
+  }
+
+  void _goToNextStepOrFinish() {
+    final nextIndex = nextIncompleteIndex;
+
+    if (nextIndex == -1) {
+      Get.off(CurrentLoadingScreen());
+    } else {
+      // ➡️ Move to next incomplete page
+      pageController.animateToPage(
+        nextIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+    currentIndex.value = nextIndex;
+  }
+
+  void onboardingCompleted() async {
+    final Position? position = await fetchLocation();
+    if (position != null) {
+      final address = await getAddress(
+        lat: position.latitude,
+        lng: position.longitude,
+      );
+      final isSuccess = await currentLocation(
+        lat: address!.lat!,
+        lng: address.lng!,
+        label: address.placeDetails!.label!,
+        city: address.placeDetails!.city!,
+        state: address.placeDetails!.state!,
+        country: address.placeDetails!.country!,
+      );
+      if (isSuccess) {
+        Get.offAll(() => const LandingScreen());
+      }
+    }
+  }
+
+  bool get isOnboardingCompleted {
+    return !stepStatus.contains(false);
+  }
+
+  final LocationService _locationService = LocationService();
+  Placemark place = Placemark();
+  Future<Position?> fetchLocation() async {
+    try {
+      Position? position = await _locationService.getCurrentLocation();
+      return position!;
+    } catch (e) {
+      AppMethods.appPrint(message: e.toString());
+      return null;
+    }
+  }
+
+  Future<Address?> getAddress({
+    required double lat,
+    required double lng,
+  }) async {
+    try {
+      final response = await _onboardService.getAddress(lat: lat, lng: lng);
+      if (response.success) {
+        AppMethods.appPrint(
+          message:
+              "Api location data    ${response.data!.address.placeDetails!.country},${response.data!.address.placeDetails!.label},${response.data!.address.placeDetails!.city} ",
+        );
+        return response.data!.address;
+      }
+    } catch (e) {
+      AppMethods.appPrint(message: e.toString());
+      return null;
+    }
+    return null;
+  }
+
+  Future<void> addHomeLocation({
+    required double lat,
+    required double lng,
+    required String label,
+    required String city,
+    required String state,
+    required String country,
+  }) async {
+    try {
+      final response = await _onboardService.addHomeLocation(
+        lat: lat,
+        lng: lng,
+        label: label,
+        city: city,
+        state: state,
+        country: country,
+      );
+      if (response.success) {}
+    } catch (e) {
+      AppMethods.appPrint(message: e.toString());
+    }
+  }
+
+  Future<void> getLocation() async {
+    try {
+      Position? position = await fetchLocation();
+      if (position != null) {
+        final address = await getAddress(
+          lat: position.latitude,
+          lng: position.longitude,
+        );
+        final isSuccess = await currentLocation(
+          lat: address!.lat!,
+          lng: address.lng!,
+          label: address.placeDetails!.label!,
+          city: address.placeDetails!.city!,
+          state: address.placeDetails!.state!,
+          country: address.placeDetails!.country!,
+        );
+      }
+
+      AppMethods.appPrint(
+        message:
+            "Location data ${position!.latitude}${position.longitude} ${place.country}${place.locality},${place.administrativeArea},${place.name}",
+      );
+    } catch (e) {
+      AppMethods.appPrint(message: e.toString());
+    }
   }
 }

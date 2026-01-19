@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -54,9 +55,9 @@ class DobWidget extends StatelessWidget {
                       final formattedDate = DateFormat(
                         'yyyy-MM-dd',
                       ).format(newDate);
-                      _controller.dobController.text = formattedDate;
-                      _controller.selectedDob.value =
-                          _controller.dobController.text;
+                      _controller.dobController.text = AppMethods()
+                          .formatDateToDDMMYYYY(formattedDate);
+                      _controller.selectedDob.value = formattedDate;
 
                       _controller.isEnable.value = true;
                     },
@@ -69,6 +70,7 @@ class DobWidget extends StatelessWidget {
               label: "",
               hint: AppConstants.hintDob,
               controller: _controller.dobController,
+              enableBorder: true.obs,
             ),
           ),
           10.hBox,

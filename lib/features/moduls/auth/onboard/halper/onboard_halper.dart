@@ -8,7 +8,7 @@ import 'package:matchster/features/moduls/auth/onboard/view/hieght_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/name_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/name_widget.dart';
 
-enum OnboardStep { name, gender, dob, height, dateWith }
+enum OnboardStep { name, gender, dob, height, dateWith, allOfame }
 
 class OnboardHalper {
   static const List<String> radioList = ["Men", "Women", "Others"];
@@ -45,13 +45,8 @@ class OnboardHalper {
     GenderWidget(),
     DobWidget(),
     YourHeightWidget(),
-    // LikeWidget(),
-    // LanguageListWidget(),
-    // ReligionWidget(),
     DateWidget(),
     AddPhotoWidget(),
-    // FaceRecogonizationWidget(),
-    // PostureGestureScreen(),
   ];
 
   static const List<Map<String, dynamic>> addPhotoOption = [
@@ -105,6 +100,7 @@ class OnboardHalper {
     OnboardStep.dob,
     OnboardStep.height,
     OnboardStep.dateWith,
+    OnboardStep.allOfame,
   ];
 
   List<HeightItem> generateHeightList() {

@@ -141,7 +141,7 @@ class _AnimatedSeekBarState extends State<AnimatedSeekBar> {
                               value.round().toString(),
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.blackColor,
+                              color: AppColors.whiteColor,
                             ),
                           );
                         },

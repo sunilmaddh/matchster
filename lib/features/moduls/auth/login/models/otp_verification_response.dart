@@ -50,7 +50,7 @@ class OnboardPages {
     dob: UtilMethods.boolValueParser(json["dob"]),
     height: UtilMethods.boolValueParser(json["height"]),
     dateWith: UtilMethods.boolValueParser(json["dateWith"]),
-    allOfame: UtilMethods.boolValueParser(json["allOfame"]),
+    allOfame: UtilMethods.boolValueParser(json["hallOfFame"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -59,6 +59,6 @@ class OnboardPages {
     "dob": dob,
     "height": height,
     "dateWith": dateWith,
-    "allOfame": allOfame,
+    "hallOfFame": allOfame,
   };
 }

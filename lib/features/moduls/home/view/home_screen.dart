@@ -15,7 +15,7 @@ import 'package:matchster/features/moduls/home/view/filter/filter_screen.dart';
 import 'package:matchster/features/moduls/home/view/match_screen.dart';
 import 'package:matchster/features/moduls/home/widgets/circle_widget.dart';
 import 'package:matchster/features/moduls/home/widgets/dark_circle_widget.dart';
-import 'package:matchster/features/moduls/profile/presentation/widgets/common_wrap_widget.dart';
+import 'package:matchster/features/moduls/profile/widgets/common_wrap_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});

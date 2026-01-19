@@ -48,6 +48,8 @@ class YourHeightWidget extends StatelessWidget {
                     '${height.feet}.${height.inch}',
                   );
                   _controller.cm.value = height.cm;
+                  _controller.heightController.text =
+                      "${height.feet} feet, ${height.inch} inch";
                   print(
                     "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
                   );
@@ -60,6 +62,7 @@ class YourHeightWidget extends StatelessWidget {
               label: "",
               hint: AppConstants.hintHeight,
               controller: _controller.heightController,
+              enableBorder: true.obs,
             ),
           ),
         ],
