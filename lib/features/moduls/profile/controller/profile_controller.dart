@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/app_methods.dart';
@@ -47,6 +48,9 @@ class ProfileController extends GetxController {
   RxList<AutoCompleteResponse> autoCompleteResponse =
       <AutoCompleteResponse>[].obs;
   Rx<PlaceDetailsResponse> placeDetails = PlaceDetailsResponse().obs;
+
+  final TextEditingController jobTtileController = TextEditingController();
+  final TextEditingController companyController = TextEditingController();
 
   Future<void> addWorkout({required String workout}) async {
     try {

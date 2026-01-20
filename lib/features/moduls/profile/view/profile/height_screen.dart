@@ -36,28 +36,22 @@ class HeightScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CommonText.text(
-                  "Enter your Height",
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: "Caros",
-                ),
-                // ToggleWithText(
-                //   onTop: () {
-                //     if (_controller.isNotFeet.isTrue) {
-                //       _controller.isNotFeet.value = false;
-                //     } else {
-                //       _controller.isNotFeet.value = true;
-                //     }
-                //   },
-                //   isFeet: _controller.isNotFeet,
-                // ),
-              ],
-            ),
+            20.hBox,
 
+            CommonText.text(
+              "What is your Height",
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w500,
+              fontFamily: "Caros",
+            ),
+            10.hBox,
+            CommonText.text(
+              maxLines: 2,
+              "Share your height to help others to get to know you better",
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+              fontFamily: "Caros",
+            ),
             20.hBox,
             InkWell(
               onTap: () {
@@ -67,6 +61,15 @@ class HeightScreen extends StatelessWidget {
                   defaultValue: OnboardHalper().generateHeightList()[0],
 
                   onSelected: (height) {
+                    _controller.feet.value = double.parse(
+                      '${height.feet}.${height.inch}',
+                    );
+                    _controller.cm.value = height.cm;
+                    _controller.heightController.text =
+                        "${height.feet} feet, ${height.inch} inch";
+                    print(
+                      "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
+                    );
                     // _controller.feet.value = height.feet;
                     print(
                       "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
@@ -80,62 +83,6 @@ class HeightScreen extends StatelessWidget {
                 label: "",
                 hint: AppConstants.hintHeight,
                 controller: _controller.heightController,
-              ),
-            ),
-            10.hBox,
-            Obx(
-              () => RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    color: AppColors.blackColor,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Caros",
-                  ),
-                  text: "Note: ",
-                  children: [
-                    TextSpan(
-                      text: AppConstants.heightNote1,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: "Caros",
-                      ),
-                    ),
-                    TextSpan(
-                      text:
-                          _controller.isNotFeet.isTrue
-                              ? AppConstants.heightNote2
-                              : AppConstants.heightNote5,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Caros",
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                    TextSpan(
-                      text: AppConstants.heightNote3,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: "Caros",
-                      ),
-                    ),
-                    TextSpan(
-                      text:
-                          _controller.isNotFeet.isTrue
-                              ? AppConstants.heightNote4
-                              : AppConstants.heightNote6,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Caros",
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ],

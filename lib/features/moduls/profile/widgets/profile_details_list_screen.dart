@@ -95,7 +95,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 15.h),
           child: InkWell(
             onTap: () {
-              Get.to(HeightScreen());
+              // Get.to(HeightScreen());
             },
             child: InterestCard(
               title: 'Height',
