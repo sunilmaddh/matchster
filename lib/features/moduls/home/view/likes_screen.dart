@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/constants/app_assets.dart';
+import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/core/widgets/rectangle_card_widget.dart';
+import 'package:matchster/features/moduls/home/controller/home_controller.dart';
 import 'package:matchster/features/moduls/home/widgets/like_card.dart';
 
 class LikesScreen extends StatelessWidget {
-  const LikesScreen({super.key});
+  LikesScreen({super.key});
+  final _controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
+    if (_controller.likeList.isEmpty) {
+      _controller.getLikeOnMe();
+    }
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -81,7 +86,7 @@ class LikesScreen extends StatelessWidget {
                 20.hBox,
                 GridView.builder(
                   shrinkWrap: true,
-                  itemCount: 4,
+                  itemCount: _controller.likeList.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 20,
@@ -89,11 +94,12 @@ class LikesScreen extends StatelessWidget {
                     childAspectRatio: 0.68,
                   ),
                   itemBuilder: (context, index) {
+                    final value = _controller.likeList[index];
                     return LikeCard(
                       isBlur: true,
-                      image: AppAssets.imageAssets4,
+                      image: value.mainPhoto!,
                       text1: "99% match",
-                      text2: "R, 28",
+                      text2: "${value.name}, ${value.age}",
                     );
                   },
                 ),

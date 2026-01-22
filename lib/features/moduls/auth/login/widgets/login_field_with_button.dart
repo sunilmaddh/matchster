@@ -32,23 +32,38 @@ class LoginFieldWithButton extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 60.0.h, left: 20.w, right: 20.w),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CommonText.text(
-                AppConstants.login,
-                fontSize: 32.sp,
-                fontWeight: FontWeight.w400,
+              Align(
+                alignment: AlignmentGeometry.center,
+                child: CommonText.text(
+                  textAlign: TextAlign.center,
+                  "Create account",
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               20.hBox,
               CommonText.text(
+                fontFamily: "DM Sans",
                 textAlign: TextAlign.center,
                 maxLines: 3,
                 AppConstants.loginSubtile,
-                fontSize: 14.sp,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w400,
                 color: AppColors.loginTitleColor,
               ),
-              90.hBox,
+              70.hBox,
+              CommonText.text(
+                "Phone Number",
+                fontFamily: "DM Sans",
+                fontWeight: FontWeight.w500,
+                fontSize: 14.sp,
+              ),
+              5.hBox,
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Obx(
                     () => InkWell(
@@ -71,7 +86,7 @@ class LoginFieldWithButton extends StatelessWidget {
                             color:
                                 _loginController.isEnable.isTrue
                                     ? AppColors.textFieldColor
-                                    : AppColors.borderColor,
+                                    : AppColors.blackColor.withAlpha(64),
                           ),
                         ),
                         child: Row(
@@ -99,9 +114,10 @@ class LoginFieldWithButton extends StatelessWidget {
                   5.wBox,
                   Flexible(
                     child: CustomFormField(
+                      maxLength: 10,
                       enableBorder: _loginController.isEnable,
                       keyboardType: TextInputType.number,
-                      label: "",
+                      label: AppConstants.hintLoginMessage,
                       hint: AppConstants.hintLoginMessage,
                       controller: _loginController.controller,
                       onChanged: (mobileNUmber) {
@@ -109,7 +125,7 @@ class LoginFieldWithButton extends StatelessWidget {
                           _loginController.isEnable.value = true;
                           AppMethods.hideKeyboard();
                         } else {
-                          _loginController.isEnable.value = false;
+                          _loginController.isEnable.value = true;
                         }
                       },
                     ),

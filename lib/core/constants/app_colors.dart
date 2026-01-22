@@ -8,7 +8,7 @@ class AppColors {
         colors: [Color(0xffD9D9D9), Color(0xff000000).withAlpha(84)],
       ),
       gradiantPrimary = LinearGradient(
-        colors: [Color(0xff1D48EF), Color(0xff1B8CF5)],
+        colors: [Color(0xff1D48EF), Color(0xff7A96F8)],
       ),
       gradientCircle = const LinearGradient(
         begin: AlignmentDirectional.topStart,

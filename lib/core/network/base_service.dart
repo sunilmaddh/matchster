@@ -11,6 +11,9 @@ class BaseService {
       BaseOptions(
         baseUrl: ApiEndpoints.baseUrl,
         headers: {'Content-Type': 'application/json'},
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
       ),
     );
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
@@ -15,16 +16,18 @@ class CustomFormField extends StatelessWidget {
   final VoidCallback? onSuffixTap;
   final bool readOnly;
   final bool enable;
-  final RxBool enableBorder; // ✅ NON-NULLABLE
+  final int maxLength;
+  final RxBool enableBorder;
   final double borderRadius;
+  final List<TextInputFormatter> inputFormatters;
   final void Function(String?)? onChanged;
 
-  const CustomFormField({
+  CustomFormField({
     super.key,
     required this.label,
     required this.hint,
     required this.controller,
-    required this.enableBorder, // ✅ REQUIRED
+    required this.enableBorder,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.validator,
@@ -33,35 +36,60 @@ class CustomFormField extends StatelessWidget {
     this.onSuffixTap,
     this.readOnly = false,
     this.enable = true,
+    this.maxLength = 200,
     this.borderRadius = 20.0,
     this.onChanged,
+    this.inputFormatters = const [], // ✅ FIX
   });
+
+  final FocusNode _focusNode = FocusNode();
+  final RxBool _isFocused = false.obs;
 
   @override
   Widget build(BuildContext context) {
+    _focusNode.addListener(() {
+      _isFocused.value = _focusNode.hasFocus;
+    });
+
     return Obx(() {
       final bool isValid = enableBorder.value;
 
       return TextFormField(
+        focusNode: _focusNode,
         controller: controller,
+        maxLength: maxLength,
         keyboardType: keyboardType,
         obscureText: obscureText,
         readOnly: readOnly,
         enabled: enable,
         validator: validator,
         onChanged: onChanged,
+        inputFormatters: inputFormatters, // ✅ FIX
         decoration: InputDecoration(
-          labelText: label,
-          hintText: hint,
+          counterText: '',
+          labelText: !_isFocused.value && !isValid ? label : null,
+          hintText: _isFocused.value ? hint : null,
+          labelStyle: TextStyle(
+            fontFamily: "Caros",
+            fontSize: 17.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColors.blackColor.withAlpha(128),
+          ),
+          hintStyle: TextStyle(
+            fontFamily: "Caros",
+            fontSize: 17.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColors.blackColor.withAlpha(128),
+          ),
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
           contentPadding: EdgeInsets.symmetric(
             vertical: 12.h,
             horizontal: 16.w,
           ),
-          border: _border(isValid),
           enabledBorder: _border(isValid),
-          focusedBorder: _border(isValid),
+          border: _border(isValid),
+          focusedBorder: _border(true),
           disabledBorder: _border(false),
         ),
       );
@@ -72,7 +100,10 @@ class CustomFormField extends StatelessWidget {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(borderRadius.r),
       borderSide: BorderSide(
-        color: isValid ? AppColors.textFieldColor : AppColors.borderColor,
+        color:
+            isValid
+                ? AppColors.textFieldColor
+                : AppColors.blackColor.withAlpha(64),
         width: 2,
       ),
     );

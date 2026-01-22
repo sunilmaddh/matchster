@@ -22,9 +22,9 @@ class SwitchCard extends StatelessWidget {
       children: [
         CommonText.text(
           text,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w400,
-          color: Color(0xff666666),
+          fontSize: 17.sp,
+          fontWeight: FontWeight.w600,
+          color: AppColors.blackColor,
         ),
         GradientSwitch(
           value: isSwitch,
@@ -63,7 +63,7 @@ class GradientSwitch extends StatelessWidget {
               value
                   ? AppColors.gradientBoxCircle
                   : LinearGradient(
-                    colors: [Colors.grey.shade400, Colors.grey.shade500],
+                    colors: [Color(0xffD9D9D9), Color(0xffD9D9D9)],
                   ),
         ),
         child: AnimatedAlign(

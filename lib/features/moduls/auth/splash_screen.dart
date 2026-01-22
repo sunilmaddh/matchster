@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
+import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/routes/app_routes.dart';
 import 'package:video_player/video_player.dart';
 
@@ -78,12 +80,6 @@ class _SplashScreenState extends State<SplashScreen>
             )
           else
             const Center(child: CircularProgressIndicator()),
-
-          // Fade overlay
-          // FadeTransition(
-          //   opacity: _fadeAnimation,
-          //   child: Container(color: Colors.black),
-          // ),
         ],
       ),
     );

@@ -37,6 +37,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         children: [
           _homeBackground(),
           PageView(
+            physics: const NeverScrollableScrollPhysics(),
             controller: _controller.pageController,
             onPageChanged: _controller.onTabTapped,
             children: widget.pageList,

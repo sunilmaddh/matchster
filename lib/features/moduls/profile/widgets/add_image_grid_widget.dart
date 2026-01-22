@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/features/moduls/profile/models/my_profile_response.dart';
 import 'package:matchster/features/moduls/profile/widgets/profile_photo_card.dart';
 
 class AddImageGrid extends StatelessWidget {
@@ -12,7 +14,7 @@ class AddImageGrid extends StatelessWidget {
     required this.onTop,
     required this.onTopRemove,
   });
-  final RxList<File> imageList;
+  final RxList<HallOfFame> imageList;
   final VoidCallback onTop;
   final Function(int index) onTopRemove;
 
@@ -37,16 +39,14 @@ class AddImageGrid extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20.r),
-                    child: Image.file(
-                      File(imageList[index].path),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
+                    child: CommonAssets.networkImage(
+                      imageList[index].url!,
+                      fit: BoxFit.fill,
                     ),
                   ),
                   Positioned(
                     top: 12.h,
-                    right: 12.w,
+                    right: 20.w,
                     child: GestureDetector(
                       onTap: () {
                         imageList.removeAt(index);

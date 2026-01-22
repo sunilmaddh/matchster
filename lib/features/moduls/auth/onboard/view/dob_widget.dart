@@ -32,7 +32,7 @@ class DobWidget extends StatelessWidget {
           CommonText.text(
             maxLines: 2,
             AppConstants.dobDiscription,
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
@@ -55,7 +55,7 @@ class DobWidget extends StatelessWidget {
                       final formattedDate = DateFormat(
                         'yyyy-MM-dd',
                       ).format(newDate);
-                      _controller.dobController.text = AppMethods()
+                      _controller.dobController.value = AppMethods()
                           .formatDateToDDMMYYYY(formattedDate);
                       _controller.selectedDob.value = formattedDate;
 
@@ -65,13 +65,43 @@ class DobWidget extends StatelessWidget {
                 ),
               );
             },
-            child: CustomFormField(
-              enable: false,
-              label: "",
-              hint: AppConstants.hintDob,
-              controller: _controller.dobController,
-              enableBorder: true.obs,
+            child: Obx(
+              () => Container(
+                padding: 15.horizontalPadding,
+                alignment: Alignment.centerLeft,
+                width: Get.width,
+                height: 48.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(
+                    width: 1.w,
+                    color:
+                        _controller.isEnable.value
+                            ? AppColors.textFieldColor
+                            : AppColors.blackColor.withAlpha(64),
+                  ),
+                ),
+                child: CommonText.text(
+                  _controller.dobController.isNotEmpty
+                      ? _controller.dobController.value
+                      : "Select your birthdate",
+                  textAlign: TextAlign.center,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17.sp,
+                  color:
+                      _controller.dobController.isNotEmpty
+                          ? AppColors.blackColor
+                          : AppColors.blackColor.withAlpha(128),
+                ),
+              ),
             ),
+            //  CustomFormField(
+            //   enable: false,
+            //   label: "",
+            //   hint: AppConstants.hintDob,
+            //   controller: _controller.dobController,
+            //   enableBorder: true.obs,
+            // ),
           ),
           10.hBox,
           Row(
@@ -79,8 +109,9 @@ class DobWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.info_outline),
-              10.wBox,
+              Icon(Icons.info_outline, size: 20),
+              5.wBox,
+
               Flexible(
                 child: RichText(
                   maxLines: 3,

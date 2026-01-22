@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
@@ -30,7 +31,7 @@ class YourHeightWidget extends StatelessWidget {
           CommonText.text(
             maxLines: 2,
             AppConstants.heightDescription,
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
@@ -48,8 +49,8 @@ class YourHeightWidget extends StatelessWidget {
                     '${height.feet}.${height.inch}',
                   );
                   _controller.cm.value = height.cm;
-                  _controller.heightController.text =
-                      "${height.feet} feet, ${height.inch} inch";
+                  _controller.heightController.value =
+                      "${height.feet} feet ${height.inch} inch";
                   print(
                     "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
                   );
@@ -57,13 +58,45 @@ class YourHeightWidget extends StatelessWidget {
                 },
               );
             },
-            child: CustomFormField(
-              enable: false,
-              label: "",
-              hint: AppConstants.hintHeight,
-              controller: _controller.heightController,
-              enableBorder: true.obs,
+            child: Obx(
+              () => Container(
+                padding: 15.horizontalPadding,
+                alignment: Alignment.centerLeft,
+                width: Get.width,
+                height: 48.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(
+                    width: 1.w,
+                    color:
+                        _controller.isEnable.value
+                            ? AppColors.textFieldColor
+                            : AppColors.blackColor.withAlpha(64),
+                  ),
+                ),
+                child: CommonText.text(
+                  _controller.heightController.isNotEmpty
+                      ? _controller.heightController.value
+                      : "Select your height",
+
+                  textAlign: TextAlign.center,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17.sp,
+                  color:
+                      _controller.heightController.isNotEmpty
+                          ? AppColors.blackColor
+                          : AppColors.blackColor.withAlpha(128),
+                ),
+              ),
             ),
+
+            // CustomFormField(
+            //   enable: false,
+            //   label: "",
+            //   hint: AppConstants.hintHeight,
+            //   controller: _controller.heightController,
+            //   enableBorder: true.obs,
+            // ),
           ),
         ],
       ),

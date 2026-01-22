@@ -108,7 +108,7 @@ class ProfilePreviewScreen extends StatelessWidget {
 
                     20.hBox,
 
-                    CommonWrapWidget(list: HomeHelper.list),
+                    // CommonWrapWidget(list: []),
                   ],
                 ),
               ),
@@ -127,7 +127,7 @@ class ProfilePreviewScreen extends StatelessWidget {
                     10.hBox,
 
                     // ),
-                    CommonWrapWidget(list: HomeHelper.list),
+                    // CommonWrapWidget(list: []),
                   ],
                 ),
               ),
@@ -146,7 +146,7 @@ class ProfilePreviewScreen extends StatelessWidget {
                     10.hBox,
 
                     // ),
-                    CommonWrapWidget(list: HomeHelper.list),
+                    // CommonWrapWidget(list: []),
                   ],
                 ),
               ),
@@ -168,10 +168,10 @@ class ProfilePreviewScreen extends StatelessWidget {
                       fontWeight: FontWeight.w300,
                     ),
 
-                    CommonWrapWidget(
-                      borderColor: Color(0xff363636).withAlpha(33),
-                      list: HomeHelper.list,
-                    ),
+                    // CommonWrapWidget(
+                    //   borderColor: Color(0xff363636).withAlpha(33),
+                    //   list: [],
+                    // ),
                   ],
                 ),
               ),
@@ -185,11 +185,6 @@ class ProfilePreviewScreen extends StatelessWidget {
                       fontFamily: "Caros",
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                    ),
-
-                    CommonWrapWidget(
-                      borderColor: Color(0xff363636).withAlpha(33),
-                      list: HomeHelper.list,
                     ),
                   ],
                 ),

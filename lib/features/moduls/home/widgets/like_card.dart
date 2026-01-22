@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 
@@ -30,7 +31,7 @@ class LikeCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20.r),
-            child: Image.asset(image, fit: BoxFit.cover),
+            child: CommonAssets.networkImage(image, fit: BoxFit.cover),
           ),
           5.hBox,
           CommonText.text(

@@ -1,12 +1,14 @@
 class ApiEndpoints {
   static const String baseUrl =
-      "https://revision-republic-forgotten-rom.trycloudflare.com";
-  // "http://209.38.123.49:8002/";
+      // "https://revision-republic-forgotten-rom.trycloudflare.com";
+      "http://209.38.123.49:8002/";
   //  "https://watt-clan-cabinet-formats.trycloudflare.com";
   static const String apiPrefix = "/api/v1/matchster";
   static const String urlUserType = "$apiPrefix/user-auth";
   static const String urlProfileType = "$apiPrefix/user-profile";
   static const String urlGoogleMap = "$apiPrefix/google-map";
+
+  static const String urlInteractions = "$apiPrefix/interaction";
 
   static const String sendOtp = "$urlUserType/send-otp",
       verifyOtp = "$urlUserType/verify-otp",
@@ -34,5 +36,8 @@ class ApiEndpoints {
       autoComplete = "$urlGoogleMap/auto-complete",
       placeDetails = "$urlGoogleMap/place-details",
       myProfile = "$urlProfileType/my-profile",
+      getProfiles = "$urlInteractions/get-profiles",
+      createInteraction = "$urlInteractions/create-interaction",
+      likesOnme = "$urlInteractions/likes-on-me",
       addAbout = "$urlProfileType/add-about";
 }

@@ -27,6 +27,7 @@ class OtpWidget extends StatelessWidget {
       filled: false,
       autoFocus: true,
       borderWidth: 1,
+      keyboardType: TextInputType.number,
       numberOfFields: 4,
       margin: 10.5.horizontalPadding,
       borderColor: AppColors.otpFieldColor,

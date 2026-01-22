@@ -1,26 +1,14 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
-import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
-import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/core/widgets/fields/custom_form_field.dart';
-import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
-import 'package:matchster/features/moduls/auth/onboard/widgets/photo_card.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
 import 'package:matchster/features/moduls/auth/widgets/radio_widget.dart';
-import 'package:matchster/features/moduls/auth/widgets/switch_widget.dart';
 
 class LikeWidget extends StatefulWidget {
   const LikeWidget({super.key});

@@ -48,8 +48,8 @@ class OnboardController extends GetxController {
 
   /// Text controllers
   final nameController = TextEditingController();
-  final dobController = TextEditingController();
-  final heightController = TextEditingController();
+  RxString dobController = ''.obs;
+  RxString heightController = "".obs;
   final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
 
   /// Face detection related
@@ -66,14 +66,29 @@ class OnboardController extends GetxController {
   RxString selectedDateWith = "".obs;
   final FaceDetectionService _faceService = FaceDetectionService();
   RxString gridImage = "".obs;
+  late final FaceDetector faceDetector;
+
+  @override
+  void onInit() {
+    super.onInit();
+    faceDetector = FaceDetector(
+      options: FaceDetectorOptions(
+        enableLandmarks: true,
+        enableClassification: true,
+        enableTracking: false,
+        minFaceSize: 0.15,
+        performanceMode: FaceDetectorMode.accurate,
+      ),
+    );
+  }
+
   RxList<String> fileList = List.generate(6, (_) => '').obs;
   void updateFile(int index, String imageUrl) {
     if (index < fileList.length) {
       fileList[index] = imageUrl;
       fileList.refresh();
-      if (index == fileList.length - 1) isEnable.value = true;
-    } else {
       isEnable.value = true;
+      // if (index == fileList.length - 1) isEnable.value = true;
     }
   }
 
@@ -261,6 +276,7 @@ class OnboardController extends GetxController {
   void onClose() {
     _faceDetector.close();
     _faceService.dispose();
+    faceDetector.close(); // 🔴 VERY IMPORTANT
     super.onClose();
   }
 
@@ -403,36 +419,26 @@ class OnboardController extends GetxController {
     try {
       final response = await _onboardService.uploadImageWithDio(imagePath);
       if (response!.success) {
-        // AppToastMessage.show(title: "Success", message: response.message);
         final image = response.data!.url ?? '';
         updateFile(index, image.toString());
-        // isImageUploading(false);
+
         return true;
       } else {
-        isImageUploading(false);
         Get.back();
-        PhotoReviewBottomsheet.show(
-          onImageSelected: (selectedImage) {
-            Get.back();
-            Get.to(PhotoPreviewScreen(imageFile: selectedImage, index: index));
-          },
-        );
         return false;
       }
     } catch (e) {
-      isImageUploading(false);
       debugPrint(e.toString());
       return false;
-    } finally {
-      isImageUploading(false);
     }
   }
 
   Future<bool> allOfFame({required List<String> imageUrlList}) async {
     try {
       isPageLoading(true);
+      final cleanedList = imageUrlList.where((e) => e.isNotEmpty).toList();
       final response = await _onboardService.allOfFame(
-        imageUrlList: imageUrlList,
+        imageUrlList: cleanedList,
       );
       if (response.success) {
         AppToastMessage.show(
@@ -680,6 +686,68 @@ class OnboardController extends GetxController {
             "Location data ${position!.latitude}${position.longitude} ${place.country}${place.locality},${place.administrativeArea},${place.name}",
       );
     } catch (e) {
+      AppMethods.appPrint(message: e.toString());
+    }
+  }
+
+  Future<bool> isFaceClear(File image) async {
+    final inputImage = InputImage.fromFile(image);
+    final faces = await faceDetector.processImage(inputImage);
+
+    // ❌ No face or multiple faces
+    if (faces.length != 1) return false;
+
+    final face = faces.first;
+
+    // ❌ Eyes closed
+    if ((face.leftEyeOpenProbability ?? 0) < 0.5 ||
+        (face.rightEyeOpenProbability ?? 0) < 0.5) {
+      return false;
+    }
+
+    // ❌ Face turned too much
+    if ((face.headEulerAngleY ?? 0).abs() > 15 ||
+        (face.headEulerAngleZ ?? 0).abs() > 15) {
+      return false;
+    }
+
+    return true; // ✅ Clear face
+  }
+
+  Future<void> validateAndUploadPhoto({
+    required File file,
+    required int index,
+  }) async {
+    try {
+      isImageUploading(true);
+
+      final isValid = await isFaceClear(file);
+
+      if (!isValid) {
+        isImageUploading(false);
+
+        if (Get.isOverlaysOpen || Get.key.currentState?.canPop() == true) {
+          Get.back();
+        }
+
+        PhotoReviewBottomsheet.show(
+          onImageSelected: (selectedImage) {
+            Get.back();
+            Get.to(PhotoPreviewScreen(imageFile: selectedImage, index: index));
+          },
+        );
+        return;
+      }
+
+      final success = await uploadPhotoW(imagePath: file.path, index: index);
+
+      isImageUploading(false);
+
+      if (success) {
+        Get.back();
+      }
+    } catch (e) {
+      isImageUploading(false);
       AppMethods.appPrint(message: e.toString());
     }
   }

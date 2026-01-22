@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -26,7 +25,7 @@ class GenderWidget extends StatelessWidget {
           CommonText.text(
             maxLines: 2,
             AppConstants.genderDiscription,
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
@@ -46,29 +45,27 @@ class GenderWidget extends StatelessWidget {
             },
           ),
 
-          // 10.hBox,
+          5.hBox,
           SwitchWidget(),
           10.hBox,
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: AppColors.blackColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Caros",
-              ),
-              text: "Note: ",
-              children: [
-                TextSpan(
-                  text: AppConstants.genderNote,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w300,
-                    fontFamily: "Caros",
-                  ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.info_outline, size: 20),
+              5.wBox,
+              Expanded(
+                child: CommonText.text(
+                  maxLines: 3,
+                  AppConstants.genderNote,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Caros",
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -22,37 +25,23 @@ class AddPhotoWidget extends StatelessWidget {
       padding: 15.horizontalPadding,
       child: Stack(
         children: [
-          Obx(
-            () =>
-                _controller.isSelectingImage.isTrue
-                    ? Container(
-                      width: Get.width,
-                      color: Colors.grey,
-                      height: Get.height,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                    : SizedBox.shrink(),
-          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CommonText.text(
                 maxLines: 2,
-                "Show off your best photos and videos!",
+                "Show off your best photos!",
                 fontSize: 24.sp,
                 fontWeight: FontWeight.w600,
               ),
               // 10.hBox,
               CommonText.text(
                 maxLines: 3,
-                "Upload 5-6 favorite photos or a video to let your personality shine. Make sure your uploads are clear and capture the real you!",
+                "Upload 5-6 favorite photos to let your personality shine. Make sure your uploads are clear and capture the real you!",
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),
-              20.hBox,
+              35.hBox,
               Obx(
                 () => GridView.builder(
                   shrinkWrap: true,
@@ -89,38 +78,49 @@ class AddPhotoWidget extends StatelessWidget {
                                         OnboardHalper.addPhotoOption.map((v) {
                                           return InkWell(
                                             onTap: () async {
-                                              File? selectedImage;
+                                              try {
+                                                // 1️⃣ Close bottom sheet FIRST
+                                                Get.back();
 
-                                              if (v["text"] == "Camera") {
-                                                selectedImage =
-                                                    await ImageUploadServices()
-                                                        .getImageFromCamera();
-                                              } else {
-                                                selectedImage =
-                                                    await ImageUploadServices()
-                                                        .getImageFromGallery();
-                                              }
-                                              Get.back();
-                                              _controller.isSelectingImage(
-                                                true,
-                                              );
-                                              await Future.delayed(
-                                                const Duration(
-                                                  milliseconds: 150,
-                                                ),
-                                              );
+                                                // 2️⃣ Wait for UI to rebuild (IMPORTANT)
+                                                await Future.delayed(
+                                                  Duration.zero,
+                                                );
 
-                                              if (selectedImage != null) {
-                                                Get.to(
-                                                  () => PhotoPreviewScreen(
-                                                    imageFile: selectedImage!,
-                                                    index: index,
-                                                  ),
+                                                // 3️⃣ Show loading
+                                                _controller.isSelectingImage(
+                                                  true,
+                                                );
+
+                                                File? selectedImage;
+
+                                                if (v["text"] == "Camera") {
+                                                  selectedImage =
+                                                      await ImageUploadServices()
+                                                          .getImageFromCamera();
+                                                } else {
+                                                  selectedImage =
+                                                      await ImageUploadServices()
+                                                          .getImageFromGallery();
+                                                }
+
+                                                if (selectedImage != null) {
+                                                  Get.to(
+                                                    () => PhotoPreviewScreen(
+                                                      imageFile: selectedImage!,
+                                                      index: index,
+                                                    ),
+                                                  );
+                                                }
+                                              } catch (e) {
+                                                AppMethods.appPrint(
+                                                  message: e.toString(),
+                                                );
+                                              } finally {
+                                                _controller.isSelectingImage(
+                                                  false,
                                                 );
                                               }
-                                              _controller.isSelectingImage(
-                                                false,
-                                              );
                                             },
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
@@ -163,6 +163,18 @@ class AddPhotoWidget extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          Obx(
+            () =>
+                _controller.isSelectingImage.isTrue
+                    ? Align(
+                      alignment: Alignment.center,
+                      child: LoadingIndicator(
+                        colors: [AppColors.primary],
+                        indicatorType: Indicator.lineSpinFadeLoader,
+                      ),
+                    )
+                    : SizedBox.shrink(),
           ),
         ],
       ),

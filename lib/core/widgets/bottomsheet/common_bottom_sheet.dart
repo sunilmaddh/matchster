@@ -32,13 +32,30 @@ class CommonBottomSheet {
           children:
               heightList.map((item) {
                 return Center(
-                  child: Text(
-                    item.label, // 🔥 5 feet 1 inch (154.94 cm)
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "${item.feet} feet   ${item.inch} inch",
+                        // item.label, // 🔥 5 feet 1 inch (154.94 cm)
+                        style: TextStyle(
+                          fontFamily: "Caros",
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      20.wBox,
+                      Text(
+                        "(${item.cm.toStringAsFixed(2)} cm)", // 🔥 5 feet 1 inch (154.94 cm)
+                        style: TextStyle(
+                          fontFamily: "Caros",
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }).toList(),

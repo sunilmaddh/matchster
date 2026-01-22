@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -31,7 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: IconButton(
-                  onPressed: onTop,
+                  onPressed: onTop ?? () => Get.back(),
                   icon: Icon(Icons.arrow_back),
                 ),
               )

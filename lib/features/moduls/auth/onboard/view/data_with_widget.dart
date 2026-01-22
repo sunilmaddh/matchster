@@ -6,6 +6,7 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/widgets/card/switch_card.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
@@ -29,35 +30,44 @@ class DateWidget extends StatelessWidget {
             fontFamily: "Caros",
           ),
 
-          // 10.hBox,
-          CommonText.text(
-            maxLines: 2,
-            AppConstants.dateDescription,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            fontFamily: "Caros",
+          2.hBox,
+          Padding(
+            padding: EdgeInsets.only(right: 15.w),
+            child: CommonText.text(
+              maxLines: 3,
+              AppConstants.dateDescription,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+              fontFamily: "Caros",
+            ),
           ),
           20.hBox,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CommonText.text(
-                "Open to Date Everybody",
-                fontSize: 17.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              Obx(
-                () => Switch(
-                  focusColor: Color(0xff1D48EF),
-                  activeTrackColor: Color(0xff1D48EF),
-                  padding: EdgeInsets.zero,
-                  value: _controller.isSwitchOn.value,
-                  onChanged:
-                      _controller
-                          .toggleDateSwitch, // ← Select All / Unselect All
+          Padding(
+            padding: 8.horizontalPadding,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CommonText.text(
+                  "Open to Date Everybody",
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.w600,
                 ),
-              ),
-            ],
+                Obx(
+                  () => GradientSwitch(
+                    value: _controller.isSwitchOn.value,
+                    onChanged: _controller.toggleDateSwitch,
+                  ),
+                  //  Switch(
+                  //   focusColor: Color(0xff1D48EF),
+                  //   activeTrackColor: Color(0xff1D48EF),
+                  //   padding: EdgeInsets.zero,
+                  //   value: _controller.isSwitchOn.value,
+                  //   onChanged:
+                  //      , // ← Select All / Unselect All
+                  // ),
+                ),
+              ],
+            ),
           ),
 
           10.hBox,

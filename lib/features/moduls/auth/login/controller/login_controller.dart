@@ -23,15 +23,22 @@ class LoginController extends GetxController {
   RxBool isAccessMyAccount = false.obs;
   RxString countryCode = "+91".obs;
   RxString phoneNumber = "".obs;
+  RxBool isResend = false.obs;
   RxBool isLoading = false.obs;
   TextEditingController controller = TextEditingController();
   Future<void> sendOtp(String number) async {
     try {
-      isLoading(true);
+      if (isResend.isFalse) {
+        isLoading(true);
+      }
+
       final response = await _loginService.sendOtp(number: number);
       if (response.success) {
         debugPrint(response.message);
-        NavigationHelper.push(OtpScreen());
+        AppToastMessage.show(title: "OTP", message: response.message);
+        if (isResend.isFalse) {
+          NavigationHelper.push(OtpScreen());
+        }
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -44,6 +51,7 @@ class LoginController extends GetxController {
       isLoading(false);
       debugPrint(e.toString());
     } finally {
+      isResend(false);
       isLoading(false);
     }
   }
@@ -69,6 +77,7 @@ class LoginController extends GetxController {
           }
         }
       } else {
+        AppMethods.appPrint(message: response.message.toString());
         AppToastMessage.show(
           title: AppConstants.errorTitle,
           message: response.message,

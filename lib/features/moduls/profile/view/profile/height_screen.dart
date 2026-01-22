@@ -65,7 +65,7 @@ class HeightScreen extends StatelessWidget {
                       '${height.feet}.${height.inch}',
                     );
                     _controller.cm.value = height.cm;
-                    _controller.heightController.text =
+                    _controller.heightController.value =
                         "${height.feet} feet, ${height.inch} inch";
                     print(
                       "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
@@ -77,12 +77,29 @@ class HeightScreen extends StatelessWidget {
                   },
                 );
               },
-              child: CustomFormField(
-                enableBorder: true.obs,
-                enable: false,
-                label: "",
-                hint: AppConstants.hintHeight,
-                controller: _controller.heightController,
+              child: Obx(
+                () => Container(
+                  padding: 15.horizontalPadding,
+                  alignment: Alignment.centerLeft,
+                  width: Get.width,
+                  height: 48.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    border: Border.all(
+                      width: 1.w,
+                      color:
+                          _controller.isEnable.value
+                              ? AppColors.textFieldColor
+                              : AppColors.blackColor.withAlpha(64),
+                    ),
+                  ),
+                  child: CommonText.text(
+                    _controller.heightController.value,
+                    textAlign: TextAlign.center,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17.sp,
+                  ),
+                ),
               ),
             ),
           ],

@@ -18,6 +18,7 @@ class CommonText {
     TextOverflow overflow = TextOverflow.ellipsis,
   }) {
     return Text(
+      softWrap: true,
       key: key,
       text,
       style: TextStyle(

@@ -30,7 +30,7 @@ class RadioWidget extends StatelessWidget {
             border: Border.all(
               color:
                   isSelected
-                      ? const Color(0xFF1B8CF5)
+                      ? const Color(0xFF1D48EF)
                       : const Color(0xFFEBEBEB),
               width: 1,
             ),

@@ -12,7 +12,7 @@ class AppConstants {
   createMyAccount = "Create My Account",
   accessMyAccount = "Access My Account",
   instagram = "$continueWith Instagram",
-  facebook = "$continueWith facebook",
+  facebook = "$continueWith Facebook",
   google = "$continueWith Google",
   number = "$continueWith Number",
   login = "Login",
@@ -22,12 +22,12 @@ class AppConstants {
   verifyNumber = "Verify Number",
   dontSend = "Don’t receive code?",
   resend = "Re-send",
-  whatYourname = "Your name, Please",
+  whatYourname = "What is Your name?",
   nameDiscription =
       "This is how it’ll appear on your profile, so make it memorable! Choose carefully –",
   nameDisSpan = 'it can’t be changed later. ',
-  whatYourGender = "What is your Gender?",
-  whatYourDob = "When is your Birthday?",
+  whatYourGender = "What is your gender?",
+  whatYourDob = "What is your birthdate?",
   dobDiscription = "Your birthdate helps us connect you with the best matches.",
   heightDescription =
       "Share your height to help others to get to know you better",
@@ -51,7 +51,7 @@ class AppConstants {
   heightDiscription =
       "Choose your height to help others get to know you better. ",
   heightNote = "Minimum height should be 3 feet and maximum should be 7 feet.",
-  otpDiscription = "A verification code has been sent to",
+  otpDiscription = "We have sent a verification code to your number",
   loginSubtile =
       "Fill in your details below or register to join - where meaningful connections begin",
   likeTitle = "Select Your Likes...",

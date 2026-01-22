@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/utils/app_input_formetters.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/core/widgets/fields/custom_form_field.dart';
@@ -9,7 +10,6 @@ import 'package:matchster/features/moduls/auth/onboard/controller/onboard_contro
 
 class NameWidget extends StatelessWidget {
   NameWidget({super.key});
-
   final _onboardController = Get.find<OnboardController>();
   @override
   Widget build(BuildContext context) {
@@ -25,15 +25,21 @@ class NameWidget extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontFamily: "Caros",
           ),
-          10.hBox,
+          15.hBox,
           CustomFormField(
-            enableBorder: true.obs,
-            label: "",
-            hint: "Enter first name",
+            inputFormatters: [
+              AppInputFormatters.onlyCharacters(),
+              AppInputFormatters.firstLetterCapital(),
+            ],
+            enableBorder: _onboardController.isEnable,
+            label: "Enter your name",
+            hint: "Enter your name",
             controller: _onboardController.nameController,
             onChanged: (name) {
               if (name != null && name.isNotEmpty) {
                 _onboardController.isEnable.value = true;
+              } else {
+                _onboardController.isEnable.value = false;
               }
             },
           ),

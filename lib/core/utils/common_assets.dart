@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 
 class CommonAssets {
   /// Load a local SVG asset
@@ -84,7 +85,9 @@ class CommonAssets {
 
   /// Default placeholder widget
   static Widget _defaultPlaceholder() {
-    return const Center(child: CircularProgressIndicator());
+    return const Center(
+      child: CircularProgressIndicator(color: AppColors.otpFieldColor),
+    );
   }
 
   /// Default error widget

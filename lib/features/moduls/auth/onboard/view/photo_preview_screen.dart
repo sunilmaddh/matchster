@@ -97,14 +97,10 @@ class _CustomCropScreenState extends State<PhotoPreviewScreen> {
                     onTop: () async {
                       _onboarController.isImageUploading(true);
                       final file = await _cropImage();
-
-                      final success = await _onboarController.uploadPhotoW(
-                        imagePath: file.path,
+                      _onboarController.validateAndUploadPhoto(
+                        file: file,
                         index: widget.index,
                       );
-                      if (success) {
-                        Get.back();
-                      }
                     },
                     isEnable: true,
                   ),
@@ -116,42 +112,35 @@ class _CustomCropScreenState extends State<PhotoPreviewScreen> {
           children: [
             /// Close
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
                   icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Get.back(),
                 ),
               ),
             ),
 
             /// Crop Area
-            Expanded(
-              child: Center(
-                child: AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: Stack(
-                    fit: StackFit.expand, // ❗ IMPORTANT
-                    children: [
-                      /// Image (pan & zoom)
-                      RepaintBoundary(
-                        key: _cropKey,
-                        child: InteractiveViewer(
-                          transformationController: _controller,
-                          minScale: 1,
-                          maxScale: 4,
-                          child: Image.file(
-                            widget.imageFile,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+            Center(
+              child: AspectRatio(
+                aspectRatio: 3 / 4,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    RepaintBoundary(
+                      key: _cropKey,
+                      child: InteractiveViewer(
+                        transformationController: _controller,
+                        minScale: 1,
+                        maxScale: 4,
+                        child: Image.file(widget.imageFile, fit: BoxFit.cover),
                       ),
+                    ),
 
-                      /// Grid overlay (ALWAYS ON TOP)
-                      const CropGridOverlay(),
-                    ],
-                  ),
+                    const CropGridOverlay(),
+                  ],
                 ),
               ),
             ),

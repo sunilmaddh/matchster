@@ -111,9 +111,9 @@ class LoginScreen extends StatelessWidget {
                                             image: AppAssets.facebookAssets,
                                             name: AppConstants.facebook,
                                             onTop: () {
-                                              _controller
-                                                  .isLoginWithMobile
-                                                  .value = true;
+                                              // _controller
+                                              //     .isLoginWithMobile
+                                              //     .value = true;
                                             },
                                           ),
                                           10.hBox,
@@ -121,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                                             image: AppAssets.googleAssets,
                                             name: AppConstants.google,
                                             onTop: () async {
-                                              _controller.signWithGoogle();
+                                              // _controller.signWithGoogle();
                                               // _controller
                                               //     .isLoginWithMobile
                                               //     .value = true;
