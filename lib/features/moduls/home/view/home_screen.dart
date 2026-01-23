@@ -241,9 +241,9 @@ class _HomeScreenState extends State<HomeScreen>
                                               ),
                                               10.hBox,
 
-                                              InshortWrapWidget(
-                                                list: data.lookingFor!,
-                                              ),
+                                              // InshortWrapWidget(
+                                              //   list: data.lookingFor!,
+                                              // ),
                                             ],
                                           ),
                                         ).paddingOnly(bottom: 15.h)

@@ -96,5 +96,6 @@ class AppAssets {
       loveMatchAssets = "$baseUrlSvg/love.svg",
       rightLIkes = "$baseUrlSvg/right_likes.svg",
       previewErrorAssets = "$baseUrlSvg/preview_error.svg",
+      maintence = "$baseUrlLottie/maintence.json",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

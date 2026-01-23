@@ -46,7 +46,8 @@ class Profile {
   String? drinking;
   List<String>? interests;
   List<String>? languages;
-  List<String>? lookingFor;
+  // List<String>? lookingFor;
+  String? lookingFor;
   String? zodiacSign;
   String? religion;
   String? work;
@@ -91,9 +92,10 @@ class Profile {
     languages: List<String>.from(
       UtilMethods.listParser(json["languages"]).map((x) => x),
     ),
-    lookingFor: List<String>.from(
-      UtilMethods.listParser(json["lookingFor"]).map((x) => x),
-    ),
+    lookingFor: UtilMethods.stringParser(json["lookingFor"]),
+    // List<String>.from(
+    //   UtilMethods.listParser(json["lookingFor"]).map((x) => x),
+    // ),
     zodiacSign: UtilMethods.stringParser(json["zodiacSign"]),
     religion: UtilMethods.stringParser(json["religion"]),
     work: UtilMethods.stringParser(json["work"]),

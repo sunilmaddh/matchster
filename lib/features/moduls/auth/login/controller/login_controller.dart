@@ -9,6 +9,7 @@ import 'package:matchster/features/moduls/auth/login/services/login_service.dart
 import 'package:matchster/features/moduls/auth/login/view/otp_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/onboard_screen.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/work_inprogress.dart';
 import 'package:matchster/features/moduls/auth/services/firebase_services.dart';
 import 'package:matchster/routes/app_navigation.dart';
 import 'package:matchster/routes/app_routes.dart';
@@ -71,6 +72,7 @@ class LoginController extends GetxController {
           await onboardController.setOnboardPages(pages);
           final allCompleted = onboardController.allCompleted;
           if (allCompleted) {
+            //Get.to(() => MaintenceScreen());
             AppNavigation.off(AppRoutes.landingScreen);
           } else {
             AppNavigation.off(AppRoutes.onboardScreen);

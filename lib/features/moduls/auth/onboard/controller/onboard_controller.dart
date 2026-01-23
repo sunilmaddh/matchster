@@ -19,6 +19,7 @@ import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dar
 import 'package:matchster/features/moduls/auth/onboard/services/onboard_service.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/current_loading_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/work_inprogress.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/photo_review_bottomsheet.dart';
 import 'package:matchster/features/moduls/home/view/landing_screen.dart';
 import 'package:matchster/features/moduls/profile/services/location_services.dart'
