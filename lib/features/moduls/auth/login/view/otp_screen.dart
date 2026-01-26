@@ -58,10 +58,12 @@ class OtpScreen extends StatelessWidget {
                             isEnable: _controller.isOtpEnable.value,
                             name: AppConstants.verifyNumber,
                             onTop: () {
-                              _controller.verifyOtp(
-                                number: _controller.phoneNumber.value,
-                                otp: _controller.otpValue.value,
-                              );
+                              if (_controller.isOtpEnable.isTrue) {
+                                _controller.verifyOtp(
+                                  number: _controller.phoneNumber.value,
+                                  otp: _controller.otpValue.value,
+                                );
+                              }
                             },
                           ),
                 ),

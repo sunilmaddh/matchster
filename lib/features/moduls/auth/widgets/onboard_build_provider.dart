@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
@@ -30,7 +29,7 @@ class OnboardPageViewBuilder extends StatelessWidget {
                 _onboardController.isPageLoading.isTrue
                     ? CircularProgressIndicator(color: AppColors.primary)
                     : CircleButtonWidget(
-                      isEnable: _onboardController.isEnable.value,
+                      isEnable: _onboardController.isButtonEnabled,
                       onTap: () async {
                         _onboardController.isNextPageEnable.value = false;
                         final current = _onboardController.currentIndex.value;
@@ -58,7 +57,8 @@ class OnboardPageViewBuilder extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(), // 🔒 lock swipe
               onPageChanged: (index) {
                 _onboardController.currentIndex.value = index;
-                _onboardController.isEnable.value = false;
+                _onboardController.isButtonEnabled;
+                // _onboardController.isEnable.value = false;
               },
               itemBuilder: (_, index) => pages[index],
             ),

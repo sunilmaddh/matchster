@@ -21,6 +21,7 @@ import 'package:matchster/features/moduls/auth/onboard/view/current_loading_scre
 import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/work_inprogress.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/photo_review_bottomsheet.dart';
+import 'package:matchster/features/moduls/home/controller/home_controller.dart';
 import 'package:matchster/features/moduls/home/view/landing_screen.dart';
 import 'package:matchster/features/moduls/profile/services/location_services.dart'
     show LocationService;
@@ -68,6 +69,12 @@ class OnboardController extends GetxController {
   final FaceDetectionService _faceService = FaceDetectionService();
   RxString gridImage = "".obs;
   late final FaceDetector faceDetector;
+  final isNameValid = false.obs;
+  final isGenderSelected = false.obs;
+  final isDobSelected = false.obs;
+  final isHeightSelected = false.obs;
+  final isDateSelectedP = false.obs;
+  final isPhotoAdded = false.obs;
 
   @override
   void onInit() {
@@ -287,10 +294,12 @@ class OnboardController extends GetxController {
       final response = await _onboardService.addName(name: name);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        isEnable.value = false;
         goToNextPage();
         return true;
       } else {
         AppToastMessage.show(
+          isError: true,
           title: AppConstants.errorTitle,
           message: response.message,
         );
@@ -318,11 +327,13 @@ class OnboardController extends GetxController {
       );
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        isEnable.value = false;
         goToNextPage();
         isPageLoading(false);
         return true;
       } else {
         AppToastMessage.show(
+          isError: true,
           title: AppConstants.errorTitle,
           message: response.message,
         );
@@ -344,11 +355,13 @@ class OnboardController extends GetxController {
       final response = await _onboardService.addDob(dob: dob);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        isEnable.value = false;
         goToNextPage();
         isPageLoading(false);
         return true;
       } else {
         AppToastMessage.show(
+          isError: true,
           title: AppConstants.errorTitle,
           message: response.message,
         );
@@ -367,11 +380,13 @@ class OnboardController extends GetxController {
       final response = await _onboardService.addHieght(feet: feet, cm: cm);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        isEnable.value = false;
         goToNextPage();
         isPageLoading(false);
         return true;
       } else {
         AppToastMessage.show(
+          isError: true,
           title: AppConstants.errorTitle,
           message: response.message,
         );
@@ -393,11 +408,13 @@ class OnboardController extends GetxController {
       final response = await _onboardService.addDateWith(dateWith: dateWith);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
+        isEnable.value = false;
         goToNextPage();
         isPageLoading(false);
         return true;
       } else {
         AppToastMessage.show(
+          isError: true,
           title: AppConstants.errorTitle,
           message: response.message,
         );
@@ -527,6 +544,30 @@ class OnboardController extends GetxController {
     }
   }
 
+  Future<void> setPagesValue(PageValues pagesValue) async {
+    nameController.text = pagesValue.name!;
+    if (nameController.text.isNotEmpty) {
+      isNameValid.value = true;
+    }
+    selectedGender.value = pagesValue.gender!;
+    if (selectedGender.isNotEmpty) {
+      isGenderSelected.value = true;
+    }
+    selectedDob.value = pagesValue.dob!;
+    if (selectedDob.value.isNotEmpty) {
+      isDobSelected.value = true;
+    }
+    dateWithList.addAll(pagesValue.dateWith!);
+    if (dateWithList.isNotEmpty) {
+      isDateSelected.value = true;
+    }
+
+    heightController.value = pagesValue.height!.feet.toString();
+    if (heightController.isNotEmpty) {
+      isHeightSelected.value = true;
+    }
+  }
+
   void goToNextPage() {
     isNextPageEnable.value = true;
   }
@@ -574,6 +615,7 @@ class OnboardController extends GetxController {
     if (nextIndex == -1) {
       Get.off(CurrentLoadingScreen());
     } else {
+      isEnable.value = true;
       // ➡️ Move to next incomplete page
       pageController.animateToPage(
         nextIndex,
@@ -750,6 +792,31 @@ class OnboardController extends GetxController {
     } catch (e) {
       isImageUploading(false);
       AppMethods.appPrint(message: e.toString());
+    }
+  }
+
+  void enbleButton() {
+    if (nameController.text.isNotEmpty) {
+      isEnable.value = true;
+    }
+  }
+
+  bool get isButtonEnabled {
+    switch (currentIndex.value) {
+      case 0:
+        return isNameValid.value;
+      case 1:
+        return isGenderSelected.value;
+      case 2:
+        return isDobSelected.value;
+      case 3:
+        return isHeightSelected.value;
+      case 4:
+        return isDateSelectedP.value;
+      case 5:
+        return isPhotoAdded.value;
+      default:
+        return false;
     }
   }
 }

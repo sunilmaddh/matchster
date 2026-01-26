@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
@@ -11,8 +10,6 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_field_with_button.dart';
-import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/current_loading_screen.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {

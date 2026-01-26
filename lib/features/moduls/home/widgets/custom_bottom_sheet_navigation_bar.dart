@@ -45,6 +45,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           Positioned(
             left: 0,
             right: 0,
+
             bottom: 40,
             child: IgnorePointer(
               child: Container(

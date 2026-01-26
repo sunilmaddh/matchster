@@ -42,6 +42,7 @@ class LoginController extends GetxController {
         }
       } else {
         AppToastMessage.show(
+          isError: true,
           title: AppConstants.errorTitle,
           message: response.message,
         );
@@ -67,9 +68,12 @@ class LoginController extends GetxController {
           response.data!.accessToken.toString(),
         );
         final pages = response.data!.pages;
+        final pagesValue = response.data!.values;
         if (pages != null) {
           final onboardController = Get.find<OnboardController>();
           await onboardController.setOnboardPages(pages);
+
+          await onboardController.setPagesValue(pagesValue!);
           final allCompleted = onboardController.allCompleted;
           if (allCompleted) {
             //Get.to(() => MaintenceScreen());
@@ -81,6 +85,7 @@ class LoginController extends GetxController {
       } else {
         AppMethods.appPrint(message: response.message.toString());
         AppToastMessage.show(
+          isError: true,
           title: AppConstants.errorTitle,
           message: response.message,
         );

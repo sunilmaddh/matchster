@@ -37,9 +37,10 @@ class NameWidget extends StatelessWidget {
             controller: _onboardController.nameController,
             onChanged: (name) {
               if (name != null && name.isNotEmpty) {
-                _onboardController.isEnable.value = true;
+                _onboardController.isNameValid.value = true;
               } else {
-                _onboardController.isEnable.value = false;
+                _onboardController.isNameValid.value = false;
+                // _onboardController.isEnable.value = false;
               }
             },
           ),

@@ -13,7 +13,7 @@ class LikesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_controller.likeList.isEmpty) {
-      _controller.getLikeOnMe();
+      _controller.likeOnMe();
     }
     return Scaffold(
       body: SafeArea(

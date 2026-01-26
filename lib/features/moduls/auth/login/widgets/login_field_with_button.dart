@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/utils/app_input_formetters.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -114,6 +115,7 @@ class LoginFieldWithButton extends StatelessWidget {
                   5.wBox,
                   Flexible(
                     child: CustomFormField(
+                      inputFormatters: [AppInputFormatters.onlyNumbers()],
                       maxLength: 10,
                       enableBorder: _loginController.isEnable,
                       keyboardType: TextInputType.number,

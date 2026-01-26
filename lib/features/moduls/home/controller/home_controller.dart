@@ -6,29 +6,56 @@ import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/features/moduls/home/models/home_response.dart';
 import 'package:matchster/features/moduls/home/models/like_response.dart';
 import 'package:matchster/features/moduls/home/services/home_services.dart';
-import 'package:matchster/test_main.dart';
 
 class HomeController extends GetxController {
-  RxList<Profile> profileList = <Profile>[].obs;
-  Rx<Profile> profile = Profile().obs;
-  final _homeService = HomeServices();
-  RxList<String> inShortList = <String>[].obs;
-  RxList<Datum> likeList = <Datum>[].obs;
-  RxInt selectedIndex = 0.obs;
-  RxBool isGettingProfile = false.obs;
-  late PageController pageController;
+  /* ----------------------------------------------------
+   * CONTROLLERS
+   * -------------------------------------------------- */
+
+  PageController pageController = PageController();
+  final CardSwiperController swiperController = CardSwiperController();
+
+  /* ----------------------------------------------------
+   * STATE
+   * -------------------------------------------------- */
+
+  final RxList<Profile> profileList = <Profile>[].obs;
+  final RxList<Datum> likeList = <Datum>[].obs;
+  final RxList<String> inShortList = <String>[].obs;
+
+  final RxInt selectedIndex = 0.obs;
+  final RxInt currentIndex = 0.obs;
+
+  final RxBool isGettingProfile = false.obs;
+  final RxBool isOverlay = false.obs;
+  final RxBool isLike = false.obs;
+
+  final HomeServices _homeService = HomeServices();
+
+  /* ----------------------------------------------------
+   * GETTERS (SAFE)
+   * -------------------------------------------------- */
+
+  Profile? get currentProfile {
+    if (profileList.isEmpty) return null;
+    if (currentIndex.value < 0 || currentIndex.value >= profileList.length) {
+      return null;
+    }
+    return profileList[currentIndex.value];
+  }
+
+  /* ----------------------------------------------------
+   * BOTTOM TAB
+   * -------------------------------------------------- */
+
   void onTabTapped(int index) {
     selectedIndex.value = index;
     pageController.jumpToPage(index);
   }
 
-  RxBool isOverlay = false.obs;
-  RxBool isLike = false.obs;
-
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  final currentIndex = 0.obs;
-
-  final CardSwiperController swiperController = CardSwiperController();
+  /* ----------------------------------------------------
+   * PROFILE LIST
+   * -------------------------------------------------- */
 
   Future<void> getProfileList({
     required String filterType,
@@ -36,26 +63,27 @@ class HomeController extends GetxController {
   }) async {
     try {
       isGettingProfile(true);
+
       final response = await _homeService.getProfileLisr(
         filterType: filterType,
         filter: filter,
       );
-      if (response.success) {
-        final data = response.data;
-        if (data != null) {
-          profileList.value = data.profiles!;
-          updateList();
-        }
-        isGettingProfile(false);
-      } else {
-        AppMethods.appPrint(message: response.message);
-        isGettingProfile(false);
+
+      if (response.success && response.data?.profiles != null) {
+        profileList.assignAll(response.data!.profiles!);
+        currentIndex.value = 0;
+        _updateInShort();
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
+    } finally {
       isGettingProfile(false);
     }
   }
+
+  /* ----------------------------------------------------
+   * CREATE INTERACTION
+   * -------------------------------------------------- */
 
   Future<void> createInterection({
     required String userId,
@@ -66,8 +94,8 @@ class HomeController extends GetxController {
         userId: userId,
         action: action,
       );
-      if (response.success) {
-      } else {
+
+      if (!response.success) {
         AppMethods.appPrint(message: response.message);
       }
     } catch (e) {
@@ -75,14 +103,16 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> getLikeOnMe() async {
+  /* ----------------------------------------------------
+   * LIKE ON ME
+   * -------------------------------------------------- */
+
+  Future<void> likeOnMe() async {
     try {
       final response = await _homeService.likeOnMe();
-      if (response.success) {
-        final data = response.data;
-        if (data != null) {
-          likeList.value = data.data;
-        }
+
+      if (response.success && response.data != null) {
+        likeList.assignAll(response.data!.data);
       } else {
         AppToastMessage.show(title: "Error", message: response.message);
       }
@@ -91,68 +121,96 @@ class HomeController extends GetxController {
     }
   }
 
-  void callGetProfile() {
-    if (profileList.isEmpty) {
-      getProfileList(filterType: "basic", filter: 10);
-    }
-  }
+  /* ----------------------------------------------------
+   * CARD SWIPE
+   * -------------------------------------------------- */
 
-  void updateList() {
-    if (profileList.isEmpty) {
-      inShortList.clear();
-    } else {
-      inShortList.clear();
-      final nextProfile = profileList.first;
-      profile.value = nextProfile;
-      if (nextProfile != null) {
-        inShortList.addAll(
-          [
-                nextProfile.gender,
-                nextProfile.smoking,
-                nextProfile.drinking,
-                nextProfile.religion,
-                nextProfile.zodiacSign,
-                nextProfile.height,
-              ]
-              .where((e) => e != null && e.toString().trim().isNotEmpty)
-              .cast<String>(),
-        );
-      }
-      profileList.removeAt(0);
-    }
-  }
-
-  final List<ProfileDemo> profiles = [
-    ProfileDemo(
-      name: "Emma",
-      age: 24,
-      image: "https://picsum.photos/400/600?1",
-    ),
-    ProfileDemo(
-      name: "Sophia",
-      age: 26,
-      image: "https://picsum.photos/400/600?2",
-    ),
-    ProfileDemo(
-      name: "Olivia",
-      age: 23,
-      image: "https://picsum.photos/400/600?3",
-    ),
-    ProfileDemo(name: "Ava", age: 25, image: "https://picsum.photos/400/600?4"),
-  ];
   bool onSwipe(
     int previousIndex,
     int? currentIndex,
     CardSwiperDirection direction,
   ) {
-    final profile = profiles[previousIndex];
+    if (currentIndex == null) return true;
+    if (currentIndex < 0 || currentIndex >= profileList.length) {
+      return true;
+    }
 
-    if (direction == CardSwiperDirection.right) {
-      debugPrint("Liked ${profile.name}");
-    } else if (direction == CardSwiperDirection.left) {
-      debugPrint("Disliked ${profile.name}");
+    this.currentIndex.value = currentIndex;
+    _updateInShort();
+    if (direction == CardSwiperDirection.left) {
+      createInterection(
+        userId: profileList[previousIndex].userId!,
+        action: "dislike",
+      );
+    } else if (direction == CardSwiperDirection.right) {
+      createInterection(
+        userId: profileList[previousIndex].userId!,
+        action: "dislike",
+      );
     }
 
     return true;
+  }
+
+  /* ----------------------------------------------------
+   * LIKE / DISLIKE BUTTON TAP
+   * -------------------------------------------------- */
+
+  void handleInteraction({required bool isLikeAction}) async {
+    final profile = currentProfile;
+    if (profile == null) return;
+
+    isLike.value = isLikeAction;
+    isOverlay.value = true;
+
+    await createInterection(
+      userId: profile.userId!,
+      action: isLikeAction ? "like" : "dislike",
+    );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      isOverlay.value = false;
+      isLike.value = false;
+      swiperController.swipe(
+        isLikeAction ? CardSwiperDirection.right : CardSwiperDirection.left,
+      );
+    });
+  }
+
+  /* ----------------------------------------------------
+   * UPDATE "IN SHORT"
+   * -------------------------------------------------- */
+
+  void _updateInShort() {
+    final profile = currentProfile;
+    if (profile == null) {
+      inShortList.clear();
+      return;
+    }
+
+    inShortList
+      ..clear()
+      ..addAll(
+        [
+              profile.gender,
+              profile.smoking,
+              profile.drinking,
+              profile.religion,
+              profile.zodiacSign,
+              profile.height,
+            ]
+            .where((e) => e != null && e.toString().trim().isNotEmpty)
+            .cast<String>(),
+      );
+  }
+
+  /* ----------------------------------------------------
+   * CLEANUP
+   * -------------------------------------------------- */
+
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
   }
 }
