@@ -79,21 +79,47 @@ class AddPhotoWidget extends StatelessWidget {
                                           return InkWell(
                                             onTap: () async {
                                               try {
-                                                // 1️⃣ Close bottom sheet FIRST
-                                                Get.back();
+                                                // 1️⃣ Prevent double tap
+                                                // if (_controller
+                                                //     .isSelectingImage
+                                                //     .isTrue)
+                                                //   return;
 
-                                                // 2️⃣ Wait for UI to rebuild (IMPORTANT)
+                                                // ❌ DO NOT set loader yet (this causes first-photo crash on Vivo)
+
+                                                // 2️⃣ Force close bottom sheet / overlay
+                                                final context = Get.context;
+                                                if (context != null &&
+                                                    Navigator.of(
+                                                      context,
+                                                      rootNavigator: true,
+                                                    ).canPop()) {
+                                                  Navigator.of(
+                                                    context,
+                                                    rootNavigator: true,
+                                                  ).pop();
+                                                }
+
+                                                // 3️⃣ Give Vivo camera time to get foreground (CRITICAL)
                                                 await Future.delayed(
-                                                  Duration.zero,
+                                                  const Duration(
+                                                    milliseconds: 300,
+                                                  ),
                                                 );
 
-                                                // 3️⃣ Show loading
-                                                _controller.isSelectingImage(
-                                                  true,
-                                                );
+                                                // 4️⃣ Clear image cache BEFORE opening camera
+                                                PaintingBinding
+                                                    .instance
+                                                    .imageCache
+                                                    .clear();
+                                                PaintingBinding
+                                                    .instance
+                                                    .imageCache
+                                                    .clearLiveImages();
 
                                                 File? selectedImage;
 
+                                                // 5️⃣ Open camera/gallery WITHOUT touching UI state
                                                 if (v["text"] == "Camera") {
                                                   selectedImage =
                                                       await ImageUploadServices()
@@ -104,22 +130,29 @@ class AddPhotoWidget extends StatelessWidget {
                                                           .getImageFromGallery();
                                                 }
 
+                                                // 6️⃣ NOW update UI
                                                 if (selectedImage != null) {
+                                                  _controller.isSelectingImage(
+                                                    true,
+                                                  ); // loader AFTER camera
+
                                                   Get.to(
                                                     () => PhotoPreviewScreen(
                                                       imageFile: selectedImage!,
                                                       index: index,
                                                     ),
-                                                  );
+                                                  )!.whenComplete(() {
+                                                    _controller
+                                                        .isSelectingImage(
+                                                          false,
+                                                        );
+                                                  });
                                                 }
-                                              } catch (e) {
+                                              } catch (e, s) {
                                                 AppMethods.appPrint(
                                                   message: e.toString(),
                                                 );
-                                              } finally {
-                                                _controller.isSelectingImage(
-                                                  false,
-                                                );
+                                                debugPrintStack(stackTrace: s);
                                               }
                                             },
                                             child: Column(

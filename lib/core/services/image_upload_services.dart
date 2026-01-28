@@ -10,6 +10,10 @@ class ImageUploadServices {
   late File imagePath = File("");
 
   bool _isPicking = false;
+  void clearImageMemory() {
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
+  }
 
   Future<File?> pickImageFromCamera() async {
     if (_isPicking) return null; // prevent multiple camera instances
@@ -18,10 +22,10 @@ class ImageUploadServices {
     try {
       final XFile? image = await _picker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 70, // prevents memory crash
-        maxWidth: 1024,
-        maxHeight: 1024,
-        preferredCameraDevice: CameraDevice.rear,
+        imageQuality: 45, // prevents memory crash
+        maxWidth: 900,
+        maxHeight: 900,
+        preferredCameraDevice: CameraDevice.front,
       );
 
       if (image == null) return null; // user cancelled

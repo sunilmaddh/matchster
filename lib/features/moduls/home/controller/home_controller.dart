@@ -160,10 +160,17 @@ class HomeController extends GetxController {
       );
     }
 
+    // void onSwipeCompleted(int previousIndex) {
+    //   if (previousIndex < 0 || previousIndex >= profileList.length) return;
+
+    //   profileList.removeAt(previousIndex);
+    //   this.currentIndex.value = 0;
+    // }
+
     // profileList.removeAt(previousIndex);
 
     /// Reset index
-    this.currentIndex.value = 0;
+    this.currentIndex.value = currentIndex;
 
     /// Update UI data
     if (profileList.isNotEmpty) {

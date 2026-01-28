@@ -135,7 +135,12 @@ class _CustomCropScreenState extends State<PhotoPreviewScreen> {
                         transformationController: _controller,
                         minScale: 1,
                         maxScale: 4,
-                        child: Image.file(widget.imageFile, fit: BoxFit.cover),
+                        child: Image.file(
+                          widget.imageFile,
+                          fit: BoxFit.cover,
+                          cacheWidth: 600, // VERY IMPORTANT for Vivo
+                          filterQuality: FilterQuality.low,
+                        ),
                       ),
                     ),
 

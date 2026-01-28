@@ -6,6 +6,9 @@
     <application
         android:label="matchster"
         android:name="${applicationName}"
+        android:largeHeap="true"
+        android:hardwareAccelerated="true"
+        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
 
         <!-- ✅ Google Maps API Key -->

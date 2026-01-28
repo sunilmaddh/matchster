@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen>
           return SizedBox.shrink();
         }
 
-        final profiles = List<Profile>.from(_homeController.profileList);
+        // final profiles = List<Profile>.from(_homeController.profileList);
 
         return GestureDetector(
           onVerticalDragUpdate: (details) {
@@ -142,8 +142,10 @@ class _HomeScreenState extends State<HomeScreen>
                                       up: false,
                                       down: false,
                                     ),
-                                numberOfCardsDisplayed: profiles.length,
-                                cardsCount: profiles.length,
+                                numberOfCardsDisplayed:
+                                    _homeController.profileList.length,
+                                cardsCount: _homeController.profileList.length,
+
                                 backCardOffset: const Offset(20, 20),
                                 padding: EdgeInsets.zero,
                                 onSwipe: _homeController.onSwipe,
@@ -187,7 +189,9 @@ class _HomeScreenState extends State<HomeScreen>
                                       Positioned.fill(
                                         top: 25.h,
                                         child: MainPhotoCard(
-                                          data: profiles[index],
+                                          data:
+                                              _homeController
+                                                  .profileList[index],
 
                                           onLikeTap: () {
                                             _homeController.handleInteraction(
