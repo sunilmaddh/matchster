@@ -149,6 +149,9 @@ class LoginScreen extends StatelessWidget {
                                               _controller
                                                   .isLoginWithMobile
                                                   .value = true;
+                                              _controller
+                                                  .isAccessAccount
+                                                  .value = false;
                                             },
                                           ),
                                           10.hBox,
@@ -157,6 +160,9 @@ class LoginScreen extends StatelessWidget {
                                             onTop: () {
                                               _controller
                                                   .isAccessMyAccount
+                                                  .value = true;
+                                              _controller
+                                                  .isAccessAccount
                                                   .value = true;
                                             },
                                           ),

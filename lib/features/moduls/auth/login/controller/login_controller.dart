@@ -26,6 +26,7 @@ class LoginController extends GetxController {
   RxString phoneNumber = "".obs;
   RxBool isResend = false.obs;
   RxBool isLoading = false.obs;
+  RxBool isAccessAccount = false.obs;
   TextEditingController controller = TextEditingController();
   Future<void> sendOtp(String number) async {
     try {

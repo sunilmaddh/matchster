@@ -122,3 +122,9 @@ enum RelationshipIntentEnum {
   dontKnowYet,
   preferNotToSay,
 }
+
+enum HabitTypeEnum { workout, smoke, drinking, height }
+
+enum HeightEnum { height }
+
+enum FrequencyEnum { everyday, sometimes, often, never }

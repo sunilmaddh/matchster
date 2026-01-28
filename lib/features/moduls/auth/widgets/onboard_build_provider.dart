@@ -24,23 +24,22 @@ class OnboardPageViewBuilder extends StatelessWidget {
         alignment: Alignment.bottomRight,
         child: Padding(
           padding: 10.allPadding,
-          child: Obx(
-            () =>
-                _onboardController.isPageLoading.isTrue
-                    ? CircularProgressIndicator(color: AppColors.primary)
-                    : CircleButtonWidget(
-                      isEnable: _onboardController.isButtonEnabled,
-                      onTap: () async {
-                        _onboardController.isNextPageEnable.value = false;
-                        final current = _onboardController.currentIndex.value;
-                        final isSuccess = await _onboardController.submitStep(
-                          current,
-                        );
-                        if (!isSuccess) return;
-                        _onboardController.completeStep(current);
-                      },
-                    ),
-          ),
+          child: Obx(() {
+            if (_onboardController.isPageLoading.isTrue) {
+              return CircularProgressIndicator(color: AppColors.primary);
+            }
+
+            return CircleButtonWidget(
+              isEnable: _onboardController.isButtonEnabled.value,
+              onTap: () async {
+                _onboardController.isNextPageEnable.value = false;
+                final current = _onboardController.currentIndex.value;
+                final isSuccess = await _onboardController.submitStep(current);
+                if (!isSuccess) return;
+                _onboardController.completeStep(current);
+              },
+            );
+          }),
         ),
       ),
       body: Column(
@@ -58,7 +57,7 @@ class OnboardPageViewBuilder extends StatelessWidget {
               onPageChanged: (index) {
                 _onboardController.currentIndex.value = index;
                 _onboardController.isButtonEnabled;
-                // _onboardController.isEnable.value = false;
+                _onboardController.updateButtonState();
               },
               itemBuilder: (_, index) => pages[index],
             ),

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/extentions/interests_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
+import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/home/models/home_response.dart';
@@ -104,13 +106,19 @@ class MainPhotoCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                CommonText.text(
-                                  "${data.name}, ${data.age}",
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: "Caros",
-                                  color: AppColors.whiteColor,
+                                SizedBox(
+                                  width: 100.w,
+                                  child: CommonText.text(
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                    "${data.name}, ${data.age}",
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: "Caros",
+                                    color: AppColors.whiteColor,
+                                  ),
                                 ),
                                 2.wBox,
 
@@ -133,6 +141,8 @@ class MainPhotoCard extends StatelessWidget {
                               Wrap(
                                 children:
                                     data.interests!.take(2).map((v) {
+                                      final intarestList =
+                                          InterestEnumX.fromString(v);
                                       return Container(
                                         margin: EdgeInsets.only(right: 5.w),
                                         padding:
@@ -147,20 +157,13 @@ class MainPhotoCard extends StatelessWidget {
                                             width: 0.96.w,
                                           ),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              AppAssets.travelImage,
-                                            ),
-                                            5.wBox,
-                                            CommonText.text(
+                                        child: CommonText.text(
+                                          intarestList?.label ??
                                               AppMethods.capitalizeFirst(v),
-                                              fontSize: 11.5.sp,
-                                              fontFamily: "Caros",
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.whiteColor,
-                                            ),
-                                          ],
+                                          fontSize: 11.5.sp,
+                                          fontFamily: "Caros",
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.whiteColor,
                                         ),
                                       );
                                     }).toList(),

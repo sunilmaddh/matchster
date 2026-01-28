@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:matchster/core/extentions/date_x_ext.dart';
 
 class AppMethods {
   static String capitalizeFirst(String word) {
@@ -35,6 +37,19 @@ class AppMethods {
     } catch (_) {
       return date;
     }
+  }
+
+  static Map<String, String> formatFromIso(String rawDate) {
+    if (rawDate.isEmpty) {
+      return {'ui': '', 'api': ''};
+    }
+
+    final DateTime date = DateTime.parse(rawDate).toLocal();
+
+    return {
+      'ui': date.readable, // UI
+      'api': DateFormat('yyyy-MM-dd').format(date), // API
+    };
   }
 
   static void hideKeyboard() {

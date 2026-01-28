@@ -5,16 +5,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/extentions/address_x_ext.dart';
 import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_card.dart';
 import 'package:matchster/core/widgets/fields/common_home_card.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/home/controller/home_controller.dart';
+import 'package:matchster/features/moduls/home/models/home_response.dart';
 import 'package:matchster/features/moduls/home/widgets/dark_circle_widget.dart';
 import 'package:matchster/features/moduls/home/widgets/main_photo_card.dart';
 import 'package:matchster/features/moduls/profile/widgets/inshort_wrap_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/interest_wrap_widget.dart';
+import 'package:matchster/features/moduls/profile/widgets/looking_wrap_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/sub_common_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,13 +44,20 @@ class _HomeScreenState extends State<HomeScreen>
         showUpArrow.value = false;
       }
     });
-    _homeController.getProfileList(filterType: 'basic', filter: 10);
+    callGetProfileApi();
     super.initState();
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void callGetProfileApi() {
+    if (_homeController.profileList.isEmpty) {
+      _homeController.getProfileList(filterType: 'basic', filter: 10);
+    }
   }
 
   @override
@@ -63,6 +73,8 @@ class _HomeScreenState extends State<HomeScreen>
         if (data == null) {
           return SizedBox.shrink();
         }
+
+        final profiles = List<Profile>.from(_homeController.profileList);
 
         return GestureDetector(
           onVerticalDragUpdate: (details) {
@@ -130,9 +142,8 @@ class _HomeScreenState extends State<HomeScreen>
                                       up: false,
                                       down: false,
                                     ),
-                                numberOfCardsDisplayed:
-                                    _homeController.profileList.length,
-                                cardsCount: _homeController.profileList.length,
+                                numberOfCardsDisplayed: profiles.length,
+                                cardsCount: profiles.length,
                                 backCardOffset: const Offset(20, 20),
                                 padding: EdgeInsets.zero,
                                 onSwipe: _homeController.onSwipe,
@@ -176,9 +187,7 @@ class _HomeScreenState extends State<HomeScreen>
                                       Positioned.fill(
                                         top: 25.h,
                                         child: MainPhotoCard(
-                                          data:
-                                              _homeController
-                                                  .profileList[index],
+                                          data: profiles[index],
 
                                           onLikeTap: () {
                                             _homeController.handleInteraction(
@@ -272,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             20.hBox,
 
                                             InshortWrapWidget(
-                                              list: _homeController.inShortList,
+                                              list: _homeController.inshortList,
                                             ),
                                           ],
                                         ),
@@ -296,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             ),
                                             10.hBox,
 
-                                            InshortWrapWidget(
+                                            LookingWrapWidget(
                                               list: data.lookingFor!,
                                             ),
                                           ],
@@ -323,8 +332,33 @@ class _HomeScreenState extends State<HomeScreen>
 
                                             // ),
                                             CommonCard(
-                                              widget: CommonText.text(
-                                                "${data.distance.toString()} ",
+                                              widget: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    padding: 7.allPadding,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Color(0xffF4F4F4),
+                                                    ),
+                                                    child: CommonText.text(
+                                                      "📍",
+                                                    ),
+                                                  ),
+                                                  5.wBox,
+                                                  CommonText.text(
+                                                    color: Color(0xffD90380),
+                                                    "${data.distance.toString()} km",
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 14.sp,
+                                                  ),
+                                                  5.wBox,
+                                                  CommonText.text(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14.sp,
+                                                    "away, ${data.currentAddress!.city}",
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],

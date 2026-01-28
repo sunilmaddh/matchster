@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/extentions/date_x_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
@@ -47,7 +48,7 @@ class DobWidget extends StatelessWidget {
                     itemExtent: 50,
                     mode: CupertinoDatePickerMode.date,
                     dateOrder: DatePickerDateOrder.dmy,
-                    initialDateTime: DateTime.now(),
+                    initialDateTime: DateTime.now().eighteenYearsAgo,
                     minimumDate: DateTime(1925),
                     maximumDate: DateTime(2050),
 
@@ -55,11 +56,14 @@ class DobWidget extends StatelessWidget {
                       final formattedDate = DateFormat(
                         'yyyy-MM-dd',
                       ).format(newDate);
-                      _controller.dobController.value = AppMethods()
-                          .formatDateToDDMMYYYY(formattedDate);
+                      _controller.dobController.value = newDate.readable;
+                      // AppMethods()
+                      //     .formatDateToDDMMYYYY(formattedDate);
                       _controller.selectedDob.value = formattedDate;
 
-                      _controller.isEnable.value = true;
+                      _controller.isDobSelected.value = true;
+
+                      _controller.updateButtonState();
                     },
                   ),
                 ),

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/enum/enum.dart';
+import 'package:matchster/core/extentions/gender_enum_ext.dart';
+import 'package:matchster/core/extentions/height_enum_ext.dart';
+import 'package:matchster/core/extentions/religion_level_ext.dart';
+import 'package:matchster/core/extentions/zodiac_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
+import 'package:matchster/features/moduls/home/models/habit_option.dart';
 import 'package:matchster/features/moduls/home/models/home_response.dart';
+import 'package:matchster/features/moduls/home/models/inshort_list.dart';
 import 'package:matchster/features/moduls/home/models/like_response.dart';
 import 'package:matchster/features/moduls/home/services/home_services.dart';
 
@@ -29,8 +36,11 @@ class HomeController extends GetxController {
   final RxBool isGettingProfile = false.obs;
   final RxBool isOverlay = false.obs;
   final RxBool isLike = false.obs;
+  final RxMap<String, dynamic> singleMap = <String, dynamic>{}.obs;
 
   final HomeServices _homeService = HomeServices();
+  RxList<InshortList> inshortList = <InshortList>[].obs;
+  RxBool isFetchingMore = false.obs;
 
   /* ----------------------------------------------------
    * GETTERS (SAFE)
@@ -71,6 +81,7 @@ class HomeController extends GetxController {
 
       if (response.success && response.data?.profiles != null) {
         profileList.assignAll(response.data!.profiles!);
+
         currentIndex.value = 0;
         _updateInShort();
       }
@@ -149,6 +160,19 @@ class HomeController extends GetxController {
       );
     }
 
+    // profileList.removeAt(previousIndex);
+
+    /// Reset index
+    this.currentIndex.value = 0;
+
+    /// Update UI data
+    if (profileList.isNotEmpty) {
+      _updateInShort();
+    }
+
+    /// 🚀 Load more profiles when only 1 left
+    // _loadMoreProfilesIfNeeded();
+
     return true;
   }
 
@@ -175,6 +199,12 @@ class HomeController extends GetxController {
         isLikeAction ? CardSwiperDirection.right : CardSwiperDirection.left,
       );
     });
+    if (profileList.isNotEmpty) {
+      _updateInShort();
+    }
+
+    /// 🚀 Load more if only 1 left
+    _loadMoreProfilesIfNeeded();
   }
 
   /* ----------------------------------------------------
@@ -185,7 +215,64 @@ class HomeController extends GetxController {
     final profile = currentProfile;
     if (profile == null) {
       inShortList.clear();
+      inshortList.clear();
       return;
+    }
+    inshortList.clear();
+    if (profile.gender != null && profile.gender!.isNotEmpty) {
+      final vlaue = GenderEnumX.fromApi(profile.gender!);
+      if (vlaue != null) {
+        inshortList.add(
+          InshortList(text: profile.gender.toString(), img: vlaue.emoji),
+        );
+      }
+    }
+    if (profile.smoking!.isNotEmpty) {
+      final freq = frequencyFromApi(profile.smoking!);
+      if (freq != null) {
+        final smokeOption = HabitOption(
+          type: HabitTypeEnum.smoke,
+          frequency: freq,
+        );
+        inshortList.add(
+          InshortList(text: smokeOption.label, img: smokeOption.emoji),
+        );
+      }
+    }
+    if (profile.drinking != null && profile.drinking!.isNotEmpty) {
+      final freq = frequencyFromApi(profile.drinking!);
+      if (freq != null) {
+        final drinkOption = HabitOption(
+          type: HabitTypeEnum.drinking,
+          frequency: freq,
+        );
+        inshortList.add(
+          InshortList(text: drinkOption.label, img: drinkOption.emoji),
+        );
+      }
+    }
+
+    if (profile.religion != null && profile.religion!.isNotEmpty) {
+      final value = ReligionEnumX.fromApi(profile.religion!);
+
+      if (value != null) {
+        inshortList.add(InshortList(text: value.label, img: value.emoji));
+      }
+    }
+
+    if (profile.zodiacSign != null && profile.zodiacSign!.isNotEmpty) {
+      final value = ZodiacEnumX.fromApi(profile.zodiacSign!);
+      if (value != null) {
+        inshortList.add(InshortList(text: value.label, img: value.emoji));
+      }
+    }
+    if (profile.height != null && profile.height!.isNotEmpty) {
+      final value = HeightEnumExt.fromApi(profile.height!);
+      if (value != null) {
+        inshortList.add(
+          InshortList(text: profile.height.toString(), img: value.emoji),
+        );
+      }
     }
 
     inShortList
@@ -213,4 +300,30 @@ class HomeController extends GetxController {
     pageController.dispose();
     super.onClose();
   }
+
+  List<HabitOption> buildHabitOptions(
+    HabitTypeEnum type, {
+    Set<FrequencyEnum>? exclude,
+  }) {
+    return FrequencyEnum.values
+        .where((e) => exclude == null || !exclude.contains(e))
+        .map((e) => HabitOption(type: type, frequency: e))
+        .toList();
+  }
+
+  void _loadMoreProfilesIfNeeded() {
+    if (profileList.length == 2 && !isFetchingMore.value) {
+      isFetchingMore.value = true;
+      getProfileList(filterType: 'basic', filter: 10).then((_) {
+        isFetchingMore.value = false;
+      });
+    }
+  }
+}
+
+FrequencyEnum frequencyFromApi(String value) {
+  return FrequencyEnum.values.firstWhere(
+    (e) => e.name == value.toLowerCase(),
+    orElse: () => null!,
+  );
 }

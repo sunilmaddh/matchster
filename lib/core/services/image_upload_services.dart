@@ -9,10 +9,31 @@ class ImageUploadServices {
   final ImagePicker _picker = ImagePicker();
   late File imagePath = File("");
 
+  bool _isPicking = false;
+
   Future<File?> pickImageFromCamera() async {
-    XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if (image == null) return null; // User canceled
-    return File(image.path);
+    if (_isPicking) return null; // prevent multiple camera instances
+
+    _isPicking = true;
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 70, // prevents memory crash
+        maxWidth: 1024,
+        maxHeight: 1024,
+        preferredCameraDevice: CameraDevice.rear,
+      );
+
+      if (image == null) return null; // user cancelled
+
+      return File(image.path);
+    } catch (e, s) {
+      debugPrint('Camera crash prevented: $e');
+      debugPrintStack(stackTrace: s);
+      return null;
+    } finally {
+      _isPicking = false;
+    }
   }
 
   Future<File?> pickImageFromGallery() async {

@@ -20,6 +20,8 @@ class OnboardScreen extends StatelessWidget {
             duration: const Duration(milliseconds: 450),
             curve: Curves.ease,
           );
+          _onboardController.updateButtonState();
+          _onboardController.updateStepState();
           // _onboardController.isEnable.value = true;
         },
       ),

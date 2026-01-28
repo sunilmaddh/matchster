@@ -110,5 +110,10 @@ extension InterestEnumX on InterestEnum {
   // }
 
   /// API / storage value
-  String get apiValue => name;
+  static InterestEnum? fromString(String value) {
+    for (final e in InterestEnum.values) {
+      if (e.name == value) return e;
+    }
+    return null;
+  }
 }

@@ -97,7 +97,7 @@ class AddPhotoWidget extends StatelessWidget {
                                                 if (v["text"] == "Camera") {
                                                   selectedImage =
                                                       await ImageUploadServices()
-                                                          .getImageFromCamera();
+                                                          .pickImageFromCamera();
                                                 } else {
                                                   selectedImage =
                                                       await ImageUploadServices()

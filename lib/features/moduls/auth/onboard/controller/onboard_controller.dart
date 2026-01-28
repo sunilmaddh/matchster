@@ -12,16 +12,13 @@ import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
-import 'package:matchster/core/utils/navigation_helper.dart';
 import 'package:matchster/features/moduls/auth/login/models/otp_verification_response.dart';
 import 'package:matchster/features/moduls/auth/login/models/reverse_geocode_response.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 import 'package:matchster/features/moduls/auth/onboard/services/onboard_service.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/current_loading_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/work_inprogress.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/photo_review_bottomsheet.dart';
-import 'package:matchster/features/moduls/home/controller/home_controller.dart';
 import 'package:matchster/features/moduls/home/view/landing_screen.dart';
 import 'package:matchster/features/moduls/profile/services/location_services.dart'
     show LocationService;
@@ -95,7 +92,7 @@ class OnboardController extends GetxController {
     if (index < fileList.length) {
       fileList[index] = imageUrl;
       fileList.refresh();
-      isEnable.value = true;
+      updateButtonState();
       // if (index == fileList.length - 1) isEnable.value = true;
     }
   }
@@ -125,15 +122,18 @@ class OnboardController extends GetxController {
         (i) => i,
       );
       dateWithList.assignAll(OnboardHalper.dateList);
-      isEnable.value = true;
+      isDateSelectedP.value = true;
     } else {
       dateWithList.clear();
       selectedDates.clear();
+      isDateSelectedP.value = false;
     }
+    updateButtonState();
   }
 
   void toggleSelection(int index) {
-    isEnable.value = true;
+    isGenderSelected.value = true;
+    updateButtonState();
     selectedIndex.value = (selectedIndex.value == index) ? null : index;
     selectedGender.value = OnboardHalper.radioList[selectedIndex.value!];
   }
@@ -145,7 +145,8 @@ class OnboardController extends GetxController {
     } else {
       selectedDates.add(index);
       dateWithList.add(OnboardHalper.dateList[index]);
-      isEnable.value = true;
+      isDateSelectedP.value = true;
+      updateButtonState();
     }
   }
 
@@ -294,7 +295,7 @@ class OnboardController extends GetxController {
       final response = await _onboardService.addName(name: name);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
-        isEnable.value = false;
+        updateButtonState();
         goToNextPage();
         return true;
       } else {
@@ -327,7 +328,7 @@ class OnboardController extends GetxController {
       );
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
-        isEnable.value = false;
+
         goToNextPage();
         isPageLoading(false);
         return true;
@@ -355,7 +356,6 @@ class OnboardController extends GetxController {
       final response = await _onboardService.addDob(dob: dob);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
-        isEnable.value = false;
         goToNextPage();
         isPageLoading(false);
         return true;
@@ -380,7 +380,7 @@ class OnboardController extends GetxController {
       final response = await _onboardService.addHieght(feet: feet, cm: cm);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
-        isEnable.value = false;
+
         goToNextPage();
         isPageLoading(false);
         return true;
@@ -408,7 +408,7 @@ class OnboardController extends GetxController {
       final response = await _onboardService.addDateWith(dateWith: dateWith);
       if (response.success) {
         AppToastMessage.show(title: "Success", message: response.message);
-        isEnable.value = false;
+
         goToNextPage();
         isPageLoading(false);
         return true;
@@ -439,6 +439,8 @@ class OnboardController extends GetxController {
       if (response!.success) {
         final image = response.data!.url ?? '';
         updateFile(index, image.toString());
+        isPhotoAdded.value = true;
+        updateButtonState();
 
         return true;
       } else {
@@ -468,6 +470,7 @@ class OnboardController extends GetxController {
       } else {
         isPageLoading(false);
         AppToastMessage.show(
+          isError: true,
           title: "Error",
           message: "Success ${response.message}",
         );
@@ -545,26 +548,86 @@ class OnboardController extends GetxController {
   }
 
   Future<void> setPagesValue(PageValues pagesValue) async {
-    nameController.text = pagesValue.name!;
-    if (nameController.text.isNotEmpty) {
+    /// NAME
+    if (pagesValue.name != null && pagesValue.name!.isNotEmpty) {
+      nameController.text = pagesValue.name!;
       isNameValid.value = true;
-    }
-    selectedGender.value = pagesValue.gender!;
-    if (selectedGender.isNotEmpty) {
-      isGenderSelected.value = true;
-    }
-    selectedDob.value = pagesValue.dob!;
-    if (selectedDob.value.isNotEmpty) {
-      isDobSelected.value = true;
-    }
-    dateWithList.addAll(pagesValue.dateWith!);
-    if (dateWithList.isNotEmpty) {
-      isDateSelected.value = true;
+      updateButtonState();
+    } else {
+      isNameValid.value = false;
+      updateButtonState();
     }
 
-    heightController.value = pagesValue.height!.feet.toString();
-    if (heightController.isNotEmpty) {
+    /// GENDER
+    if (pagesValue.gender != null && pagesValue.gender!.isNotEmpty) {
+      selectedGender.value = pagesValue.gender!;
+      isGenderSelected.value = true;
+      updateButtonState();
+      final list = OnboardHalper.radioList;
+
+      for (int i = 0; i < list.length; i++) {
+        // ✅ FIXED
+        if (list[i].contains(selectedGender.value)) {
+          // ✅ FIXED
+          selectedIndex.value = i;
+          break; // ✅ DO NOT return (prevents skipping next fields)
+        }
+      }
+    }
+
+    /// DOB
+    if (pagesValue.dob != null && pagesValue.dob!.isNotEmpty) {
+      final dateValue = AppMethods.formatFromIso(pagesValue.dob!);
+      dobController.value = dateValue['ui'] ?? '';
+      selectedDob.value = dateValue['api'] ?? '';
+      isDobSelected.value = true;
+      updateButtonState();
+    }
+
+    /// DATE WITH
+    if (pagesValue.dateWith != null && pagesValue.dateWith!.isNotEmpty) {
+      dateWithList
+        ..clear()
+        ..addAll(pagesValue.dateWith!);
+
+      isDateSelected.value = true;
+      updateButtonState();
+
+      final list = OnboardHalper.dateList;
+
+      // 🔥 IMPORTANT: clear before adding
+      selectedDates.clear();
+
+      for (int i = 0; i < list.length; i++) {
+        if (dateWithList.contains(list[i])) {
+          selectedDates.add(i);
+        }
+      }
+
+      // 🔥 Move switch logic OUTSIDE loop
+      isSwitchOn.value =
+          selectedDates.length == dateWithList.length &&
+          dateWithList.every((e) => list.contains(e));
+    }
+
+    /// HEIGHT
+    if (pagesValue.height != null && pagesValue.height!.feet != null) {
       isHeightSelected.value = true;
+      updateButtonState();
+      final double height = pagesValue.height!.feet!;
+      final int feets = height.floor();
+      final int inchs = ((height - feets) * 10).round(); // feet.inches format
+      heightController.value = "$feets feet $inchs inch";
+      feet.value = feets.toDouble();
+      cm.value = pagesValue.height!.cm!;
+    }
+
+    if (pagesValue.hallOfFame != null && pagesValue.hallOfFame!.isNotEmpty) {
+      isPhotoAdded.value = true;
+      updateButtonState();
+    } else {
+      isPhotoAdded.value = false;
+      updateButtonState();
     }
   }
 
@@ -577,7 +640,6 @@ class OnboardController extends GetxController {
   late PageController pageController = PageController(
     initialPage: firstIncompleteIndex,
   );
-
   Future<void> setOnboardPages(OnboardPages pages) async {
     stepStatus.assignAll(pages.toStepStatusList());
     pageController = PageController(initialPage: firstIncompleteIndex);
@@ -586,6 +648,7 @@ class OnboardController extends GetxController {
   bool get allCompleted => stepStatus.every((e) => e);
   int get firstIncompleteIndex {
     final index = stepStatus.indexWhere((e) => e == false);
+    currentIndex.value = index;
     return index == -1 ? 0 : index;
   }
 
@@ -601,11 +664,8 @@ class OnboardController extends GetxController {
   Future<void> completeStep(int index) async {
     AppToastMessage.show(title: 'Step Status', message: stepStatus.toString());
     if (index < 0 || index >= stepStatus.length) return;
-
     stepStatus[index] = true;
     AppMethods.appPrint(message: stepStatus.toString());
-    AppToastMessage.show(title: 'Step Status', message: stepStatus.toString());
-
     _goToNextStepOrFinish();
   }
 
@@ -615,7 +675,6 @@ class OnboardController extends GetxController {
     if (nextIndex == -1) {
       Get.off(CurrentLoadingScreen());
     } else {
-      isEnable.value = true;
       // ➡️ Move to next incomplete page
       pageController.animateToPage(
         nextIndex,
@@ -624,6 +683,7 @@ class OnboardController extends GetxController {
       );
     }
     currentIndex.value = nextIndex;
+    updateButtonState();
   }
 
   void onboardingCompleted() async {
@@ -801,22 +861,34 @@ class OnboardController extends GetxController {
     }
   }
 
-  bool get isButtonEnabled {
+  RxBool isButtonEnabled = false.obs;
+
+  void updateButtonState() {
     switch (currentIndex.value) {
       case 0:
-        return isNameValid.value;
+        isButtonEnabled.value = isNameValid.value;
+        break;
       case 1:
-        return isGenderSelected.value;
+        isButtonEnabled.value = isGenderSelected.value;
+        break;
       case 2:
-        return isDobSelected.value;
+        isButtonEnabled.value = isDobSelected.value;
+        break;
       case 3:
-        return isHeightSelected.value;
+        isButtonEnabled.value = isHeightSelected.value;
+        break;
       case 4:
-        return isDateSelectedP.value;
+        isButtonEnabled.value = isDateSelectedP.value;
+        break;
       case 5:
-        return isPhotoAdded.value;
+        isButtonEnabled.value = isPhotoAdded.value;
+        break;
       default:
-        return false;
+        isButtonEnabled.value = false;
     }
+  }
+
+  void updateStepState() {
+    stepStatus[currentIndex.value] = false;
   }
 }

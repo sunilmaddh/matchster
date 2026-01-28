@@ -49,4 +49,14 @@ extension ReligionEnumX on ReligionEnum {
 
   /// Value used for API / storage
   String get apiValue => name;
+  String get emoji {
+    return "🙏🏼";
+  }
+
+  static ReligionEnum? fromApi(String value) {
+    return ReligionEnum.values.firstWhere(
+      (e) => e.apiValue == value.toLowerCase(),
+      orElse: () => ReligionEnum.others,
+    );
+  }
 }

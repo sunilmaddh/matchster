@@ -10,6 +10,9 @@ class AppConstants {
   errorTitle = "Error",
   oRcontinue = "or continue with",
   createMyAccount = "Create My Account",
+  loginTitle = "Secure OTP Login",
+  loginDescription =
+      "Enter your phone number to receive a one-time password and continue securely.",
   accessMyAccount = "Access My Account",
   instagram = "$continueWith Instagram",
   facebook = "$continueWith Facebook",

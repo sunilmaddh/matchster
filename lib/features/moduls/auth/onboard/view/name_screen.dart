@@ -38,10 +38,13 @@ class NameWidget extends StatelessWidget {
             onChanged: (name) {
               if (name != null && name.isNotEmpty) {
                 _onboardController.isNameValid.value = true;
+
+                // _onboardController.isNameValid.value = true;
               } else {
                 _onboardController.isNameValid.value = false;
                 // _onboardController.isEnable.value = false;
               }
+              _onboardController.updateButtonState();
             },
           ),
           10.hBox,

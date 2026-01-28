@@ -39,7 +39,9 @@ class LoginFieldWithButton extends StatelessWidget {
                 alignment: AlignmentGeometry.center,
                 child: CommonText.text(
                   textAlign: TextAlign.center,
-                  "Create account",
+                  _loginController.isAccessAccount.isTrue
+                      ? AppConstants.loginTitle
+                      : "Create account",
                   fontSize: 30.sp,
                   fontWeight: FontWeight.w600,
                 ),
@@ -49,7 +51,9 @@ class LoginFieldWithButton extends StatelessWidget {
                 fontFamily: "DM Sans",
                 textAlign: TextAlign.center,
                 maxLines: 3,
-                AppConstants.loginSubtile,
+                _loginController.isAccessAccount.isTrue
+                    ? AppConstants.loginDescription
+                    : AppConstants.loginSubtile,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w400,
                 color: AppColors.loginTitleColor,
@@ -127,7 +131,7 @@ class LoginFieldWithButton extends StatelessWidget {
                           _loginController.isEnable.value = true;
                           AppMethods.hideKeyboard();
                         } else {
-                          _loginController.isEnable.value = true;
+                          _loginController.isEnable.value = false;
                         }
                       },
                     ),

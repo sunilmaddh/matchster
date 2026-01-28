@@ -31,6 +31,17 @@ extension ZodiacEnumX on ZodiacEnum {
     }
   }
 
+  String get emoji {
+    return "⚛";
+  }
+
   /// Value for API / storage
   String get apiValue => name;
+
+  static ZodiacEnum? fromApi(String value) {
+    return ZodiacEnum.values.firstWhere(
+      (e) => e.apiValue == value.toLowerCase(),
+      orElse: () => ZodiacEnum.gemini,
+    );
+  }
 }
