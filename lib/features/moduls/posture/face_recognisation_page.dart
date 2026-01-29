@@ -9,7 +9,7 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/posture_gesture_screen.dart';
+import 'package:matchster/features/moduls/posture/posture_gesture_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/face_overlay_widgets.dart';
 
 class FaceRecognisationPage extends StatelessWidget {
