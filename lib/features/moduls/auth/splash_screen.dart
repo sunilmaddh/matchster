@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/routes/app_routes.dart';
 import 'package:video_player/video_player.dart';
 
@@ -10,57 +9,81 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late VideoPlayerController _controller;
+  late VideoPlayerController _videoController;
   late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
+  bool _hideVideo = false;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
     super.initState();
 
-    // Fade animation setup
     _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 500),
     );
-    // _fadeAnimation = CurvedAnimation(
-    //   parent: _fadeController,
-    //   curve: Curves.easeInOut,
-    // );
 
-    // Initialize video
-    _controller = VideoPlayerController.asset(AppAssets.splashAsset)
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.play();
-        _controller.addListener(_checkVideoEnded);
-      });
+    _fadeAnimation = Tween<double>(begin: 1, end: 0).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut),
+    );
+
+    _videoController = VideoPlayerController.asset(AppAssets.splashAsset);
+
+    _initializeVideo();
   }
 
-  void _checkVideoEnded() {
-    final bool isEnd = _controller.value.position >= _controller.value.duration;
-    if (isEnd && mounted) {
-      _controller.removeListener(_checkVideoEnded);
-      _startFadeOutAndNavigate();
+  Future<void> _initializeVideo() async {
+    await _videoController.initialize();
+    if (!mounted) return;
+
+    setState(() {});
+    _videoController
+      ..setVolume(0.0)
+      ..setLooping(false)
+      ..play();
+
+    _videoController.addListener(_videoListener);
+  }
+
+  void _videoListener() {
+    if (_hasNavigated) return;
+
+    final value = _videoController.value;
+
+    if (!value.isInitialized ||
+        !value.isPlaying ||
+        value.position == Duration.zero) {
+      return;
+    }
+
+    // 🔑 Hide video BEFORE it ends (prevents flash)
+    if (value.position >= value.duration - const Duration(milliseconds: 150)) {
+      _hasNavigated = true;
+      _hideVideo = true;
+      _videoController.removeListener(_videoListener);
+
+      setState(() {});
+      _startFadeAndNavigate();
     }
   }
 
-  void _startFadeOutAndNavigate() async {
-    await _fadeController.forward(); // fade-out
-    if (mounted) {
-      Get.offAllNamed(AppRoutes.loginScreen); // navigate to login
-    }
+  Future<void> _startFadeAndNavigate() async {
+    await _fadeController.forward();
+    if (!mounted) return;
+    Get.offAllNamed(AppRoutes.loginScreen);
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_checkVideoEnded);
-    _controller.dispose();
+    _videoController.removeListener(_videoListener);
+    _videoController.dispose();
     _fadeController.dispose();
     super.dispose();
   }
@@ -68,18 +91,33 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.white, // ALWAYS WHITE
       body: Stack(
+        fit: StackFit.expand,
         children: [
-          if (_controller.value.isInitialized)
-            Center(
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
+          // White background layer
+          Container(
+            color: Colors.white,
+
+            child: Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            ),
+          ),
+
+          // Video layer
+          if (_videoController.value.isInitialized && !_hideVideo)
+            FadeTransition(
+              opacity: _fadeAnimation,
+              child: Transform.scale(
+                scale: 1.02, // 🔑 hides 1–2px black line
+                child: Center(
+                  child: AspectRatio(
+                    aspectRatio: _videoController.value.aspectRatio,
+                    child: VideoPlayer(_videoController),
+                  ),
+                ),
               ),
-            )
-          else
-            const Center(child: CircularProgressIndicator()),
+            ),
         ],
       ),
     );

@@ -97,5 +97,6 @@ class AppAssets {
       rightLIkes = "$baseUrlSvg/right_likes.svg",
       previewErrorAssets = "$baseUrlSvg/preview_error.svg",
       maintence = "$baseUrlLottie/maintence.json",
+      noMoreProfile = "$baseUrlSvg/no-more-profile.svg",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

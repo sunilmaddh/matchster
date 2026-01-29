@@ -138,80 +138,116 @@ class HomeController extends GetxController {
 
   bool onSwipe(
     int previousIndex,
-    int? currentIndex,
+    int? newIndex,
     CardSwiperDirection direction,
   ) {
-    if (currentIndex == null) return true;
-    if (currentIndex < 0 || currentIndex >= profileList.length) {
+    /// Safety checks
+    if (newIndex == null) return true;
+    if (profileList.isEmpty) return true;
+    if (previousIndex < 0 || previousIndex >= profileList.length) {
       return true;
     }
 
-    this.currentIndex.value = currentIndex;
-    _updateInShort();
-    if (direction == CardSwiperDirection.left) {
-      createInterection(
-        userId: profileList[previousIndex].userId!,
-        action: "dislike",
-      );
-    } else if (direction == CardSwiperDirection.right) {
-      createInterection(
-        userId: profileList[previousIndex].userId!,
-        action: "dislike",
-      );
-    }
+    final swipedProfile = profileList[previousIndex];
 
-    // void onSwipeCompleted(int previousIndex) {
-    //   if (previousIndex < 0 || previousIndex >= profileList.length) return;
+    /// 🔥 Call API
+    createInterection(
+      userId: swipedProfile.userId!,
+      action: direction == CardSwiperDirection.right ? "like" : "dislike",
+    );
 
-    //   profileList.removeAt(previousIndex);
-    //   this.currentIndex.value = 0;
-    // }
+    /// 🚫 DO NOT update currentIndex using swiper index
+    /// We always keep index at 0 because we remove items
+    currentIndex.value = 0;
 
-    // profileList.removeAt(previousIndex);
+    /// 🕒 Delay removal to avoid RangeError
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (previousIndex < profileList.length) {
+        profileList.removeAt(previousIndex);
+      }
 
-    /// Reset index
-    this.currentIndex.value = currentIndex;
+      /// Update UI safely
+      if (profileList.isNotEmpty) {
+        _updateInShort();
+      }
 
-    /// Update UI data
-    if (profileList.isNotEmpty) {
-      _updateInShort();
-    }
-
-    /// 🚀 Load more profiles when only 1 left
-    // _loadMoreProfilesIfNeeded();
+      /// 🚀 Load more when only 1 left
+      if (profileList.length <= 1) {
+        _loadMoreProfilesIfNeeded();
+      }
+    });
 
     return true;
+  }
+
+  void _loadMoreProfilesIfNeeded() {
+    if (profileList.length <= 1) {
+      getProfileList(filterType: "basic", filter: 10);
+    }
   }
 
   /* ----------------------------------------------------
    * LIKE / DISLIKE BUTTON TAP
    * -------------------------------------------------- */
 
-  void handleInteraction({required bool isLikeAction}) async {
-    final profile = currentProfile;
-    if (profile == null) return;
+  // void handleInteraction({required bool isLikeAction}) async {
+  //   final profile = currentProfile;
+  //   if (profile == null) return;
 
+  //   isLike.value = isLikeAction;
+  //   isOverlay.value = true;
+
+  //   await createInterection(
+  //     userId: profile.userId!,
+  //     action: isLikeAction ? "like" : "dislike",
+  //   );
+
+  //   Future.delayed(const Duration(seconds: 2), () {
+  //     isOverlay.value = false;
+  //     isLike.value = false;
+  //     swiperController.swipe(
+  //       isLikeAction ? CardSwiperDirection.right : CardSwiperDirection.left,
+  //     );
+  //   });
+  //    Future.delayed(const Duration(milliseconds: 300), () {
+  //     if (previousIndex < profileList.length) {
+  //       profileList.removeAt(previousIndex);
+  //     }
+
+  //     /// Update UI safely
+  //     if (profileList.isNotEmpty) {
+  //       _updateInShort();
+  //     }
+
+  //     /// 🚀 Load more when only 1 left
+  //     if (profileList.length <= 1) {
+  //       _loadMoreProfilesIfNeeded();
+  //     }
+  //   });
+  //   if (profileList.isNotEmpty) {
+  //     _updateInShort();
+  //   }
+
+  //   /// 🚀 Load more if only 1 left
+  //   _loadMoreProfilesIfNeeded();
+  // }
+  void handleInteraction({required bool isLikeAction}) {
+    if (profileList.isEmpty) return;
+
+    /// Show overlay animation
     isLike.value = isLikeAction;
     isOverlay.value = true;
 
-    await createInterection(
-      userId: profile.userId!,
-      action: isLikeAction ? "like" : "dislike",
-    );
-
-    Future.delayed(const Duration(seconds: 2), () {
+    /// Hide overlay after animation
+    Future.delayed(const Duration(seconds: 1), () {
       isOverlay.value = false;
       isLike.value = false;
+
+      /// Trigger swipe ONLY
       swiperController.swipe(
         isLikeAction ? CardSwiperDirection.right : CardSwiperDirection.left,
       );
     });
-    if (profileList.isNotEmpty) {
-      _updateInShort();
-    }
-
-    /// 🚀 Load more if only 1 left
-    _loadMoreProfilesIfNeeded();
   }
 
   /* ----------------------------------------------------
@@ -318,14 +354,14 @@ class HomeController extends GetxController {
         .toList();
   }
 
-  void _loadMoreProfilesIfNeeded() {
-    if (profileList.length == 2 && !isFetchingMore.value) {
-      isFetchingMore.value = true;
-      getProfileList(filterType: 'basic', filter: 10).then((_) {
-        isFetchingMore.value = false;
-      });
-    }
-  }
+  // void _loadMoreProfilesIfNeeded() {
+  //   if (profileList.length == 2 && !isFetchingMore.value) {
+  //     isFetchingMore.value = true;
+  //     getProfileList(filterType: 'basic', filter: 10).then((_) {
+  //       isFetchingMore.value = false;
+  //     });
+  //   }
+  // }
 }
 
 FrequencyEnum frequencyFromApi(String value) {

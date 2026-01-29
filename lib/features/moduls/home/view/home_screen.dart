@@ -12,9 +12,9 @@ import 'package:matchster/core/widgets/fields/common_card.dart';
 import 'package:matchster/core/widgets/fields/common_home_card.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/home/controller/home_controller.dart';
-import 'package:matchster/features/moduls/home/models/home_response.dart';
 import 'package:matchster/features/moduls/home/widgets/dark_circle_widget.dart';
 import 'package:matchster/features/moduls/home/widgets/main_photo_card.dart';
+import 'package:matchster/features/moduls/home/widgets/no_more_profile_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/inshort_wrap_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/interest_wrap_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/looking_wrap_widget.dart';
@@ -70,11 +70,9 @@ class _HomeScreenState extends State<HomeScreen>
           return const Center(child: CircularProgressIndicator());
         }
         final data = _homeController.currentProfile;
-        if (data == null) {
-          return SizedBox.shrink();
+        if (data == null || _homeController.profileList.isEmpty) {
+          return NoMoreProfileWidget();
         }
-
-        // final profiles = List<Profile>.from(_homeController.profileList);
 
         return GestureDetector(
           onVerticalDragUpdate: (details) {
@@ -253,9 +251,9 @@ class _HomeScreenState extends State<HomeScreen>
                                             fontWeight: FontWeight.w700,
                                             fontFamily: "Caros",
                                           ),
-                                          SvgPicture.asset(
-                                            AppAssets.shareAssets,
-                                          ),
+                                          // SvgPicture.asset(
+                                          //   AppAssets.shareAssets,
+                                          // ),
                                         ],
                                       ),
                                     ),

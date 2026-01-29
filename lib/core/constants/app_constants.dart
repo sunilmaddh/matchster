@@ -18,6 +18,9 @@ class AppConstants {
   facebook = "$continueWith Facebook",
   google = "$continueWith Google",
   number = "$continueWith Number",
+  nOProfilesTtile = "No profiles nearby right now",
+  noProfileDes =
+      "Expand your search radius to discover more nearby profiles and new connections.",
   login = "Login",
   hintLoginMessage = "Enter mobile Number",
   verify = "Verify",
