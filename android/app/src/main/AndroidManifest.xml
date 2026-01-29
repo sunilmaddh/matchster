@@ -1,7 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Permissions -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:label="matchster"
@@ -15,6 +20,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBGOD5V39x9XIoEkhpbKRL_D5ipsYPG3qE" />
+
+        <activity android:name="com.example.matchster.PostureCameraActivity"/>
 
         <activity
             android:name=".MainActivity"
@@ -35,10 +42,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-    android:name="com.yalantis.ucrop.UCropActivity"
-    android:screenOrientation="portrait"
-    android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+<!--    android:name="com.yalantis.ucrop.UCropActivity"-->
+<!--    android:screenOrientation="portrait"-->
+<!--    android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>-->
 
 
         <meta-data

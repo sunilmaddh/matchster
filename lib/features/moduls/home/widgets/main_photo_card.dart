@@ -106,20 +106,29 @@ class MainPhotoCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(
-                                  width: 100.w,
-                                  child: CommonText.text(
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                    "${data.name}, ${data.age}",
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: "Caros",
-                                    color: AppColors.whiteColor,
-                                  ),
+                                Row(
+                                  children: [
+                                    CommonText.text(
+                                      shortName(data.name.toString()),
+                                      // "${data.name.toString()},",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Caros",
+                                      color: AppColors.whiteColor,
+                                    ),
+                                    CommonText.text(
+                                      ", ${data.age}",
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Caros",
+                                      color: AppColors.whiteColor,
+                                    ),
+                                  ],
                                 ),
+
                                 2.wBox,
 
                                 SvgPicture.asset(AppAssets.verified),
@@ -203,4 +212,7 @@ class MainPhotoCard extends StatelessWidget {
       ),
     );
   }
+
+  String shortName(String name) =>
+      name.length > 5 ? "${name.substring(0, 5)}…" : name;
 }

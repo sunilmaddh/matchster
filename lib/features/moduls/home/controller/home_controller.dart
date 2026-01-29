@@ -158,13 +158,13 @@ class HomeController extends GetxController {
 
     /// 🚫 DO NOT update currentIndex using swiper index
     /// We always keep index at 0 because we remove items
-    currentIndex.value = 0;
 
     /// 🕒 Delay removal to avoid RangeError
     Future.delayed(const Duration(milliseconds: 300), () {
       if (previousIndex < profileList.length) {
         profileList.removeAt(previousIndex);
       }
+      currentIndex.value = newIndex;
 
       /// Update UI safely
       if (profileList.isNotEmpty) {
