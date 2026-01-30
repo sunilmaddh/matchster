@@ -21,7 +21,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBGOD5V39x9XIoEkhpbKRL_D5ipsYPG3qE" />
 
-        <activity android:name="com.example.matchster.PostureCameraActivity"/>
+        <activity android:name="com.example.matchster.PostureCameraActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/PostureCameraTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            />
 
         <activity
             android:name=".MainActivity"

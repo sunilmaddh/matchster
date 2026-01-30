@@ -9,7 +9,9 @@ import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/bar/linear_progress_bar_with_badge.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/posture/face_recognisation.dart';
+import 'package:matchster/features/moduls/posture/posture_gesture_screen.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
+import 'package:matchster/features/moduls/profile/services/posture_services.dart';
 import 'package:matchster/features/moduls/profile/view/location/current_location.dart';
 import 'package:matchster/features/moduls/profile/view/location/search_location_screen.dart';
 import 'package:matchster/features/moduls/profile/view/profile/setting_screen.dart';
@@ -246,7 +248,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: EdgeInsets.only(bottom: 15.h),
                         child: InkWell(
                           onTap: () {
-                            Get.to(FaceRecogonizationWidget());
+                            PostureService.startCameraActivity();
+                            // Get.to(FaceRecogonizationWidget());
                           },
                           child: InterestCard(
                             color: Color(0xff1D48EF),

@@ -27,12 +27,15 @@ import java.util.concurrent.Executors
 class PostureCameraActivity : AppCompatActivity() {
 
     private lateinit var previewView: PreviewView
+    lateinit var handDetector: HandLandmarker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         previewView = PreviewView(this)
         setContentView(previewView)
+
+        setupHandDetector()
 
         if (ContextCompat.checkSelfPermission(
                 this,CAMERA
@@ -55,7 +58,7 @@ class PostureCameraActivity : AppCompatActivity() {
             val cameraProvider = cameraProviderFuture.get()
 
             val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(previewView.surfaceProvider)
+                it.surfaceProvider = previewView.surfaceProvider
             }
 
             val analysis = ImageAnalysis.Builder()
@@ -94,7 +97,7 @@ class PostureCameraActivity : AppCompatActivity() {
 
         imageProxy.close()
     }
-    lateinit var handDetector: HandLandmarker
+
 
     private fun setupHandDetector() {
 
