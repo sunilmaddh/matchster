@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/core/widgets/fields/custom_form_field.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 
@@ -38,8 +36,9 @@ class YourHeightWidget extends StatelessWidget {
 
           20.hBox,
           InkWell(
-            onTap: () {
-              CommonBottomSheet.showHeightPicker(
+            onTap: () async {
+              _controller.isBottomSheetOpen.value = true;
+              await CommonBottomSheet.showHeightPicker(
                 context: context,
                 heightList: OnboardHalper().generateHeightList(),
                 defaultValue: OnboardHalper().generateHeightList()[0],
@@ -58,6 +57,7 @@ class YourHeightWidget extends StatelessWidget {
                   _controller.updateButtonState();
                 },
               );
+              _controller.isBottomSheetOpen.value = false;
             },
             child: Obx(
               () => Container(

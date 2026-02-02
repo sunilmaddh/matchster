@@ -131,7 +131,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [BoxShadow(blurRadius: 3)],
+              border: Border.all(color: Color(0xffE6E6E6)),
             ),
 
             child: Row(

@@ -26,6 +26,7 @@ class AppAssets {
       fileAssets = "$baseUrlSvg/file.svg",
       cameraAssets = "$baseUrlSvg/camera.svg",
       splashAsset = "$baseUrlVideo/splash.mp4",
+      loginBgAsset = "$baseUrlVideo/login_bg.mp4",
       faceDetector = "$baseUrlSvg/face_detector.svg",
       photoFrame = "$baseUrlSvg/photo_frame.png",
       photoFrame1 = "$baseUrlSvg/photo_frame_2.png",
@@ -98,5 +99,9 @@ class AppAssets {
       previewErrorAssets = "$baseUrlSvg/preview_error.svg",
       maintence = "$baseUrlLottie/maintence.json",
       noMoreProfile = "$baseUrlSvg/no-more-profile.svg",
+      loginAni = "$baseUrlAssets/logo-ani.gif",
+      loginBGAssets = "$baseUrlVideo/login_bg_fixed.mp4",
+      noProfile = "$baseUrlSvg/no_profile_list.svg",
+      noMProfile = "$baseUrlPng/no-profile.png",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

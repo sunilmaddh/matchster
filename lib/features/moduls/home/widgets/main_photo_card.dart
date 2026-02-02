@@ -72,7 +72,7 @@ class MainPhotoCard extends StatelessWidget {
                 return Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 220.h),
+                    padding: EdgeInsets.only(bottom: 160.h),
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
                       key: ValueKey(isUp),
@@ -94,7 +94,7 @@ class MainPhotoCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
-                      bottom: Platform.isAndroid ? 120.h : 160.h,
+                      bottom: Platform.isAndroid ? 105.h : 160.h,
                       left: 25.w,
                       right: 25.w,
                     ),
@@ -144,7 +144,10 @@ class MainPhotoCard extends StatelessWidget {
                                 fontFamily: "Caros",
                                 color: AppColors.whiteColor,
                               ),
-                            15.hBox,
+
+                            if (data.interests != null &&
+                                data.interests!.isNotEmpty)
+                              15.hBox,
                             if (data.interests != null &&
                                 data.interests!.isNotEmpty)
                               Wrap(
@@ -203,7 +206,7 @@ class MainPhotoCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  10.hBox,
+                  // 10.hBox,
                 ],
               ),
             ),

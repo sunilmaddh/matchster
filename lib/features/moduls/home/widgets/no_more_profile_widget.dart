@@ -12,27 +12,35 @@ class NoMoreProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Stack(
-        children: [
-          Align(
-            alignment: AlignmentGeometry.topCenter,
-            child: Padding(
-              padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 120.h),
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 0.h),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CommonAssets.svgAsset(
-                    AppAssets.noMoreProfile,
-                    height: 150.h,
-                    width: 150.w,
+                  30.hBox,
+                  CommonAssets.imageAsset(
+                    AppAssets.noMProfile,
+                    // height: 150.h,
+                    // width: 150.w,
                   ),
-                  60.hBox,
-                  CommonText.text(
-                    AppConstants.nOProfilesTtile,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
+                  30.hBox,
+                  Padding(
+                    padding: 40.horizontalPadding,
+                    child: CommonText.text(
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      AppConstants.nOProfilesTtile,
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  15.hBox,
+                  20.hBox,
                   CommonText.text(
                     maxLines: 3,
                     AppConstants.noProfileDes,
@@ -40,21 +48,27 @@ class NoMoreProfileWidget extends StatelessWidget {
                     fontWeight: FontWeight.w300,
                     textAlign: TextAlign.center,
                   ),
+                  50.hBox,
+                  AppButton(
+                    isEnable: true,
+                    name: "Update Preferences",
+                    onTop: () {},
+                  ),
                 ],
               ),
             ),
-          ),
 
-          Positioned(
-            left: 16.w,
-            right: 16.w,
-            bottom:
-                kBottomNavigationBarHeight +
-                MediaQuery.of(context).padding.bottom +
-                40.h,
-            child: AppButton(name: "Update Preferences", onTop: () {}),
-          ),
-        ],
+            // Positioned(
+            //   left: 16.w,
+            //   right: 16.w,
+            //   bottom:
+            //       kBottomNavigationBarHeight +
+            //       MediaQuery.of(context).padding.bottom +
+            //       40.h,
+            //   child: AppButton(name: "Update Preferences", onTop: () {}),
+            // ),
+          ],
+        ),
       ),
     );
   }

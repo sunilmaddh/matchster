@@ -5,7 +5,7 @@ import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 
 class CommonBottomSheet {
-  static void showHeightPicker({
+  static Future<void> showHeightPicker({
     required BuildContext context,
     required List<HeightItem> heightList,
     required HeightItem defaultValue,
@@ -19,7 +19,8 @@ class CommonBottomSheet {
 
     final controller = FixedExtentScrollController(initialItem: selectedIndex);
 
-    CustomBottomSheet.show(
+    /// ✅ IMPORTANT: return the Future
+    return CustomBottomSheet.show(
       child: SizedBox(
         height: 300.h,
         child: CupertinoPicker(
@@ -37,7 +38,6 @@ class CommonBottomSheet {
                     children: [
                       Text(
                         "${item.feet} feet   ${item.inch} inch",
-                        // item.label, // 🔥 5 feet 1 inch (154.94 cm)
                         style: TextStyle(
                           fontFamily: "Caros",
                           fontSize: 18.sp,
@@ -47,7 +47,7 @@ class CommonBottomSheet {
                       ),
                       20.wBox,
                       Text(
-                        "(${item.cm.toStringAsFixed(2)} cm)", // 🔥 5 feet 1 inch (154.94 cm)
+                        "(${item.cm.toStringAsFixed(2)} cm)",
                         style: TextStyle(
                           fontFamily: "Caros",
                           fontSize: 14.sp,

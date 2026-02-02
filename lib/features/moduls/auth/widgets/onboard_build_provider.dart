@@ -20,28 +20,35 @@ class OnboardPageViewBuilder extends StatelessWidget {
         _onboardController.firstIncompleteIndex;
 
     return Scaffold(
-      floatingActionButton: Align(
-        alignment: Alignment.bottomRight,
-        child: Padding(
-          padding: 10.allPadding,
-          child: Obx(() {
-            if (_onboardController.isPageLoading.isTrue) {
-              return CircularProgressIndicator(color: AppColors.primary);
-            }
-
-            return CircleButtonWidget(
-              isEnable: _onboardController.isButtonEnabled.value,
-              onTap: () async {
-                _onboardController.isNextPageEnable.value = false;
-                final current = _onboardController.currentIndex.value;
-                final isSuccess = await _onboardController.submitStep(current);
-                if (!isSuccess) return;
-                _onboardController.completeStep(current);
-              },
-            );
-          }),
+      floatingActionButton: Obx(
+        () => AnimatedPadding(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(
+            bottom: _onboardController.isBottomSheetOpen.isTrue ? 320.h : 0.h,
+          ),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: 10.allPadding,
+              child: CircleButtonWidget(
+                isEnable: _onboardController.isButtonEnabled.value,
+                onTap: () async {
+                  _onboardController.isNextPageEnable.value = false;
+                  final current = _onboardController.currentIndex.value;
+                  final isSuccess = await _onboardController.submitStep(
+                    current,
+                  );
+                  _onboardController.completeStep(current);
+                  // if (!isSuccess) return;
+                  // _onboardController.completeStep(current);
+                },
+              ),
+            ),
+          ),
         ),
       ),
+
       body: Column(
         children: [
           MatchsterProgressIndicator(

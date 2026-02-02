@@ -39,8 +39,9 @@ class DobWidget extends StatelessWidget {
           ),
           20.hBox,
           InkWell(
-            onTap: () {
-              CustomBottomSheet.show(
+            onTap: () async {
+              _controller.isBottomSheetOpen.value = true;
+              await CustomBottomSheet.show(
                 child: SizedBox(
                   height: 300.h,
 
@@ -68,6 +69,7 @@ class DobWidget extends StatelessWidget {
                   ),
                 ),
               );
+              _controller.isBottomSheetOpen.value = false;
             },
             child: Obx(
               () => Container(
