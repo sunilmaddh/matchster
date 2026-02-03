@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
@@ -34,12 +35,16 @@ class OnboardPageViewBuilder extends StatelessWidget {
               child: CircleButtonWidget(
                 isEnable: _onboardController.isButtonEnabled.value,
                 onTap: () async {
-                  _onboardController.isNextPageEnable.value = false;
-                  final current = _onboardController.currentIndex.value;
-                  final isSuccess = await _onboardController.submitStep(
-                    current,
-                  );
-                  _onboardController.completeStep(current);
+                  if (_onboardController.isButtonEnabled.value) {
+                    _onboardController.isNextPageEnable.value = false;
+                    final current = _onboardController.currentIndex.value;
+                    final isSuccess = await _onboardController.submitStep(
+                      current,
+                    );
+                    _onboardController.completeStep(current);
+                  }
+                  AppMethods.hideKeyboard();
+
                   // if (!isSuccess) return;
                   // _onboardController.completeStep(current);
                 },

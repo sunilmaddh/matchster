@@ -24,6 +24,7 @@ class LoginController extends GetxController {
   RxBool isResend = false.obs;
   RxBool isLoading = false.obs;
   RxBool isAccessAccount = false.obs;
+  RxInt otpRebuildKey = 0.obs;
   TextEditingController controller = TextEditingController();
   Future<void> sendOtp(String number) async {
     try {
@@ -82,11 +83,16 @@ class LoginController extends GetxController {
         }
       } else {
         // AppMethods.appPrint(message: response.message.toString());
-        AppToastMessage.show(
-          isError: true,
-          title: AppConstants.errorTitle,
-          message: response.message,
-        );
+        // AppToastMessage.show(
+        //   isError: true,
+        //   title: AppConstants.errorTitle,
+        //   message: response.message,
+        // );
+
+        otpValue.value = "";
+        otpRebuildKey++;
+        isOtpEnable.value = false;
+
         isLoading(false);
       }
     } catch (e) {

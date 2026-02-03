@@ -112,10 +112,10 @@ class OnboardHalper {
     for (int feet = 5; feet <= 7; feet++) {
       for (int inch = 0; inch < 12; inch++) {
         // Min = 5'1"
-        if (feet == 5 && inch < 1) continue;
+        if (feet == 5 && inch < 0) continue;
 
         // Max = 7'10"
-        if (feet == 7 && inch > 10) break;
+        if (feet == 7 && inch > 0) break;
 
         final double cm = ((feet * 12 + inch) * 2.54);
 
@@ -124,7 +124,7 @@ class OnboardHalper {
             feet: feet,
             inch: inch,
             cm: cm,
-            label: "$feet feet  ${inch} inch  (${cm.toStringAsFixed(2)} cm)",
+            label: "$feet feet  $inch inch  (${cm.toStringAsFixed(2)} cm)",
           ),
         );
       }

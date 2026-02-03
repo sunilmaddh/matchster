@@ -131,7 +131,13 @@ class AddPhotoWidget extends StatelessWidget {
                                                 }
 
                                                 // 6️⃣ NOW update UI
-                                                if (selectedImage != null) {
+                                                debugPrint(
+                                                  "Selected image ${selectedImage.toString()}",
+                                                );
+                                                if (selectedImage != null &&
+                                                    selectedImage
+                                                        .path
+                                                        .isNotEmpty) {
                                                   _controller.isSelectingImage(
                                                     true,
                                                   ); // loader AFTER camera
@@ -153,7 +159,7 @@ class AddPhotoWidget extends StatelessWidget {
                                                   message: e.toString(),
                                                 );
                                                 debugPrintStack(stackTrace: s);
-                                              }
+                                              } finally {}
                                             },
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,

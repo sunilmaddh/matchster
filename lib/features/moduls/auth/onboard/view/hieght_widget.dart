@@ -50,11 +50,9 @@ class YourHeightWidget extends StatelessWidget {
                   _controller.cm.value = height.cm;
                   _controller.heightController.value =
                       "${height.feet} feet ${height.inch} inch";
-                  print(
-                    "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
-                  );
                   _controller.isHeightSelected.value = true;
                   _controller.updateButtonState();
+                  debugPrint(_controller.isHeightSelected.value.toString());
                 },
               );
               _controller.isBottomSheetOpen.value = false;

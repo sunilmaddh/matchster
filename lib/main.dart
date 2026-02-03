@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +27,8 @@ void main() async {
   );
   await Get.putAsync(() => SplashVideoService().init());
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  //runApp(DevicePreview(builder: (context) => const MyApp()));
   runApp(MyApp());
 }
 

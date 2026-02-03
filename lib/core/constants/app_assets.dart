@@ -103,5 +103,6 @@ class AppAssets {
       loginBGAssets = "$baseUrlVideo/login_bg_fixed.mp4",
       noProfile = "$baseUrlSvg/no_profile_list.svg",
       noMProfile = "$baseUrlPng/no-profile.png",
+      likeLottie = "$baseUrlLottie/like.json",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

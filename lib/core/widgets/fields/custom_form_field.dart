@@ -67,8 +67,8 @@ class CustomFormField extends StatelessWidget {
         inputFormatters: inputFormatters, // ✅ FIX
         decoration: InputDecoration(
           counterText: '',
-          labelText: !_isFocused.value && !isValid ? label : null,
-          hintText: _isFocused.value ? hint : null,
+          // labelText: !_isFocused.value && !isValid ? label : null,
+          hintText: hint,
           labelStyle: TextStyle(
             fontFamily: "Caros",
             fontSize: 17.sp,

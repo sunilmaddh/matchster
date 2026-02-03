@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
@@ -91,7 +92,7 @@ class _CustomCropScreenState extends State<PhotoPreviewScreen> {
         child: Obx(
           () =>
               _onboarController.isImageUploading.isTrue
-                  ? CircularProgressIndicator()
+                  ? CircularProgressIndicator(color: AppColors.primary)
                   : AppButton(
                     name: "Upload",
                     onTop: () async {

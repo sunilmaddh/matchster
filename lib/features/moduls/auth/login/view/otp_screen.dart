@@ -40,14 +40,23 @@ class OtpScreen extends StatelessWidget {
                   // " ${AppConstants.otpDiscription} ${_controller.phoneNumber.value}",
                 ),
                 45.hBox,
-                OtpWidget(
-                  onCodeChanged: (value) {
-                    _controller.isOtpEnable.value = value.length == 4;
-                  },
-                  onCompleted: (otp) {
-                    _controller.isOtpEnable.value = true;
-                    _controller.otpValue.value = otp;
-                  },
+                Obx(
+                  () => OtpWidget(
+                    key: ValueKey(_controller.otpRebuildKey.value),
+                    onCodeChanged: (value) {
+                      _controller.isOtpEnable.value = value.length == 4;
+                    },
+                    onCompleted: (otp) {
+                      _controller.isOtpEnable.value = true;
+                      _controller.otpValue.value = otp;
+                      if (_controller.isOtpEnable.isTrue) {
+                        _controller.verifyOtp(
+                          number: _controller.phoneNumber.value,
+                          otp: _controller.otpValue.value,
+                        );
+                      }
+                    },
+                  ),
                 ),
                 40.hBox,
                 Obx(

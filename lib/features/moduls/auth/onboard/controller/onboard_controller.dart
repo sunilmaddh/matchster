@@ -30,6 +30,7 @@ class OnboardController extends GetxController {
   RxBool isEnable = false.obs;
   var selectedIndex = RxnInt();
   var selectedImageIndex = RxnInt();
+  RxBool isDateWithSwitchOn = false.obs;
   RxBool isSwitchOn = false.obs;
   RxBool isNotFeet = false.obs;
   RxBool isDateSelected = false.obs;
@@ -115,7 +116,7 @@ class OnboardController extends GetxController {
   }
 
   void toggleDateSwitch(bool value) {
-    isSwitchOn.value = value;
+    isDateWithSwitchOn.value = value;
 
     if (value) {
       selectedDates.value = List.generate(
@@ -146,9 +147,11 @@ class OnboardController extends GetxController {
     } else {
       selectedDates.add(index);
       dateWithList.add(OnboardHalper.dateList[index]);
-      isDateSelectedP.value = true;
-      updateButtonState();
     }
+    isDateSelectedP.value = dateWithList.isNotEmpty;
+
+    updateButtonState();
+    updateButtonState();
   }
 
   final ImageUploadServices _imageService = ImageUploadServices();

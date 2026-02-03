@@ -41,11 +41,11 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         bottom: false, // 👈 keeps bottom content flexible
         child: Obx(() {
-          if (_controller.isLoginWithMobile.value) {
-            return SingleChildScrollView(child: LoginFieldWithButton());
+          // if (_controller.isLoginWithMobile.value) {
+          //   return SingleChildScrollView(child: LoginFieldWithButton());
 
-            // space for FAB
-          }
+          //   // space for FAB
+          // }
           return SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isEnable: true,
                                   name: AppConstants.number,
                                   onTop: () {
-                                    _controller.isLoginWithMobile.value = true;
+                                    Get.to(LoginFieldWithButton());
                                   },
                                 ),
                               ],
@@ -132,7 +132,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 isEnable: true,
                                 name: AppConstants.createMyAccount,
                                 onTop: () {
-                                  _controller.isLoginWithMobile.value = true;
+                                  // _controller.isLoginWithMobile.value = true;
+                                  _controller.isAccessMyAccount.value = true;
                                   _controller.isAccessAccount.value = false;
                                 },
                               ),
@@ -160,27 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
 
       /// 🔘 Floating Verify Button
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Obx(() {
-        if (!_controller.isLoginWithMobile.value) {
-          return const SizedBox.shrink();
-        }
-
-        return Padding(
-          padding: 20.horizontalPadding,
-          child: AppButton(
-            isEnable: _controller.isEnable.value,
-            name: AppConstants.verify,
-            onTop: () async {
-              final number =
-                  _controller.countryCode + _controller.controller.text;
-              _controller.phoneNumber.value = number;
-              await _controller.sendOtp(number);
-              NavigationHelper.push(OtpScreen());
-            },
-          ),
-        );
-      }),
     );
   }
 }

@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/extentions/address_x_ext.dart';
@@ -36,16 +38,36 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    _scrollController.addListener(() {
-      final direction = _scrollController.position.userScrollDirection;
-      if (direction == ScrollDirection.reverse) {
-        showUpArrow.value = true;
-      } else if (direction == ScrollDirection.forward) {
-        showUpArrow.value = false;
-      }
+    // _scrollController.addListener(() {
+    //   final direction = _scrollController.position.userScrollDirection;
+    //   if (direction == ScrollDirection.reverse) {
+    //     showUpArrow.value = true;
+    //   } else if (direction == ScrollDirection.forward) {
+    //     showUpArrow.value = false;
+    //   }
+    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.addListener(_onScroll);
     });
     callGetProfileApi();
+
     super.initState();
+  }
+
+  double _lastOffset = 0;
+
+  void _onScroll() {
+    final currentOffset = _scrollController.offset;
+
+    if (currentOffset > _lastOffset && !showUpArrow.value) {
+      // scrolling DOWN
+      showUpArrow.value = true;
+    } else if (currentOffset < _lastOffset && showUpArrow.value) {
+      // scrolling UP
+      showUpArrow.value = false;
+    }
+
+    _lastOffset = currentOffset;
   }
 
   @override
@@ -54,9 +76,9 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  void callGetProfileApi() {
+  void callGetProfileApi() async {
     if (_homeController.profileList.isEmpty) {
-      _homeController.getProfileList(filterType: 'basic', filter: 10);
+      await _homeController.getProfileList(filterType: 'basic', filter: 10);
     }
   }
 
@@ -71,314 +93,342 @@ class _HomeScreenState extends State<HomeScreen>
         }
         final data = _homeController.currentProfile;
 
-        return GestureDetector(
-          onVerticalDragUpdate: (details) {
-            if (_scrollController.hasClients) {
-              _scrollController.jumpTo(
-                _scrollController.offset - details.delta.dy,
-              );
-            }
-          },
-          child: Stack(
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SafeArea(
-                bottom: false,
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    spacing: 0,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: 15.horizontalPadding + 10.verticalPadding,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset(AppAssets.appLogo),
-                            Row(
-                              children: [
-                                DarkCircleWidget(
-                                  widget: Icon(
-                                    Icons.notifications_outlined,
-                                    color: AppColors.whiteColor,
-                                  ),
-                                  onTop: () {},
-                                ),
-                                20.wBox,
-                                DarkCircleWidget(
-                                  widget: Icon(
-                                    Icons.filter_list_sharp,
-                                    color: AppColors.whiteColor,
-                                  ),
-                                  onTop: () {
-                                    // Get.to(FilterScreen());
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 15.w,
+                  right: 15.w,
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SvgPicture.asset(AppAssets.appLogo),
+                    Row(
+                      children: [
+                        DarkCircleWidget(
+                          widget: Icon(
+                            Icons.notifications_outlined,
+                            color: AppColors.whiteColor,
+                          ),
+                          onTop: () {},
                         ),
-                      ),
+                        20.wBox,
+                        DarkCircleWidget(
+                          widget: Icon(
+                            Icons.filter_list_sharp,
+                            color: AppColors.whiteColor,
+                          ),
+                          onTop: () {
+                            // Get.to(FilterScreen());
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        spacing: 0,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 30.h),
+                            child:
+                                data == null ||
+                                        _homeController.profileList.isEmpty
+                                    ? NoMoreProfileWidget()
+                                    : Column(
+                                      children: [
+                                        SizedBox(
+                                          height: Get.height - 80.h,
+                                          child: CardSwiper(
+                                            threshold: 80,
+                                            maxAngle: 120,
+                                            controller:
+                                                _homeController
+                                                    .swiperController,
+                                            allowedSwipeDirection:
+                                                AllowedSwipeDirection.only(
+                                                  left: true,
+                                                  right: true,
+                                                  up: false,
+                                                  down: false,
+                                                ),
+                                            numberOfCardsDisplayed:
+                                                _homeController
+                                                    .profileList
+                                                    .length,
+                                            cardsCount:
+                                                _homeController
+                                                    .profileList
+                                                    .length,
 
-                      Padding(
-                        padding: EdgeInsets.only(top: 20.h),
-                        child:
-                            data == null || _homeController.profileList.isEmpty
-                                ? NoMoreProfileWidget()
-                                : Column(
-                                  children: [
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height -
-                                          80.h,
-                                      child: CardSwiper(
-                                        threshold: 80,
-                                        maxAngle: 120,
-                                        controller:
-                                            _homeController.swiperController,
-                                        allowedSwipeDirection:
-                                            AllowedSwipeDirection.only(
-                                              left: true,
-                                              right: true,
-                                              up: false,
-                                              down: false,
+                                            backCardOffset: const Offset(
+                                              20,
+                                              20,
                                             ),
-                                        numberOfCardsDisplayed:
-                                            _homeController.profileList.length,
-                                        cardsCount:
-                                            _homeController.profileList.length,
+                                            padding: EdgeInsets.zero,
+                                            onSwipe: _homeController.onSwipe,
+                                            cardBuilder: (
+                                              context,
+                                              index,
+                                              horizontalThresholdPercentage,
+                                              verticalThresholdPercentage,
+                                            ) {
+                                              return Stack(
+                                                children: [
+                                                  Positioned.fill(
+                                                    top: 0,
+                                                    child: Container(
+                                                      margin:
+                                                          18.horizontalPadding,
 
-                                        backCardOffset: const Offset(20, 20),
-                                        padding: EdgeInsets.zero,
-                                        onSwipe: _homeController.onSwipe,
-                                        cardBuilder: (
-                                          context,
-                                          index,
-                                          horizontalThresholdPercentage,
-                                          verticalThresholdPercentage,
-                                        ) {
-                                          return Stack(
-                                            children: [
-                                              Positioned.fill(
-                                                top: 0,
-                                                child: Container(
-                                                  margin: 18.horizontalPadding,
-
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xffCDF0FF),
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                40.0.r,
-                                                              ),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                40.0.r,
-                                                              ),
+                                                      decoration: BoxDecoration(
+                                                        color: Color(
+                                                          0xffCDF0FF,
                                                         ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned.fill(
-                                                top: 7.h,
-                                                child: Container(
-                                                  margin: 13.horizontalPadding,
-
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xffF6E9FF),
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                40.0.r,
-                                                              ),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                40.0.r,
-                                                              ),
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-
-                                              Positioned.fill(
-                                                top: 15.h,
-                                                child: MainPhotoCard(
-                                                  data:
-                                                      _homeController
-                                                          .profileList[index],
-
-                                                  onLikeTap: () {
-                                                    _homeController
-                                                        .handleInteraction(
-                                                          isLikeAction: true,
-                                                        );
-                                                  },
-                                                  onDislikeTap: () {
-                                                    _homeController
-                                                        .handleInteraction(
-                                                          isLikeAction: false,
-                                                        );
-                                                  },
-                                                  showUpArrow: showUpArrow,
-                                                  onVerticalDrag: (double dy) {
-                                                    if (_scrollController
-                                                        .hasClients) {
-                                                      _scrollController.jumpTo(
-                                                        (_scrollController
-                                                                    .offset -
-                                                                dy)
-                                                            .clamp(
-                                                              0.0,
-                                                              _scrollController
-                                                                  .position
-                                                                  .maxScrollExtent,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                              topLeft:
+                                                                  Radius.circular(
+                                                                    40.0.r,
+                                                                  ),
+                                                              topRight:
+                                                                  Radius.circular(
+                                                                    40.0.r,
+                                                                  ),
                                                             ),
-                                                      );
-                                                    }
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Positioned.fill(
+                                                    top: 7.h,
+                                                    child: Container(
+                                                      margin:
+                                                          13.horizontalPadding,
 
-                                    Transform.translate(
-                                      offset: Offset(0, -10), // move upward
-                                      child: Container(
-                                        padding:
-                                            15.verticalPadding +
-                                            15.horizontalPadding,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20.0.r),
-                                            topRight: Radius.circular(20.0.r),
+                                                      decoration: BoxDecoration(
+                                                        color: Color(
+                                                          0xffF6E9FF,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                              topLeft:
+                                                                  Radius.circular(
+                                                                    40.0.r,
+                                                                  ),
+                                                              topRight:
+                                                                  Radius.circular(
+                                                                    40.0.r,
+                                                                  ),
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  Positioned.fill(
+                                                    top: 15.h,
+                                                    child: MainPhotoCard(
+                                                      data:
+                                                          _homeController
+                                                              .profileList[index],
+
+                                                      onLikeTap: () {
+                                                        _homeController
+                                                            .handleInteraction(
+                                                              isLikeAction:
+                                                                  true,
+                                                            );
+                                                      },
+                                                      onDislikeTap: () {
+                                                        _homeController
+                                                            .handleInteraction(
+                                                              isLikeAction:
+                                                                  false,
+                                                            );
+                                                      },
+                                                      showUpArrow: showUpArrow,
+                                                      onVerticalDrag: (
+                                                        double dy,
+                                                      ) {
+                                                        if (_scrollController
+                                                            .hasClients) {
+                                                          _scrollController.jumpTo(
+                                                            (_scrollController
+                                                                        .offset -
+                                                                    dy)
+                                                                .clamp(
+                                                                  0.0,
+                                                                  _scrollController
+                                                                      .position
+                                                                      .maxScrollExtent,
+                                                                ),
+                                                          );
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
                                           ),
                                         ),
 
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Padding(
-                                              padding: 20.horizontalPadding,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  CommonText.text(
-                                                    "${data.name}, ${data.age}",
-                                                    fontSize: 16.sp,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontFamily: "Caros",
-                                                  ),
-                                                  // SvgPicture.asset(
-                                                  //   AppAssets.shareAssets,
-                                                  // ),
-                                                ],
+                                        Transform.translate(
+                                          offset: Offset(0, -10), // move upward
+                                          child: Container(
+                                            padding:
+                                                15.verticalPadding +
+                                                15.horizontalPadding,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(
+                                                  20.0.r,
+                                                ),
+                                                topRight: Radius.circular(
+                                                  20.0.r,
+                                                ),
                                               ),
                                             ),
-                                            10.hBox,
 
-                                            if (data.about != null &&
-                                                data.about!.isNotEmpty)
-                                              CommonHomeCard(
-                                                widget: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    CommonText.text(
-                                                      "In Short",
-                                                      color:
-                                                          AppColors.whiteColor,
-                                                    ),
-                                                    CommonText.text(
-                                                      fontSize: 24.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: "Caros",
-                                                      maxLines: 7,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      color:
-                                                          AppColors.whiteColor,
-                                                      "“${data.about}.”",
-                                                    ),
-
-                                                    20.hBox,
-
-                                                    InshortWrapWidget(
-                                                      list:
-                                                          _homeController
-                                                              .inshortList,
-                                                    ),
-                                                  ],
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Padding(
+                                                  padding: 20.horizontalPadding,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      CommonText.text(
+                                                        "${data.name}, ${data.age}",
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily: "Caros",
+                                                      ),
+                                                      // SvgPicture.asset(
+                                                      //   AppAssets.shareAssets,
+                                                      // ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ).paddingOnly(bottom: 15.h)
-                                            else
-                                              SizedBox.shrink(),
+                                                10.hBox,
 
-                                            if (data.lookingFor != null &&
-                                                data.lookingFor!.isNotEmpty)
-                                              CommonHomeCard(
-                                                widget: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    CommonText.text(
-                                                      "Looking For",
-                                                      color:
-                                                          AppColors.whiteColor,
-                                                      fontFamily: "Caros",
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
+                                                if (data.about != null &&
+                                                    data.about!.isNotEmpty)
+                                                  CommonHomeCard(
+                                                    widget: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CommonText.text(
+                                                          "In Short",
+                                                          color:
+                                                              AppColors
+                                                                  .whiteColor,
+                                                        ),
+                                                        CommonText.text(
+                                                          fontSize: 24.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: "Caros",
+                                                          maxLines: 7,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          color:
+                                                              AppColors
+                                                                  .whiteColor,
+                                                          "“${data.about}.”",
+                                                        ),
+
+                                                        20.hBox,
+
+                                                        InshortWrapWidget(
+                                                          list:
+                                                              _homeController
+                                                                  .inshortList,
+                                                        ),
+                                                      ],
                                                     ),
-                                                    10.hBox,
+                                                  ).paddingOnly(bottom: 15.h)
+                                                else
+                                                  SizedBox.shrink(),
 
-                                                    LookingWrapWidget(
-                                                      list: data.lookingFor!,
+                                                if (data.lookingFor != null &&
+                                                    data.lookingFor!.isNotEmpty)
+                                                  CommonHomeCard(
+                                                    widget: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CommonText.text(
+                                                          "Looking For",
+                                                          color:
+                                                              AppColors
+                                                                  .whiteColor,
+                                                          fontFamily: "Caros",
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        10.hBox,
+
+                                                        LookingWrapWidget(
+                                                          list:
+                                                              data.lookingFor!,
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                              ).paddingOnly(bottom: 15.h)
-                                            else
-                                              SizedBox.shrink(),
+                                                  ).paddingOnly(bottom: 15.h)
+                                                else
+                                                  SizedBox.shrink(),
 
-                                            if (data.distance != null &&
-                                                data.distance!.isNotEmpty)
-                                              CommonHomeCard(
-                                                widget: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    CommonText.text(
-                                                      "Location",
-                                                      color:
-                                                          AppColors.whiteColor,
-                                                      fontFamily: "Caros",
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                    10.hBox,
+                                                if (data.distance != null &&
+                                                    data.distance!.isNotEmpty)
+                                                  CommonHomeCard(
+                                                    widget: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CommonText.text(
+                                                          "Location",
+                                                          color:
+                                                              AppColors
+                                                                  .whiteColor,
+                                                          fontFamily: "Caros",
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        10.hBox,
 
-                                                    // ),
-                                                    CommonCard(
-                                                      widget: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          Container(
-                                                            padding:
-                                                                7.allPadding,
-                                                            decoration:
-                                                                BoxDecoration(
+                                                        // ),
+                                                        CommonCard(
+                                                          widget: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              Container(
+                                                                padding:
+                                                                    7.allPadding,
+                                                                decoration: BoxDecoration(
                                                                   shape:
                                                                       BoxShape
                                                                           .circle,
@@ -386,203 +436,219 @@ class _HomeScreenState extends State<HomeScreen>
                                                                     0xffF4F4F4,
                                                                   ),
                                                                 ),
-                                                            child:
-                                                                CommonText.text(
-                                                                  "📍",
+                                                                child:
+                                                                    CommonText.text(
+                                                                      "📍",
+                                                                    ),
+                                                              ),
+                                                              5.wBox,
+                                                              CommonText.text(
+                                                                color: Color(
+                                                                  0xffD90380,
                                                                 ),
+                                                                "${data.distance.toString()} km",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize: 14.sp,
+                                                              ),
+                                                              5.wBox,
+                                                              CommonText.text(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontSize: 14.sp,
+                                                                "away, ${data.currentAddress!.city}",
+                                                              ),
+                                                            ],
                                                           ),
-                                                          5.wBox,
-                                                          CommonText.text(
-                                                            color: Color(
-                                                              0xffD90380,
-                                                            ),
-                                                            "${data.distance.toString()} km",
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            fontSize: 14.sp,
-                                                          ),
-                                                          5.wBox,
-                                                          CommonText.text(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 14.sp,
-                                                            "away, ${data.currentAddress!.city}",
-                                                          ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                              )
-                                            else
-                                              SizedBox.shrink(),
-                                            15.hBox,
-                                            if (data.interests != null &&
-                                                data.interests!.isNotEmpty)
-                                              CommonCard(
-                                                widget: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    CommonText.text(
-                                                      "My Interest",
-                                                      fontFamily: "Caros",
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
+                                                  )
+                                                else
+                                                  SizedBox.shrink(),
+                                                15.hBox,
+                                                if (data.interests != null &&
+                                                    data.interests!.isNotEmpty)
+                                                  CommonCard(
+                                                    widget: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CommonText.text(
+                                                          "My Interest",
+                                                          fontFamily: "Caros",
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        CommonText.text(
+                                                          "Express your interests to find your ideal match",
+                                                          fontFamily: "Caros",
+                                                          fontSize: 12.sp,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                        ),
+                                                        10.hBox,
+                                                        InterestWrapWidget(
+                                                          list: data.interests!,
+                                                        ),
+                                                      ],
                                                     ),
-                                                    CommonText.text(
-                                                      "Express your interests to find your ideal match",
-                                                      fontFamily: "Caros",
-                                                      fontSize: 12.sp,
-                                                      fontWeight:
-                                                          FontWeight.w300,
-                                                    ),
-                                                    10.hBox,
-                                                    InterestWrapWidget(
-                                                      list: data.interests!,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ).paddingOnly(bottom: 15.h)
-                                            else
-                                              SizedBox.shrink(),
+                                                  ).paddingOnly(bottom: 15.h)
+                                                else
+                                                  SizedBox.shrink(),
 
-                                            if (data.work != null &&
-                                                data.work!.isNotEmpty)
-                                              CommonCard(
-                                                widget: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    CommonText.text(
-                                                      "Profession",
-                                                      fontFamily: "Caros",
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
+                                                if (data.work != null &&
+                                                    data.work!.isNotEmpty)
+                                                  CommonCard(
+                                                    widget: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CommonText.text(
+                                                          "Profession",
+                                                          fontFamily: "Caros",
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        5.hBox,
+                                                        SubCommonCard(
+                                                          widget:
+                                                              CommonText.text(
+                                                                data.work!,
+                                                              ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    5.hBox,
-                                                    SubCommonCard(
-                                                      widget: CommonText.text(
-                                                        data.work!,
-                                                      ),
+                                                  )
+                                                else
+                                                  SizedBox.shrink(),
+                                                15.hBox,
+                                                if (data.morePictures != null &&
+                                                    data
+                                                        .morePictures!
+                                                        .isNotEmpty)
+                                                  CommonCard(
+                                                    widget: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CommonText.text(
+                                                          "More Picture",
+                                                          fontFamily: "Caros",
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        10.hBox,
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                20.r,
+                                                              ),
+                                                          child:
+                                                              CommonAssets.networkImage(
+                                                                data
+                                                                    .morePictures!
+                                                                    .first,
+                                                              ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                              )
-                                            else
-                                              SizedBox.shrink(),
-                                            15.hBox,
-                                            if (data.morePictures != null &&
-                                                data.morePictures!.isNotEmpty)
-                                              CommonCard(
-                                                widget: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    CommonText.text(
-                                                      "More Picture",
-                                                      fontFamily: "Caros",
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                    10.hBox,
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            20.r,
-                                                          ),
-                                                      child:
-                                                          CommonAssets.networkImage(
-                                                            data
-                                                                .morePictures!
-                                                                .first,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ).paddingOnly(bottom: 15.h)
-                                            else
-                                              const SizedBox.shrink(),
+                                                  ).paddingOnly(bottom: 15.h)
+                                                else
+                                                  const SizedBox.shrink(),
 
-                                            if (data.languages != null &&
-                                                data.languages!.isNotEmpty)
-                                              CommonCard(
-                                                widget: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    CommonText.text(
-                                                      "Language",
-                                                      color:
-                                                          AppColors.blackColor,
-                                                      fontFamily: "Caros",
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                    10.hBox,
+                                                if (data.languages != null &&
+                                                    data.languages!.isNotEmpty)
+                                                  CommonCard(
+                                                    widget: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CommonText.text(
+                                                          "Language",
+                                                          color:
+                                                              AppColors
+                                                                  .blackColor,
+                                                          fontFamily: "Caros",
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        10.hBox,
 
-                                                    InterestWrapWidget(
-                                                      list: data.languages!,
+                                                        InterestWrapWidget(
+                                                          list: data.languages!,
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                              ).paddingOnly(bottom: 15.h)
-                                            else
-                                              SizedBox.shrink(),
+                                                  ).paddingOnly(bottom: 15.h)
+                                                else
+                                                  SizedBox.shrink(),
 
-                                            if (data.morePictures != null &&
-                                                data.morePictures!.isNotEmpty)
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  /// Images list
+                                                if (data.morePictures != null &&
+                                                    data
+                                                        .morePictures!
+                                                        .isNotEmpty)
                                                   Column(
-                                                    children: List.generate(
-                                                      data
-                                                              .morePictures!
-                                                              .length -
-                                                          1,
-                                                      (index) {
-                                                        return Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                bottom: 15.h,
-                                                              ),
-                                                          child: CommonCard(
-                                                            widget: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                    20.r,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      /// Images list
+                                                      Column(
+                                                        children: List.generate(
+                                                          data
+                                                                  .morePictures!
+                                                                  .length -
+                                                              1,
+                                                          (index) {
+                                                            return Padding(
+                                                              padding:
+                                                                  EdgeInsets.only(
+                                                                    bottom:
+                                                                        15.h,
                                                                   ),
-                                                              child: CommonAssets.networkImage(
-                                                                data.morePictures![index +
-                                                                    1],
+                                                              child: CommonCard(
+                                                                widget: ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        20.r,
+                                                                      ),
+                                                                  child: CommonAssets.networkImage(
+                                                                    data.morePictures![index +
+                                                                        1],
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            else
-                                              const SizedBox.shrink(),
-                                          ],
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                else
+                                                  const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                          ),
+                          100.hBox,
+                        ],
                       ),
-                      100.hBox,
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -43,29 +43,47 @@ class DobWidget extends StatelessWidget {
               _controller.isBottomSheetOpen.value = true;
               await CustomBottomSheet.show(
                 child: SizedBox(
-                  height: 300.h,
+                  height: 300.h, // fixed & predictable
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// CLOSE BUTTON
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.close_rounded),
+                          onPressed: () {
+                            Get.back();
+                          },
+                        ),
+                      ),
 
-                  child: CupertinoDatePicker(
-                    itemExtent: 50,
-                    mode: CupertinoDatePickerMode.date,
-                    dateOrder: DatePickerDateOrder.dmy,
-                    initialDateTime: DateTime.now().eighteenYearsAgo,
-                    minimumDate: DateTime(1925),
-                    maximumDate: DateTime(2050),
+                      /// DATE PICKER
+                      Expanded(
+                        child: CupertinoDatePicker(
+                          itemExtent: 50,
+                          mode: CupertinoDatePickerMode.date,
+                          dateOrder: DatePickerDateOrder.dmy,
+                          initialDateTime: DateTime.now().eighteenYearsAgo,
+                          minimumDate: DateTime(1925),
+                          maximumDate: DateTime(2050),
+                          onDateTimeChanged: (DateTime newDate) {
+                            final formattedDate = DateFormat(
+                              'yyyy-MM-dd',
+                            ).format(newDate);
 
-                    onDateTimeChanged: (DateTime newDate) {
-                      final formattedDate = DateFormat(
-                        'yyyy-MM-dd',
-                      ).format(newDate);
-                      _controller.dobController.value = newDate.readable;
-                      // AppMethods()
-                      //     .formatDateToDDMMYYYY(formattedDate);
-                      _controller.selectedDob.value = formattedDate;
+                            _controller.dobController.value = newDate.readable;
+                            _controller.selectedDob.value = formattedDate;
 
-                      _controller.isDobSelected.value = true;
+                            _controller
+                                .isDobSelected
+                                .value = AppMethods.isAge18OrAbove(newDate);
 
-                      _controller.updateButtonState();
-                    },
+                            _controller.updateButtonState();
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );

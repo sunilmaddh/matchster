@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
@@ -23,42 +24,61 @@ class CommonBottomSheet {
     return CustomBottomSheet.show(
       child: SizedBox(
         height: 300.h,
-        child: CupertinoPicker(
-          scrollController: controller,
-          itemExtent: 50,
-          looping: true,
-          onSelectedItemChanged: (index) {
-            onSelected(heightList[index]);
-          },
-          children:
-              heightList.map((item) {
-                return Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "${item.feet} feet   ${item.inch} inch",
-                        style: TextStyle(
-                          fontFamily: "Caros",
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// CLOSE BUTTON
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: const Icon(Icons.close_rounded),
+                onPressed: () {
+                  Get.back();
+                },
+              ),
+            ),
+
+            /// HEIGHT PICKER (FIXED)
+            Expanded(
+              child: CupertinoPicker(
+                scrollController: controller,
+                itemExtent: 50,
+                looping: true,
+                onSelectedItemChanged: (index) {
+                  onSelected(heightList[index]);
+                },
+                children:
+                    heightList.map((item) {
+                      return Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "${item.feet} feet   ${item.inch} inch",
+                              style: TextStyle(
+                                fontFamily: "Caros",
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                            20.wBox,
+                            Text(
+                              "(${item.cm.toStringAsFixed(2)} cm)",
+                              style: TextStyle(
+                                fontFamily: "Caros",
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      20.wBox,
-                      Text(
-                        "(${item.cm.toStringAsFixed(2)} cm)",
-                        style: TextStyle(
-                          fontFamily: "Caros",
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
+                      );
+                    }).toList(),
+              ),
+            ),
+          ],
         ),
       ),
     );

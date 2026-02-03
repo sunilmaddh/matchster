@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:matchster/core/extentions/religion_level_ext.dart';
 import 'package:matchster/core/extentions/zodiac_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
+import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/features/moduls/home/models/habit_option.dart';
 import 'package:matchster/features/moduls/home/models/home_response.dart';
 import 'package:matchster/features/moduls/home/models/inshort_list.dart';
@@ -30,6 +32,7 @@ class HomeController extends GetxController {
   final RxList<Profile> profileListCount = <Profile>[].obs;
   final RxList<Datum> likeList = <Datum>[].obs;
   final RxList<String> inShortList = <String>[].obs;
+  RxBool showLike = false.obs;
 
   final RxInt selectedIndex = 0.obs;
   final RxInt currentIndex = 0.obs;
@@ -84,15 +87,23 @@ class HomeController extends GetxController {
       if (response.success && response.data?.profiles != null) {
         profileList.assignAll(response.data!.profiles!);
         profileListCount.assignAll(response.data!.profiles!);
+        preloadInitialCachedImages(profileList);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (profileList.first.mainPhoto != null &&
+              profileList.first.mainPhoto!.isEmpty) {
+            CachedNetworkImageProvider(
+              profileList.first.mainPhoto!,
+            ).resolve(const ImageConfiguration());
+          }
+        });
 
         currentIndex.value = 0;
         _updateInShort();
+        isGettingProfile(false);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
-    } finally {
-      isGettingProfile(false);
-    }
+    } finally {}
   }
 
   /* ----------------------------------------------------
@@ -149,6 +160,10 @@ class HomeController extends GetxController {
     if (profileList.isEmpty) return true;
     if (previousIndex < 0 || previousIndex >= profileList.length) {
       return true;
+    }
+
+    if (direction == CardSwiperDirection.right) {
+      playLike();
     }
 
     final swipedProfile = profileList[previousIndex];
@@ -262,6 +277,12 @@ class HomeController extends GetxController {
   /* ----------------------------------------------------
    * UPDATE "IN SHORT"
    * -------------------------------------------------- */
+  void playLike() {
+    showLike.value = true;
+    Future.delayed(const Duration(milliseconds: 800), () {
+      showLike.value = false;
+    });
+  }
 
   void _updateInShort() {
     final profile = currentProfile;
@@ -341,6 +362,28 @@ class HomeController extends GetxController {
             .where((e) => e != null && e.toString().trim().isNotEmpty)
             .cast<String>(),
       );
+  }
+
+  Future<void> preloadInitialCachedImages(List<Profile> images) async {
+    for (int i = 0; i < 3 && i < images.length; i++) {
+      CachedNetworkImageProvider(
+        images[i].mainPhoto!,
+      ).resolve(const ImageConfiguration());
+    }
+  }
+
+  Future<void> preloadInitialCards(
+    BuildContext context,
+    List<Profile> images,
+  ) async {
+    final preloadCount = images.length >= 3 ? 3 : images.length;
+
+    for (int i = 0; i < preloadCount; i++) {
+      await precacheImage(
+        CachedNetworkImageProvider(images[i].mainPhoto!),
+        context,
+      );
+    }
   }
 
   /* ----------------------------------------------------

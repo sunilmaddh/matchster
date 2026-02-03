@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/extentions/interests_enum_ext.dart';
@@ -39,11 +40,11 @@ class MainPhotoCard extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height - 80.h,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(data.mainPhoto.toString()),
+          // image: DecorationImage(
+          //   image: NetworkImage(data.mainPhoto.toString()),
 
-            fit: BoxFit.fill,
-          ),
+          //   fit: BoxFit.fill,
+          // ),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40.0.r),
             topRight: Radius.circular(40.0.r),
@@ -51,18 +52,29 @@ class MainPhotoCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: AlignmentGeometry.center,
-                  end: AlignmentGeometry.bottomCenter,
-                  colors: [
-                    const Color(0xFF7A96F8).withAlpha(0), // 0.0
-                    const Color(0xFF587DFF).withAlpha(128), // 0.50
-                    const Color(0xFF5174FF).withAlpha(191), // 0.75
-                    const Color(0xFF3F66FF).withAlpha(223), // 0.87
-                    const Color(0xFF1D48EF).withAlpha(0), // 0.0
-                  ],
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadiusGeometry.only(
+                  topLeft: Radius.circular(40.0.r),
+                  topRight: Radius.circular(40.0.r),
+                ),
+                child: CommonAssets.networkImage(data.mainPhoto.toString()),
+              ),
+            ),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.center,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color(0xFF7A96F8).withAlpha(0),
+                      const Color(0xFF587DFF).withAlpha(128),
+                      const Color(0xFF5174FF).withAlpha(191),
+                      const Color(0xFF3F66FF).withAlpha(223),
+                      const Color(0xFF1D48EF).withAlpha(0),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -75,11 +87,14 @@ class MainPhotoCard extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 160.h),
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
-                      key: ValueKey(isUp),
+                      transitionBuilder: (child, animation) {
+                        return ScaleTransition(scale: animation, child: child);
+                      },
                       child: SvgPicture.asset(
                         isUp
                             ? AppAssets.downArrowAssets
                             : AppAssets.upArrowAssets,
+                        key: ValueKey(isUp), // ✅ KEY GOES HERE
                       ),
                     ),
                   ),
