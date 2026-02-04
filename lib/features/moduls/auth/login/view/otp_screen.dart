@@ -104,17 +104,17 @@ class OtpScreen extends StatelessWidget {
               ],
             ),
           ),
-          Obx(
-            () =>
-                _controller.isResend.isTrue
-                    ? Align(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
-                    )
-                    : SizedBox.shrink(),
-          ),
+          // Obx(
+          //   () =>
+          //       _controller.isResend.isTrue
+          //           ? Align(
+          //             alignment: Alignment.center,
+          //             child: CircularProgressIndicator(
+          //               color: AppColors.primary,
+          //             ),
+          //           )
+          //           : SizedBox.shrink(),
+          // ),
         ],
       ),
     );

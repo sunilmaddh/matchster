@@ -58,7 +58,21 @@ class MainPhotoCard extends StatelessWidget {
                   topLeft: Radius.circular(40.0.r),
                   topRight: Radius.circular(40.0.r),
                 ),
-                child: CommonAssets.networkImage(data.mainPhoto.toString()),
+                child: CommonAssets.networkImage(
+                  data.mainPhoto.toString(),
+                  errorWidget: Container(
+                    padding: 20.horizontalPadding,
+
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40.0.r),
+                        topRight: Radius.circular(40.0.r),
+                      ),
+                    ),
+                    child: SvgPicture.asset(AppAssets.appLogo),
+                  ),
+                ),
               ),
             ),
             Positioned.fill(
@@ -110,8 +124,8 @@ class MainPhotoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(
                       bottom: Platform.isAndroid ? 105.h : 160.h,
-                      left: 25.w,
-                      right: 25.w,
+                      left: 15.w,
+                      right: 15.w,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

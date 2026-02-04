@@ -28,7 +28,7 @@ void main() async {
   await Get.putAsync(() => SplashVideoService().init());
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  //runApp(DevicePreview(builder: (context) => const MyApp()));
+  // runApp(DevicePreview(builder: (context) => const MyApp()));
   runApp(MyApp());
 }
 
