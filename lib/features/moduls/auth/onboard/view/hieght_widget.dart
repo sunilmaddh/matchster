@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -53,6 +54,17 @@ class YourHeightWidget extends StatelessWidget {
                   _controller.isHeightSelected.value = true;
                   _controller.updateButtonState();
                   debugPrint(_controller.isHeightSelected.value.toString());
+                },
+                onTap: () async {
+                  Get.back();
+                  if (_controller.isButtonEnabled.value) {
+                    _controller.isNextPageEnable.value = false;
+                    final current = _controller.currentIndex.value;
+                    final isSuccess = await _controller.submitStep(current);
+
+                    _controller.completeStep(current);
+                  }
+                  AppMethods.hideKeyboard();
                 },
               );
               _controller.isBottomSheetOpen.value = false;

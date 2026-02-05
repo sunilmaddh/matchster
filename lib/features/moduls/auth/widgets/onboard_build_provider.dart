@@ -26,7 +26,8 @@ class OnboardPageViewBuilder extends StatelessWidget {
           duration: const Duration(milliseconds: 250),
           curve: Curves.easeOut,
           padding: EdgeInsets.only(
-            bottom: _onboardController.isBottomSheetOpen.isTrue ? 320.h : 0.h,
+            bottom: 0.h,
+            //  _onboardController.isBottomSheetOpen.isTrue ? 320.h : 0.h,
           ),
           child: Align(
             alignment: Alignment.bottomRight,
@@ -41,6 +42,7 @@ class OnboardPageViewBuilder extends StatelessWidget {
                     final isSuccess = await _onboardController.submitStep(
                       current,
                     );
+
                     _onboardController.completeStep(current);
                   }
                   AppMethods.hideKeyboard();

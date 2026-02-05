@@ -36,11 +36,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       },
 
       child: Scaffold(
-        extendBody: false,
+        extendBody: true,
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            _homeBackground(),
             PageView(
               physics: const NeverScrollableScrollPhysics(),
               controller: _controller.pageController,

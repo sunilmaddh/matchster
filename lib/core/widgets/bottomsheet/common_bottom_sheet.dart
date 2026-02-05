@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 
 class CommonBottomSheet {
@@ -11,6 +12,7 @@ class CommonBottomSheet {
     required List<HeightItem> heightList,
     required HeightItem defaultValue,
     required Function(HeightItem value) onSelected,
+    required VoidCallback onTap,
   }) {
     int selectedIndex = heightList.indexWhere(
       (e) => e.feet == defaultValue.feet && e.inch == defaultValue.inch,
@@ -30,11 +32,9 @@ class CommonBottomSheet {
             /// CLOSE BUTTON
             Align(
               alignment: Alignment.centerRight,
-              child: IconButton(
-                icon: const Icon(Icons.close_rounded),
-                onPressed: () {
-                  Get.back();
-                },
+              child: TextButton(
+                onPressed: onTap,
+                child: CommonText.text("Done"),
               ),
             ),
 

@@ -78,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen>
       backgroundColor: Colors.white,
       body: Obx(() {
         if (_homeController.isGettingProfile.isTrue) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
         final data = _homeController.currentProfile;
 
@@ -181,7 +183,12 @@ class _HomeScreenState extends State<HomeScreen>
                                               down: false,
                                             ),
                                         numberOfCardsDisplayed:
-                                            _homeController.profileList.length,
+                                            _homeController.profileList.length >
+                                                    3
+                                                ? 3
+                                                : _homeController
+                                                    .profileList
+                                                    .length,
                                         cardsCount:
                                             _homeController.profileList.length,
 

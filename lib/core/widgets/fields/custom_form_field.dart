@@ -55,6 +55,8 @@ class CustomFormField extends StatelessWidget {
       final bool isValid = enableBorder.value;
 
       return TextFormField(
+        showCursor: true,
+        enableInteractiveSelection: true,
         // focusNode: _focusNode,
         controller: controller,
         maxLength: maxLength,

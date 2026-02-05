@@ -40,11 +40,6 @@ class MainPhotoCard extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height - 80.h,
         decoration: BoxDecoration(
-          // image: DecorationImage(
-          //   image: NetworkImage(data.mainPhoto.toString()),
-
-          //   fit: BoxFit.fill,
-          // ),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40.0.r),
             topRight: Radius.circular(40.0.r),
@@ -59,6 +54,7 @@ class MainPhotoCard extends StatelessWidget {
                   topRight: Radius.circular(40.0.r),
                 ),
                 child: CommonAssets.networkImage(
+                  placeholder: SizedBox(),
                   data.mainPhoto.toString(),
                   errorWidget: Container(
                     padding: 20.horizontalPadding,

@@ -37,9 +37,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.whiteColor,
       body: SafeArea(
-        bottom: false, // 👈 keeps bottom content flexible
+        bottom: true, // 👈 keeps bottom content flexible
         child: Obx(() {
           // if (_controller.isLoginWithMobile.value) {
           //   return SingleChildScrollView(child: LoginFieldWithButton());

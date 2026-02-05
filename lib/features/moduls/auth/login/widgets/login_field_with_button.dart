@@ -26,35 +26,40 @@ class LoginFieldWithButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true, // 🔥 KEY FIX
-      bottomNavigationBar: Obx(
-        () => Padding(
-          padding: EdgeInsets.only(
-            left: 20.w,
-            right: 20.w,
-            bottom: MediaQuery.of(context).viewInsets.bottom > 0 ? 10.h : 20.h,
-          ),
-          child: AppButton(
-            isEnable: _loginController.isEnable.value,
-            name: AppConstants.verify,
-            onTop: () async {
-              final number =
-                  _loginController.countryCode +
-                  _loginController.controller.text;
+    return SafeArea(
+      bottom: true,
+      left: true,
+      right: true,
+      top: true,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true, // 🔥 KEY FIX
+        bottomNavigationBar: Obx(
+          () => Padding(
+            padding: EdgeInsets.only(
+              left: 20.w,
+              right: 20.w,
+              bottom:
+                  MediaQuery.of(context).viewInsets.bottom > 0 ? 10.h : 20.h,
+            ),
+            child: AppButton(
+              isEnable: _loginController.isEnable.value,
+              name: AppConstants.verify,
+              onTop: () async {
+                final number =
+                    _loginController.countryCode +
+                    _loginController.controller.text;
 
-              _loginController.phoneNumber.value = number;
-              if (_loginController.isEnable.isTrue) {
-                await _loginController.sendOtp(number);
-                NavigationHelper.push(OtpScreen());
-              }
-            },
+                _loginController.phoneNumber.value = number;
+                if (_loginController.isEnable.isTrue) {
+                  await _loginController.sendOtp(number);
+                  NavigationHelper.push(OtpScreen());
+                }
+              },
+            ),
           ),
         ),
-      ),
 
-      body: SafeArea(
-        child: SingleChildScrollView(
+        body: SingleChildScrollView(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
@@ -146,7 +151,11 @@ class LoginFieldWithButton extends StatelessWidget {
                                           "+${_countryController.selectedCountry.value!.phoneCode}";
                                     },
                                     child: Container(
-                                      height: 48.h,
+                                      height:
+                                          MediaQuery.of(context).size.height <
+                                                  750
+                                              ? 57.h
+                                              : 48.h,
                                       padding: 10.horizontalPadding,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(

@@ -48,14 +48,28 @@ class DobWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       /// CLOSE BUTTON
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                          icon: const Icon(Icons.close_rounded),
-                          onPressed: () {
-                            Get.back();
-                          },
-                        ),
+                      Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              child: CommonText.text("Done"),
+                              onPressed: () async {
+                                Get.back();
+                                if (_controller.isButtonEnabled.value) {
+                                  _controller.isNextPageEnable.value = false;
+                                  final current =
+                                      _controller.currentIndex.value;
+                                  final isSuccess = await _controller
+                                      .submitStep(current);
+
+                                  _controller.completeStep(current);
+                                }
+                                AppMethods.hideKeyboard();
+                              },
+                            ),
+                          ),
+                        ],
                       ),
 
                       /// DATE PICKER

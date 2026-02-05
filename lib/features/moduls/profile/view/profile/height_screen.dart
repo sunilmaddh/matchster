@@ -75,6 +75,7 @@ class HeightScreen extends StatelessWidget {
                       "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
                     );
                   },
+                  onTap: () {},
                 );
               },
               child: Obx(

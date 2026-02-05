@@ -87,18 +87,19 @@ class HomeController extends GetxController {
       if (response.success && response.data?.profiles != null) {
         profileList.assignAll(response.data!.profiles!);
         profileListCount.assignAll(response.data!.profiles!);
-        preloadInitialCachedImages(profileList);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (profileList.first.mainPhoto != null &&
-              profileList.first.mainPhoto!.isEmpty) {
-            CachedNetworkImageProvider(
-              profileList.first.mainPhoto!,
-            ).resolve(const ImageConfiguration());
-          }
-        });
+        // preloadInitialCachedImages(profileList);
+        // WidgetsBinding.instance.addPostFrameCallback((_) {
+        //   if (profileList.first.mainPhoto != null &&
+        //       profileList.first.mainPhoto!.isEmpty) {
+        //     CachedNetworkImageProvider(
+        //       profileList.first.mainPhoto!,
+        //     ).resolve(const ImageConfiguration());
+        //   }
+        // });
 
         currentIndex.value = 0;
-        _updateInShort();
+        await _updateInShort();
+
         isGettingProfile(false);
       }
     } catch (e) {
@@ -284,7 +285,7 @@ class HomeController extends GetxController {
     });
   }
 
-  void _updateInShort() {
+  Future<void> _updateInShort() async {
     final profile = currentProfile;
     if (profile == null) {
       inShortList.clear();
