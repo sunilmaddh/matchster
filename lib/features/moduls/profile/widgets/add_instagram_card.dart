@@ -55,24 +55,25 @@ class AddInstagramCard extends StatelessWidget {
                       child: DottedBorder(
                         options: RoundedRectDottedBorderOptions(
                           color: Colors.black.withAlpha(128),
-                          radius: Radius.circular(20.r),
-                          dashPattern: [3, 4],
+                          radius: Radius.circular(16.r),
+                          dashPattern: [2, 2],
                         ),
                         child: Container(
+                          padding: EdgeInsets.zero,
                           width: 46.w,
                           height: 46.h,
                           decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.r),
                             color: AppColors.whiteColor,
-                            shape: BoxShape.circle,
                           ),
                         ),
                       ),
                     ),
                     Positioned(
-                      right: 5,
+                      right: 3,
                       top: -1,
                       child: Container(
-                        padding: EdgeInsets.all(4.0),
+                        padding: EdgeInsets.all(1.0),
                         // width: 15.w,
                         // height: 15.h,
                         decoration: BoxDecoration(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 
@@ -13,6 +14,7 @@ class CommonBottomSheet {
     required HeightItem defaultValue,
     required Function(HeightItem value) onSelected,
     required VoidCallback onTap,
+    required final RxBool isEnable,
   }) {
     int selectedIndex = heightList.indexWhere(
       (e) => e.feet == defaultValue.feet && e.inch == defaultValue.inch,
@@ -30,11 +32,31 @@ class CommonBottomSheet {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// CLOSE BUTTON
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: onTap,
-                child: CommonText.text("Done"),
+            Obx(
+              () => Align(
+                alignment: Alignment.centerRight,
+                child: CircleButtonWidget(
+                  size: 50,
+                  isEnable: isEnable.value,
+
+                  onTap: onTap,
+                  // _controller.isButtonEnabled.value,
+                  // onTap: () async {
+                  //   if (_controller.isButtonEnabled.value) {
+                  //     _controller.isNextPageEnable.value = false;
+                  //     final current = _controller.currentIndex.value;
+                  //     final isSuccess = await _controller.submitStep(
+                  //       current,
+                  //     );
+
+                  //     _controller.completeStep(current);
+                  //   }
+                  //   AppMethods.hideKeyboard();
+
+                  //   // if (!isSuccess) return;
+                  //   // _onboardController.completeStep(current);
+                  // },
+                ),
               ),
             ),
 

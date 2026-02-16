@@ -840,7 +840,13 @@ class OnboardController extends GetxController {
         PhotoReviewBottomsheet.show(
           onImageSelected: (selectedImage) {
             Get.back();
-            Get.to(PhotoPreviewScreen(imageFile: selectedImage, index: index));
+            Get.to(
+              PhotoPreviewScreen(
+                imageFile: selectedImage,
+                index: index,
+                page: 'onboard',
+              ),
+            );
           },
         );
         return;

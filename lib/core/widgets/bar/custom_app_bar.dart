@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/widgets/fields/common_text.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -37,9 +39,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               )
               : SizedBox.shrink(),
-      title: Text(
+      title: CommonText.text(
         title,
-        style: TextStyle(fontWeight: FontWeight.w700, color: textColor),
+
+        fontWeight: FontWeight.w500,
+        color: textColor,
+        fontSize: 16.sp,
       ),
       centerTitle: isCenterTitle,
       actions: actions,

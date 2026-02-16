@@ -18,12 +18,16 @@ class SmokeScreen extends StatelessWidget {
       onTop: (v) {
         _profileController.selectedSmoke.value = v;
       },
-      isSelected: (v) => _profileController.selectedSmoke.contains(v),
+      isSelected:
+          (v) =>
+              _profileController.selectedSmoke.value.toLowerCase().trim() ==
+              v.toLowerCase().trim(),
       onTopButton: () {
         _profileController.addSmoking(
           smoking: _profileController.selectedSmoke.value,
         );
       },
+      appBarTitle: 'Smoking',
     );
   }
 }

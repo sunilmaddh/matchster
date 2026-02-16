@@ -8,6 +8,7 @@ import 'package:matchster/core/extentions/date_x_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/core/widgets/fields/custom_form_field.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
@@ -48,28 +49,46 @@ class DobWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       /// CLOSE BUTTON
-                      Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              child: CommonText.text("Done"),
-                              onPressed: () async {
-                                Get.back();
-                                if (_controller.isButtonEnabled.value) {
-                                  _controller.isNextPageEnable.value = false;
-                                  final current =
-                                      _controller.currentIndex.value;
-                                  final isSuccess = await _controller
-                                      .submitStep(current);
+                      Obx(
+                        () => Align(
+                          alignment: Alignment.centerRight,
+                          child: CircleButtonWidget(
+                            size: 50,
+                            isEnable: _controller.isButtonEnabled.value,
+                            onTap: () async {
+                              if (_controller.isButtonEnabled.value) {
+                                _controller.isNextPageEnable.value = false;
+                                final current = _controller.currentIndex.value;
+                                final isSuccess = await _controller.submitStep(
+                                  current,
+                                );
 
-                                  _controller.completeStep(current);
-                                }
-                                AppMethods.hideKeyboard();
-                              },
-                            ),
+                                _controller.completeStep(current);
+                              }
+                              Get.back();
+                              AppMethods.hideKeyboard();
+
+                              // if (!isSuccess) return;
+                              // _onboardController.completeStep(current);
+                            },
                           ),
-                        ],
+                        ),
+                        //  TextButton(
+                        //   child: CommonText.text("Done"),
+                        //   onPressed: () async {
+                        //     Get.back();
+                        //     if (_controller.isButtonEnabled.value) {
+                        //       _controller.isNextPageEnable.value = false;
+                        //       final current =
+                        //           _controller.currentIndex.value;
+                        //       final isSuccess = await _controller
+                        //           .submitStep(current);
+
+                        //       _controller.completeStep(current);
+                        //     }
+                        //     AppMethods.hideKeyboard();
+                        //   },
+                        // ),
                       ),
 
                       /// DATE PICKER

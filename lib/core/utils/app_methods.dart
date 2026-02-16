@@ -39,6 +39,19 @@ class AppMethods {
     }
   }
 
+  static bool isValid(String value) {
+    return RegExp(r'^[a-zA-Z]+$').hasMatch(value);
+  }
+
+  static String? validateWorkText({required String value}) {
+    if (value == null && value.isEmpty) {
+      return null;
+    } else if (!isValid(value)) {
+      return "Please enter valid text";
+    }
+    return null;
+  }
+
   static bool isValidIndianMobile(String mobile) {
     final regex = RegExp(r'^[6-9]\d{9}$');
     return regex.hasMatch(mobile);
@@ -61,6 +74,10 @@ class AppMethods {
     }
 
     return null;
+  }
+
+  String toSnakeCase(String value) {
+    return value.trim().toLowerCase().replaceAll(RegExp(r'\s+'), '_');
   }
 
   static String? validateText(String? value) {

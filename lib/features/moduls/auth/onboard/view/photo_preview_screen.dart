@@ -1,16 +1,14 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
+import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 class CropGridOverlay extends StatelessWidget {
   const CropGridOverlay({super.key});
@@ -57,11 +55,13 @@ class _GridPainter extends CustomPainter {
 class PhotoPreviewScreen extends StatefulWidget {
   final File imageFile;
   final int index;
+  final String page;
 
   const PhotoPreviewScreen({
     super.key,
     required this.imageFile,
     required this.index,
+    required this.page,
   });
 
   @override
@@ -104,15 +104,20 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.all(16.r),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: Get.back,
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16.r),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: Get.back,
+                    ),
+                  ),
                 ),
-              ),
+                CommonText.text("Crop photo", fontWeight: FontWeight.w400),
+              ],
             ),
 
             /// 🔥 Crop Area
@@ -150,11 +155,17 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
                                 Matrix4.identity()
                                   ..translate(_offset.dx, _offset.dy)
                                   ..scale(_scale),
-                            child: Image.file(
-                              widget.imageFile,
-                              fit: BoxFit.cover,
-                              cacheWidth: 600,
-                              filterQuality: FilterQuality.high,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Image.file(
+                                  widget.imageFile,
+                                  fit: BoxFit.cover,
+                                  cacheWidth: 600,
+                                  filterQuality: FilterQuality.high,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -176,7 +187,6 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
     if (context == null) {
       throw Exception('Crop area not ready');
     }
-
     final boundary = context.findRenderObject() as RenderRepaintBoundary;
 
     final image = await boundary.toImage(pixelRatio: 3);

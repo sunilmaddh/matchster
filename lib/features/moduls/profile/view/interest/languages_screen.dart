@@ -14,9 +14,9 @@ class LanguagesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonWidget(
-      image: AppAssets.workout2,
-      title: "Workout Frequency",
-      subtitle: "How often do you work out?",
+      image: AppAssets.languageAssets,
+      title: "What languages do you know?",
+      subtitle: "Build your connection more",
       list: CommonLists.languageList,
       onTop: (v) {
         if (_profileController.selectedLanguage.contains(v)) {
@@ -32,6 +32,7 @@ class LanguagesScreen extends StatelessWidget {
         );
         _profileController.addLanguages(languages: languages);
       },
+      appBarTitle: 'Languages',
     );
   }
 }

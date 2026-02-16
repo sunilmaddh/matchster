@@ -168,7 +168,7 @@ class Lifestyle {
 
 class Locations {
   CurrentLocation? currentLocation;
-  CurrentLocation? homeTown;
+  HomeTown? homeTown;
 
   Locations({this.currentLocation, this.homeTown});
 
@@ -179,8 +179,8 @@ class Locations {
             : CurrentLocation.fromJson(json["currentLocation"]),
     homeTown:
         json["homeTown"] == null
-            ? CurrentLocation()
-            : CurrentLocation.fromJson(json["homeTown"]),
+            ? HomeTown()
+            : HomeTown.fromJson(json["homeTown"]),
   );
 }
 
@@ -223,6 +223,25 @@ class Address {
 
   Map<String, dynamic> toJson() => {
     "label": label,
+    "city": city,
+    "state": state,
+    "country": country,
+  };
+}
+
+class HomeTown {
+  String? city;
+  String? state;
+  String? country;
+
+  HomeTown({this.city, this.state, this.country});
+
+  factory HomeTown.fromJson(Map<String, dynamic> json) => HomeTown(
+    city: UtilMethods.stringParser(json["city"]),
+    state: UtilMethods.stringParser(json["state"]),
+    country: UtilMethods.stringParser(json["country"]),
+  );
+  Map<String, dynamic> toJson() => {
     "city": city,
     "state": state,
     "country": country,
@@ -298,13 +317,16 @@ class Personal {
 }
 
 class Preferences {
-  String? lookingFor;
+  List<String>? lookingFor;
   String? visibility;
 
   Preferences({this.lookingFor, this.visibility});
 
   factory Preferences.fromJson(Map<String, dynamic> json) => Preferences(
-    lookingFor: UtilMethods.stringParser(json["lookingFor"]),
+    lookingFor:
+        json["lookingFor"] == null
+            ? []
+            : List<String>.from(json["lookingFor"].map((x) => x)),
     visibility: UtilMethods.stringParser(json["visibility"]),
   );
 
@@ -313,7 +335,7 @@ class Preferences {
     "visibility": visibility,
   };
 
-  Preferences copyWith({String? lookingFor, String? visibility}) {
+  Preferences copyWith({List<String>? lookingFor, String? visibility}) {
     return Preferences(
       lookingFor: lookingFor ?? this.lookingFor,
       visibility: visibility ?? this.visibility,
@@ -331,6 +353,9 @@ class Professional {
   );
 
   Map<String, dynamic> toJson() => {"work": work!.toJson()};
+  Professional copyWith({Work? work}) {
+    return Professional(work: work ?? this.work);
+  }
 }
 
 class Work {

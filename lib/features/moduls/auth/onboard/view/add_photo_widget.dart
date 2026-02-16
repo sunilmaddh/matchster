@@ -146,6 +146,7 @@ class AddPhotoWidget extends StatelessWidget {
                                                     () => PhotoPreviewScreen(
                                                       imageFile: selectedImage!,
                                                       index: index,
+                                                      page: 'onboard',
                                                     ),
                                                   )!.whenComplete(() {
                                                     _controller
@@ -159,7 +160,7 @@ class AddPhotoWidget extends StatelessWidget {
                                                   message: e.toString(),
                                                 );
                                                 debugPrintStack(stackTrace: s);
-                                              } finally {}
+                                              }
                                             },
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,

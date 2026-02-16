@@ -19,14 +19,14 @@ enum ReligionEnum {
   tao,
   voodoo,
   spiritism,
-  muism,
+
   confucianism,
   bahaiFaith,
-  others,
+  perfecttonotsay,
 }
 
 enum EducationLevelEnum {
-  diplomaTechTrade,
+  diploma,
   pursuingGraduation,
   graduate,
   pursuingPostGraduation,
@@ -115,7 +115,7 @@ enum VisibilityEnum { everyone, myPreferenceOnly, myMatches }
 
 enum RelationshipIntentEnum {
   relationship,
-  casualRelationship,
+  casualrelationship,
   friendship,
   marriage,
   networking,

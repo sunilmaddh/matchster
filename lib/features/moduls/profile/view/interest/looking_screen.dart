@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/common_lists.dart';
+import 'package:matchster/core/extentions/workout_enum_ext.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
 import 'package:matchster/features/moduls/profile/widgets/common_widget.dart';
 
@@ -17,19 +18,21 @@ class LookingScreen extends StatelessWidget {
       subtitle: "Build your connection more",
       list: CommonLists.releationships,
       onTop: (v) {
-        _profileController.selectedLooking.value = v;
-        // if (_profileController.selectedItems.contains(v)) {
-        //   _profileController.selectedItems.remove(v);
-        // } else {
-        //   _profileController.selectedItems.add(v);
-        // }
+        // _profileController.selectedLooking.value = v;
+        if (_profileController.selectedLookingFor.contains(v)) {
+          _profileController.selectedLookingFor.remove(v);
+        } else {
+          _profileController.selectedLookingFor.add(v);
+        }
       },
-      isSelected: (v) => _profileController.selectedLooking.contains(v),
+      isSelected: (v) => _profileController.selectedLookingFor.contains(v),
       onTopButton: () {
-        _profileController.addLookingFor(
-          lookingFor: _profileController.selectedLooking.value.toLowerCase(),
-        );
+        List<String> lowerCaseList =
+            _profileController.selectedLookingFor.toLowerCaseList();
+
+        _profileController.addLookingFor(lookingFor: lowerCaseList);
       },
+      appBarTitle: 'Looking for',
     );
   }
 }

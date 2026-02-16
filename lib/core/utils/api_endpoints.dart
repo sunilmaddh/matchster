@@ -38,6 +38,8 @@ class ApiEndpoints {
       myProfile = "$urlProfileType/my-profile",
       getProfiles = "$urlInteractions/get-profiles",
       createInteraction = "$urlInteractions/create-interaction",
+      addProfilePicture = "$urlUserType/hall-of-fame/add",
+      deleteProfile = "$urlUserType/hall-of-fame",
       likesOnme = "$urlInteractions/likes-on-me",
       addAbout = "$urlProfileType/add-about";
 }
