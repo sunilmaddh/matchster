@@ -28,7 +28,7 @@ class AppConstants {
   verifyNumber = "Verify Number",
   dontSend = "Don’t receive code?",
   resend = "Re-send",
-  whatYourname = "What is Your name?",
+  whatYourname = "What is your name?",
   nameDiscription =
       "This is how it’ll appear on your profile, so make it memorable! Choose carefully –",
   nameDisSpan = 'it can’t be changed later. ',

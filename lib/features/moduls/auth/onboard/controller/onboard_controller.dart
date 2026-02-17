@@ -30,6 +30,7 @@ class OnboardController extends GetxController {
   RxBool isEnable = false.obs;
   var selectedIndex = RxnInt();
   var selectedImageIndex = RxnInt();
+  RxBool isDateWithSwitchOn = false.obs;
   RxBool isSwitchOn = false.obs;
   RxBool isNotFeet = false.obs;
   RxBool isDateSelected = false.obs;
@@ -41,6 +42,7 @@ class OnboardController extends GetxController {
   RxBool isNextPageEnable = false.obs;
   RxBool isPageLoading = false.obs;
   RxBool isSelectingImage = false.obs;
+  RxBool isBottomSheetOpen = false.obs;
 
   RxList<int> selectedDates = <int>[].obs;
   RxString imageFile = "".obs;
@@ -114,7 +116,7 @@ class OnboardController extends GetxController {
   }
 
   void toggleDateSwitch(bool value) {
-    isSwitchOn.value = value;
+    isDateWithSwitchOn.value = value;
 
     if (value) {
       selectedDates.value = List.generate(
@@ -145,9 +147,11 @@ class OnboardController extends GetxController {
     } else {
       selectedDates.add(index);
       dateWithList.add(OnboardHalper.dateList[index]);
-      isDateSelectedP.value = true;
-      updateButtonState();
     }
+    isDateSelectedP.value = dateWithList.isNotEmpty;
+
+    updateButtonState();
+    updateButtonState();
   }
 
   final ImageUploadServices _imageService = ImageUploadServices();
@@ -291,10 +295,10 @@ class OnboardController extends GetxController {
 
   Future<bool> addName({required String name}) async {
     try {
-      isPageLoading(true);
+      // isPageLoading(true);
       final response = await _onboardService.addName(name: name);
       if (response.success) {
-        AppToastMessage.show(title: "Success", message: response.message);
+        // AppToastMessage.show(title: "Success", message: response.message);
         updateButtonState();
         goToNextPage();
         return true;
@@ -304,7 +308,7 @@ class OnboardController extends GetxController {
           title: AppConstants.errorTitle,
           message: response.message,
         );
-        isPageLoading(false);
+        // isPageLoading(false);
         return false;
       }
     } catch (e) {
@@ -321,16 +325,16 @@ class OnboardController extends GetxController {
     required genderPreview,
   }) async {
     try {
-      isPageLoading(true);
+      // isPageLoading(true);
       final response = await _onboardService.addGender(
         gender: gender,
         genderPreview: genderPreview,
       );
       if (response.success) {
-        AppToastMessage.show(title: "Success", message: response.message);
+        // AppToastMessage.show(title: "Success", message: response.message);
 
         goToNextPage();
-        isPageLoading(false);
+        // isPageLoading(false);
         return true;
       } else {
         AppToastMessage.show(
@@ -338,7 +342,7 @@ class OnboardController extends GetxController {
           title: AppConstants.errorTitle,
           message: response.message,
         );
-        isPageLoading(false);
+        // isPageLoading(false);
         return false;
       }
     } catch (e) {
@@ -352,12 +356,12 @@ class OnboardController extends GetxController {
 
   Future<bool> addDob({required String dob}) async {
     try {
-      isPageLoading(true);
+      // isPageLoading(true);
       final response = await _onboardService.addDob(dob: dob);
       if (response.success) {
-        AppToastMessage.show(title: "Success", message: response.message);
+        // AppToastMessage.show(title: "Success", message: response.message);
         goToNextPage();
-        isPageLoading(false);
+        // isPageLoading(false);
         return true;
       } else {
         AppToastMessage.show(
@@ -376,13 +380,13 @@ class OnboardController extends GetxController {
 
   Future<bool> addHieght({required double feet, required double cm}) async {
     try {
-      isPageLoading(true);
+      // isPageLoading(true);
       final response = await _onboardService.addHieght(feet: feet, cm: cm);
       if (response.success) {
-        AppToastMessage.show(title: "Success", message: response.message);
+        // AppToastMessage.show(title: "Success", message: response.message);
 
         goToNextPage();
-        isPageLoading(false);
+        // isPageLoading(false);
         return true;
       } else {
         AppToastMessage.show(
@@ -404,13 +408,13 @@ class OnboardController extends GetxController {
 
   Future<bool> addDatewith({required List dateWith}) async {
     try {
-      isPageLoading(true);
+      // isPageLoading(true);
       final response = await _onboardService.addDateWith(dateWith: dateWith);
       if (response.success) {
-        AppToastMessage.show(title: "Success", message: response.message);
+        // AppToastMessage.show(title: "Success", message: response.message);
 
         goToNextPage();
-        isPageLoading(false);
+        // isPageLoading(false);
         return true;
       } else {
         AppToastMessage.show(
@@ -455,25 +459,25 @@ class OnboardController extends GetxController {
 
   Future<bool> allOfFame({required List<String> imageUrlList}) async {
     try {
-      isPageLoading(true);
+      // isPageLoading(true);
       final cleanedList = imageUrlList.where((e) => e.isNotEmpty).toList();
       final response = await _onboardService.allOfFame(
         imageUrlList: cleanedList,
       );
       if (response.success) {
-        AppToastMessage.show(
-          title: "Success",
-          message: "Success ${response.success}",
-        );
+        // AppToastMessage.show(
+        //   title: "Success",
+        //   message: "Success ${response.success}",
+        // );
         isPageLoading(false);
         return true;
       } else {
-        isPageLoading(false);
-        AppToastMessage.show(
-          isError: true,
-          title: "Error",
-          message: "Success ${response.message}",
-        );
+        // isPageLoading(false);
+        // AppToastMessage.show(
+        //   isError: true,
+        //   title: "Error",
+        //   message: "Success ${response.message}",
+        // );
       }
     } catch (e) {
       isPageLoading(false);
@@ -503,10 +507,10 @@ class OnboardController extends GetxController {
       );
       if (response.success) {
         isPageLoading(false);
-        AppToastMessage.show(
-          title: "Success",
-          message: "Success ${response.success}",
-        );
+        // AppToastMessage.show(
+        //   title: "Success",
+        //   message: "Success ${response.success}",
+        // );
 
         return true;
       }
@@ -662,7 +666,7 @@ class OnboardController extends GetxController {
   }
 
   Future<void> completeStep(int index) async {
-    AppToastMessage.show(title: 'Step Status', message: stepStatus.toString());
+    // AppToastMessage.show(title: 'Step Status', message: stepStatus.toString());
     if (index < 0 || index >= stepStatus.length) return;
     stepStatus[index] = true;
     AppMethods.appPrint(message: stepStatus.toString());
@@ -836,7 +840,13 @@ class OnboardController extends GetxController {
         PhotoReviewBottomsheet.show(
           onImageSelected: (selectedImage) {
             Get.back();
-            Get.to(PhotoPreviewScreen(imageFile: selectedImage, index: index));
+            Get.to(
+              PhotoPreviewScreen(
+                imageFile: selectedImage,
+                index: index,
+                page: 'onboard',
+              ),
+            );
           },
         );
         return;

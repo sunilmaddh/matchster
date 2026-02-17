@@ -14,12 +14,12 @@ class LandingScreen extends StatelessWidget {
         HomeScreen(),
         MaintenceScreen(),
         MaintenceScreen(),
+        //  GifAnimation(),
         MaintenceScreen(),
-        // MaintenceScreen(),
 
         // LikesScreen(),
         // PremiumScreen(),
-        // ChatListMetchesScreen(),
+        //   // ChatListMetchesScreen(),
         ProfileScreen(),
       ],
     );

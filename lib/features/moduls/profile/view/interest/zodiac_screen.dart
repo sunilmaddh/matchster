@@ -24,12 +24,16 @@ class ZodiacScreen extends StatelessWidget {
         //   _profileController.selectedItems.add(v);
         // }
       },
-      isSelected: (v) => _profileController.selectedZodiac.contains(v),
+      isSelected:
+          (v) =>
+              _profileController.selectedZodiac.value.toLowerCase().trim() ==
+              v.toLowerCase().trim(),
       onTopButton: () {
         _profileController.addZodiacsign(
           zodiacsign: _profileController.selectedZodiac.toLowerCase(),
         );
       },
+      appBarTitle: 'Zodiac sign',
     );
   }
 }

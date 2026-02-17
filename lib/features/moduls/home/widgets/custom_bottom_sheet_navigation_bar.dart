@@ -30,70 +30,76 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: false,
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          _homeBackground(),
-          PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: _controller.pageController,
-            onPageChanged: _controller.onTabTapped,
-            children: widget.pageList,
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
+    return WillPopScope(
+      onWillPop: () async {
+        return false; // ❌ block back
+      },
 
-            bottom: 40,
-            child: IgnorePointer(
-              child: Container(
-                height: 35,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.white],
+      child: Scaffold(
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: [
+            PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _controller.pageController,
+              onPageChanged: _controller.onTabTapped,
+              children: widget.pageList,
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+
+              bottom: 40,
+              child: IgnorePointer(
+                child: Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, Colors.white],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
 
-          /// 🔹 Bottom navigation
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Obx(() => _bottomNavigation()),
-          ),
-          Obx(
-            () =>
-                _controller.isOverlay.isTrue
-                    ? Container(
-                      alignment: Alignment.center,
-                      color: Colors.white.withAlpha(153),
-                      child: Hero(
-                        tag: "like_dislike",
-                        transitionOnUserGestures: true,
+            /// 🔹 Bottom navigation
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Obx(() => _bottomNavigation()),
+            ),
+            Obx(
+              () =>
+                  _controller.isOverlay.isTrue
+                      ? Container(
+                        alignment: Alignment.center,
+                        color: Colors.white.withAlpha(153),
+                        child: Hero(
+                          tag: "like_dislike",
+                          transitionOnUserGestures: true,
 
-                        child: CircleGradiantCard(
-                          isGradiant: _controller.isLike.isTrue ? true : false,
-                          widget: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset(
-                              _controller.isLike.isTrue
-                                  ? AppAssets.likeAssets
-                                  : AppAssets.dislike,
+                          child: CircleGradiantCard(
+                            isGradiant:
+                                _controller.isLike.isTrue ? true : false,
+                            widget: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                _controller.isLike.isTrue
+                                    ? AppAssets.likeAssets
+                                    : AppAssets.dislike,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                    : SizedBox.shrink(),
-          ),
-        ],
+                      )
+                      : SizedBox.shrink(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -106,8 +112,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           begin: Alignment.bottomCenter,
           end: Alignment.bottomCenter,
           colors: [
-            const Color(0xFF7A96F8).withValues(alpha: 0), // 0.0
-            const Color(0xFF587DFF).withValues(alpha: 128), // 0.50
+            const Color(0xFF7A96F8).withValues(alpha: 0),
+            const Color(0xFF587DFF).withValues(alpha: 128),
             const Color(0xFF5174FF).withValues(alpha: 191), // 0.75
             const Color(0xFF3F66FF).withValues(alpha: 222), // 0.87
             const Color(0xFF1D48EF).withValues(alpha: 0), // 0.0
@@ -131,7 +137,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [BoxShadow(blurRadius: 3)],
+              border: Border.all(color: Color(0xffE6E6E6)),
             ),
 
             child: Row(
@@ -163,14 +169,15 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           SvgPicture.asset(
             icon,
             height: 22,
-            color: selected ? AppColors.primary : const Color(0xFF9AA0A6),
+            color: selected ? AppColors.primary : AppColors.blackColor,
+            // const Color(0xFF9AA0A6),
           ),
           const SizedBox(height: 4),
           CommonText.text(
             label,
             fontSize: 11.5,
             fontWeight: FontWeight.w500,
-            color: selected ? AppColors.primary : const Color(0xFF9AA0A6),
+            color: selected ? AppColors.primary : AppColors.blackColor,
           ),
         ],
       ),

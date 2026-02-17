@@ -14,6 +14,8 @@ class CommonLists {
 
   static final List<String> studieList =
       EducationLevelEnum.values.map((e) => e.label).toList();
+  static final List<String> studieList2 =
+      EducationLevelEnum.values.map((e) => e.apiValue).toList();
   static final List<String> workouts =
       WorkoutEnum.values.map((e) => e.label).toList();
   static final List<String> zodiocss =

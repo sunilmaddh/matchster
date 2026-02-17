@@ -41,16 +41,16 @@ class AddPhotoWidget extends StatelessWidget {
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),
-              35.hBox,
+              25.hBox,
               Obx(
                 () => GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _controller.fileList.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 15.w,
+                    mainAxisSpacing: 15.h,
                     childAspectRatio: 1.2,
                   ),
                   itemBuilder: (context, index) {
@@ -131,7 +131,13 @@ class AddPhotoWidget extends StatelessWidget {
                                                 }
 
                                                 // 6️⃣ NOW update UI
-                                                if (selectedImage != null) {
+                                                debugPrint(
+                                                  "Selected image ${selectedImage.toString()}",
+                                                );
+                                                if (selectedImage != null &&
+                                                    selectedImage
+                                                        .path
+                                                        .isNotEmpty) {
                                                   _controller.isSelectingImage(
                                                     true,
                                                   ); // loader AFTER camera
@@ -140,6 +146,7 @@ class AddPhotoWidget extends StatelessWidget {
                                                     () => PhotoPreviewScreen(
                                                       imageFile: selectedImage!,
                                                       index: index,
+                                                      page: 'onboard',
                                                     ),
                                                   )!.whenComplete(() {
                                                     _controller

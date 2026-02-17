@@ -22,7 +22,7 @@ class AddSpotifyCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              SvgPicture.asset(AppAssets.instagramAssets),
+              SvgPicture.asset(AppAssets.spotifyAssets),
               10.wBox,
               CommonText.text(
                 "Add your Spotify",
@@ -55,15 +55,15 @@ class AddSpotifyCard extends StatelessWidget {
                       child: DottedBorder(
                         options: RoundedRectDottedBorderOptions(
                           color: Colors.black.withAlpha(128),
-                          radius: Radius.circular(20.r),
-                          dashPattern: [3, 4],
+                          radius: Radius.circular(16.r),
+                          dashPattern: [2, 2],
                         ),
                         child: Container(
                           width: 46.w,
                           height: 46.h,
                           decoration: BoxDecoration(
                             color: AppColors.whiteColor,
-                            shape: BoxShape.circle,
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
                         ),
                       ),
@@ -72,7 +72,7 @@ class AddSpotifyCard extends StatelessWidget {
                       right: 5,
                       top: -1,
                       child: Container(
-                        padding: EdgeInsets.all(4.0),
+                        padding: EdgeInsets.all(1.0),
                         // width: 15.w,
                         // height: 15.h,
                         decoration: BoxDecoration(

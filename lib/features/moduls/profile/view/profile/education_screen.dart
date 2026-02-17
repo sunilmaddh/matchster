@@ -19,6 +19,7 @@ class EducationScreen extends StatelessWidget {
         icon: Icons.check,
         isEnable: true,
         onTap: () {
+          debugPrint(_controller.qualification.toString());
           _controller.addQualification(
             qualification: _controller.qualification.value.toLowerCase(),
           );
@@ -41,7 +42,7 @@ class EducationScreen extends StatelessWidget {
               fontSize: 20.sp,
               fontWeight: FontWeight.w500,
             ),
-            10.hBox,
+            20.hBox,
             Column(
               children:
                   List.generate(CommonLists.studieList.length, (index) {
@@ -50,7 +51,7 @@ class EducationScreen extends StatelessWidget {
                         onTap: () {
                           _controller.selectedEduIndex.value = index;
                           _controller.qualification.value =
-                              CommonLists.studieList[index];
+                              CommonLists.studieList2[index];
                         },
                         child: Container(
                           margin: EdgeInsets.only(bottom: 10.h),

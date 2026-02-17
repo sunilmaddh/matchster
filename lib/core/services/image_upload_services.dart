@@ -22,9 +22,8 @@ class ImageUploadServices {
     try {
       final XFile? image = await _picker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 45, // prevents memory crash
-        maxWidth: 900,
-        maxHeight: 900,
+        imageQuality: 90, // prevents memory crash
+
         preferredCameraDevice: CameraDevice.front,
       );
 

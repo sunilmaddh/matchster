@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/features/moduls/profile/models/my_profile_response.dart';
@@ -15,8 +16,8 @@ class AddImageGrid extends StatelessWidget {
     required this.onTopRemove,
   });
   final RxList<HallOfFame> imageList;
-  final VoidCallback onTop;
-  final Function(int index) onTopRemove;
+  final Function(int index) onTop;
+  final Function(String index) onTopRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,10 @@ class AddImageGrid extends StatelessWidget {
       child: Obx(
         () => GridView.builder(
           shrinkWrap: true,
-          itemCount: imageList.length + 1, // +1 for the Add button
+          itemCount:
+              imageList.length < 5
+                  ? imageList.length + 1
+                  : imageList.length, // +1 for the Add button
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, // 3 columns
             crossAxisSpacing: 8,
@@ -33,29 +37,42 @@ class AddImageGrid extends StatelessWidget {
           ),
           itemBuilder: (context, index) {
             if (index == imageList.length) {
-              return GestureDetector(onTap: onTop, child: ProfilePhotoCard());
+              return GestureDetector(
+                onTap: () {
+                  onTop(index);
+                },
+                child: ProfilePhotoCard(),
+              );
             } else {
               return Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.r),
-                    child: CommonAssets.networkImage(
-                      imageList[index].url!,
-                      fit: BoxFit.fill,
+                  Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.r),
+                      child: CommonAssets.networkImage(
+                        imageList[index].url!,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   Positioned(
-                    top: 12.h,
-                    right: 20.w,
+                    top: 8.h,
+                    right: 8.w,
                     child: GestureDetector(
                       onTap: () {
-                        imageList.removeAt(index);
+                        onTopRemove(imageList[index].id!);
                       },
 
                       child: Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.blackColor.withAlpha(40),
+                              blurRadius: 2.07,
+                            ),
+                          ],
                         ),
                         padding: const EdgeInsets.all(4),
                         child: const Icon(

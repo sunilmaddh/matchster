@@ -8,7 +8,7 @@ extension RelationshipIntentEnumX on RelationshipIntentEnum {
     switch (this) {
       case RelationshipIntentEnum.relationship:
         return "relationship";
-      case RelationshipIntentEnum.casualRelationship:
+      case RelationshipIntentEnum.casualrelationship:
         return "casual_relationship";
       case RelationshipIntentEnum.friendship:
         return "friendship";
@@ -27,7 +27,7 @@ extension RelationshipIntentEnumX on RelationshipIntentEnum {
     switch (this) {
       case RelationshipIntentEnum.relationship:
         return "Relationship";
-      case RelationshipIntentEnum.casualRelationship:
+      case RelationshipIntentEnum.casualrelationship:
         return "Casual Relationship";
       case RelationshipIntentEnum.friendship:
         return "Friendship";
@@ -54,7 +54,7 @@ extension RelationshipIntentEnumX on RelationshipIntentEnum {
       case RelationshipIntentEnum.friendship:
         return "🤝";
       case RelationshipIntentEnum.networking:
-      case RelationshipIntentEnum.casualRelationship:
+      case RelationshipIntentEnum.casualrelationship:
         return "👫";
       case RelationshipIntentEnum.dontKnowYet:
         // TODO: Handle this case.

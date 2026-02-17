@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
@@ -20,28 +21,41 @@ class OnboardPageViewBuilder extends StatelessWidget {
         _onboardController.firstIncompleteIndex;
 
     return Scaffold(
-      floatingActionButton: Align(
-        alignment: Alignment.bottomRight,
-        child: Padding(
-          padding: 10.allPadding,
-          child: Obx(() {
-            if (_onboardController.isPageLoading.isTrue) {
-              return CircularProgressIndicator(color: AppColors.primary);
-            }
+      floatingActionButton: Obx(
+        () => AnimatedPadding(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(
+            bottom: 0.h,
+            //  _onboardController.isBottomSheetOpen.isTrue ? 320.h : 0.h,
+          ),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: 10.allPadding,
+              child: CircleButtonWidget(
+                isEnable: _onboardController.isButtonEnabled.value,
+                onTap: () async {
+                  if (_onboardController.isButtonEnabled.value) {
+                    _onboardController.isNextPageEnable.value = false;
+                    final current = _onboardController.currentIndex.value;
+                    final isSuccess = await _onboardController.submitStep(
+                      current,
+                    );
 
-            return CircleButtonWidget(
-              isEnable: _onboardController.isButtonEnabled.value,
-              onTap: () async {
-                _onboardController.isNextPageEnable.value = false;
-                final current = _onboardController.currentIndex.value;
-                final isSuccess = await _onboardController.submitStep(current);
-                if (!isSuccess) return;
-                _onboardController.completeStep(current);
-              },
-            );
-          }),
+                    _onboardController.completeStep(current);
+                  }
+                  AppMethods.hideKeyboard();
+
+                  // if (!isSuccess) return;
+                  // _onboardController.completeStep(current);
+                },
+              ),
+            ),
+          ),
         ),
       ),
+
       body: Column(
         children: [
           MatchsterProgressIndicator(

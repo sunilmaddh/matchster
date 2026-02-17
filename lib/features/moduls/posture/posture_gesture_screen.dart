@@ -10,6 +10,7 @@ import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/widgets/posture_sample_card.dart';
+import 'package:matchster/test/hand_landmark.dart';
 
 class PostureGestureScreen extends StatelessWidget {
   PostureGestureScreen({super.key});
@@ -115,13 +116,15 @@ class PostureGestureScreen extends StatelessWidget {
                               bottom: 30.h,
                               left: 30.w,
                               right: 30.w,
-                              child: CommonText.text(
-                                maxLines: 2,
-                                "When you are ready, tap the button below and snap your gesture!",
-                                fontSize: 14.sp,
-                                textAlign: TextAlign.center,
-                                color: Color(0xff7B7B7B),
-                              ),
+                              child: HandTrackerView(),
+
+                              // CommonText.text(
+                              //   maxLines: 2,
+                              //   "When you are ready, tap the button below and snap your gesture!",
+                              //   fontSize: 14.sp,
+                              //   textAlign: TextAlign.center,
+                              //   color: Color(0xff7B7B7B),
+                              // ),
                             ),
                         ],
                       ),

@@ -1,6 +1,11 @@
+import 'package:dio/dio.dart' show FormData, MultipartFile;
+import 'package:flutter/material.dart';
 import 'package:matchster/core/network/base_response.dart';
 import 'package:matchster/core/network/base_service.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/add_date_with_response.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/add_hieght_response.dart';
+import 'package:matchster/features/moduls/auth/onboard/models/upload_photo_response.dart';
 import 'package:matchster/features/moduls/profile/models/auto_complete_response.dart';
 import 'package:matchster/features/moduls/profile/models/my_profile_response.dart';
 import 'package:matchster/features/moduls/profile/models/place_details_response.dart';
@@ -64,6 +69,7 @@ class ProfileServices {
     return await _baseService.postRequest(
       path: ApiEndpoints.addZodiacsign,
       data: {"zodiacSign": zodiacsign},
+      fromJsonT: (json) => json,
     );
   }
 
@@ -88,7 +94,7 @@ class ProfileServices {
   }
 
   Future<BaseResponse<Map<String, dynamic>>> addLooking({
-    required String lookingFor,
+    required List<String> lookingFor,
   }) async {
     return await _baseService.postRequest(
       path: ApiEndpoints.addLookingfor,
@@ -107,16 +113,29 @@ class ProfileServices {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addWork({
+  Future<BaseResponse<Work>> addWork({
     required String jobTitle,
     required String company,
   }) async {
-    return await _baseService.postRequest(
+    return await _baseService.postRequest<Work>(
       path: ApiEndpoints.addWork,
       data: {
         "work": {"jobTitle": jobTitle, "company": company},
       },
-      fromJsonT: (json) => json,
+      fromJsonT: (json) => Work.fromJson(json),
+    );
+  }
+
+  Future<BaseResponse<AddHieghtResponse>> addHieght({
+    required double feet,
+    required double cm,
+  }) async {
+    return _baseService.postRequest<AddHieghtResponse>(
+      path: ApiEndpoints.addHieght,
+      data: {
+        "height": {"feet": feet, "cm": cm},
+      },
+      fromJsonT: (json) => AddHieghtResponse.fromJson(json),
     );
   }
 
@@ -156,6 +175,75 @@ class ProfileServices {
     return await _baseService.getRequest<MyProfilResponse>(
       path: ApiEndpoints.myProfile,
       fromJsonT: (json) => MyProfilResponse.fromJson(json),
+    );
+  }
+
+  Future<BaseResponse<void>> deleteProfile({required String profileId}) async {
+    return await _baseService.deleteRequest(
+      path: "${ApiEndpoints.deleteProfile}/$profileId",
+    );
+  }
+
+  Future<BaseResponse<void>> addPhoto({required String url}) async {
+    return await _baseService.postRequest(
+      path: ApiEndpoints.addProfilePicture,
+      data: {'url': url},
+    );
+  }
+
+  Future<BaseResponse<UploadPhotoResponse>?> uploadImageWithDio(
+    String filePath,
+  ) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          filePath,
+          filename: filePath.split('/').last,
+        ),
+      });
+
+      final response = await _baseService.postRequest<UploadPhotoResponse>(
+        path: ApiEndpoints.uploadPhoto,
+        data: formData,
+        fromJsonT: (json) => UploadPhotoResponse.fromJson(json),
+      );
+
+      return response;
+    } catch (e, stackTrace) {
+      debugPrint('uploadImageWithDio error: $e');
+      debugPrintStack(stackTrace: stackTrace);
+      return null;
+    }
+  }
+
+  Future<BaseResponse<AddDateWithResponse>> allOfFame({
+    required List imageUrlList,
+  }) async {
+    return _baseService.postRequest<AddDateWithResponse>(
+      path: ApiEndpoints.allOfFame,
+      data: {"urls": imageUrlList},
+    );
+  }
+
+  Future<BaseResponse<AddDateWithResponse>> addProfile({
+    required List imageUrlList,
+  }) async {
+    return _baseService.postRequest<AddDateWithResponse>(
+      path: ApiEndpoints.allOfFame,
+      data: {"urls": imageUrlList},
+    );
+  }
+
+  Future<BaseResponse<AddDateWithResponse>> addHomeLocation({
+    required String city,
+    required String state,
+    required String country,
+  }) async {
+    return _baseService.postRequest<AddDateWithResponse>(
+      path: ApiEndpoints.addHomeTownLocation,
+      data: {
+        "homeTown": {"city": city, "state": state, "country": country},
+      },
     );
   }
 }

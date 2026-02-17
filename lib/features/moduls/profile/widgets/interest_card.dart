@@ -27,6 +27,7 @@ class InterestCard extends StatelessWidget {
         dashPattern: const [4, 5],
       ),
       child: ListTile(
+        titleAlignment: ListTileTitleAlignment.center,
         leading: Container(
           padding: EdgeInsets.all(8.r),
           height: 36.h,

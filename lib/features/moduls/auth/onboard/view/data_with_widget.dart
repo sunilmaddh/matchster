@@ -54,7 +54,7 @@ class DateWidget extends StatelessWidget {
                 ),
                 Obx(
                   () => GradientSwitch(
-                    value: _controller.isSwitchOn.value,
+                    value: _controller.isDateWithSwitchOn.value,
                     onChanged: _controller.toggleDateSwitch,
                   ),
                   //  Switch(
@@ -89,7 +89,7 @@ class DateWidget extends StatelessWidget {
                             color:
                                 _controller.selectedDates.contains(index)
                                     ? Color(0xff1D48EF)
-                                    : _controller.isSwitchOn.value
+                                    : _controller.isDateWithSwitchOn.value
                                     ? Color(0xff1D48EF)
                                     : Color(0xffEBEBEB),
                           ),
@@ -110,7 +110,7 @@ class DateWidget extends StatelessWidget {
                             // ✔ filled checkbox if selected, else outline
                             _controller.selectedDates.contains(index)
                                 ? SvgPicture.asset(AppAssets.checkboxFill)
-                                : _controller.isSwitchOn.value
+                                : _controller.isDateWithSwitchOn.value
                                 ? SvgPicture.asset(AppAssets.checkboxFill)
                                 : SvgPicture.asset(AppAssets.checkBoxOutline),
                           ],

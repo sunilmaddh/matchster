@@ -31,6 +31,7 @@ class InterestScreen extends StatelessWidget {
         );
         _profileController.addInterests(interests: interestList);
       },
+      appBarTitle: 'Interests',
     );
   }
 }

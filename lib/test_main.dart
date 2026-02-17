@@ -2,13 +2,15 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/features/moduls/home/models/home_response.dart';
-import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
-import 'package:matchster/features/moduls/profile/services/face_detector_service.dart';
+import 'package:matchster/features/moduls/home/view/match_screen.dart';
+import 'package:matchster/features/moduls/home/widgets/match_card_widget.dart';
 
-void main() async {
-  await initCamera();
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -24,348 +26,253 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FaceDetectorScreen(),
+      home: HomeScreen(),
     );
   }
 }
 
-class FaceDetectorScreen extends StatefulWidget {
-  const FaceDetectorScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
 
-  @override
-  State<FaceDetectorScreen> createState() => _FaceDetectorScreenState();
-}
-
-class _FaceDetectorScreenState extends State<FaceDetectorScreen> {
-  late CameraController _controller;
-  final FaceDetectorService _faceService = FaceDetectorService();
-
-  bool _isDetecting = false;
-  Face? _detectedFace;
-  Size? _imageSize;
-
-  CameraDescription getFrontCamera() {
-    return cameras.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.front,
-      orElse: () => cameras.first,
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    final frontCamera = getFrontCamera();
-
-    _controller = CameraController(
-      frontCamera,
-      ResolutionPreset.veryHigh,
-      enableAudio: false,
-      imageFormatGroup: ImageFormatGroup.yuv420, // ✅ REQUIRED
-    );
-
-    _controller.initialize().then((_) {
-      _controller.startImageStream(_processCameraImage);
-      setState(() {});
-    });
-  }
-
-  void _processCameraImage(CameraImage image) async {
-    if (_isDetecting) return;
-    _isDetecting = true;
-
-    debugPrint("Face detected called");
-
-    try {
-      _imageSize = Size(image.width.toDouble(), image.height.toDouble());
-
-      debugPrint("Face detected 1");
-
-      final inputImage = inputImageFromCameraImage(
-        image,
-        _controller.description,
-      );
-
-      debugPrint("Face detected 2");
-
-      final faces = await _faceService.detectFaces(inputImage);
-
-      debugPrint("Face detected 3: ${faces.length}");
-
-      if (faces.isNotEmpty) {
-        setState(() {
-          _detectedFace = faces.first;
-        });
-      } else {
-        setState(() {
-          _detectedFace = null;
-        });
-      }
-    } catch (e) {
-      debugPrint("Face detection error: $e");
-    } finally {
-      _isDetecting = false; // ✅ ALWAYS reset here
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _faceService.dispose();
-    super.dispose();
-  }
+  final controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
-    if (!_controller.value.isInitialized) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
     return Scaffold(
+      bottomNavigationBar: const MyBottomNav(),
       body: Stack(
         children: [
-          CameraPreview(_controller),
-
-          if (_detectedFace != null && _imageSize != null)
-            CustomPaint(
-              painter: FaceOverlayPainter(
-                scaleRect(
-                  rect: _detectedFace!.boundingBox,
-                  imageSize: _imageSize!,
-                  widgetSize: MediaQuery.of(context).size,
-                ),
-              ),
-              size: Size.infinite,
+          /// Scrollable content
+          SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 190),
+            child: Column(
+              children: const [ProfileImages(), SizedBox(height: 24)],
             ),
+          ),
+
+          /// Fixed bottom card
+          BottomProfileCard(controller: controller),
         ],
       ),
     );
   }
 }
 
-InputImage inputImageFromCameraImage(
-  CameraImage image,
-  CameraDescription camera,
-) {
-  return InputImage.fromBytes(
-    bytes: yuv420ToNv21(image),
-    metadata: InputImageMetadata(
-      size: Size(image.width.toDouble(), image.height.toDouble()),
-      rotation: InputImageRotation.rotation270deg, // 🔥 FORCE THIS
-      format: InputImageFormat.nv21,
-      bytesPerRow: image.width,
-    ),
-  );
-}
-
-Uint8List yuv420ToNv21(CameraImage image) {
-  final yPlane = image.planes[0].bytes;
-  final uPlane = image.planes[1].bytes;
-  final vPlane = image.planes[2].bytes;
-
-  final nv21 = Uint8List(yPlane.length + uPlane.length + vPlane.length);
-
-  nv21.setRange(0, yPlane.length, yPlane);
-
-  int index = yPlane.length;
-  for (int i = 0; i < uPlane.length; i++) {
-    nv21[index++] = uPlane[i]; // 🔄 swapped
-    nv21[index++] = vPlane[i];
-  }
-
-  return nv21;
-}
-
-Rect scaleRect({
-  required Rect rect,
-  required Size imageSize,
-  required Size widgetSize,
-}) {
-  final scaleX = widgetSize.width / imageSize.width;
-  final scaleY = widgetSize.height / imageSize.height;
-
-  return Rect.fromLTRB(
-    rect.left * scaleX,
-    rect.top * scaleY,
-    rect.right * scaleX,
-    rect.bottom * scaleY,
-  );
-}
-
-class FaceOverlayPainter extends CustomPainter {
-  final Rect faceRect;
-
-  FaceOverlayPainter(this.faceRect);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = Colors.green
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3;
-
-    canvas.drawRect(faceRect, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
-
-class TinderSwiperPage extends StatefulWidget {
-  const TinderSwiperPage({super.key, required this.profiles});
-  final List<Profile> profiles;
-
-  @override
-  State<TinderSwiperPage> createState() => _TinderSwiperPageState();
-}
-
-class _TinderSwiperPageState extends State<TinderSwiperPage> {
-  final CardSwiperController _controller = CardSwiperController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class ProfileImages extends StatelessWidget {
+  const ProfileImages({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: CardSwiper(
-            controller: _controller,
-            cardsCount: widget.profiles.length,
-            numberOfCardsDisplayed: 3,
-            backCardOffset: const Offset(20, 20),
-            padding: const EdgeInsets.all(16),
-            onSwipe: _onSwipe,
-            cardBuilder: (
-              context,
-              index,
-              horizontalThresholdPercentage,
-              verticalThresholdPercentage,
-            ) {
-              return ProfileCard(profile: widget.profiles[index]);
-            },
-          ),
-        ),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.7,
+      child: PageView(
+        children: [
+          Image.asset("assets/user1.jpg", fit: BoxFit.cover),
+          Image.asset("assets/user2.jpg", fit: BoxFit.cover),
+          Image.asset("assets/user3.jpg", fit: BoxFit.cover),
+        ],
+      ),
+    );
+  }
+}
 
-        // Action buttons
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _actionButton(
-                icon: Icons.close,
-                color: Colors.red,
-                onTap: () => _controller.swipe(CardSwiperDirection.left),
-              ),
-              _actionButton(
-                icon: Icons.favorite,
-                color: Colors.green,
-                onTap: () => _controller.swipe(CardSwiperDirection.right),
-              ),
+class BottomProfileCard extends StatelessWidget {
+  final ProfileController controller;
+
+  const BottomProfileCard({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            boxShadow: [
+              BoxShadow(blurRadius: 10, color: Colors.black.withOpacity(0.1)),
             ],
           ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              /// Name + Age + Distance
+              Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "${controller.name.value}, ${controller.age.value}",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(controller.distance.value),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              /// Interests
+              Obx(
+                () => Wrap(
+                  spacing: 8,
+                  children:
+                      controller.interests
+                          .map((e) => Chip(label: Text(e)))
+                          .toList(),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              /// Action Buttons
+              ActionButtons(controller: controller),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ActionButtons extends StatelessWidget {
+  final ProfileController controller;
+
+  const ActionButtons({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _circleButton(
+          icon: Icons.close,
+          color: Colors.red,
+          onTap: controller.dislike,
+        ),
+        _circleButton(
+          icon: Icons.favorite,
+          color: Colors.blue,
+          onTap: controller.like,
         ),
       ],
     );
   }
 
-  // final List<ProfileDemo> profiles = [
-  //   ProfileDemo(
-  //     name: "Emma",
-  //     age: 24,
-  //     image: "https://picsum.photos/400/600?1",
-  //   ),
-  //   ProfileDemo(
-  //     name: "Sophia",
-  //     age: 26,
-  //     image: "https://picsum.photos/400/600?2",
-  //   ),
-  //   ProfileDemo(
-  //     name: "Olivia",
-  //     age: 23,
-  //     image: "https://picsum.photos/400/600?3",
-  //   ),
-  //   ProfileDemo(name: "Ava", age: 25, image: "https://picsum.photos/400/600?4"),
-  // ];
-
-  bool _onSwipe(
-    int previousIndex,
-    int? currentIndex,
-    CardSwiperDirection direction,
-  ) {
-    final profile = widget.profiles[previousIndex];
-
-    if (direction == CardSwiperDirection.right) {
-      debugPrint("Liked ${profile.name}");
-    } else if (direction == CardSwiperDirection.left) {
-      debugPrint("Disliked ${profile.name}");
-    }
-
-    return true;
-  }
-
-  Widget _actionButton({
+  Widget _circleButton({
     required IconData icon,
     required Color color,
     required VoidCallback onTap,
   }) {
-    return FloatingActionButton(
-      backgroundColor: Colors.white,
-      onPressed: onTap,
-      child: Icon(icon, color: color, size: 30),
+    return GestureDetector(
+      onTap: onTap,
+      child: CircleAvatar(
+        radius: 28,
+        backgroundColor: color.withOpacity(0.12),
+        child: Icon(icon, color: color, size: 28),
+      ),
     );
   }
 }
 
-class ProfileCard extends StatelessWidget {
-  const ProfileCard({super.key, required this.profile});
+class ProfileController extends GetxController {
+  final name = "Ryle Sharma".obs;
+  final age = 28.obs;
+  final distance = "4 km away".obs;
 
-  final Profile profile;
+  final interests = ["Travel", "Music"].obs;
+
+  void like() {
+    // TODO: swipe right / API call
+    print("Liked");
+  }
+
+  void dislike() {
+    // TODO: swipe left / API call
+    print("Disliked");
+  }
+}
+
+class MyBottomNav extends StatelessWidget {
+  const MyBottomNav({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.network(profile.mainPhoto!, fit: BoxFit.cover),
-
-          // Gradient overlay
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
-              ),
-            ),
-          ),
-
-          // Profile info
-          Positioned(
-            left: 16,
-            right: 16,
-            bottom: 20,
-            child: Text(
-              "${profile.name}, ${profile.age}",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+    return SafeArea(
+      top: false,
+      child: Container(
+        height: 70,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(blurRadius: 10, color: Colors.black.withOpacity(0.08)),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            _NavItem(icon: Icons.home, index: 0),
+            _NavItem(icon: Icons.favorite, index: 1),
+            _NavItem(icon: Icons.star, index: 2),
+            _NavItem(icon: Icons.chat, index: 3),
+            _NavItem(icon: Icons.person, index: 4),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  final IconData icon;
+  final int index;
+
+  const _NavItem({required this.icon, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.put(BottomNavController());
+
+    return Obx(() {
+      final isActive = controller.selectedIndex.value == index;
+
+      return GestureDetector(
+        onTap: () => controller.changeTab(index),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 26, color: isActive ? Colors.blue : Colors.grey),
+            const SizedBox(height: 4),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              height: 4,
+              width: isActive ? 16 : 0,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class BottomNavController extends GetxController {
+  final selectedIndex = 0.obs;
+
+  void changeTab(int index) {
+    selectedIndex.value = index;
   }
 }

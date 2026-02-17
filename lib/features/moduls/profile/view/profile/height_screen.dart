@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/core/widgets/fields/custom_form_field.dart';
-import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
-import 'package:matchster/features/moduls/auth/widgets/toggle_button_widget.dart';
+import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
 
 class HeightScreen extends StatelessWidget {
   HeightScreen({super.key});
 
-  final _controller = Get.find<OnboardController>();
+  final _controller = Get.find<ProfileController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +37,7 @@ class HeightScreen extends StatelessWidget {
             20.hBox,
 
             CommonText.text(
-              "What is your Height",
+              "What is your height?",
               fontSize: 20.sp,
               fontWeight: FontWeight.w500,
               fontFamily: "Caros",
@@ -75,7 +73,12 @@ class HeightScreen extends StatelessWidget {
                       "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
                     );
                   },
+                  onTap: () {
+                    _controller.addHeight();
+                  },
+                  isEnable: true.obs,
                 );
+                AppMethods.hideKeyboard();
               },
               child: Obx(
                 () => Container(
@@ -94,10 +97,16 @@ class HeightScreen extends StatelessWidget {
                     ),
                   ),
                   child: CommonText.text(
-                    _controller.heightController.value,
+                    _controller.heightController.isNotEmpty
+                        ? _controller.heightController.value
+                        : "Select your height",
                     textAlign: TextAlign.center,
                     fontWeight: FontWeight.w500,
                     fontSize: 17.sp,
+                    color:
+                        _controller.heightController.isNotEmpty
+                            ? AppColors.blackColor
+                            : AppColors.blackColor.withAlpha(128),
                   ),
                 ),
               ),

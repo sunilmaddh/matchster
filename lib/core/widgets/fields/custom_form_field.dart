@@ -42,20 +42,22 @@ class CustomFormField extends StatelessWidget {
     this.inputFormatters = const [], // ✅ FIX
   });
 
-  final FocusNode _focusNode = FocusNode();
-  final RxBool _isFocused = false.obs;
+  // final FocusNode _focusNode = FocusNode();
+  // final RxBool _isFocused = false.obs;
 
   @override
   Widget build(BuildContext context) {
-    _focusNode.addListener(() {
-      _isFocused.value = _focusNode.hasFocus;
-    });
+    // _focusNode.addListener(() {
+    //   _isFocused.value = _focusNode.hasFocus;
+    // });
 
     return Obx(() {
       final bool isValid = enableBorder.value;
 
       return TextFormField(
-        focusNode: _focusNode,
+        showCursor: true,
+        enableInteractiveSelection: true,
+        // focusNode: _focusNode,
         controller: controller,
         maxLength: maxLength,
         keyboardType: keyboardType,
@@ -67,8 +69,8 @@ class CustomFormField extends StatelessWidget {
         inputFormatters: inputFormatters, // ✅ FIX
         decoration: InputDecoration(
           counterText: '',
-          labelText: !_isFocused.value && !isValid ? label : null,
-          hintText: _isFocused.value ? hint : null,
+          // labelText: !_isFocused.value && !isValid ? label : null,
+          hintText: hint,
           labelStyle: TextStyle(
             fontFamily: "Caros",
             fontSize: 17.sp,

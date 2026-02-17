@@ -14,18 +14,22 @@ class WorkoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommonWidget(
       image: AppAssets.workout2,
-      title: "Workout Frequency",
-      subtitle: "How often do you work out?",
+      title: "Do you work out?",
+      subtitle: "Build your connection more",
       list: CommonLists.workouts,
       onTop: (v) {
         _profileController.selectedWorkout.value = v;
       },
-      isSelected: (v) => _profileController.selectedWorkout.contains(v),
+      isSelected:
+          (v) =>
+              _profileController.selectedWorkout.value.toLowerCase().trim() ==
+              v.toLowerCase().trim(),
       onTopButton: () {
         _profileController.addWorkout(
           workout: _profileController.selectedWorkout.value,
         );
       },
+      appBarTitle: 'Workout',
     );
   }
 }

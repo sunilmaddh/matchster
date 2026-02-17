@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/common_lists.dart';
+import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
 import 'package:matchster/features/moduls/profile/widgets/common_widget.dart';
 
@@ -24,12 +25,20 @@ class VisibilityScreen extends StatelessWidget {
         //   _profileController.selectedItems.add(v);
         // }
       },
-      isSelected: (v) => _profileController.selectedVisibility.contains(v),
+      isSelected:
+          (v) =>
+              _profileController.selectedVisibility.value
+                  .toLowerCase()
+                  .trim() ==
+              v.toLowerCase().trim(),
       onTopButton: () {
         _profileController.addVisibility(
-          visibility: _profileController.selectedVisibility.value.toLowerCase(),
+          visibility:
+              _profileController.selectedVisibility.value
+                  .toSnakeCaseLowerCase(),
         );
       },
+      appBarTitle: 'Profile visibility',
     );
   }
 }

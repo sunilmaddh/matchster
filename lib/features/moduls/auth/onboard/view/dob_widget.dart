@@ -8,6 +8,7 @@ import 'package:matchster/core/extentions/date_x_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/core/widgets/fields/custom_form_field.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
@@ -39,35 +40,87 @@ class DobWidget extends StatelessWidget {
           ),
           20.hBox,
           InkWell(
-            onTap: () {
-              CustomBottomSheet.show(
+            onTap: () async {
+              _controller.isBottomSheetOpen.value = true;
+              await CustomBottomSheet.show(
                 child: SizedBox(
-                  height: 300.h,
+                  height: 300.h, // fixed & predictable
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// CLOSE BUTTON
+                      Obx(
+                        () => Align(
+                          alignment: Alignment.centerRight,
+                          child: CircleButtonWidget(
+                            size: 50,
+                            isEnable: _controller.isButtonEnabled.value,
+                            onTap: () async {
+                              if (_controller.isButtonEnabled.value) {
+                                _controller.isNextPageEnable.value = false;
+                                final current = _controller.currentIndex.value;
+                                final isSuccess = await _controller.submitStep(
+                                  current,
+                                );
 
-                  child: CupertinoDatePicker(
-                    itemExtent: 50,
-                    mode: CupertinoDatePickerMode.date,
-                    dateOrder: DatePickerDateOrder.dmy,
-                    initialDateTime: DateTime.now().eighteenYearsAgo,
-                    minimumDate: DateTime(1925),
-                    maximumDate: DateTime(2050),
+                                _controller.completeStep(current);
+                              }
+                              Get.back();
+                              AppMethods.hideKeyboard();
 
-                    onDateTimeChanged: (DateTime newDate) {
-                      final formattedDate = DateFormat(
-                        'yyyy-MM-dd',
-                      ).format(newDate);
-                      _controller.dobController.value = newDate.readable;
-                      // AppMethods()
-                      //     .formatDateToDDMMYYYY(formattedDate);
-                      _controller.selectedDob.value = formattedDate;
+                              // if (!isSuccess) return;
+                              // _onboardController.completeStep(current);
+                            },
+                          ),
+                        ),
+                        //  TextButton(
+                        //   child: CommonText.text("Done"),
+                        //   onPressed: () async {
+                        //     Get.back();
+                        //     if (_controller.isButtonEnabled.value) {
+                        //       _controller.isNextPageEnable.value = false;
+                        //       final current =
+                        //           _controller.currentIndex.value;
+                        //       final isSuccess = await _controller
+                        //           .submitStep(current);
 
-                      _controller.isDobSelected.value = true;
+                        //       _controller.completeStep(current);
+                        //     }
+                        //     AppMethods.hideKeyboard();
+                        //   },
+                        // ),
+                      ),
 
-                      _controller.updateButtonState();
-                    },
+                      /// DATE PICKER
+                      Expanded(
+                        child: CupertinoDatePicker(
+                          itemExtent: 50,
+                          mode: CupertinoDatePickerMode.date,
+                          dateOrder: DatePickerDateOrder.dmy,
+                          initialDateTime: DateTime.now().eighteenYearsAgo,
+                          minimumDate: DateTime(1925),
+                          maximumDate: DateTime(2050),
+                          onDateTimeChanged: (DateTime newDate) {
+                            final formattedDate = DateFormat(
+                              'yyyy-MM-dd',
+                            ).format(newDate);
+
+                            _controller.dobController.value = newDate.readable;
+                            _controller.selectedDob.value = formattedDate;
+
+                            _controller
+                                .isDobSelected
+                                .value = AppMethods.isAge18OrAbove(newDate);
+
+                            _controller.updateButtonState();
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
+              _controller.isBottomSheetOpen.value = false;
             },
             child: Obx(
               () => Container(

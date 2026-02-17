@@ -36,14 +36,14 @@ extension ReligionEnumX on ReligionEnum {
         return "Voodoo";
       case ReligionEnum.spiritism:
         return "Spiritism";
-      case ReligionEnum.muism:
-        return "Mu-ism";
+      // case ReligionEnum.muism:
+      //   return "Mu-ism";
       case ReligionEnum.confucianism:
         return "Confucianism";
       case ReligionEnum.bahaiFaith:
         return "Baháʼí Faith";
-      case ReligionEnum.others:
-        return "Others";
+      case ReligionEnum.perfecttonotsay:
+        return "Prefer not to say";
     }
   }
 
@@ -56,7 +56,7 @@ extension ReligionEnumX on ReligionEnum {
   static ReligionEnum? fromApi(String value) {
     return ReligionEnum.values.firstWhere(
       (e) => e.apiValue == value.toLowerCase(),
-      orElse: () => ReligionEnum.others,
+      orElse: () => ReligionEnum.perfecttonotsay,
     );
   }
 }

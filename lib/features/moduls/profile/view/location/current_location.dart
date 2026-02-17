@@ -8,101 +8,104 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
-import 'package:matchster/features/moduls/profile/view/location/add_location_screen.dart';
 
 class CurrentLocation extends StatelessWidget {
   CurrentLocation({super.key});
   final RxBool isEnable = true.obs;
-  final _controller = Get.find<OnboardController>();
+  final _controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: CustomAppBar(
+        isCenterTitle: false,
         title: "Current Location",
         onTop: () {
           Get.back();
         },
       ),
       body: SingleChildScrollView(
-        child: Container(
-          margin: 20.horizontalPadding + 20.verticalPadding,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: Colors.black.withAlpha(77)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width,
-                height: 65.h,
-                decoration: BoxDecoration(
-                  gradient: AppColors.gradiantPrimary,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.r),
-                    topRight: Radius.circular(20.r),
+        child: SafeArea(
+          child: Container(
+            margin: 20.horizontalPadding + 20.verticalPadding,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(color: Colors.black.withAlpha(77)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width,
+                  height: 65.h,
+                  decoration: BoxDecoration(
+                    gradient: AppColors.gradiantPrimary,
+                    borderRadius: BorderRadius.circular(20.r),
+                    // BorderRadius.only(
+                    //   topLeft: Radius.circular(20.r),
+                    //   topRight: Radius.circular(20.r),
+                    // ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(AppAssets.locations),
+                      15.wBox,
+                      CommonText.text(
+                        "${_controller.currentLocations.value.address!.city!},  ${_controller.currentLocations.value.address!.country!}",
+
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.whiteColor,
+                      ),
+                    ],
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(AppAssets.locations),
-                    15.wBox,
-                    CommonText.text(
-                      "Jamnagar, India",
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.whiteColor,
-                    ),
-                  ],
+                30.hBox,
+                Padding(
+                  padding: 7.horizontalPadding,
+                  child: CommonText.text(
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    "Want to change your current location?",
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              30.hBox,
-              Padding(
-                padding: 7.horizontalPadding,
-                child: CommonText.text(
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  "Want to change your current location?",
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w500,
+                10.hBox,
+                Padding(
+                  padding: 15.horizontalPadding,
+                  child: CommonText.text(
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    "Don’t miss out! Upgrade to Matchster Premium to change your current location!",
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w300,
+                  ),
                 ),
-              ),
-              10.hBox,
-              Padding(
-                padding: 15.horizontalPadding,
-                child: CommonText.text(
-                  textAlign: TextAlign.center,
-                  maxLines: 3,
-                  "Don’t miss out! Upgrade to Matchster Premium to change your current location!",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w300,
+                40.hBox,
+                SubscriptionRow(),
+                20.hBox,
+                PlanTypeFaqList(),
+                30.hBox,
+                Padding(
+                  padding: 20.horizontalPadding,
+                  child: AppButton(
+                    isEnable: true,
+                    name: 'Upgrade to Change',
+                    onTop: () {
+                      // _controller.getLocation();
+                    },
+                  ),
                 ),
-              ),
-              40.hBox,
-              SubscriptionRow(),
-              20.hBox,
-              PlanTypeFaqList(),
-              40.hBox,
-              Padding(
-                padding: 20.horizontalPadding,
-                child: AppButton(
-                  isEnable: true,
-                  name: 'Upgrade to Change',
-                  onTop: () {
-                    _controller.getLocation();
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -261,7 +264,7 @@ class SubscriptionRow extends StatelessWidget {
                         plan["tag"],
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.whiteColor,
+                        color: AppColors.blackColor,
                       ),
                     ),
                   8.hBox,

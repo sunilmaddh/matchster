@@ -21,11 +21,11 @@ extension ZodiacEnumX on ZodiacEnum {
       case ZodiacEnum.scorpio:
         return "Scorpio";
       case ZodiacEnum.sagittarius:
-        return "Sagittarius";
+        return "Sigatarius"; // updated spelling
       case ZodiacEnum.capricorn:
         return "Capricorn";
       case ZodiacEnum.aquarius:
-        return "Aquarius";
+        return "Aquarious"; // updated spelling
       case ZodiacEnum.pisces:
         return "Pisces";
     }

@@ -6,6 +6,9 @@ extension SizeExtension on num {
   double get h => ScreenUtil().setHeight(toDouble());
   double get sp => ScreenUtil().setSp(toDouble());
   double get r => ScreenUtil().radius(toDouble());
+
+  SizedBox get hBox => SizedBox(height: h);
+  SizedBox get wBox => SizedBox(width: w);
 }
 
 extension EdgeInsetsExtension on num {
@@ -14,9 +17,4 @@ extension EdgeInsetsExtension on num {
       EdgeInsets.symmetric(horizontal: SizeExtension(toDouble()).w);
   EdgeInsets get verticalPadding =>
       EdgeInsets.symmetric(vertical: SizeExtension(toDouble()).h);
-}
-
-extension SizedBoxExtension on num {
-  SizedBox get hBox => SizedBox(height: toDouble());
-  SizedBox get wBox => SizedBox(width: toDouble());
 }
