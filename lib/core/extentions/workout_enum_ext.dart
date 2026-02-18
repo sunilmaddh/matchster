@@ -22,6 +22,10 @@ extension WorkoutEnumX on WorkoutEnum {
 extension ListStringX on List<String> {
   List<String> toLowerCaseList() =>
       map(
-        (e) => e.trim().toLowerCase().replaceAll(RegExp(r'\s+'), '_'),
+        (e) => e
+            .trim()
+            .toLowerCase()
+            .replaceAll(RegExp(r"[’']"), '') // remove both ' and ’
+            .replaceAll(RegExp(r'\s+'), '_'),
       ).toList();
 }

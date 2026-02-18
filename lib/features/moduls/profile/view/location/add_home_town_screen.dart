@@ -135,7 +135,7 @@ class AddHomeTownScreen extends StatelessWidget {
                       CommonText.text(
                         _controller.selectedState.value.isNotEmpty
                             ? _controller.selectedState.value
-                            : "Select your country",
+                            : "Select your state",
                       ),
                       Align(
                         alignment: Alignment.centerRight,
@@ -176,10 +176,10 @@ class AddHomeTownScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CommonText.text("India"),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Icon(Icons.keyboard_arrow_down),
-                            ),
+                            // Align(
+                            //   alignment: Alignment.centerRight,
+                            //   child: Icon(Icons.keyboard_arrow_down),
+                            // ),
                           ],
                         ),
                       )

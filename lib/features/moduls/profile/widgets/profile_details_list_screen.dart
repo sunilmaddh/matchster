@@ -81,7 +81,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffB4DEC5),
               title: 'Religion',
-              subTitle: AppMethods.capitalizeFirst(personal.religion!),
+              subTitle: personal.religion!.removeSnakeAndCapitalize(),
               image: AppAssets.religionAssest,
             ),
           ),
