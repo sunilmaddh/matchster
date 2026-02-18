@@ -80,6 +80,7 @@ enum LanguageEnum {
   thai,
   swedish,
   vietnamese,
+  kannada,
 }
 
 enum InterestEnum {
