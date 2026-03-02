@@ -118,5 +118,8 @@ class AppAssets {
       spotifyAssets = "$baseUrlSvg/spotify.svg",
       languageAssets = "$baseUrlPng/language.png",
       settingAssets = "$baseUrlSvg/setting.svg",
+      posture2 = "$baseUrlPng/hand_on_chin.png",
+      posture3 = "$baseUrlPng/ok_assets.png",
+      faceMarkAssets = "$baseUrlPng/face_mark.png",
       instagramAssets = "$baseUrlSvg/instagram.svg";
 }

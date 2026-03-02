@@ -19,6 +19,7 @@ import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dar
 import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart'
     show PhotoPreviewScreen;
 import 'package:matchster/features/moduls/posture/controller/posture_controller.dart';
+import 'package:matchster/features/moduls/posture/face_recognisation.dart';
 import 'package:matchster/features/moduls/posture/posture_gesture_screen.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
 import 'package:matchster/features/moduls/profile/view/location/add_home_town_screen.dart';
@@ -394,8 +395,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: InkWell(
                               onTap: () {
                                 _postureController.resetImage();
-                                Get.to(() => PostureGestureScreen());
-                                // Get.to(FaceRecogonizationWidget());
+                                // Get.to(() => PostureGestureScreen());
+                                Get.to(() => FaceRecogonizationWidget());
                               },
                               child: InterestCard(
                                 color: Color(0xff1D48EF),

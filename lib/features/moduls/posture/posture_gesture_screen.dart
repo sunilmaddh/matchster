@@ -10,7 +10,6 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/widgets/posture_sample_card.dart';
 import 'package:matchster/features/moduls/posture/controller/posture_controller.dart';
 import 'package:matchster/test/hand_landmark.dart';
@@ -18,7 +17,6 @@ import 'package:matchster/test/hand_landmark.dart';
 class PostureGestureScreen extends StatelessWidget {
   PostureGestureScreen({super.key});
 
-  final _controller = Get.find<OnboardController>();
   final _postureController = Get.find<PostureController>();
 
   @override
@@ -29,7 +27,6 @@ class PostureGestureScreen extends StatelessWidget {
         child: Padding(
           padding: 15.horizontalPadding + 15.verticalPadding,
           child: Obx(() {
-            final image = _controller.postureImage.value;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -39,7 +36,12 @@ class PostureGestureScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
                 10.hBox,
-                PostureSampleCard(),
+                PostureSampleCard(
+                  image:
+                      _postureController.postureList[_postureController
+                          .postureIndex
+                          .value],
+                ),
                 10.hBox,
                 CommonText.text(
                   maxLines: 4,
@@ -88,7 +90,7 @@ class PostureGestureScreen extends StatelessWidget {
                                                 .lastCapturedPath
                                                 .value!,
                                           ),
-                                          fit: BoxFit.contain,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
@@ -123,6 +125,7 @@ class PostureGestureScreen extends StatelessWidget {
                               bottom: 30.h,
                               left: 30.w,
                               right: 30.w,
+
                               child: HandTrackerView(),
 
                               // CommonText.text(
@@ -140,16 +143,18 @@ class PostureGestureScreen extends StatelessWidget {
                     AppButton(
                       name: "Take My Photo",
                       onTop: () async {
-                        _controller.pickImageFromCameraForPosture();
-                        if (_controller.faceImage.value != null) {
-                          await _controller.loadImageSize(
-                            _controller.faceImage.value!,
-                          );
-                          await _controller.analyzeFace(
-                            _controller.faceImage.value!,
-                          );
-                          // Get.to(FaceRecognisationPage());
-                        }
+                        _postureController.moveToNextStep();
+                        _postureController.restartDetection();
+                        // _controller.pickImageFromCameraForPosture();
+                        // if (_controller.faceImage.value != null) {
+                        //   await _controller.loadImageSize(
+                        //     _controller.faceImage.value!,
+                        //   );
+                        //   await _controller.analyzeFace(
+                        //     _controller.faceImage.value!,
+                        //   );
+                        //   // Get.to(FaceRecognisationPage());
+                        // }
                       },
                       isEnable: true,
                     ),

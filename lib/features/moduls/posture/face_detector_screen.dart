@@ -71,6 +71,6 @@ class _FaceCameraScreenState extends State<FaceDetectorScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return Scaffold(body: CameraPreview(_controller));
+    return Scaffold(body: Stack(children: [CameraPreview(_controller)]));
   }
 }
