@@ -5,6 +5,7 @@ import 'package:matchster/features/moduls/auth/login/controller/login_controller
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/home/controller/filter_controller.dart';
 import 'package:matchster/features/moduls/home/controller/home_controller.dart';
+import 'package:matchster/features/moduls/posture/controller/posture_controller.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
 
 class AppBinding extends Bindings {
@@ -16,6 +17,7 @@ class AppBinding extends Bindings {
     Get.put(ProfileController(), permanent: true);
     Get.put(CountryController());
     Get.put(FilterController());
+    Get.put(PostureController());
     Get.put<BaseService>(BaseService(), permanent: true);
   }
 }

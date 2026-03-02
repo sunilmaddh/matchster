@@ -18,6 +18,7 @@ import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart'
     show PhotoPreviewScreen;
+import 'package:matchster/features/moduls/posture/controller/posture_controller.dart';
 import 'package:matchster/features/moduls/posture/posture_gesture_screen.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
 import 'package:matchster/features/moduls/profile/view/location/add_home_town_screen.dart';
@@ -44,6 +45,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final _controller = Get.find<ProfileController>();
+  final _postureController = Get.find<PostureController>();
 
   @override
   void initState() {
@@ -391,6 +393,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: EdgeInsets.only(bottom: 15.h),
                             child: InkWell(
                               onTap: () {
+                                _postureController.resetImage();
                                 Get.to(() => PostureGestureScreen());
                                 // Get.to(FaceRecogonizationWidget());
                               },

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -10,12 +12,14 @@ import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/widgets/posture_sample_card.dart';
+import 'package:matchster/features/moduls/posture/controller/posture_controller.dart';
 import 'package:matchster/test/hand_landmark.dart';
 
 class PostureGestureScreen extends StatelessWidget {
   PostureGestureScreen({super.key});
 
   final _controller = Get.find<OnboardController>();
+  final _postureController = Get.find<PostureController>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +68,7 @@ class PostureGestureScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-
-                          if (image != null)
+                          if (_postureController.lastCapturedPath.value != null)
                             Positioned(
                               top: 10.h,
                               bottom: 10.h,
@@ -80,8 +83,12 @@ class PostureGestureScreen extends StatelessWidget {
                                         borderRadius:
                                             BorderRadiusGeometry.circular(20),
                                         child: Image.file(
-                                          _controller.postureImage.value!,
-                                          fit: BoxFit.cover,
+                                          File(
+                                            _postureController
+                                                .lastCapturedPath
+                                                .value!,
+                                          ),
+                                          fit: BoxFit.contain,
                                         ),
                                       ),
                                     ),
