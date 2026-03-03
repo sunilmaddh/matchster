@@ -81,22 +81,28 @@ class CommonWidget extends StatelessWidget {
                           onTap: () => onTop(v),
                           child: Container(
                             margin: 5.verticalPadding,
-                            padding: 8.horizontalPadding + 4.verticalPadding,
+
                             decoration: BoxDecoration(
                               gradient:
                                   selected ? AppColors.gradiantPrimary : null,
                               color: !selected ? Color(0xffE8E8E8) : null,
                               borderRadius: BorderRadius.circular(20.r),
                             ),
-                            child: CommonText.text(
-                              v,
-                              color:
-                                  selected
-                                      ? AppColors.whiteColor
-                                      : AppColors.blackColor,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "Caros",
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14.0,
+                                vertical: 10.0,
+                              ),
+                              child: CommonText.text(
+                                v,
+                                color:
+                                    selected
+                                        ? AppColors.whiteColor
+                                        : AppColors.blackColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Caros",
+                              ),
                             ),
                           ),
                         );

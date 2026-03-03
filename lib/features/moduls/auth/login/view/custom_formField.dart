@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/state_manager.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/constants/app_text_style.dart';
 import 'package:matchster/core/utils/extentions.dart';
 
 // ignore: must_be_immutable

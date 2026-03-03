@@ -27,6 +27,7 @@ class LookingScreen extends StatelessWidget {
       },
       isSelected: (v) => _profileController.selectedLookingFor.contains(v),
       onTopButton: () {
+        if (_profileController.selectedLookingFor.isEmpty) return;
         List<String> lowerCaseList =
             _profileController.selectedLookingFor.toLowerCaseList();
 

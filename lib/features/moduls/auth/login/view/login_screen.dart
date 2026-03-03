@@ -5,12 +5,10 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/login_controller.dart';
 import 'package:matchster/features/moduls/auth/login/services/video_services.dart';
-import 'package:matchster/features/moduls/auth/login/view/otp_screen.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_field_with_button.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -24,14 +22,18 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final LoginController _controller = Get.find<LoginController>();
-  final VideoService _videoService = Get.find<VideoService>();
+  VideoService? _videoService;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _videoService.play();
-    });
+    _videoService =
+        Get.isRegistered<VideoService>() ? Get.find<VideoService>() : null;
+    if (_videoService != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _videoService?.play();
+      });
+    }
   }
 
   @override
@@ -40,29 +42,23 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.whiteColor,
       body: SafeArea(
-        bottom: true, // 👈 keeps bottom content flexible
+        bottom: true,
         child: Obx(() {
-          // if (_controller.isLoginWithMobile.value) {
-          //   return SingleChildScrollView(child: LoginFieldWithButton());
-
-          //   // space for FAB
-          // }
           return SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Stack(
               children: [
                 /// 🎥 Background Video
-                IgnorePointer(
-                  child: Video(
-                    controller: _videoService.controller,
-                    controls: NoVideoControls,
-                    fill: Colors.white,
-                    fit: BoxFit.cover,
+                if (_videoService != null)
+                  IgnorePointer(
+                    child: Video(
+                      controller: _videoService!.controller,
+                      controls: NoVideoControls,
+                      fill: Colors.white,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-
-                /// 🔰 App Logo (SafeArea respected)
                 Padding(
                   padding: EdgeInsets.only(top: 20.h),
                   child: Align(
@@ -70,12 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: CommonAssets.svgAsset(AppAssets.appLogo),
                   ),
                 ),
-
                 Positioned.fill(
                   child: Column(
                     children: [
                       const Spacer(),
-
                       Padding(
                         padding: 15.horizontalPadding,
                         child: CommonText.text(
@@ -88,7 +82,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontFamily: "Caros",
                         ),
                       ),
-
                       _controller.isAccessMyAccount.isTrue ? 5.hBox : 30.hBox,
 
                       Padding(

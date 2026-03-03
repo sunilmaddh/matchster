@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/card/circle_gradiant_card.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
-import 'package:matchster/features/moduls/home/widgets/match_card_widget.dart';
 
 class GifAnimation extends StatefulWidget {
   const GifAnimation({super.key});

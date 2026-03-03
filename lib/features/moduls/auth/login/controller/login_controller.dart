@@ -40,11 +40,11 @@ class LoginController extends GetxController {
         //   NavigationHelper.push(OtpScreen());
         // }
       } else {
-        AppToastMessage.show(
-          isError: true,
-          title: AppConstants.errorTitle,
-          message: response.message,
-        );
+        // AppToastMessage.show(
+        //   isError: true,
+        //   title: AppConstants.errorTitle,
+        //   message: response.message,
+        // );
 
         isLoading(false);
       }

@@ -64,7 +64,7 @@ class HeightScreen extends StatelessWidget {
                     );
                     _controller.cm.value = height.cm;
                     _controller.heightController.value =
-                        "${height.feet} feet, ${height.inch} inch";
+                        "${height.feet} feet ${height.inch} inch";
                     print(
                       "${height.feet}'${height.inch}\" = ${height.cm.toStringAsFixed(2)} cm",
                     );

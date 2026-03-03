@@ -1,15 +1,12 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CropGridOverlay extends StatelessWidget {
   const CropGridOverlay({super.key});
@@ -64,12 +61,7 @@ class ProfilePhotoPreviewScreen extends StatefulWidget {
 }
 
 class _ProfilePhotoPreviewScreenState extends State<ProfilePhotoPreviewScreen> {
-  final GlobalKey _cropKey = GlobalKey();
-
   final _profileController = Get.find<ProfileController>();
-
-  Offset _offset = Offset.zero;
-  double _scale = 1.0;
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +75,20 @@ class _ProfilePhotoPreviewScreenState extends State<ProfilePhotoPreviewScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           return AppButton(
-            name: "Upload",
+            name: "Crop & Upload",
             isEnable: true,
             onTop: () async {
               try {
                 _profileController.isImageUploading.value = true;
                 final file = await _cropImage();
-                _profileController.validateAndUploadPhoto(file: file);
+                if (file != null) {
+                  _profileController.validateAndUploadPhoto(file: file);
+                } else {
+                  _profileController.isImageUploading.value = false;
+                }
               } catch (e) {
                 debugPrint(e.toString());
+                _profileController.isImageUploading.value = false;
               }
             },
           );
@@ -116,59 +113,19 @@ class _ProfilePhotoPreviewScreenState extends State<ProfilePhotoPreviewScreen> {
               ],
             ),
 
-            /// 🔥 Crop Area
-            Center(
-              child: AspectRatio(
-                aspectRatio: 3 / 4,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    RepaintBoundary(
-                      key: _cropKey,
-                      child: GestureDetector(
-                        onScaleUpdate: (details) {
-                          setState(() {
-                            // zoom
-                            _scale = (_scale * details.scale).clamp(1.0, 4.0);
-
-                            // move (single finger)
-                            _offset += details.focalPointDelta;
-                          });
-                        },
-                        onScaleEnd: (_) {
-                          // optional: snap back if scale < 1
-                          if (_scale < 1) {
-                            setState(() {
-                              _scale = 1;
-                              _offset = Offset.zero;
-                            });
-                          }
-                        },
-                        child: ClipRect(
-                          child: Transform(
-                            alignment: Alignment.center,
-                            transform:
-                                Matrix4.identity()
-                                  ..translate(_offset.dx, _offset.dy)
-                                  ..scale(_scale),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Image.file(
-                                  widget.imageFile,
-                                  fit: BoxFit.cover,
-                                  cacheWidth: 600,
-                                  filterQuality: FilterQuality.high,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+            /// 🔥 Image Preview
+            Expanded(
+              child: Center(
+                child: AspectRatio(
+                  aspectRatio: 3 / 4,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.file(
+                      widget.imageFile,
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.high,
                     ),
-                    const CropGridOverlay(),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -178,21 +135,32 @@ class _ProfilePhotoPreviewScreenState extends State<ProfilePhotoPreviewScreen> {
     );
   }
 
-  Future<File> _cropImage() async {
-    final context = _cropKey.currentContext;
-    if (context == null) {
-      throw Exception('Crop area not ready');
-    }
-    final boundary = context.findRenderObject() as RenderRepaintBoundary;
+  Future<File?> _cropImage() async {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: widget.imageFile.path,
+      aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 4),
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Photo',
+          toolbarColor: Colors.white,
+          toolbarWidgetColor: Colors.black,
+          backgroundColor: Colors.white,
+          activeControlsWidgetColor: Colors.blue,
+          cropGridColor: Colors.white.withOpacity(0.7),
+          cropFrameColor: Colors.blue,
+          initAspectRatio: CropAspectRatioPreset.ratio4x3,
+          lockAspectRatio: true,
+          hideBottomControls: true,
+          showCropGrid: true,
+        ),
+        IOSUiSettings(
+          title: 'Crop Photo',
+          aspectRatioLockEnabled: true,
+          resetAspectRatioEnabled: false,
+        ),
+      ],
+    );
 
-    final image = await boundary.toImage(pixelRatio: 3);
-    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-
-    final pngBytes = byteData!.buffer.asUint8List();
-    final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/cropped.png');
-
-    await file.writeAsBytes(pngBytes);
-    return file;
+    return croppedFile != null ? File(croppedFile.path) : null;
   }
 }

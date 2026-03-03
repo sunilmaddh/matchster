@@ -26,10 +26,12 @@ class InterestScreen extends StatelessWidget {
       },
       isSelected: (v) => _profileController.selectedInterests.contains(v),
       onTopButton: () async {
-        final interestList = await AppMethods.toApiValues(
-          _profileController.selectedInterests,
-        );
-        _profileController.addInterests(interests: interestList);
+        if (_profileController.selectedInterests.isNotEmpty) {
+          final interestList = await AppMethods.toApiValues(
+            _profileController.selectedInterests,
+          );
+          _profileController.addInterests(interests: interestList);
+        }
       },
       appBarTitle: 'Interests',
     );

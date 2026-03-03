@@ -43,14 +43,16 @@ class NameWidget extends StatelessWidget {
                 return AppMethods.validateText(name);
               },
               onChanged: (name) {
-                if (name != null && name.isNotEmpty) {
-                  if (_formKey.currentState!.validate()) {
-                    _onboardController.isNameValid.value = true;
-                  } else {
-                    _onboardController.isNameValid.value = false;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (name != null && name.isNotEmpty) {
+                    if (_formKey.currentState!.validate()) {
+                      _onboardController.isNameValid.value = true;
+                    } else {
+                      _onboardController.isNameValid.value = false;
+                    }
                   }
-                }
-                _onboardController.updateButtonState();
+                  _onboardController.updateButtonState();
+                });
               },
             ),
           ),

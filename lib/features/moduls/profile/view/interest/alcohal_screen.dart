@@ -24,9 +24,11 @@ class AlcohalScreen extends StatelessWidget {
               _profileController.selectedDrinking.value.toLowerCase().trim() ==
               v.toLowerCase().trim(),
       onTopButton: () {
-        _profileController.addDrinkking(
-          drinking: _profileController.selectedDrinking.value,
-        );
+        if (_profileController.selectedDrinking.value.isNotEmpty) {
+          _profileController.addDrinkking(
+            drinking: _profileController.selectedDrinking.value,
+          );
+        }
       },
       appBarTitle: 'Drinking',
     );

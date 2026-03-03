@@ -55,6 +55,5 @@ class DistanceWidget extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

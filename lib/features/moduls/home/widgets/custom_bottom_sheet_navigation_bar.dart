@@ -20,19 +20,12 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   final HomeController _controller = Get.find<HomeController>();
-  @override
-  void initState() {
-    super.initState();
-    _controller.pageController = PageController(
-      initialPage: _controller.selectedIndex.value,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false; // ❌ block back
+        return false;
       },
 
       child: Scaffold(
@@ -105,51 +98,48 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   // ================= HOME BACKGROUND =================
-  Widget _homeBackground() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            const Color(0xFF7A96F8).withValues(alpha: 0),
-            const Color(0xFF587DFF).withValues(alpha: 128),
-            const Color(0xFF5174FF).withValues(alpha: 191), // 0.75
-            const Color(0xFF3F66FF).withValues(alpha: 222), // 0.87
-            const Color(0xFF1D48EF).withValues(alpha: 0), // 0.0
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _homeBackground() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //       gradient: LinearGradient(
+  //         begin: Alignment.bottomCenter,
+  //         end: Alignment.bottomCenter,
+  //         colors: [
+  //           const Color(0xFF7A96F8).withValues(alpha: 0),
+  //           const Color(0xFF587DFF).withValues(alpha: 128),
+  //           const Color(0xFF5174FF).withValues(alpha: 191), // 0.75
+  //           const Color(0xFF3F66FF).withValues(alpha: 222), // 0.87
+  //           const Color(0xFF1D48EF).withValues(alpha: 0), // 0.0
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // ================= BOTTOM NAV =================
   Widget _bottomNavigation() {
     return SafeArea(
       top: false,
       child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Container(
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(8.0),
+        child: Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.all(8.0),
 
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(color: Color(0xffE6E6E6)),
-            ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.0),
+            border: Border.all(color: Color(0xffE6E6E6)),
+          ),
 
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _navItem(0, "Home", AppAssets.homeAssets),
-                _navItem(1, "Likes", AppAssets.likesAssets),
-                _navItem(2, "Premium", AppAssets.premuimAssets),
-                _navItem(3, "Chats", AppAssets.chatAssets),
-                _navItem(4, "Profile", AppAssets.profileAssets),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _navItem(0, "Home", AppAssets.homeAssets),
+              _navItem(1, "Likes", AppAssets.likesAssets),
+              _navItem(2, "Premium", AppAssets.premuimAssets),
+              _navItem(3, "Chats", AppAssets.chatAssets),
+              _navItem(4, "Profile", AppAssets.profileAssets),
+            ],
           ),
         ),
       ),

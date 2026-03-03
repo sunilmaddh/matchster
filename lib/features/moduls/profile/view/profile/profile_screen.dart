@@ -7,6 +7,7 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/app_methods.dart';
+import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
@@ -16,15 +17,11 @@ import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/login_button.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/face_recognisation.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart'
-    show PhotoPreviewScreen;
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
 import 'package:matchster/features/moduls/profile/view/location/add_home_town_screen.dart';
 import 'package:matchster/features/moduls/profile/view/location/current_location.dart';
-import 'package:matchster/features/moduls/profile/view/location/search_location_screen.dart';
-import 'package:matchster/features/moduls/profile/view/profile/setting_screen.dart';
 import 'package:matchster/features/moduls/profile/view/profile/profile_preview_screen.dart';
+import 'package:matchster/features/moduls/profile/view/profile/setting_screen.dart';
 import 'package:matchster/features/moduls/profile/view/profile_photo_preview_screen.dart';
 import 'package:matchster/features/moduls/profile/widgets/add_image_grid_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/add_instagram_card.dart';
@@ -64,12 +61,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Padding(
             padding: 15.horizontalPadding,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => SettingScreen());
+              },
               child: SvgPicture.asset(AppAssets.settingAssets),
             ),
             // IconButton(
             //   onPressed: () {
-            //     // Get.to(SettingScreen());
+            //     // Get.to<SettingScreen>();
             //   },
             //   icon: Icon(Icons.settings_outlined),
             // ),
@@ -104,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               AppAssets.profileHeader,
                               width: double.infinity,
                               height: 145.h,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.contain,
                             ),
                           ),
                           Padding(
@@ -136,8 +135,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                               .basicInfo
                                                               .value
                                                               .profilePic !=
+                                                          null &&
+                                                      _controller
+                                                              .basicInfo
+                                                              .value
+                                                              .profilePic
+                                                              ?.url !=
                                                           null
                                                       ? CommonAssets.networkImage(
+                                                        fit: BoxFit.cover,
                                                         _controller
                                                             .basicInfo
                                                             .value
@@ -228,6 +234,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     AddImageGrid(
                       imageList: _controller.allPfFame,
                       onTop: (index) {
+                        // Prevent adding more than 6 images
+                        if (_controller.allPfFame.length >= 6) {
+                          AppToastMessage.show(
+                            title: "Limit Reached",
+                            message: "You can only upload up to 6 photos",
+                            isError: true,
+                          );
+                          return;
+                        }
                         CustomBottomSheet.show(
                           borderRadius: 40.r,
                           backgroundColor: const Color(0xffF4F4F4),

@@ -30,7 +30,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController _homeController = Get.find<HomeController>();
   final ScrollController _scrollController = ScrollController();
-  final ValueNotifier<bool> showUpArrow = ValueNotifier(true);
+  final Map<String, ValueNotifier<bool>> _arrowNotifiers = {};
 
   double _lastOffset = 0;
 
@@ -43,11 +43,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onScroll() {
     final currentOffset = _scrollController.offset;
+    final currentCardId =
+        _homeController.currentProfile?.userId ??
+        'card_${_homeController.profileList.indexOf(_homeController.currentProfile)}';
 
-    if (currentOffset > _lastOffset && !showUpArrow.value) {
-      showUpArrow.value = true;
-    } else if (currentOffset < _lastOffset && showUpArrow.value) {
-      showUpArrow.value = false;
+    final notifier = _arrowNotifiers.putIfAbsent(
+      currentCardId,
+      () => ValueNotifier(true),
+    );
+
+    if (currentOffset > _lastOffset && !notifier.value) {
+      notifier.value = true;
+    } else if (currentOffset < _lastOffset && notifier.value) {
+      notifier.value = false;
     }
     _lastOffset = currentOffset;
   }
@@ -60,14 +68,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    for (var notifier in _arrowNotifiers.values) {
+      notifier.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // bottom nav overlays body
+      extendBody: true,
       backgroundColor: Colors.white,
       body: Obx(() {
         if (_homeController.isGettingProfile.isTrue) {
@@ -80,36 +92,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Column(
           children: [
-            /// TOP BAR (SAFE AREA ONLY HERE)
             SafeArea(
               bottom: false,
-              child: Padding(
-                padding: 15.horizontalPadding,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SvgPicture.asset(AppAssets.appLogo),
-                    Row(
-                      children: [
-                        DarkCircleWidget(
-                          widget: const Icon(
-                            Icons.notifications_outlined,
-                            color: AppColors.whiteColor,
-                          ),
-                          onTop: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SvgPicture.asset(AppAssets.appLogo),
+                  Row(
+                    children: [
+                      DarkCircleWidget(
+                        widget: const Icon(
+                          Icons.notifications_outlined,
+                          color: AppColors.whiteColor,
                         ),
-                        20.wBox,
-                        DarkCircleWidget(
-                          widget: const Icon(
-                            Icons.filter_list_sharp,
-                            color: AppColors.whiteColor,
-                          ),
-                          onTop: () {},
+                        onTop: () {},
+                      ),
+                      20.wBox,
+                      DarkCircleWidget(
+                        widget: const Icon(
+                          Icons.filter_list_sharp,
+                          color: AppColors.whiteColor,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                        onTop: () {},
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
 
@@ -129,109 +137,240 @@ class _HomeScreenState extends State<HomeScreen> {
                               MediaQuery.of(context).padding.bottom +
                               20.h, // space above bottom nav
                         ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            /// CARD STACK AREA (FIXED HEIGHT VIEWPORT)
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.88,
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: Container(
-                                      margin: 18.horizontalPadding,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffCDF0FF),
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(40.r),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    /// BACKGROUND CARD 2 (BOTTOM)
+                                    if (_homeController.profileList.length > 2)
+                                      Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                          height:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.height *
+                                              0.65,
+                                          margin: EdgeInsets.only(
+                                            left: 16.w,
+                                            right: 16.w,
+                                            top: 16.h,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              40.r,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                  0.1,
+                                                ),
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 5),
+                                              ),
+                                            ],
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              40.r,
+                                            ),
+                                            child: Obx(() {
+                                              final currentIndex =
+                                                  _homeController.profileList
+                                                      .indexOf(
+                                                        _homeController
+                                                            .currentProfile,
+                                                      );
+                                              final nextIndex =
+                                                  currentIndex + 2;
+                                              if (nextIndex <
+                                                  _homeController
+                                                      .profileList
+                                                      .length) {
+                                                return CommonAssets.networkImage(
+                                                  _homeController
+                                                          .profileList[nextIndex]
+                                                          .mainPhoto ??
+                                                      '',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              }
+                                              return Container(
+                                                color: const Color(0xffCDF0FF),
+                                              );
+                                            }),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  Positioned.fill(
-                                    top: 7.h,
-                                    child: Container(
-                                      margin: 13.horizontalPadding,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffF6E9FF),
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(40.r),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
 
-                                  /// CARD SWIPER
-                                  CardSwiper(
-                                    padding: EdgeInsets.only(top: 15.h),
-                                    controller:
-                                        _homeController.swiperController,
-                                    cardsCount:
-                                        _homeController.profileList.length,
-                                    numberOfCardsDisplayed:
-                                        _homeController.profileList.length > 3
-                                            ? 3
-                                            : _homeController
-                                                .profileList
-                                                .length,
-                                    allowedSwipeDirection:
-                                        AllowedSwipeDirection.only(
-                                          left: true,
-                                          right: true,
+                                    /// BACKGROUND CARD 1 (MIDDLE)
+                                    if (_homeController.profileList.length > 1)
+                                      Positioned(
+                                        top: 20,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                          height:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.height *
+                                              0.65,
+                                          margin: EdgeInsets.only(
+                                            left: 8.w,
+                                            right: 8.w,
+                                            top: 8.h,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              40.r,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                  0.15,
+                                                ),
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 5),
+                                              ),
+                                            ],
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              40.r,
+                                            ),
+                                            child: Obx(() {
+                                              final currentIndex =
+                                                  _homeController.profileList
+                                                      .indexOf(
+                                                        _homeController
+                                                            .currentProfile,
+                                                      );
+                                              final nextIndex =
+                                                  currentIndex + 1;
+                                              if (nextIndex <
+                                                  _homeController
+                                                      .profileList
+                                                      .length) {
+                                                return CommonAssets.networkImage(
+                                                  _homeController
+                                                          .profileList[nextIndex]
+                                                          .mainPhoto ??
+                                                      '',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              }
+                                              return const SizedBox.shrink();
+                                            }),
+                                          ),
                                         ),
-                                    onSwipe: _homeController.onSwipe,
-                                    cardBuilder: (context, index, _, __) {
-                                      return MainPhotoCard(
-                                        data:
-                                            _homeController.profileList[index],
-                                        showUpArrow: showUpArrow,
-                                        onLikeTap: () {
-                                          _homeController.handleInteraction(
-                                            isLikeAction: true,
-                                          );
-                                        },
-                                        onDislikeTap: () {
-                                          _homeController.handleInteraction(
-                                            isLikeAction: false,
-                                          );
-                                        },
-                                        onVerticalDrag: (dy) {
-                                          if (_scrollController.hasClients) {
-                                            _scrollController.jumpTo(
-                                              (_scrollController.offset - dy)
-                                                  .clamp(
-                                                    0.0,
-                                                    _scrollController
-                                                        .position
-                                                        .maxScrollExtent,
-                                                  ),
+                                      ),
+
+                                    /// CARD SWIPER (TOP)
+                                    Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
+                                      child: SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                            0.65,
+                                        child: CardSwiper(
+                                          padding: EdgeInsets.zero,
+                                          backCardOffset: const Offset(0, 0),
+                                          controller:
+                                              _homeController.swiperController,
+                                          cardsCount:
+                                              _homeController
+                                                  .profileList
+                                                  .length,
+                                          numberOfCardsDisplayed: 1,
+                                          allowedSwipeDirection:
+                                              AllowedSwipeDirection.only(
+                                                left: true,
+                                                right: true,
+                                              ),
+                                          onSwipe: _homeController.onSwipe,
+                                          cardBuilder: (context, index, _, __) {
+                                            final cardId =
+                                                _homeController
+                                                    .profileList[index]
+                                                    .userId ??
+                                                'card_$index';
+                                            final showUpArrow = _arrowNotifiers
+                                                .putIfAbsent(
+                                                  cardId,
+                                                  () => ValueNotifier(true),
+                                                );
+                                            return MainPhotoCard(
+                                              key: ValueKey(cardId),
+                                              data:
+                                                  _homeController
+                                                      .profileList[index],
+                                              showUpArrow: showUpArrow,
+                                              cardId: cardId,
+                                              onLikeTap:
+                                                  () => _homeController
+                                                      .handleInteraction(
+                                                        isLikeAction: true,
+                                                      ),
+                                              onDislikeTap:
+                                                  () => _homeController
+                                                      .handleInteraction(
+                                                        isLikeAction: false,
+                                                      ),
+                                              onVerticalDrag: (dy) {
+                                                if (_scrollController
+                                                    .hasClients) {
+                                                  _scrollController.jumpTo(
+                                                    (_scrollController.offset -
+                                                            dy)
+                                                        .clamp(
+                                                          0.0,
+                                                          _scrollController
+                                                              .position
+                                                              .maxScrollExtent,
+                                                        ),
+                                                  );
+                                                }
+                                              },
                                             );
-                                          }
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            /// PROFILE DETAILS (THIS PART SCROLLS)
-                            Transform.translate(
-                              offset: const Offset(0, -20),
-                              child: Container(
-                                width: double.infinity,
-                                padding:
-                                    15.verticalPadding + 15.horizontalPadding,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20.r),
-                                  ),
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                child: _buildProfileDetails(data),
                               ),
-                            ),
-                          ],
+
+                              /// PROFILE DETAILS (THIS PART SCROLLS)
+                              Transform.translate(
+                                offset: const Offset(0, -10),
+                                child: Container(
+                                  width: double.infinity,
+                                  padding:
+                                      40.verticalPadding + 15.horizontalPadding,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20.r),
+                                    ),
+                                  ),
+                                  child: _buildProfileDetails(data),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
             ),

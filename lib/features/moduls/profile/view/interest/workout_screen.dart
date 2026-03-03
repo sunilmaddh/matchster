@@ -25,9 +25,11 @@ class WorkoutScreen extends StatelessWidget {
               _profileController.selectedWorkout.value.toLowerCase().trim() ==
               v.toLowerCase().trim(),
       onTopButton: () {
-        _profileController.addWorkout(
-          workout: _profileController.selectedWorkout.value,
-        );
+        if (_profileController.selectedWorkout.value.isNotEmpty) {
+          _profileController.addWorkout(
+            workout: _profileController.selectedWorkout.value,
+          );
+        }
       },
       appBarTitle: 'Workout',
     );

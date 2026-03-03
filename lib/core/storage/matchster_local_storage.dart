@@ -162,4 +162,9 @@ class MatchsterLocalStorage {
     _checkInit();
     return _preferences!.getBool("history_type") ?? false;
   }
+
+  Future<void> clearAllData() async {
+    _checkInit();
+    await _preferences!.clear();
+  }
 }

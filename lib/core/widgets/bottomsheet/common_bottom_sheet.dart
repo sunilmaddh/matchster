@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 
 class CommonBottomSheet {

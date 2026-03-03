@@ -14,7 +14,7 @@ import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dar
 class DateWidget extends StatelessWidget {
   DateWidget({super.key});
   final _controller = Get.find<OnboardController>();
-  int selectedIndex = 0;
+  final int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Padding(

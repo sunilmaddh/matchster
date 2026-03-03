@@ -29,9 +29,11 @@ class ZodiacScreen extends StatelessWidget {
               _profileController.selectedZodiac.value.toLowerCase().trim() ==
               v.toLowerCase().trim(),
       onTopButton: () {
-        _profileController.addZodiacsign(
-          zodiacsign: _profileController.selectedZodiac.toLowerCase(),
-        );
+        if (_profileController.selectedZodiac.value.isNotEmpty) {
+          _profileController.addZodiacsign(
+            zodiacsign: _profileController.selectedZodiac.toLowerCase(),
+          );
+        }
       },
       appBarTitle: 'Zodiac sign',
     );

@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,27 +23,19 @@ class AddImageGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Obx(
-        () => GridView.builder(
+      child: Obx(() {
+        final count = imageList.length; // Access observable here
+        return GridView.builder(
           shrinkWrap: true,
-          itemCount:
-              imageList.length < 5
-                  ? imageList.length + 1
-                  : imageList.length, // +1 for the Add button
+          itemCount: 6, // Always show 6 slots
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, // 3 columns
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
           ),
           itemBuilder: (context, index) {
-            if (index == imageList.length) {
-              return GestureDetector(
-                onTap: () {
-                  onTop(index);
-                },
-                child: ProfilePhotoCard(),
-              );
-            } else {
+            if (index < count) {
+              // Show uploaded image
               return Stack(
                 children: [
                   Positioned.fill(
@@ -62,7 +54,6 @@ class AddImageGrid extends StatelessWidget {
                       onTap: () {
                         onTopRemove(imageList[index].id!);
                       },
-
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -85,10 +76,18 @@ class AddImageGrid extends StatelessWidget {
                   ),
                 ],
               );
+            } else {
+              // Show "Add Photo" placeholder
+              return GestureDetector(
+                onTap: () {
+                  onTop(index);
+                },
+                child: ProfilePhotoCard(),
+              );
             }
           },
-        ),
-      ),
+        );
+      }),
     );
   }
 }

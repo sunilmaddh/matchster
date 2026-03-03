@@ -30,11 +30,13 @@ class ReligionScreen extends StatelessWidget {
               _profileController.selectedReligion.value.toLowerCase().trim() ==
               v.toLowerCase().trim(),
       onTopButton: () {
-        _profileController.addReligion(
-          religion: normalizeValue(
-            _profileController.selectedReligion.value.toLowerCase(),
-          ),
-        );
+        if (_profileController.selectedReligion.value.isNotEmpty) {
+          _profileController.addReligion(
+            religion: normalizeValue(
+              _profileController.selectedReligion.value.toLowerCase(),
+            ),
+          );
+        }
       },
       appBarTitle: 'Religion',
     );

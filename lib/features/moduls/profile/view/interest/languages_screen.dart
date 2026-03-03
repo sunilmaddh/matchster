@@ -27,10 +27,12 @@ class LanguagesScreen extends StatelessWidget {
       },
       isSelected: (v) => _profileController.selectedLanguage.contains(v),
       onTopButton: () async {
-        final languages = await AppMethods.toApiValues(
-          _profileController.selectedLanguage,
-        );
-        _profileController.addLanguages(languages: languages);
+        if (_profileController.selectedLanguage.isNotEmpty) {
+          final languages = await AppMethods.toApiValues(
+            _profileController.selectedLanguage,
+          );
+          _profileController.addLanguages(languages: languages);
+        }
       },
       appBarTitle: 'Languages',
     );

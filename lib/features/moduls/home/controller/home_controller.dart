@@ -9,7 +9,6 @@ import 'package:matchster/core/extentions/religion_level_ext.dart';
 import 'package:matchster/core/extentions/zodiac_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
-import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/features/moduls/home/models/habit_option.dart';
 import 'package:matchster/features/moduls/home/models/home_response.dart';
 import 'package:matchster/features/moduls/home/models/inshort_list.dart';
@@ -64,7 +63,9 @@ class HomeController extends GetxController {
 
   void onTabTapped(int index) {
     selectedIndex.value = index;
-    pageController.jumpToPage(index);
+    if (pageController.hasClients) {
+      pageController.jumpToPage(index);
+    }
   }
 
   /* ----------------------------------------------------
@@ -76,7 +77,7 @@ class HomeController extends GetxController {
     required int filter,
   }) async {
     try {
-      isGettingProfile(true);
+      isGettingProfile.value = true;
 
       final response = await _homeService.getProfileLisr(
         filterType: filterType,
@@ -87,20 +88,19 @@ class HomeController extends GetxController {
       if (response.success && response.data?.profiles != null) {
         profileList.assignAll(response.data!.profiles!);
         profileListCount.assignAll(response.data!.profiles!);
-        // preloadInitialCachedImages(profileList);
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   if (profileList.first.mainPhoto != null &&
-        //       profileList.first.mainPhoto!.isEmpty) {
-        //     CachedNetworkImageProvider(
-        //       profileList.first.mainPhoto!,
-        //     ).resolve(const ImageConfiguration());
-        //   }
-        // });
+        
+        // Preload first 3 images
+        for (int i = 0; i < 3 && i < profileList.length; i++) {
+          if (profileList[i].mainPhoto != null && profileList[i].mainPhoto!.isNotEmpty) {
+            CachedNetworkImageProvider(profileList[i].mainPhoto!)
+                .resolve(const ImageConfiguration());
+          }
+        }
 
         currentIndex.value = 0;
         await _updateInShort();
 
-        isGettingProfile(false);
+        isGettingProfile.value = false;
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -181,24 +181,18 @@ class HomeController extends GetxController {
     /// 🕒 Delay removal to avoid RangeError
     currentIndex.value = newIndex;
     profileListCount.removeAt(0);
-    // Future.delayed(const Duration(milliseconds: 300), () {
-    //   if (previousIndex < profileList.length) {
-    //     profileList.removeAt(previousIndex);
-    //   }
-    //   currentIndex.value = newIndex;
-
-    //   /// Update UI safely
-    //   if (profileList.isNotEmpty) {
-    //     _updateInShort();
-    //   }
-
-    //   /// 🚀 Load more when only 1 left
-    //   if (profileList.length <= 1) {
-    //     _loadMoreProfilesIfNeeded();
-    //   }
-    // });
+    
     if (profileList.isNotEmpty) {
       _updateInShort();
+      
+      // Preload next image
+      final nextIndex = newIndex + 2;
+      if (nextIndex < profileList.length && 
+          profileList[nextIndex].mainPhoto != null &&
+          profileList[nextIndex].mainPhoto!.isNotEmpty) {
+        CachedNetworkImageProvider(profileList[nextIndex].mainPhoto!)
+            .resolve(const ImageConfiguration());
+      }
     }
 
     if (profileListCount.isEmpty) {
@@ -420,6 +414,6 @@ class HomeController extends GetxController {
 FrequencyEnum frequencyFromApi(String value) {
   return FrequencyEnum.values.firstWhere(
     (e) => e.name == value.toLowerCase(),
-    orElse: () => null!,
+    orElse: () => FrequencyEnum.values.first,
   );
 }

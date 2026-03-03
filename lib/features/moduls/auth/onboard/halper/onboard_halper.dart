@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/add_photo_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/data_with_widget.dart';
@@ -9,7 +6,6 @@ import 'package:matchster/features/moduls/auth/onboard/view/dob_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/gender_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/hieght_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/name_screen.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/name_widget.dart';
 
 enum OnboardStep { name, gender, dob, height, dateWith, allOfame }
 
@@ -109,7 +105,7 @@ class OnboardHalper {
   List<HeightItem> generateHeightList() {
     final List<HeightItem> list = [];
 
-    for (int feet = 5; feet <= 7; feet++) {
+    for (int feet = 3; feet <= 7; feet++) {
       for (int inch = 0; inch < 12; inch++) {
         // Min = 5'1"
         if (feet == 5 && inch < 0) continue;

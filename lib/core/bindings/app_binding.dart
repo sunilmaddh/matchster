@@ -11,7 +11,7 @@ class AppBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(OnboardController(), permanent: true);
-    Get.lazyPut<LoginController>(() => LoginController());
+    Get.put(LoginController(), permanent: true);
     Get.put(HomeController(), permanent: true);
     Get.put(ProfileController(), permanent: true);
     Get.put(CountryController());

@@ -20,29 +20,26 @@ class CircleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "like_dislike",
-      child: GestureDetector(
-        onTap: onTop,
-        child: Column(
-          children: [
-            CircleGradiantCard(
-              isGradiant: isGradient,
-              widget: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(image),
-              ),
+    return GestureDetector(
+      onTap: onTop,
+      child: Column(
+        children: [
+          CircleGradiantCard(
+            isGradiant: isGradient,
+            widget: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(image),
             ),
-            5.hBox,
-            CommonText.text(
-              fontFamily: "Caros",
-              fontWeight: FontWeight.w500,
-              fontSize: 10.sp,
-              text,
-              color: AppColors.whiteColor,
-            ),
-          ],
-        ),
+          ),
+          5.hBox,
+          CommonText.text(
+            fontFamily: "Caros",
+            fontWeight: FontWeight.w500,
+            fontSize: 10.sp,
+            text,
+            color: AppColors.whiteColor,
+          ),
+        ],
       ),
     );
   }

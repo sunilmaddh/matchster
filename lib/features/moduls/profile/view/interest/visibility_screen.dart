@@ -32,11 +32,13 @@ class VisibilityScreen extends StatelessWidget {
                   .trim() ==
               v.toLowerCase().trim(),
       onTopButton: () {
-        _profileController.addVisibility(
-          visibility:
-              _profileController.selectedVisibility.value
-                  .toSnakeCaseLowerCase(),
-        );
+        if (_profileController.selectedVisibility.value.isNotEmpty) {
+          _profileController.addVisibility(
+            visibility:
+                _profileController.selectedVisibility.value
+                    .toSnakeCaseLowerCase(),
+          );
+        }
       },
       appBarTitle: 'Profile visibility',
     );

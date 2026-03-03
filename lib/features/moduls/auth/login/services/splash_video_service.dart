@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -8,6 +7,7 @@ class SplashVideoService extends GetxService {
   late final VideoController controller;
 
   bool _isInitialized = false;
+  bool _isDisposed = false;
 
   Future<SplashVideoService> init() async {
     player = Player();
@@ -17,12 +17,12 @@ class SplashVideoService extends GetxService {
 
   /// Open & play asset ONLY ONCE
   Future<void> playAsset(String asset) async {
-    if (_isInitialized) return; // 🔒 prevents multiple plays
+    if (_isInitialized || _isDisposed) return; 
     _isInitialized = true;
     await player.open(Media('asset:///$asset'), play: false);
 
     player.setPlaylistMode(PlaylistMode.none);
-    player.setVolume(0); // 🔇 background video
+    player.setVolume(0); 
 
     await player.play();
 
@@ -31,6 +31,8 @@ class SplashVideoService extends GetxService {
 
   @override
   void onClose() {
+    if (_isDisposed) return;
+    _isDisposed = true;
     player.dispose();
     super.onClose();
   }

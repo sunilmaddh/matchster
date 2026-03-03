@@ -44,7 +44,7 @@ class AppMethods {
   }
 
   static String? validateWorkText({required String value}) {
-    if (value == null && value.isEmpty) {
+    if (value == null || value.isEmpty) {
       return null;
     } else if (!isValid(value)) {
       return "Please enter valid text";
