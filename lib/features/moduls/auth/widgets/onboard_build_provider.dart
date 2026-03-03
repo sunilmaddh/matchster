@@ -35,19 +35,21 @@ class OnboardPageViewBuilder extends StatelessWidget {
               child: CircleButtonWidget(
                 isEnable: _onboardController.isButtonEnabled.value,
                 onTap: () async {
-                  if (_onboardController.isButtonEnabled.value) {
-                    _onboardController.isNextPageEnable.value = false;
-                    final current = _onboardController.currentIndex.value;
-                    final isSuccess = await _onboardController.submitStep(
-                      current,
-                    );
+                  if (!_onboardController.isButtonEnabled.value) return;
 
+                  _onboardController.isNextPageEnable.value = false;
+
+                  final current = _onboardController.currentIndex.value;
+
+                  final isSuccess = await _onboardController.submitStep(
+                    current,
+                  );
+
+                  if (isSuccess) {
                     _onboardController.completeStep(current);
                   }
-                  AppMethods.hideKeyboard();
 
-                  // if (!isSuccess) return;
-                  // _onboardController.completeStep(current);
+                  AppMethods.hideKeyboard();
                 },
               ),
             ),
@@ -66,7 +68,7 @@ class OnboardPageViewBuilder extends StatelessWidget {
             child: PageView.builder(
               controller: _onboardController.pageController,
               itemCount: pages.length,
-              physics: const NeverScrollableScrollPhysics(), // 🔒 lock swipe
+              physics: const NeverScrollableScrollPhysics(),
               onPageChanged: (index) {
                 _onboardController.currentIndex.value = index;
                 _onboardController.isButtonEnabled;

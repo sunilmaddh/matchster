@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/extentions/looking_for_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/features/moduls/home/models/inshort_list.dart';
 import 'package:matchster/features/moduls/profile/widgets/common_wrap_card.dart';

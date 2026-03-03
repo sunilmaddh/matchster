@@ -19,6 +19,67 @@ class AddPhotoWidget extends StatelessWidget {
   AddPhotoWidget({super.key});
   final _controller = Get.find<OnboardController>();
 
+  void _showDeleteDialog(int index) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AppColors.whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        title: Text(
+          'Delete Photo?',
+          style: TextStyle(
+            color: AppColors.primary,
+            fontWeight: FontWeight.w600,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          'Do you want to delete this photo?',
+          style: TextStyle(
+            color: AppColors.blackColor,
+            fontSize: 28,
+            fontWeight: FontWeight.w900,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            onPressed: Get.back,
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: AppColors.whiteColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            onPressed: () {
+              _controller.removeFile(index);
+              Get.back();
+            },
+            child: Text('Delete'),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -194,9 +255,7 @@ class AddPhotoWidget extends StatelessWidget {
                       },
                       child: PhotoCard(
                         image: image,
-                        onDelete: () {
-                          // _controller.removeFile(index);
-                        },
+                        onDelete: () => _showDeleteDialog(index),
                       ),
                     );
                   },

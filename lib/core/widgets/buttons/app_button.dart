@@ -6,7 +6,7 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 
 // ignore: must_be_immutable
 class AppButton extends StatelessWidget {
-  AppButton({
+ const AppButton({
     super.key,
     required this.name,
     required this.onTop,

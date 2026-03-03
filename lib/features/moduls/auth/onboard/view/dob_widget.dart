@@ -167,7 +167,6 @@ class DobWidget extends StatelessWidget {
             children: [
               Icon(Icons.info_outline, size: 20),
               5.wBox,
-
               Flexible(
                 child: RichText(
                   maxLines: 3,
@@ -178,7 +177,6 @@ class DobWidget extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       fontFamily: "Caros",
                     ),
-
                     children: [
                       TextSpan(
                         text: AppConstants.dobNote1,

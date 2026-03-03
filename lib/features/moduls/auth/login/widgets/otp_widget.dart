@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
@@ -24,6 +25,7 @@ class OtpWidget extends StatelessWidget {
       controller: _otpController,
       autoFocus: true,
       keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       animationType: AnimationType.none,
       cursorColor: Colors.black,
       showCursor: false,
@@ -34,13 +36,11 @@ class OtpWidget extends StatelessWidget {
         fontWeight: FontWeight.w400,
         color: Colors.black,
       ),
-
       pinTheme: PinTheme(
         shape: PinCodeFieldShape.box,
         borderRadius: BorderRadius.circular(20.r),
         fieldHeight: 58.h,
         fieldWidth: 68.w,
-
         activeColor: AppColors.appDisableButton,
         selectedColor: AppColors.otpFieldColor,
         inactiveColor: Color(0xffCFCFCF),
@@ -48,7 +48,6 @@ class OtpWidget extends StatelessWidget {
         borderWidth: 1,
       ),
       onTap: () {
-        /// 👇 move cursor to last entered digit
         final text = _otpController.text;
         final index = text.length.clamp(0, 3);
 
@@ -61,11 +60,9 @@ class OtpWidget extends StatelessWidget {
       onChanged: (value) {
         onCodeChanged(value);
       },
-
       onCompleted: (otp) {
         onCompleted(otp);
       },
-
       beforeTextPaste: (_) => false,
     );
   }

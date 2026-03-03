@@ -765,7 +765,7 @@ class ProfileController extends GetxController {
         ..addAll(apiList);
       selectedInterests.value = selectedInterests.toSet().toList();
     }
-    print("SelectedInterest ${selectedInterests.toString()}");
+  
   }
 
   Future<void> setLanguageFromApi(List<String>? apiList) async {

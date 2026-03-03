@@ -132,16 +132,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             child: ClipOval(
                                               child:
                                                   _controller
-                                                              .basicInfo
-                                                              .value
-                                                              .profilePic !=
-                                                          null &&
-                                                      _controller
-                                                              .basicInfo
-                                                              .value
-                                                              .profilePic
-                                                              ?.url !=
-                                                          null
+                                                                  .basicInfo
+                                                                  .value
+                                                                  .profilePic !=
+                                                              null &&
+                                                          _controller
+                                                                  .basicInfo
+                                                                  .value
+                                                                  .profilePic
+                                                                  ?.url !=
+                                                              null
                                                       ? CommonAssets.networkImage(
                                                         fit: BoxFit.cover,
                                                         _controller

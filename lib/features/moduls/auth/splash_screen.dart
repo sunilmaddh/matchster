@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Get.find<SplashVideoService>().playAsset(AppAssets.splashAsset);
     Future.delayed(Duration(seconds: 6), () {
-      Get.toNamed(AppRoutes.loginScreen);
+      Get.offAllNamed(AppRoutes.loginScreen);
     });
     super.initState();
   }
@@ -42,3 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+
+
+

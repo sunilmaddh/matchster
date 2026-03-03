@@ -10,12 +10,12 @@ import 'package:matchster/features/moduls/profile/controller/profile_controller.
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(OnboardController(), permanent: true);
-    Get.put(LoginController(), permanent: true);
-    Get.put(HomeController(), permanent: true);
-    Get.put(ProfileController(), permanent: true);
-    Get.put(CountryController());
-    Get.put(FilterController());
+    Get.lazyPut(() => OnboardController(), fenix: true);
+    Get.lazyPut(() => LoginController(), fenix: true);
+    Get.lazyPut(() => HomeController(), fenix: true);
+    Get.lazyPut(() => ProfileController(), fenix: true);
+    Get.lazyPut(() => CountryController(), fenix: true);
+    Get.lazyPut(() => FilterController());
     Get.put<BaseService>(BaseService(), permanent: true);
   }
 }

@@ -82,7 +82,6 @@ class AppMethods {
 
   static String? validateText(String? value) {
     if (value == null || value.isEmpty) return null;
-
     if (!RegExp(r'^.{3,}$').hasMatch(value)) {
       return 'Enter at least 3 characters';
     }

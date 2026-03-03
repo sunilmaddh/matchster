@@ -163,7 +163,7 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
         ),
       ],
     );
-    
+
     return croppedFile != null ? File(croppedFile.path) : null;
   }
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
-import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/features/moduls/auth/login/services/login_service.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
@@ -25,7 +23,9 @@ class LoginController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isAccessAccount = false.obs;
   RxInt otpRebuildKey = 0.obs;
+
   TextEditingController controller = TextEditingController();
+
   Future<void> sendOtp(String number) async {
     try {
       // if (isResend.isFalse) {
@@ -76,7 +76,7 @@ class LoginController extends GetxController {
           final allCompleted = onboardController.allCompleted;
           if (allCompleted) {
             //Get.to(() => MaintenceScreen());
-            AppNavigation.off(AppRoutes.landingScreen);
+            AppNavigation.offAll(AppRoutes.landingScreen);
           } else {
             AppNavigation.off(AppRoutes.onboardScreen);
           }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/profile/models/my_profile_response.dart';
 import 'package:matchster/features/moduls/profile/widgets/location_card.dart';
 

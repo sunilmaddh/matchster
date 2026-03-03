@@ -22,7 +22,7 @@ class CustomFormField extends StatelessWidget {
   final List<TextInputFormatter> inputFormatters;
   final void Function(String?)? onChanged;
 
-  CustomFormField({
+ const CustomFormField({
     super.key,
     required this.label,
     required this.hint,

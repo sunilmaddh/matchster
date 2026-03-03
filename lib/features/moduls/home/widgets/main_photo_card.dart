@@ -39,10 +39,12 @@ class MainPhotoCard extends StatelessWidget {
         width: double.infinity,
 
         child: ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(40.r)),
-
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40.r),
+            topRight: Radius.circular(40.r),
+          ),
           child: Stack(
-            fit: StackFit.expand,
+            fit: StackFit.passthrough,
             children: [
               CachedNetworkImage(
                 imageUrl: data.mainPhoto ?? "",

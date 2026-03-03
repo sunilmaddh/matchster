@@ -25,7 +25,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        if (_controller.selectedIndex.value != 0) {
+          _controller.onTabTapped(0); // go to Home tab
+          return false; // prevent app exit
+        }
+        return true;
       },
 
       child: Scaffold(

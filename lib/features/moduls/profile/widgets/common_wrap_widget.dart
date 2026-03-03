@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/moduls/profile/widgets/sub_common_card.dart';
 
 class CommonWrapWidget extends StatelessWidget {
   const CommonWrapWidget({

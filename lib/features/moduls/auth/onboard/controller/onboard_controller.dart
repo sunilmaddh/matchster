@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:ui' as ui;
-
 import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -87,6 +86,8 @@ class OnboardController extends GetxController {
         performanceMode: FaceDetectorMode.accurate,
       ),
     );
+    nameController.clear();
+    isNameValid.value = false;
   }
 
   RxList<String> fileList = List.generate(6, (_) => '').obs;
@@ -99,12 +100,13 @@ class OnboardController extends GetxController {
     }
   }
 
-  // void removeFile(int index) {
-  //   if (index < fileList.length) {
-  //     fileList[index].value = null;
-  //     fileList.refresh();
-  //   }
-  // }
+  void removeFile(int index) {
+    if (index < fileList.length) {
+      fileList[index] = '';
+      fileList.refresh();
+      updateButtonState();
+    }
+  }
 
   void toggleSwitch(bool value) {
     isSwitchOn.value = value;
@@ -134,10 +136,28 @@ class OnboardController extends GetxController {
   }
 
   void toggleSelection(int index) {
-    isGenderSelected.value = true;
+    selectedIndex.value = index;
+    selectedGender.value = OnboardHalper.radioList[index];
+
+    print("Selected Gender: ${selectedGender.value}");
+
     updateButtonState();
-    selectedIndex.value = (selectedIndex.value == index) ? null : index;
-    selectedGender.value = OnboardHalper.radioList[selectedIndex.value!];
+  }
+
+  void clearAllData() {
+    nameController.clear();
+    isNameValid.value = false;
+    isGenderSelected.value = false;
+    isDobSelected.value = false;
+    isHeightSelected.value = false;
+    isDateSelectedP.value = false;
+    isPhotoAdded.value = false;
+    selectedGender.value = "";
+    selectedDob.value = "";
+    dateWithList.clear();
+    selectedDates.clear();
+    fileList.assignAll(List.generate(6, (_) => ''));
+    updateButtonState();
   }
 
   void toggleDateSelection(int index) {
@@ -876,22 +896,22 @@ class OnboardController extends GetxController {
   void updateButtonState() {
     switch (currentIndex.value) {
       case 0:
-        isButtonEnabled.value = isNameValid.value;
+        isButtonEnabled.value = nameController.text.trim().length >= 3;
         break;
       case 1:
-        isButtonEnabled.value = isGenderSelected.value;
+        isButtonEnabled.value = selectedGender.isNotEmpty;
         break;
       case 2:
-        isButtonEnabled.value = isDobSelected.value;
+        isButtonEnabled.value = selectedDob.isNotEmpty;
         break;
       case 3:
-        isButtonEnabled.value = isHeightSelected.value;
+        isButtonEnabled.value = heightController.isNotEmpty;
         break;
       case 4:
-        isButtonEnabled.value = isDateSelectedP.value;
+        isButtonEnabled.value = dateWithList.isNotEmpty;
         break;
       case 5:
-        isButtonEnabled.value = isPhotoAdded.value;
+        isButtonEnabled.value = fileList.any((e) => e.isNotEmpty);
         break;
       default:
         isButtonEnabled.value = false;

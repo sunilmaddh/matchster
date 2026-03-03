@@ -31,6 +31,7 @@ class NameWidget extends StatelessWidget {
           Form(
             key: _formKey,
             child: CustomFormField(
+              maxLength: 80,
               inputFormatters: [
                 AppInputFormatters.onlyCharacters(),
                 AppInputFormatters.firstLetterCapital(),
@@ -43,16 +44,17 @@ class NameWidget extends StatelessWidget {
                 return AppMethods.validateText(name);
               },
               onChanged: (name) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (name != null && name.isNotEmpty) {
-                    if (_formKey.currentState!.validate()) {
-                      _onboardController.isNameValid.value = true;
-                    } else {
-                      _onboardController.isNameValid.value = false;
-                    }
+                if (name != null && name.isNotEmpty) {
+                  if (_formKey.currentState!.validate()) {
+                    _onboardController.isNameValid.value = true;
+                  } else {
+                    _onboardController.isNameValid.value = false;
                   }
-                  _onboardController.updateButtonState();
-                });
+                } else {
+                  _onboardController.isNameValid.value = false;
+                }
+
+                _onboardController.updateButtonState();
               },
             ),
           ),

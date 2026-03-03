@@ -15,7 +15,6 @@ import 'package:matchster/routes/app_pages.dart';
 import 'package:media_kit/media_kit.dart';
 
 void main() async {
-  AppBinding().dependencies();
   WidgetsFlutterBinding.ensureInitialized();
   MatchsterLocalStorage.instance.init();
   MediaKit.ensureInitialized();
