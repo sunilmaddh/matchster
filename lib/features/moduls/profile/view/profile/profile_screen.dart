@@ -221,8 +221,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 15.hBox,
                                 LinearProgressBarWithBadge(
                                   value:
-                                      _controller.meta.value.progress!
-                                          .toDouble(),
+                                      (_controller.meta.value.progress
+                                              ?.toDouble() ??
+                                          0.0),
                                   onChanged: (double value) {},
                                 ),
                               ],

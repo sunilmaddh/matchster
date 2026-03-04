@@ -51,7 +51,9 @@ class PreferenceListWidget extends StatelessWidget {
             },
             child: InterestCard(
               title: "Workout",
-              subTitle: AppMethods.capitalizeFirst(lifestyle.workout!),
+              subTitle: AppMethods.capitalizeFirst(
+                lifestyle.workout ?? "Not available",
+              ),
               image: AppAssets.gymAssets2,
             ),
           ),
@@ -70,7 +72,9 @@ class PreferenceListWidget extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffDEB4B4),
               title: 'Smoking',
-              subTitle: AppMethods.capitalizeFirst(lifestyle.smoking!),
+              subTitle: AppMethods.capitalizeFirst(
+                lifestyle.smoking ?? "Not available",
+              ),
               image: AppAssets.smokingAssets,
             ),
           ),
@@ -90,7 +94,9 @@ class PreferenceListWidget extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffDEB4C8),
               title: 'Drinking',
-              subTitle: AppMethods.capitalizeFirst(lifestyle.drinking!),
+              subTitle: AppMethods.capitalizeFirst(
+                lifestyle.drinking ?? "Not available",
+              ),
               image: AppAssets.drinkAsssets,
             ),
           ),
@@ -110,7 +116,7 @@ class PreferenceListWidget extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffB4B8DE),
               title: 'Interest',
-              subTitle: personal.interests!.capitalizeFirstAndJoin(),
+              subTitle: (personal.interests ?? []).capitalizeFirstAndJoin(),
               image: AppAssets.interestAssets,
             ),
           ),
@@ -130,7 +136,7 @@ class PreferenceListWidget extends StatelessWidget {
             child: InterestCard(
               color: Color(0xff85CFCF),
               title: 'Languages',
-              subTitle: personal.languages!.capitalizeFirstAndJoin(),
+              subTitle: (personal.languages ?? []).capitalizeFirstAndJoin(),
               image: AppAssets.gymAssets2,
             ),
           ),

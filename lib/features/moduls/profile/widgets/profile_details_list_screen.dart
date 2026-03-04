@@ -61,7 +61,9 @@ class ProfileDetailsListScreen extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffB4CADE),
               title: 'Zodiac Sign',
-              subTitle: AppMethods.capitalizeFirst(personal.zodiacSign!),
+              subTitle: AppMethods.capitalizeFirst(
+                personal.zodiacSign ?? "Not available",
+              ),
               image: AppAssets.zodizcAssets,
             ),
           ),
@@ -80,7 +82,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffB4DEC5),
               title: 'Religion',
-              subTitle: personal.religion!.removeSnakeAndCapitalize(),
+              subTitle: (personal.religion ?? "").removeSnakeAndCapitalize(),
               image: AppAssets.religionAssest,
             ),
           ),
@@ -100,7 +102,8 @@ class ProfileDetailsListScreen extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffDEDCB4),
               title: 'Profile Visibility',
-              subTitle: preference.visibility!.removeSnakeAndCapitalize(),
+              subTitle:
+                  (preference.visibility ?? "").removeSnakeAndCapitalize(),
               image: AppAssets.profileEditAssets,
             ),
           ),
@@ -120,7 +123,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffB4CADE),
               title: 'Looking For',
-              subTitle: preference.lookingFor!.capitalizeFirstAndJoin(),
+              subTitle: (preference.lookingFor ?? []).capitalizeFirstAndJoin(),
               image: AppAssets.lookingAssets,
             ),
           ),
@@ -139,7 +142,9 @@ class ProfileDetailsListScreen extends StatelessWidget {
             child: InterestCard(
               color: Color(0xffE5C3FF),
               title: 'Height',
-              subTitle: AppMethods.capitalizeFirst(basicInfo.height!),
+              subTitle: AppMethods.capitalizeFirst(
+                basicInfo.height ?? "Not available",
+              ),
               image: AppAssets.heightAssets,
             ),
           ),
@@ -167,7 +172,8 @@ class ProfileDetailsListScreen extends StatelessWidget {
             child: InterestCard(
               color: Color(0xff92C58F),
               title: 'Education',
-              subTitle: personal.qualification!.removeSnakeAndCapitalize(),
+              subTitle:
+                  (personal.qualification ?? "").removeSnakeAndCapitalize(),
               image: AppAssets.educationAssets,
             ),
           ),
@@ -193,7 +199,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
               color: Color(0xffA2D2FF),
               title: 'Work',
               subTitle:
-                  "${AppMethods.capitalizeFirst(professional.work!.jobTitle!)}, ${AppMethods.capitalizeFirst(professional.work!.company!)}",
+                  "${AppMethods.capitalizeFirst(professional.work?.jobTitle ?? '')}, ${AppMethods.capitalizeFirst(professional.work?.company ?? '')}",
               image: AppAssets.workAssets,
             ),
           ),
