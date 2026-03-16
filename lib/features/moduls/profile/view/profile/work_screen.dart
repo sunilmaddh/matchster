@@ -59,7 +59,7 @@ class WorkScreen extends StatelessWidget {
               10.hBox,
               CustomFormField(
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+                  FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
                 ],
                 label: "",
                 hint: "Enter you job title",
@@ -89,7 +89,7 @@ class WorkScreen extends StatelessWidget {
               10.hBox,
               CustomFormField(
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+                  FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
                 ],
                 label: "",
                 hint: "Enter your company name",

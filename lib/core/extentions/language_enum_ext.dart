@@ -62,6 +62,8 @@ extension LanguageEnumX on LanguageEnum {
         return "Swedish";
       case LanguageEnum.vietnamese:
         return "Vietnamese";
+      case LanguageEnum.kannada:
+        return "Kannada";
     }
   }
 

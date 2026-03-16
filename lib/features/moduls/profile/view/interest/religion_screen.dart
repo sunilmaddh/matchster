@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
@@ -30,10 +31,20 @@ class ReligionScreen extends StatelessWidget {
               v.toLowerCase().trim(),
       onTopButton: () {
         _profileController.addReligion(
-          religion: _profileController.selectedReligion.value.toLowerCase(),
+          religion: normalizeValue(
+            _profileController.selectedReligion.value.toLowerCase(),
+          ),
         );
       },
       appBarTitle: 'Religion',
     );
+  }
+
+  String normalizeValue(String value) {
+    return removeDiacritics(value)
+        .toLowerCase()
+        .replaceAll(RegExp(r"[’'ʼ]"), '')
+        .replaceAll(RegExp(r'[^a-z\s]'), '')
+        .replaceAll(RegExp(r'\s+'), '_');
   }
 }
