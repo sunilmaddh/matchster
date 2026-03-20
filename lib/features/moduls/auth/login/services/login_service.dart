@@ -1,11 +1,6 @@
 import 'package:matchster/core/network/base_response.dart';
 import 'package:matchster/core/network/base_service.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
-import 'package:matchster/features/moduls/auth/onboard/models/add_date_with_response.dart';
-import 'package:matchster/features/moduls/auth/onboard/models/add_dob_response.dart';
-import 'package:matchster/features/moduls/auth/onboard/models/add_gender_response.dart';
-import 'package:matchster/features/moduls/auth/onboard/models/add_hieght_response.dart';
-import 'package:matchster/features/moduls/auth/onboard/models/add_name_response.dart';
 import 'package:matchster/features/moduls/auth/login/models/otp_verification_response.dart';
 
 class LoginService {

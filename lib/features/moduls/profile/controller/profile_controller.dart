@@ -14,7 +14,6 @@ import 'package:matchster/core/extentions/zodiac_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/utils_methods.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/photo_review_bottomsheet.dart';
 import 'package:matchster/features/moduls/home/controller/home_controller.dart';
 import 'package:matchster/features/moduls/home/models/habit_option.dart';
