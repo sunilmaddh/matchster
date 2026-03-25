@@ -82,7 +82,7 @@ class BottomProfileCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
-              BoxShadow(blurRadius: 10, color: Colors.black.withOpacity(0.1)),
+              BoxShadow(blurRadius: 10, color: Colors.black.withValues(alpha: 0.1)),
             ],
           ),
           child: Column(
@@ -163,7 +163,7 @@ class ActionButtons extends StatelessWidget {
       onTap: onTap,
       child: CircleAvatar(
         radius: 28,
-        backgroundColor: color.withOpacity(0.12),
+        backgroundColor: color.withValues(alpha: 0.12),
         child: Icon(icon, color: color, size: 28),
       ),
     );
@@ -179,12 +179,12 @@ class ProfileController extends GetxController {
 
   void like() {
     // TODO: swipe right / API call
-    print("Liked");
+    
   }
 
   void dislike() {
     // TODO: swipe left / API call
-    print("Disliked");
+   
   }
 }
 
@@ -201,7 +201,7 @@ class MyBottomNav extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
-            BoxShadow(blurRadius: 10, color: Colors.black.withOpacity(0.08)),
+            BoxShadow(blurRadius: 10, color: Colors.black.withValues(alpha: 0.08)),
           ],
         ),
         child: Row(

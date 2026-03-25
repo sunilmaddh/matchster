@@ -37,13 +37,11 @@ class FaceRecognisationPage extends StatelessWidget {
                 if (img == null) {
                   return const Center(child: Text("No image loaded"));
                 }
-
                 return Stack(
                   children: [
                     Positioned.fill(
                       child: Image.file(img, fit: BoxFit.fitHeight),
                     ),
-
                     Visibility(
                       visible: controller.isFaceRecognigation.isTrue,
                       child: FaceOverlayWidget(
@@ -53,7 +51,6 @@ class FaceRecognisationPage extends StatelessWidget {
                         maxH: constraints.maxHeight,
                       ),
                     ),
-
                     Align(
                       alignment: Alignment.bottomCenter,
                       child:
@@ -127,9 +124,7 @@ class FaceRecognisationPage extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                           color: Colors.white,
                         ),
-
                         40.hBox,
-
                         controller.isHumanProccessingStep2.isFalse
                             ? SizedBox(
                               width: 60,

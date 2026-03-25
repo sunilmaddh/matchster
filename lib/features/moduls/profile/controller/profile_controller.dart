@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
@@ -27,6 +29,7 @@ import 'package:matchster/features/moduls/profile/view/profile_photo_preview_scr
 
 class ProfileController extends GetxController {
   final ProfileServices _profileServices = ProfileServices();
+  ProfileServices get profileServices => _profileServices;
 
   RxBool isSelected = false.obs;
   RxList<String> selectedItems = <String>[].obs;
@@ -44,12 +47,16 @@ class ProfileController extends GetxController {
   RxBool isImageUploading = false.obs;
   Rx<MyProfilResponse> myProfileResponse = MyProfilResponse().obs;
   Rx<BasicInfo> basicInfo = BasicInfo().obs;
+  Rx<BasicInfo> profileImageData = BasicInfo().obs;
   RxList<HallOfFame> allPfFame = <HallOfFame>[].obs;
   Rx<Lifestyle> lifestyle = Lifestyle().obs;
   Rx<Preferences> prefeence = Preferences().obs;
   Rx<Personal> personal = Personal().obs;
   Rx<Work> work = Work().obs;
   Rx<Professional> professional = Professional().obs;
+  RxString otpValue = "".obs;
+  RxBool isEnable = false.obs;
+  RxBool isOtpEnable = false.obs;
 
   Rx<Bio> bio = Bio().obs;
   Rx<Locations> locations = Locations().obs;
@@ -63,7 +70,13 @@ class ProfileController extends GetxController {
   final RxList<File> images = <File>[].obs;
   RxBool isProfileLoading = false.obs;
   RxString selectedState = "".obs;
-  RxBool isEnable = false.obs;
+  RxString selectedCountry = "".obs;
+  RxList<String> countryList = <String>[].obs;
+  RxList<String> stateList = <String>[].obs;
+  RxList<String> cityList = <String>[].obs;
+  RxBool isLoadingCountries = false.obs;
+  RxBool isLoadingStates = false.obs;
+  RxBool isLoadingCities = false.obs;
   RxList<AutoCompleteResponse> autoCompleteResponse =
       <AutoCompleteResponse>[].obs;
   Rx<PlaceDetailsResponse> placeDetails = PlaceDetailsResponse().obs;
@@ -77,6 +90,9 @@ class ProfileController extends GetxController {
   final TextEditingController companyController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController aboutController = TextEditingController();
+  RxBool isResend = false.obs;
+  RxBool isLoading = false.obs;
+  RxInt otpRebuildKey = 0.obs;
 
   void clearData() {
     jobTtileController.clear();
@@ -388,17 +404,25 @@ class ProfileController extends GetxController {
 
   Future<bool> uploadPhotoW({required String imagePath}) async {
     try {
+      print('📤 uploadPhotoW: Starting image upload for $imagePath');
       final response = await _profileServices.uploadImageWithDio(imagePath);
       if (response!.success) {
         final image = response.data!.url ?? '';
+        print('📤 uploadPhotoW: Upload success, image URL: $image');
         bool isSuccess = await addPhoto(url: image);
+        print('📤 uploadPhotoW: addPhoto returned $isSuccess');
         await getMyProfile(false);
+        print(
+          '📤 uploadPhotoW: getMyProfile completed, allPfFame.length=${allPfFame.length}',
+        );
         return isSuccess;
       } else {
+        print('❌ uploadPhotoW: Upload failed');
         Get.back();
         return false;
       }
     } catch (e) {
+      print('❌ uploadPhotoW exception: $e');
       debugPrint(e.toString());
       return false;
     }
@@ -423,16 +447,41 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<bool> addPhoto({required String url}) async {
+  Future<bool> addProfileImage({required String url}) async {
     try {
-      final response = await _profileServices.addPhoto(url: url);
+      print('➕ addPhoto: Adding photo with URL: $url');
+      final response = await _profileServices.uploadProfileimage(url: url);
+      print('➕ addPhoto response success: ${response.success}');
       if (response.success) {
+        print('✅ addPhoto: Photo added successfully');
         return true;
       } else {
+        print('❌ addPhoto: Failed - ${response.message}');
         Get.back();
         return false;
       }
     } catch (e) {
+      print('❌ addPhoto exception: $e');
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> addPhoto({required String url}) async {
+    try {
+      print('➕ addPhoto: Adding photo with URL: $url');
+      final response = await _profileServices.addPhoto(url: url);
+      print('➕ addPhoto response success: ${response.success}');
+      if (response.success) {
+        print('✅ addPhoto: Photo added successfully');
+        return true;
+      } else {
+        print('❌ addPhoto: Failed - ${response.message}');
+        Get.back();
+        return false;
+      }
+    } catch (e) {
+      print('❌ addPhoto exception: $e');
       debugPrint(e.toString());
       return false;
     }
@@ -526,6 +575,7 @@ class ProfileController extends GetxController {
 
   Future<void> getMyProfile(bool isMain) async {
     try {
+      print('👤 getMyProfile: Fetching profile...');
       if (isMain) {
         isProfileLoading(true);
       }
@@ -535,7 +585,11 @@ class ProfileController extends GetxController {
         final data = response.data;
         if (data != null) {
           basicInfo.value = data.basicInfo!;
-          allPfFame.value = data.hallOfFame!;
+          final hallList = data.hallOfFame ?? [];
+          allPfFame.value = hallList;
+          print(
+            '✅ getMyProfile: Updated allPfFame with ${hallList.length} photos: ${hallList.map((e) => e.id).toList()}',
+          );
           lifestyle.value = data.lifestyle!;
           prefeence.value = data.preferences!;
           personal.value = data.personal!;
@@ -668,6 +722,82 @@ class ProfileController extends GetxController {
     }
   }
 
+  // UPDATED METHOD: Fixed the List<String>? assignment error
+  Future<void> getCountry({String? search}) async {
+    try {
+      isLoadingCountries(true);
+      final response = await _profileServices.getCountries(search: search);
+
+      if (response.success && response.data != null) {
+        // 1. Corrected variable name to 'rawData'
+        final List rawData = response.data!;
+
+        // 2. Map through the items safely
+        final List<String> names =
+            rawData
+                .map((item) {
+                  // If the item is a Map (which matches the [{name: Afghanistan...}] format you showed)
+                  if (item is Map) {
+                    return item['name']?.toString() ?? '';
+                  }
+                  // If the item is already a String
+                  return item.toString();
+                })
+                .where((name) => name.isNotEmpty)
+                .toList();
+
+        // 3. Update the RxList
+        countryList.assignAll(names);
+
+        print("Countries updated successfully: ${countryList} items");
+      }
+
+      isLoadingCountries(false);
+    } catch (e) {
+      isLoadingCountries(false);
+      AppMethods.appPrint(message: "Error fetching countries: $e");
+    }
+  }
+
+  Future<void> getState({required String country, String? search}) async {
+    try {
+      isLoadingStates(true);
+      final response = await _profileServices.getStates(
+        country: country,
+        search: search,
+      );
+      if (response.success && response.data != null) {
+        stateList.value = response.data!;
+      }
+      isLoadingStates(false);
+    } catch (e) {
+      isLoadingStates(false);
+      AppMethods.appPrint(message: e.toString());
+    }
+  }
+
+  Future<void> getCity({
+    required String country,
+    required String state,
+    String? search,
+  }) async {
+    try {
+      isLoadingCities(true);
+      final response = await _profileServices.getCities(
+        country: country,
+        state: state,
+        search: search,
+      );
+      if (response.success && response.data != null) {
+        cityList.value = response.data!;
+      }
+      isLoadingCities(false);
+    } catch (e) {
+      isLoadingCities(false);
+      AppMethods.appPrint(message: e.toString());
+    }
+  }
+
   RxList<InshortList> inshortList = <InshortList>[].obs;
   Future<void> _updateInShort() async {
     // if (profile == null) {
@@ -765,7 +895,6 @@ class ProfileController extends GetxController {
         ..addAll(apiList);
       selectedInterests.value = selectedInterests.toSet().toList();
     }
-  
   }
 
   Future<void> setLanguageFromApi(List<String>? apiList) async {
@@ -792,13 +921,82 @@ class ProfileController extends GetxController {
   Future<void> setLookingFromApi(List<String>? apiList) async {
     if (apiList == null || apiList.isEmpty) return;
 
-    selectedLookingFor.value =
-        apiList
-            .map((e) => e.toCapitalizedWords())
-            .toSet() // remove duplicates
-            .toList();
+    selectedLookingFor
+      ..clear()
+      ..add(apiList.first.toCapitalizedWords());
 
     print("SelectedLookingFor: $selectedLookingFor");
+  }
+
+  Future<void> sendEmailOtp(String email) async {
+    try {
+      // if (isResend.isFalse) {
+      //   isLoading(true);
+      // }
+
+      final response = await _profileServices.sendEmailOtp(email: email);
+      if (response.success) {
+        debugPrint(response.message);
+        // AppToastMessage.show(title: "OTP", message: response.message);
+        // if (isResend.isFalse) {
+        //   NavigationHelper.push(OtpScreen());
+        // }
+      } else {
+        // AppToastMessage.show(
+        //   isError: true,
+        //   title: AppConstants.errorTitle,
+        //   message: response.message,
+        // );
+
+        isLoading(false);
+      }
+    } catch (e) {
+      isLoading(false);
+      debugPrint(e.toString());
+    } finally {
+      isResend(false);
+      isLoading(false);
+    }
+  }
+
+  Future<bool> verifyEmailOtp({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      isLoading(true);
+      final response = await _profileServices.verifyEmailOtp(
+        email: email,
+        otp: otp,
+      );
+      if (response.success) {
+        debugPrint(response.message);
+        return true;
+        // AppToastMessage.show(title: "Success", message: response.message);
+
+        // Debug: Check if token was saved
+      } else {
+        // AppMethods.appPrint(message: response.message.toString());
+        // AppToastMessage.show(
+        //   isError: true,
+        //   title: AppConstants.errorTitle,
+        //   message: response.message,
+        // );
+
+        otpValue.value = "";
+        otpRebuildKey++;
+        isOtpEnable.value = false;
+
+        isLoading(false);
+        return false;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      isLoading(false);
+      return false;
+    } finally {
+      isLoading(false);
+    }
   }
 
   void loadFromApi(List<String> apiList) {

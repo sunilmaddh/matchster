@@ -14,6 +14,7 @@ import 'package:matchster/features/moduls/auth/onboard/controller/onboard_contro
 import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/photo_card.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/photo_preview_screen.dart';
+import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class AddPhotoWidget extends StatelessWidget {
   AddPhotoWidget({super.key});
@@ -104,7 +105,7 @@ class AddPhotoWidget extends StatelessWidget {
               ),
               25.hBox,
               Obx(
-                () => GridView.builder(
+                () => ReorderableGridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _controller.fileList.length,
@@ -114,150 +115,395 @@ class AddPhotoWidget extends StatelessWidget {
                     mainAxisSpacing: 15.h,
                     childAspectRatio: 1.2,
                   ),
+                  onReorder: (oldIndex, newIndex) {
+                    if (_controller.fileList[oldIndex].isNotEmpty &&
+                        _controller.fileList[newIndex].isNotEmpty) {
+                      final item = _controller.fileList.removeAt(oldIndex);
+                      _controller.fileList.insert(newIndex, item);
+                    }
+                  },
                   itemBuilder: (context, index) {
                     final image = _controller.fileList[index];
 
-                    return InkWell(
-                      onTap: () {
-                        _controller.selectedImageIndex.value = index;
+                    return image.isNotEmpty
+                        ? InkWell(
+                          key: ValueKey('drag_$index'),
+                          onTap: () {
+                            _controller.selectedImageIndex.value = index;
 
-                        CustomBottomSheet.show(
-                          borderRadius: 40.r,
-                          backgroundColor: const Color(0xffF4F4F4),
-                          padding: EdgeInsets.zero,
-                          child: SafeArea(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding:
-                                      15.horizontalPadding + 30.verticalPadding,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children:
-                                        OnboardHalper.addPhotoOption.map((v) {
-                                          return InkWell(
-                                            onTap: () async {
-                                              try {
-                                                // 1️⃣ Prevent double tap
-                                                // if (_controller
-                                                //     .isSelectingImage
-                                                //     .isTrue)
-                                                //   return;
+                            CustomBottomSheet.show(
+                              borderRadius: 40.r,
+                              backgroundColor: const Color(0xffF4F4F4),
+                              padding: EdgeInsets.zero,
+                              child: SafeArea(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          15.horizontalPadding +
+                                          30.verticalPadding,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children:
+                                            OnboardHalper.addPhotoOption.map((
+                                              v,
+                                            ) {
+                                              return InkWell(
+                                                onTap: () async {
+                                                  try {
+                                                    // 1️⃣ Prevent double tap
+                                                    // if (_controller
+                                                    //     .isSelectingImage
+                                                    //     .isTrue)
+                                                    //   return;
 
-                                                // ❌ DO NOT set loader yet (this causes first-photo crash on Vivo)
+                                                    // ❌ DO NOT set loader yet (this causes first-photo crash on Vivo)
 
-                                                // 2️⃣ Force close bottom sheet / overlay
-                                                final context = Get.context;
-                                                if (context != null &&
-                                                    Navigator.of(
-                                                      context,
-                                                      rootNavigator: true,
-                                                    ).canPop()) {
-                                                  Navigator.of(
-                                                    context,
-                                                    rootNavigator: true,
-                                                  ).pop();
-                                                }
+                                                    // 2️⃣ Force close bottom sheet / overlay
+                                                    final context = Get.context;
+                                                    if (context != null &&
+                                                        Navigator.of(
+                                                          context,
+                                                          rootNavigator: true,
+                                                        ).canPop()) {
+                                                      Navigator.of(
+                                                        context,
+                                                        rootNavigator: true,
+                                                      ).pop();
+                                                    }
 
-                                                // 3️⃣ Give Vivo camera time to get foreground (CRITICAL)
-                                                await Future.delayed(
-                                                  const Duration(
-                                                    milliseconds: 300,
-                                                  ),
-                                                );
+                                                    // 3️⃣ Give Vivo camera time to get foreground (CRITICAL)
+                                                    await Future.delayed(
+                                                      const Duration(
+                                                        milliseconds: 300,
+                                                      ),
+                                                    );
 
-                                                // 4️⃣ Clear image cache BEFORE opening camera
-                                                PaintingBinding
-                                                    .instance
-                                                    .imageCache
-                                                    .clear();
-                                                PaintingBinding
-                                                    .instance
-                                                    .imageCache
-                                                    .clearLiveImages();
+                                                    // 4️⃣ Clear image cache BEFORE opening camera
+                                                    PaintingBinding
+                                                        .instance
+                                                        .imageCache
+                                                        .clear();
+                                                    PaintingBinding
+                                                        .instance
+                                                        .imageCache
+                                                        .clearLiveImages();
 
-                                                File? selectedImage;
+                                                    File? selectedImage;
 
-                                                // 5️⃣ Open camera/gallery WITHOUT touching UI state
-                                                if (v["text"] == "Camera") {
-                                                  selectedImage =
-                                                      await ImageUploadServices()
-                                                          .pickImageFromCamera();
-                                                } else {
-                                                  selectedImage =
-                                                      await ImageUploadServices()
-                                                          .getImageFromGallery();
-                                                }
+                                                    // 5️⃣ Open camera/gallery WITHOUT touching UI state
+                                                    if (v["text"] == "Camera") {
+                                                      selectedImage =
+                                                          await ImageUploadServices()
+                                                              .pickImageFromCamera();
 
-                                                // 6️⃣ NOW update UI
-                                                debugPrint(
-                                                  "Selected image ${selectedImage.toString()}",
-                                                );
-                                                if (selectedImage != null &&
-                                                    selectedImage
-                                                        .path
-                                                        .isNotEmpty) {
-                                                  _controller.isSelectingImage(
-                                                    true,
-                                                  ); // loader AFTER camera
+                                                      if (selectedImage !=
+                                                              null &&
+                                                          selectedImage
+                                                              .path
+                                                              .isNotEmpty) {
+                                                        _controller
+                                                            .isSelectingImage(
+                                                              true,
+                                                            );
+                                                        Get.to(
+                                                          () => PhotoPreviewScreen(
+                                                            imageFile:
+                                                                selectedImage!,
+                                                            index: index,
+                                                            page: 'onboard',
+                                                          ),
+                                                        )!.whenComplete(() {
+                                                          _controller
+                                                              .isSelectingImage(
+                                                                false,
+                                                              );
+                                                        });
+                                                      }
+                                                    } else {
+                                                      final selectedImages =
+                                                          await ImageUploadServices()
+                                                              .pickImagesFromGallery();
 
-                                                  Get.to(
-                                                    () => PhotoPreviewScreen(
-                                                      imageFile: selectedImage!,
-                                                      index: index,
-                                                      page: 'onboard',
+                                                      if (selectedImages !=
+                                                              null &&
+                                                          selectedImages
+                                                              .isNotEmpty) {
+                                                        _controller
+                                                            .isSelectingImage(
+                                                              true,
+                                                            );
+
+                                                        for (
+                                                          int i = 0;
+                                                          i <
+                                                              selectedImages
+                                                                  .length;
+                                                          i++
+                                                        ) {
+                                                          final nextIndex =
+                                                              _controller
+                                                                  .fileList
+                                                                  .indexWhere(
+                                                                    (file) =>
+                                                                        file.isEmpty,
+                                                                  );
+
+                                                          if (nextIndex != -1) {
+                                                            await Get.to(
+                                                              () => PhotoPreviewScreen(
+                                                                imageFile:
+                                                                    selectedImages[i],
+                                                                index:
+                                                                    nextIndex,
+                                                                page: 'onboard',
+                                                              ),
+                                                            );
+                                                          }
+                                                        }
+
+                                                        _controller
+                                                            .isSelectingImage(
+                                                              false,
+                                                            );
+                                                      }
+                                                    }
+                                                  } catch (e, s) {
+                                                    AppMethods.appPrint(
+                                                      message: e.toString(),
+                                                    );
+                                                    debugPrintStack(
+                                                      stackTrace: s,
+                                                    );
+                                                  }
+                                                },
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      v["image"],
                                                     ),
-                                                  )!.whenComplete(() {
-                                                    _controller
-                                                        .isSelectingImage(
-                                                          false,
-                                                        );
-                                                  });
-                                                }
-                                              } catch (e, s) {
-                                                AppMethods.appPrint(
-                                                  message: e.toString(),
-                                                );
-                                                debugPrintStack(stackTrace: s);
-                                              }
-                                            },
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                SvgPicture.asset(v["image"]),
-                                                CommonText.text(
-                                                  v["text"],
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
+                                                    CommonText.text(
+                                                      v["text"],
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                          );
-                                        }).toList(),
-                                  ),
+                                              );
+                                            }).toList(),
+                                      ),
+                                    ),
+                                    const Divider(height: 1),
+                                    10.hBox,
+                                    TextButton(
+                                      onPressed: Get.back,
+                                      child: CommonText.text(
+                                        "Cancel",
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const Divider(height: 1),
-                                10.hBox,
-                                TextButton(
-                                  onPressed: Get.back,
-                                  child: CommonText.text(
-                                    "Cancel",
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              ),
+                            );
+                          },
+                          child: PhotoCard(
+                            image: image,
+                            onDelete:
+                                index == 0
+                                    ? null
+                                    : () => _showDeleteDialog(index),
+                          ),
+                        )
+                        : InkWell(
+                          key: ValueKey('empty_$index'),
+                          onTap: () {
+                            _controller.selectedImageIndex.value = index;
+
+                            CustomBottomSheet.show(
+                              borderRadius: 40.r,
+                              backgroundColor: const Color(0xffF4F4F4),
+                              padding: EdgeInsets.zero,
+                              child: SafeArea(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          15.horizontalPadding +
+                                          30.verticalPadding,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children:
+                                            OnboardHalper.addPhotoOption.map((
+                                              v,
+                                            ) {
+                                              return InkWell(
+                                                onTap: () async {
+                                                  try {
+                                                    final context = Get.context;
+                                                    if (context != null &&
+                                                        Navigator.of(
+                                                          context,
+                                                          rootNavigator: true,
+                                                        ).canPop()) {
+                                                      Navigator.of(
+                                                        context,
+                                                        rootNavigator: true,
+                                                      ).pop();
+                                                    }
+
+                                                    await Future.delayed(
+                                                      const Duration(
+                                                        milliseconds: 300,
+                                                      ),
+                                                    );
+
+                                                    PaintingBinding
+                                                        .instance
+                                                        .imageCache
+                                                        .clear();
+                                                    PaintingBinding
+                                                        .instance
+                                                        .imageCache
+                                                        .clearLiveImages();
+
+                                                    File? selectedImage;
+
+                                                    if (v["text"] == "Camera") {
+                                                      selectedImage =
+                                                          await ImageUploadServices()
+                                                              .pickImageFromCamera();
+
+                                                      if (selectedImage !=
+                                                              null &&
+                                                          selectedImage
+                                                              .path
+                                                              .isNotEmpty) {
+                                                        _controller
+                                                            .isSelectingImage(
+                                                              true,
+                                                            );
+                                                        Get.to(
+                                                          () => PhotoPreviewScreen(
+                                                            imageFile:
+                                                                selectedImage!,
+                                                            index: index,
+                                                            page: 'onboard',
+                                                          ),
+                                                        )!.whenComplete(() {
+                                                          _controller
+                                                              .isSelectingImage(
+                                                                false,
+                                                              );
+                                                        });
+                                                      }
+                                                    } else {
+                                                      final selectedImages =
+                                                          await ImageUploadServices()
+                                                              .pickImagesFromGallery();
+
+                                                      if (selectedImages !=
+                                                              null &&
+                                                          selectedImages
+                                                              .isNotEmpty) {
+                                                        _controller
+                                                            .isSelectingImage(
+                                                              true,
+                                                            );
+
+                                                        for (
+                                                          int i = 0;
+                                                          i <
+                                                              selectedImages
+                                                                  .length;
+                                                          i++
+                                                        ) {
+                                                          final nextIndex =
+                                                              _controller
+                                                                  .fileList
+                                                                  .indexWhere(
+                                                                    (file) =>
+                                                                        file.isEmpty,
+                                                                  );
+
+                                                          if (nextIndex != -1) {
+                                                            await Get.to(
+                                                              () => PhotoPreviewScreen(
+                                                                imageFile:
+                                                                    selectedImages[i],
+                                                                index:
+                                                                    nextIndex,
+                                                                page: 'onboard',
+                                                              ),
+                                                            );
+                                                          }
+                                                        }
+
+                                                        _controller
+                                                            .isSelectingImage(
+                                                              false,
+                                                            );
+                                                      }
+                                                    }
+                                                  } catch (e, s) {
+                                                    AppMethods.appPrint(
+                                                      message: e.toString(),
+                                                    );
+                                                    debugPrintStack(
+                                                      stackTrace: s,
+                                                    );
+                                                  }
+                                                },
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      v["image"],
+                                                    ),
+                                                    CommonText.text(
+                                                      v["text"],
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }).toList(),
+                                      ),
+                                    ),
+                                    const Divider(height: 1),
+                                    10.hBox,
+                                    TextButton(
+                                      onPressed: Get.back,
+                                      child: CommonText.text(
+                                        "Cancel",
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            );
+                          },
+                          child: PhotoCard(
+                            image: image,
+                            onDelete:
+                                index == 0
+                                    ? null
+                                    : () => _showDeleteDialog(index),
                           ),
                         );
-                      },
-                      child: PhotoCard(
-                        image: image,
-                        onDelete: () => _showDeleteDialog(index),
-                      ),
-                    );
                   },
                 ),
               ),

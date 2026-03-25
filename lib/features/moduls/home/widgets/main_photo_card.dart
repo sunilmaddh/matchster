@@ -35,7 +35,7 @@ class MainPhotoCard extends StatelessWidget {
       onVerticalDragUpdate: (details) => onVerticalDrag(details.delta.dy),
 
       child: SizedBox(
-        height: context.height * 0.80, // ✅ Fixed height
+        height: context.height,
         width: double.infinity,
 
         child: ClipRRect(
@@ -43,62 +43,71 @@ class MainPhotoCard extends StatelessWidget {
             topLeft: Radius.circular(40.r),
             topRight: Radius.circular(40.r),
           ),
+
           child: Stack(
-            fit: StackFit.passthrough,
             children: [
-              CachedNetworkImage(
-                imageUrl: data.mainPhoto ?? "",
-                fit: BoxFit.cover, // 🔥 Important
-                fadeInDuration: const Duration(milliseconds: 200),
-                placeholder:
-                    (_, __) => Container(
-                      color: Colors.grey[200],
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                          strokeWidth: 2,
+              /// PROFILE IMAGE
+              Positioned.fill(
+                child: CachedNetworkImage(
+                  imageUrl: data.mainPhoto ?? "",
+                  fit: BoxFit.cover,
+                  fadeInDuration: const Duration(milliseconds: 200),
+
+                  placeholder:
+                      (_, __) => Container(
+                        color: Colors.grey[200],
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                            strokeWidth: 2,
+                          ),
                         ),
                       ),
-                    ),
-                errorWidget:
-                    (_, __, ___) => Container(
-                      color: Colors.white,
-                      child: Center(child: SvgPicture.asset(AppAssets.appLogo)),
-                    ),
+
+                  errorWidget:
+                      (_, _, _) => Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: SvgPicture.asset(AppAssets.appLogo),
+                        ),
+                      ),
+                ),
               ),
 
+              /// GRADIENT OVERLAY
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.center,
                       end: Alignment.bottomCenter,
-                      stops: const [0.0, 0.85, 1.0],
+                      stops: const [0.0, 0.7, 1.0],
                       colors: [
                         Colors.transparent,
-                        Colors.blue.withOpacity(0.5),
-                        Colors.blue.withOpacity(0.8),
+                        Colors.black.withOpacity(0.3),
+                        Colors.black.withOpacity(0.85),
                       ],
                     ),
                   ),
                 ),
               ),
 
-              /// ✅ UP / DOWN ARROW
+              /// ARROW ICON
               Align(
                 alignment: Alignment.bottomCenter,
                 child: SafeArea(
                   minimum: EdgeInsets.only(bottom: 120.h),
+
                   child: ValueListenableBuilder<bool>(
                     valueListenable: showUpArrow,
                     builder: (_, isUp, __) {
                       return AnimatedSwitcher(
                         duration: const Duration(milliseconds: 200),
+
                         child: SvgPicture.asset(
                           isUp
                               ? AppAssets.downArrowAssets
                               : AppAssets.upArrowAssets,
-                          // key: ValueKey(isUp),
                         ),
                       );
                     },
@@ -106,20 +115,22 @@ class MainPhotoCard extends StatelessWidget {
                 ),
               ),
 
-              /// ✅ BOTTOM CONTENT
+              /// BOTTOM CONTENT
               Positioned(
-                left: 15.w,
-                right: 15.w,
-                bottom: 110.h,
+                left: 16.w,
+                right: 16.w,
+                bottom: 90.h,
+
                 child: SafeArea(
                   top: false,
+
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      /// LEFT DETAILS
+                      /// USER DETAILS
                       Expanded(child: _buildUserDetails()),
 
-                      /// RIGHT BUTTONS
+                      /// LIKE / DISLIKE BUTTONS
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -128,7 +139,9 @@ class MainPhotoCard extends StatelessWidget {
                             text: "Like",
                             onTop: onLikeTap,
                           ),
+
                           10.hBox,
+
                           CircleWidget(
                             isGradient: false,
                             image: AppAssets.dislike,
@@ -148,10 +161,12 @@ class MainPhotoCard extends StatelessWidget {
     );
   }
 
+  /// USER DETAILS
   Widget _buildUserDetails() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
+
       children: [
         /// NAME + VERIFIED
         Row(
@@ -161,43 +176,52 @@ class MainPhotoCard extends StatelessWidget {
                 "${getFirstLetter(data.name)}, ${data.age}",
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                fontSize: 20.sp,
+                fontSize: 24.sp,
                 fontWeight: FontWeight.w700,
                 fontFamily: "Caros",
                 color: AppColors.whiteColor,
               ),
             ),
+
             6.wBox,
+
             SvgPicture.asset(AppAssets.verified),
           ],
         ),
 
+        /// DISTANCE
         if (data.distance?.isNotEmpty ?? false)
           Padding(
             padding: EdgeInsets.only(top: 4.h),
+
             child: CommonText.text(
               "${data.distance} km away",
-              fontSize: 12.sp,
+              fontSize: 13.sp,
               fontWeight: FontWeight.w500,
               color: AppColors.whiteColor,
             ),
           ),
 
+        /// INTEREST TAGS
         if (data.interests?.isNotEmpty ?? false) ...[
           12.hBox,
+
           Wrap(
             spacing: 6.w,
             runSpacing: 6.h,
+
             children:
                 data.interests!.take(2).map((v) {
                   final interest = InterestEnumX.fromString(v);
 
                   return Container(
                     padding: 10.horizontalPadding + 3.verticalPadding,
+
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(color: AppColors.whiteColor),
                     ),
+
                     child: CommonText.text(
                       interest?.label ?? AppMethods.capitalizeFirst(v),
                       fontSize: 11.5.sp,

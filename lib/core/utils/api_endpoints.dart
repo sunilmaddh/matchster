@@ -1,6 +1,6 @@
 class ApiEndpoints {
   static const String baseUrl =
-      // "https://revision-republic-forgotten-rom.trycloudflare.com";
+      //"https://acknowledge-tray-consequently-dim.trycloudflare.com";
       "http://209.38.123.49:8002/";
   //  "https://watt-clan-cabinet-formats.trycloudflare.com";
   static const String apiPrefix = "/api/v1/matchster";
@@ -9,6 +9,7 @@ class ApiEndpoints {
   static const String urlGoogleMap = "$apiPrefix/google-map";
 
   static const String urlInteractions = "$apiPrefix/interaction";
+  static const String urlCsc = "$apiPrefix/csc";
 
   static const String sendOtp = "$urlUserType/send-otp",
       verifyOtp = "$urlUserType/verify-otp",
@@ -41,5 +42,12 @@ class ApiEndpoints {
       addProfilePicture = "$urlUserType/hall-of-fame/add",
       deleteProfile = "$urlUserType/hall-of-fame",
       likesOnme = "$urlInteractions/likes-on-me",
-      addAbout = "$urlProfileType/add-about";
+      addAbout = "$urlProfileType/add-about",
+      cscCountry = "$urlCsc/country",
+      cscState = "$urlCsc/state",
+      cscCity = "$urlCsc/city",
+      uploadProfileimage = "$urlUserType/update-profile-pic",
+      swipedProfiles = '$apiPrefix/interaction/swiped-profiles',
+      sendEmailOtp = '$apiPrefix/user-profile/send-email-otp',
+      verifyEmailOtp = '$apiPrefix/user-profile/verify-email-otp';
 }

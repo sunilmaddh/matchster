@@ -74,8 +74,16 @@ class BasicInfo {
   String? gender;
   String? height;
   ProfilePic? profilePic;
+  String? email;
 
-  BasicInfo({this.name, this.age, this.gender, this.height, this.profilePic});
+  BasicInfo({
+    this.name,
+    this.age,
+    this.gender,
+    this.height,
+    this.profilePic,
+    this.email,
+  });
 
   factory BasicInfo.fromJson(Map<String, dynamic> json) => BasicInfo(
     name: UtilMethods.stringParser(json["name"]),
@@ -86,6 +94,7 @@ class BasicInfo {
         json["profilePic"] == null
             ? ProfilePic()
             : ProfilePic.fromJson(json["profilePic"]),
+    email: UtilMethods.stringParser(json["email"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -93,6 +102,7 @@ class BasicInfo {
     "age": age,
     "gender": gender,
     "height": height,
+    "email": email,
   };
 }
 

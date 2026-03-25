@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -23,6 +22,7 @@ import 'package:matchster/features/moduls/profile/view/location/current_location
 import 'package:matchster/features/moduls/profile/view/profile/profile_preview_screen.dart';
 import 'package:matchster/features/moduls/profile/view/profile/setting_screen.dart';
 import 'package:matchster/features/moduls/profile/view/profile_photo_preview_screen.dart';
+import 'package:matchster/features/moduls/profile/view/verify_email_screen.dart';
 import 'package:matchster/features/moduls/profile/widgets/add_image_grid_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/add_instagram_card.dart';
 import 'package:matchster/features/moduls/profile/widgets/add_spotify_card.dart';
@@ -45,6 +45,134 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     _controller.getMyProfile(true);
     super.initState();
+  }
+
+  void _showProfileImageUploadOptions() {
+    CustomBottomSheet.show(
+      borderRadius: 40.r,
+      backgroundColor: const Color(0xffF4F4F4),
+      padding: EdgeInsets.zero,
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: 15.horizontalPadding + 30.verticalPadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children:
+                    OnboardHalper.addPhotoOption.map((v) {
+                      return InkWell(
+                        onTap: () async {
+                          try {
+                            Get.back();
+                            File? selectedImage;
+
+                            if (v["text"] == "Camera") {
+                              final file =
+                                  await ImageUploadServices()
+                                      .pickImageFromCamera();
+                              if (file != null) {
+                                selectedImage = file;
+                              }
+                            } else {
+                              final file =
+                                  await ImageUploadServices()
+                                      .pickImageFromGallery();
+                              if (file != null) {
+                                selectedImage = file;
+                              }
+                            }
+                            if (selectedImage != null &&
+                                selectedImage.path.isNotEmpty) {
+                              await _uploadProfileImage(selectedImage);
+                            }
+                          } catch (e) {
+                            AppMethods.appPrint(message: e.toString());
+                          }
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(v["image"]),
+                            CommonText.text(
+                              v["text"],
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+              ),
+            ),
+            const Divider(height: 1),
+            10.hBox,
+            TextButton(
+              onPressed: Get.back,
+              child: CommonText.text(
+                "Cancel",
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _uploadProfileImage(File imageFile) async {
+    try {
+      AppToastMessage.show(title: "Uploading", message: "Please wait...");
+
+      // Step 1: Upload image file to get URL
+      final uploadResponse = await _controller.profileServices
+          .uploadImageWithDio(imageFile.path);
+
+      if (uploadResponse == null || !uploadResponse.success) {
+        AppToastMessage.show(
+          title: "Error",
+          message: "Failed to upload image",
+          isError: true,
+        );
+        return;
+      }
+
+      final imageUrl = uploadResponse.data?.url;
+      if (imageUrl == null || imageUrl.isEmpty) {
+        AppToastMessage.show(
+          title: "Error",
+          message: "Invalid image URL received",
+          isError: true,
+        );
+        return;
+      }
+
+      // Step 2: Set profile image with URL
+      final success = await _controller.addProfileImage(url: imageUrl);
+
+      if (success) {
+        AppToastMessage.show(
+          title: "Success",
+          message: "Profile image updated",
+        );
+        await _controller.getMyProfile(false);
+      } else {
+        AppToastMessage.show(
+          title: "Error",
+          message: "Failed to set profile image",
+          isError: true,
+        );
+      }
+    } catch (e) {
+      AppMethods.appPrint(message: e.toString());
+      AppToastMessage.show(
+        title: "Error",
+        message: "An error occurred",
+        isError: true,
+      );
+    }
   }
 
   @override
@@ -77,9 +205,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: SafeArea(
         child: Obx(() {
-          final imageCount = _controller.allPfFame.length;
-          final itemCount = imageCount + 1;
-
           return _controller.isProfileLoading.isTrue
               ? Center(child: CircularProgressIndicator())
               : Padding(
@@ -91,7 +216,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: ListView(
                   children: [
                     Padding(
-                      padding: 15.horizontalPadding,
+                      padding: 10.horizontalPadding,
                       child: Stack(
                         children: [
                           ClipRRect(
@@ -99,11 +224,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               topLeft: Radius.circular(30),
                               topRight: Radius.circular(30),
                             ),
-                            child: Image.asset(
-                              AppAssets.profileHeader,
+                            child: Container(
                               width: double.infinity,
-                              height: 145.h,
-                              fit: BoxFit.contain,
+                              height: 200.h,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30),
+                                ),
+                              ),
+                              child: Image.asset(
+                                AppAssets.profileHeader,
+                                width: double.infinity,
+                                height: 200.h,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           Padding(
@@ -113,44 +249,74 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Row(
                                   children: [
                                     Stack(
+                                      clipBehavior: Clip.none,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            100.r,
-                                          ),
-                                          child: Container(
-                                            padding: EdgeInsets.all(2.r),
-                                            height: 69.h,
-                                            width: 69.w,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xffE6D534),
-                                                width: 3,
+                                        GestureDetector(
+                                          onTap:
+                                              () =>
+                                                  _showProfileImageUploadOptions(),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              100.r,
+                                            ),
+                                            child: Container(
+                                              padding: EdgeInsets.all(2.r),
+                                              height: 69.h,
+                                              width: 69.w,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  color: Color(0xffE6D534),
+                                                  width: 3,
+                                                ),
+                                              ),
+                                              child: ClipOval(
+                                                child:
+                                                    _controller
+                                                                    .basicInfo
+                                                                    .value
+                                                                    .profilePic !=
+                                                                null &&
+                                                            _controller
+                                                                    .basicInfo
+                                                                    .value
+                                                                    .profilePic
+                                                                    ?.url !=
+                                                                null
+                                                        ? CommonAssets.networkImage(
+                                                          fit: BoxFit.cover,
+                                                          _controller
+                                                              .basicInfo
+                                                              .value
+                                                              .profilePic!
+                                                              .url!,
+                                                        )
+                                                        : Container(
+                                                          color: Color(
+                                                            0xffF0F0F0,
+                                                          ),
+                                                          child: Icon(
+                                                            Icons.camera_alt,
+                                                            color:
+                                                                AppColors
+                                                                    .primary,
+                                                          ),
+                                                        ),
                                               ),
                                             ),
-                                            child: ClipOval(
-                                              child:
-                                                  _controller
-                                                                  .basicInfo
-                                                                  .value
-                                                                  .profilePic !=
-                                                              null &&
-                                                          _controller
-                                                                  .basicInfo
-                                                                  .value
-                                                                  .profilePic
-                                                                  ?.url !=
-                                                              null
-                                                      ? CommonAssets.networkImage(
-                                                        fit: BoxFit.cover,
-                                                        _controller
-                                                            .basicInfo
-                                                            .value
-                                                            .profilePic!
-                                                            .url!,
-                                                      )
-                                                      : SizedBox(),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          bottom: 0,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                AppColors.whiteColor,
+                                            radius: 12,
+                                            child: Icon(
+                                              Icons.edit,
+                                              color: AppColors.primary,
+                                              size: 10.sp,
                                             ),
                                           ),
                                         ),
@@ -172,7 +338,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           () => Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
-
                                             children: [
                                               CommonText.text(
                                                 "${_controller.basicInfo.value.name}, ${_controller.basicInfo.value.age}",
@@ -182,7 +347,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 color: AppColors.whiteColor,
                                               ),
                                               10.wBox,
-
                                               SvgPicture.asset(
                                                 AppAssets.verified,
                                               ),
@@ -192,7 +356,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         5.hBox,
                                         InkWell(
                                           onTap: () {
-                                            Get.to(ProfilePreviewScreen());
+                                            Get.to(
+                                              () => ProfilePreviewScreen(),
+                                            );
                                           },
                                           child: Container(
                                             padding:
@@ -226,6 +392,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           0.0),
                                   onChanged: (double value) {},
                                 ),
+                                5.hBox,
+                                if ((_controller.meta.value.progress
+                                            ?.toDouble() ??
+                                        0.0) <
+                                    100)
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.whiteColor,
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 15.w,
+                                      vertical: 5.h,
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: AppColors.primary,
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            shape: BoxShape.rectangle,
+                                          ),
+                                          padding: EdgeInsets.all(5.r),
+                                          child: Image.asset(
+                                            AppAssets.userBadge,
+                                            height: 14.h,
+                                            width: 14.w,
+                                          ),
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Expanded(
+                                          child: CommonText.text(
+                                            "Complete your profile so that we can find better matches for you!",
+                                            maxLines: 2,
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.normal,
+                                            color: AppColors.blackColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
@@ -235,7 +446,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     AddImageGrid(
                       imageList: _controller.allPfFame,
                       onTop: (index) {
-                        // Prevent adding more than 6 images
                         if (_controller.allPfFame.length >= 6) {
                           AppToastMessage.show(
                             title: "Limit Reached",
@@ -263,59 +473,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return InkWell(
                                             onTap: () async {
                                               try {
-                                                final context = Get.context;
-                                                if (context != null &&
-                                                    Navigator.of(
-                                                      context,
-                                                      rootNavigator: true,
-                                                    ).canPop()) {
-                                                  Navigator.of(
-                                                    context,
-                                                    rootNavigator: true,
-                                                  ).pop();
-                                                }
-
-                                                // 3️⃣ Give Vivo camera time to get foreground (CRITICAL)
-                                                // await Future.delayed(
-                                                //   const Duration(milliseconds: 300),
-                                                // );
-
-                                                // 4️⃣ Clear image cache BEFORE opening camera
-                                                PaintingBinding
-                                                    .instance
-                                                    .imageCache
-                                                    .clear();
-                                                PaintingBinding
-                                                    .instance
-                                                    .imageCache
-                                                    .clearLiveImages();
+                                                Get.back();
 
                                                 File? selectedImage;
 
-                                                // 5️⃣ Open camera/gallery WITHOUT touching UI state
                                                 if (v["text"] == "Camera") {
-                                                  selectedImage =
+                                                  final file =
                                                       await ImageUploadServices()
                                                           .pickImageFromCamera();
+                                                  if (file != null) {
+                                                    selectedImage = file;
+                                                  }
                                                 } else {
-                                                  selectedImage =
+                                                  final files =
                                                       await ImageUploadServices()
-                                                          .getImageFromGallery();
-                                                }
+                                                          .pickImagesFromGallery();
 
-                                                // 6️⃣ NOW update UI
-                                                debugPrint(
-                                                  "Selected image ${selectedImage.toString()}",
-                                                );
+                                                  if (files != null &&
+                                                      files.isNotEmpty) {
+                                                    final remaining =
+                                                        6 -
+                                                        _controller
+                                                            .allPfFame
+                                                            .length;
+
+                                                    final selectedFiles =
+                                                        files
+                                                            .take(remaining)
+                                                            .toList();
+
+                                                    for (var file
+                                                        in selectedFiles) {
+                                                      await Get.to(
+                                                        () =>
+                                                            ProfilePhotoPreviewScreen(
+                                                              imageFile: file,
+                                                            ),
+                                                      );
+                                                    }
+                                                  }
+                                                }
                                                 if (selectedImage != null &&
                                                     selectedImage
                                                         .path
                                                         .isNotEmpty) {
-                                                  // _controller.isSelectingImage(
-                                                  //   true,
-                                                  // ); // loader AFTER camera
-
-                                                  Get.to(
+                                                  await Get.to(
                                                     () =>
                                                         ProfilePhotoPreviewScreen(
                                                           imageFile:
@@ -323,11 +525,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         ),
                                                   );
                                                 }
-                                              } catch (e, s) {
+                                              } catch (e) {
                                                 AppMethods.appPrint(
                                                   message: e.toString(),
                                                 );
-                                                debugPrintStack(stackTrace: s);
                                               }
                                             },
                                             child: Column(
@@ -359,13 +560,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         );
-                        // _openImagePickerBottomSheet();
                       },
                       onTopRemove: (id) {
                         CustomBottomSheet.show(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            // height: 100.h,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -389,7 +588,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       },
                     ),
-
                     Padding(
                       padding: 15.horizontalPadding,
                       child: Column(
@@ -405,9 +603,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Padding(
                             padding: EdgeInsets.only(bottom: 15.h),
                             child: InkWell(
-                              onTap: () {
-                                // Get.to(FaceRecogonizationWidget());
-                              },
+                              onTap: () {},
                               child: InterestCard(
                                 color: Color(0xff1D48EF),
                                 title: "Get Verified",
@@ -420,6 +616,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
 
+                    Padding(
+                      padding: 15.horizontalPadding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          5.hBox,
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 15.h),
+                            child: InkWell(
+                              onTap: () {
+                                if ((_controller.basicInfo.value.email ==
+                                        null ||
+                                    _controller
+                                        .basicInfo
+                                        .value
+                                        .email!
+                                        .isEmpty)) {
+                                  Get.to(() => VerifyEmailScreen());
+                                }
+                              },
+                              child: InterestCard(
+                                showBackArrow:
+                                    (_controller.basicInfo.value.email ==
+                                                null ||
+                                            _controller
+                                                .basicInfo
+                                                .value
+                                                .email!
+                                                .isEmpty)
+                                        ? true
+                                        : false,
+                                color: Color(0xff1D48EF),
+                                title:
+                                    (_controller.basicInfo.value.email ==
+                                                null ||
+                                            _controller
+                                                .basicInfo
+                                                .value
+                                                .email!
+                                                .isEmpty)
+                                        ? "Verify Email"
+                                        : "Email Verified",
+
+                                subTitle:
+                                    (_controller.basicInfo.value.email ==
+                                                null ||
+                                            _controller
+                                                .basicInfo
+                                                .value
+                                                .email!
+                                                .isEmpty)
+                                        ? 'Confirm It’s Really You'
+                                        : 'Your email is verified',
+                                // image: AppAssets.verifyEmailIcon,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: 15.horizontalPadding,
                       child: Column(
@@ -446,7 +702,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontFamily: "Caros",
                           ),
                           5.hBox,
-
                           InkWell(
                             onTap: () {
                               Get.to(() => CurrentLocation());
@@ -517,6 +772,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 showCursor: false,
                                 onChanged: (about) {
+                                  // ignore: unnecessary_null_comparison
                                   if (about != null && about.isNotEmpty) {
                                     _controller.isAboutEnable.value = true;
                                   } else {
@@ -526,7 +782,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-
                           Obx(
                             () =>
                                 _controller.isAboutEnable.isTrue
@@ -551,7 +806,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-
                     20.hBox,
                     Divider(color: Colors.black.withAlpha(51)),
                     10.hBox,
@@ -572,7 +826,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.w300,
                             fontFamily: "Caros",
                           ),
-
                           5.hBox,
                           AddInstagramCard(),
                           30.hBox,

@@ -108,6 +108,18 @@ class BaseService {
     );
   }
 
+  Future<BaseResponse<T>> patchRequest<T>({
+    required String path,
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    T Function(dynamic json)? fromJsonT,
+  }) {
+    return request<T>(
+      apiCall: () => _dio.patch(path, data: data, queryParameters: queryParameters),
+      fromJsonT: fromJsonT,
+    );
+  }
+
   Future<BaseResponse<T>> deleteRequest<T>({
     required String path,
     dynamic data,

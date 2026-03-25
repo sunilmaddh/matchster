@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/common_assets.dart';
@@ -13,7 +12,7 @@ import 'package:matchster/features/moduls/profile/widgets/inshort_wrap_widget.da
 import 'package:matchster/features/moduls/profile/widgets/interest_wrap_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/looking_wrap_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/sub_common_card.dart';
-import 'package:matchster/features/moduls/profile/widgets/verified_card.dart';
+
 
 import '../../../../../core/widgets/fields/common_text.dart';
 
@@ -72,21 +71,21 @@ class ProfilePreviewScreen extends StatelessWidget {
                       //   fit: BoxFit.fill,
                       // ),
                     ),
-                    Align(
-                      alignment: AlignmentGeometry.bottomCenter,
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 15.h),
-                        child: InkWell(
-                          onTap: () {},
-                          child: VerifiedCard(
-                            color: Color(0xff1D48EF),
-                            title: "Get Verified",
-                            subTitle: 'Show others you’re real',
-                            image: AppAssets.verified2,
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: AlignmentGeometry.bottomCenter,
+                    //   child: Padding(
+                    //     padding: EdgeInsets.only(bottom: 15.h),
+                    //     child: InkWell(
+                    //       onTap: () {},
+                    //       child: VerifiedCard(
+                    //         color: Color(0xff1D48EF),
+                    //         title: "Get Verified",
+                    //         subTitle: 'Show others you’re real',
+                    //         image: AppAssets.verified2,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

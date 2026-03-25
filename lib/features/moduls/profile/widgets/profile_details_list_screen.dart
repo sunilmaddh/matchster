@@ -116,7 +116,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
                   preference.lookingFor!.isNotEmpty) {
                 _controller.setLookingFromApi(preference.lookingFor);
               } else {
-                _controller.selectedLookingFor.clear();
+                _controller.selectedLookingFor();
               }
               Get.to(() => LookingScreen());
             },

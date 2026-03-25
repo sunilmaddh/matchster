@@ -118,5 +118,7 @@ class AppAssets {
       spotifyAssets = "$baseUrlSvg/spotify.svg",
       languageAssets = "$baseUrlPng/language.png",
       settingAssets = "$baseUrlSvg/setting.svg",
-      instagramAssets = "$baseUrlSvg/instagram.svg";
+      instagramAssets = "$baseUrlSvg/instagram.svg",
+      userBadge = "$baseUrlPng/userBadge.png",
+      verifyEmailIcon = 'assets/images/png/verify-email.png';
 }

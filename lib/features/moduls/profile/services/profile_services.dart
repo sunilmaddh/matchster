@@ -185,9 +185,18 @@ class ProfileServices {
   }
 
   Future<BaseResponse<void>> addPhoto({required String url}) async {
-    return await _baseService.postRequest(
+    return await _baseService.postRequest<void>(
       path: ApiEndpoints.addProfilePicture,
       data: {'url': url},
+      fromJsonT: (json) => null,
+    );
+  }
+
+  Future<BaseResponse<void>> uploadProfileimage({required String url}) async {
+    return await _baseService.patchRequest<void>(
+      path: ApiEndpoints.uploadProfileimage,
+      data: {'url': url},
+      fromJsonT: (json) => null,
     );
   }
 
@@ -244,6 +253,54 @@ class ProfileServices {
       data: {
         "homeTown": {"city": city, "state": state, "country": country},
       },
+    );
+  }
+
+  Future<BaseResponse<List<String>>> getCountries({String? search}) async {
+    return await _baseService.getRequest<List<String>>(
+      path:
+          "${ApiEndpoints.cscCountry}${search != null ? '?search=$search' : ''}",
+      fromJsonT: (json) => (json as List).map((e) => e.toString()).toList(),
+    );
+  }
+
+  Future<BaseResponse<List<String>>> getStates({
+    required String country,
+    String? search,
+  }) async {
+    return await _baseService.getRequest<List<String>>(
+      path:
+          "${ApiEndpoints.cscState}?country=$country${search != null ? '&search=$search' : ''}",
+      fromJsonT: (json) => (json as List).map((e) => e.toString()).toList(),
+    );
+  }
+
+  Future<BaseResponse<List<String>>> getCities({
+    required String country,
+    required String state,
+    String? search,
+  }) async {
+    return await _baseService.getRequest<List<String>>(
+      path:
+          "${ApiEndpoints.cscCity}?country=$country&state=$state${search != null ? '&search=$search' : ''}",
+      fromJsonT: (json) => (json as List).map((e) => e.toString()).toList(),
+    );
+  }
+
+  Future<BaseResponse<void>> sendEmailOtp({required String email}) async {
+    return _baseService.postRequest(
+      path: ApiEndpoints.sendEmailOtp,
+      data: {"email": email},
+    );
+  }
+
+  Future<BaseResponse<void>> verifyEmailOtp({
+    required String email,
+    required String otp,
+  }) async {
+    return await _baseService.postRequest(
+      path: ApiEndpoints.verifyEmailOtp,
+      data: {"email": email, "otp": otp},
     );
   }
 }

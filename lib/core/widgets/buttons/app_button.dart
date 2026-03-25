@@ -6,17 +6,19 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 
 // ignore: must_be_immutable
 class AppButton extends StatelessWidget {
- const AppButton({
+  const AppButton({
     super.key,
     required this.name,
     required this.onTop,
     this.isEnable = false,
     this.image = '',
+    this.isBlack = false,
   });
   final String name;
   final VoidCallback onTop;
   final String image;
   final bool isEnable;
+  final bool isBlack;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +26,17 @@ class AppButton extends StatelessWidget {
       onTap: onTop,
       child: Container(
         alignment: Alignment.center,
-        height: 48,
+        height: 56.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(28.r),
+          color: isBlack ? AppColors.loginTitleColor : AppColors.primary,
+
           gradient:
-              isEnable ? AppColors.gradiantPrimary : AppColors.appGradiantColor,
+              isBlack
+                  ? null
+                  : isEnable
+                  ? AppColors.gradiantPrimary
+                  : AppColors.appGradiantColor,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

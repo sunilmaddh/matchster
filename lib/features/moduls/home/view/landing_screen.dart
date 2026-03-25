@@ -5,11 +5,13 @@ import 'package:matchster/features/moduls/home/widgets/custom_bottom_sheet_navig
 import 'package:matchster/features/moduls/profile/view/profile/profile_screen.dart';
 
 class LandingScreen extends StatelessWidget {
-  const LandingScreen({super.key});
+  final int index;
+  const LandingScreen({super.key, this.index = 0});
 
   @override
   Widget build(BuildContext context) {
     return CustomBottomNavigationBar(
+      initialIndex: index,
       pageList: [
         HomeScreen(),
         MaintenceScreen(),

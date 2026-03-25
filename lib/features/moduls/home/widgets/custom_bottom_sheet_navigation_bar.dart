@@ -10,8 +10,13 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/home/controller/home_controller.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({super.key, required this.pageList});
+  const CustomBottomNavigationBar({
+    super.key,
+    required this.pageList,
+    this.initialIndex = 0,
+  });
   final List<Widget> pageList;
+  final int initialIndex;
 
   @override
   State<CustomBottomNavigationBar> createState() =>

@@ -10,13 +10,15 @@ class InterestCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.subTitle,
-    required this.image,
+    this.image,
     this.color = const Color(0xffCEB4DE),
+    this.showBackArrow = true,
   });
   final String title;
   final String subTitle;
-  final String image;
+  String? image;
   Color color;
+  bool showBackArrow;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,10 @@ class InterestCard extends StatelessWidget {
             color: color,
             borderRadius: BorderRadius.circular(12.r),
           ),
-          child: SvgPicture.asset(image),
+          child:
+              image == null
+                  ? const Icon(Icons.email_outlined, color: Colors.white)
+                  : SvgPicture.asset(image!),
         ),
         title: CommonText.text(
           title,
@@ -50,7 +55,7 @@ class InterestCard extends StatelessWidget {
           fontWeight: FontWeight.w300,
           fontFamily: "Caros",
         ),
-        trailing: Icon(Icons.arrow_forward_ios),
+        trailing: showBackArrow ? Icon(Icons.arrow_forward_ios) : null,
       ),
     );
   }

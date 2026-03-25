@@ -66,6 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  callGetRetriveProfileApi() async {
+    if (_homeController.profileList.isEmpty) {
+      await _homeController.getRetriveProfileList();
+    }
+  }
+
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
@@ -94,30 +100,33 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SafeArea(
               bottom: false,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SvgPicture.asset(AppAssets.appLogo),
-                  Row(
-                    children: [
-                      DarkCircleWidget(
-                        widget: const Icon(
-                          Icons.notifications_outlined,
-                          color: AppColors.whiteColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SvgPicture.asset(AppAssets.appLogo, height: 20.h),
+                    Row(
+                      children: [
+                        DarkCircleWidget(
+                          widget: const Icon(
+                            Icons.notifications_outlined,
+                            color: AppColors.whiteColor,
+                          ),
+                          onTop: () {},
                         ),
-                        onTop: () {},
-                      ),
-                      10.wBox,
-                      DarkCircleWidget(
-                        widget: const Icon(
-                          Icons.filter_list_sharp,
-                          color: AppColors.whiteColor,
+                        10.wBox,
+                        DarkCircleWidget(
+                          widget: const Icon(
+                            Icons.filter_list_sharp,
+                            color: AppColors.whiteColor,
+                          ),
+                          onTop: () {},
                         ),
-                        onTop: () {},
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
 
@@ -125,7 +134,11 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child:
                   data == null || _homeController.profileList.isEmpty
-                      ? const NoMoreProfileWidget()
+                      ? NoMoreProfileWidget(
+                        retrieveProfileonTap: () {
+                          callGetRetriveProfileApi();
+                        },
+                      )
                       : SingleChildScrollView(
                         controller: _scrollController,
                         physics: const BouncingScrollPhysics(),
@@ -153,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Container(
                                         height:
                                             MediaQuery.of(context).size.height *
-                                            0.65,
+                                            0.80,
                                         margin: EdgeInsets.only(
                                           left: 16.w,
                                           right: 16.w,
@@ -216,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Container(
                                         height:
                                             MediaQuery.of(context).size.height *
-                                            0.65,
+                                            0.90,
                                         margin: EdgeInsets.only(
                                           left: 8.w,
                                           right: 8.w,
@@ -283,7 +296,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                             _homeController.swiperController,
                                         cardsCount:
                                             _homeController.profileList.length,
-                                        numberOfCardsDisplayed: 1,
+                                        numberOfCardsDisplayed:
+                                            _homeController
+                                                        .profileList
+                                                        .length >=
+                                                    3
+                                                ? 3
+                                                : _homeController
+                                                    .profileList
+                                                    .length,
                                         allowedSwipeDirection:
                                             AllowedSwipeDirection.only(
                                               left: true,
@@ -291,6 +312,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                         onSwipe: _homeController.onSwipe,
                                         cardBuilder: (context, index, _, __) {
+                                          if (index >=
+                                              _homeController
+                                                  .profileList
+                                                  .length) {
+                                            return const SizedBox();
+                                          }
                                           final cardId =
                                               _homeController
                                                   .profileList[index]

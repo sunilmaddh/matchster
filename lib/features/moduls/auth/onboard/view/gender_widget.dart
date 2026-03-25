@@ -46,11 +46,9 @@ class GenderWidget extends StatelessWidget {
                 );
               },
             ),
-
             5.hBox,
             SwitchWidget(),
             10.hBox,
-
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

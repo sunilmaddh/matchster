@@ -33,7 +33,9 @@ class SplashVideoService extends GetxService {
   void onClose() {
     if (_isDisposed) return;
     _isDisposed = true;
-    player.dispose();
+    try {
+      player.dispose();
+    } catch (e) {}
     super.onClose();
   }
 }

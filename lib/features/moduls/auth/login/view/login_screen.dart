@@ -34,9 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _videoService?.play();
       });
     }
-  }
-
-  @override
+  }  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,

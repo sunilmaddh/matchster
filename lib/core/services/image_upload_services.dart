@@ -45,6 +45,18 @@ class ImageUploadServices {
     return File(image.path);
   }
 
+  /// returns list of selected files or null if user cancelled
+  Future<List<File>?> pickImagesFromGallery() async {
+    try {
+      final List<XFile>? images = await _picker.pickMultiImage();
+      if (images == null || images.isEmpty) return null;
+      return images.map((x) => File(x.path)).toList();
+    } catch (e) {
+      debugPrint('Multi pick error: $e');
+      return null;
+    }
+  }
+
   Future<File?> getImageFromCamera() async {
     try {
       File? file = await pickImageFromCamera();

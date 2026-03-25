@@ -1,10 +1,7 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/constants/app_colors.dart';
+import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:matchster/core/utils/common_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/features/moduls/profile/models/my_profile_response.dart';
 import 'package:matchster/features/moduls/profile/widgets/profile_photo_card.dart';
 
@@ -15,76 +12,95 @@ class AddImageGrid extends StatelessWidget {
     required this.onTop,
     required this.onTopRemove,
   });
+
   final RxList<HallOfFame> imageList;
   final Function(int index) onTop;
-  final Function(String index) onTopRemove;
+  final Function(String id) onTopRemove;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Obx(() {
-        final count = imageList.length; // Access observable here
-        return GridView.builder(
+        final count = imageList.length;
+
+        return ReorderableGridView.builder(
           shrinkWrap: true,
-          itemCount: 6, // Always show 6 slots
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 6,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, // 3 columns
+            crossAxisCount: 3,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
           ),
+
+          onReorder: (oldIndex, newIndex) {
+            /// prevent dragging placeholders
+            if (oldIndex >= count || newIndex >= count) {
+              return;
+            }
+
+            /// fix index shift
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
+            final item = imageList.removeAt(oldIndex);
+            imageList.insert(newIndex, item);
+            imageList.refresh();
+          },
+
           itemBuilder: (context, index) {
+            /// Uploaded images
             if (index < count) {
-              // Show uploaded image
-              return Stack(
-                children: [
-                  Positioned.fill(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.r),
-                      child: CommonAssets.networkImage(
-                        imageList[index].url!,
-                        fit: BoxFit.fill,
+              final item = imageList[index];
+              return Container(
+                key: ValueKey(item.id),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: CommonAssets.networkImage(
+                          item.url!,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 8.h,
-                    right: 8.w,
-                    child: GestureDetector(
-                      onTap: () {
-                        onTopRemove(imageList[index].id!);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.blackColor.withAlpha(40),
-                              blurRadius: 2.07,
+
+                    /// remove button
+                    if (index != 0)
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: GestureDetector(
+                          onTap: () {
+                            onTopRemove(item.id!);
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
                             ),
-                          ],
-                        ),
-                        padding: const EdgeInsets.all(4),
-                        child: const Icon(
-                          Icons.close,
-                          color: Colors.black,
-                          size: 18,
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(Icons.close, size: 18),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               );
-            } else {
-              // Show "Add Photo" placeholder
-              return GestureDetector(
+            }
+
+            /// empty slot
+            return Container(
+              key: ValueKey("empty_$index"),
+              child: GestureDetector(
                 onTap: () {
                   onTop(index);
                 },
-                child: ProfilePhotoCard(),
-              );
-            }
+                child: const ProfilePhotoCard(),
+              ),
+            );
           },
         );
       }),

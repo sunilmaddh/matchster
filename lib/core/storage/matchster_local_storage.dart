@@ -163,8 +163,29 @@ class MatchsterLocalStorage {
     return _preferences!.getBool("history_type") ?? false;
   }
 
+  Future<void> saveProfilePopupShown(bool shown) async {
+    _checkInit();
+    await _preferences!.setBool("profile_popup_shown", shown);
+  }
+
+  Future<bool> getProfilePopupShown() async {
+    _checkInit();
+    return _preferences!.getBool("profile_popup_shown") ?? false;
+  }
+
   Future<void> clearAllData() async {
     _checkInit();
     await _preferences!.clear();
+  }
+
+  Future<void> logout() async {
+    _checkInit();
+    await _preferences!.remove("access_token");
+    await _preferences!.remove("refresh_token");
+    await _preferences!.remove("user_id");
+    await _preferences!.remove("user_name");
+    await _preferences!.remove("user_email");
+    await _preferences!.remove("user_image");
+    await _preferences!.remove("profile_popup_shown");
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -20,23 +19,31 @@ class VideoService extends GetxService {
     if (_isOpened || _isDisposed) return;
     _isOpened = true;
 
-    await player.open(Media('asset:///$assetPath'), play: false);
-    player.setVolume(0);
-    player.setPlaylistMode(PlaylistMode.none);
+    try {
+      await player.open(Media('asset:///$assetPath'), play: false);
+      player.setVolume(0);
+      player.setPlaylistMode(PlaylistMode.none);
+    } catch (e) {
+      _isOpened = false;
+    }
   }
 
   void play() {
-    if (_isDisposed) return;
-    player.seek(Duration.zero);
-    player.play();
+    if (_isDisposed || !_isOpened) return;
+    try {
+      player.seek(Duration.zero);
+      player.play();
+    } catch (e) {}
   }
 
   @override
   void onClose() async {
     if (_isDisposed) return;
     _isDisposed = true;
-    await player.stop();
-    await player.dispose();
+    try {
+      await player.stop();
+      await player.dispose();
+    } catch (e) {}
     super.onClose();
   }
 }

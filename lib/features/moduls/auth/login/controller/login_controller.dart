@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/navigation_halper.dart';
+import 'package:matchster/core/utils/token_debug.dart';
 import 'package:matchster/features/moduls/auth/login/services/login_service.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
 import 'package:matchster/features/moduls/auth/onboard/view/onboard_screen.dart';
@@ -66,6 +67,10 @@ class LoginController extends GetxController {
         await MatchsterLocalStorage.instance.saveAccessToken(
           response.data!.accessToken.toString(),
         );
+        await MatchsterLocalStorage.instance.saveProfilePopupShown(false);
+        
+        // Debug: Check if token was saved
+        await TokenDebug.checkToken();
         final pages = response.data!.pages;
         final pagesValue = response.data!.values;
         if (pages != null) {
@@ -107,6 +112,7 @@ class LoginController extends GetxController {
     try {
       final userCredential = await FirebaseServices.signWithGoogle();
       if (userCredential != null) {
+        await MatchsterLocalStorage.instance.saveProfilePopupShown(false);
         debugPrint("User name${userCredential.user?.displayName}");
         NavigationHelper.push(OnboardScreen());
       }

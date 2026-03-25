@@ -31,7 +31,7 @@ class NameWidget extends StatelessWidget {
           Form(
             key: _formKey,
             child: CustomFormField(
-              maxLength: 80,
+              maxLength: 15,
               inputFormatters: [
                 AppInputFormatters.onlyCharacters(),
                 AppInputFormatters.firstLetterCapital(),

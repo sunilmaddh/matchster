@@ -72,6 +72,37 @@ class HomeController extends GetxController {
    * PROFILE LIST
    * -------------------------------------------------- */
 
+  Future<void> getRetriveProfileList() async {
+    try {
+      isGettingProfile.value = true;
+
+      final response = await _homeService.getRetriveProfileList();
+      profileList.clear();
+      profileListCount.clear();
+      if (response.success && response.data?.profiles != null) {
+        profileList.assignAll(response.data!.profiles!);
+        profileListCount.assignAll(response.data!.profiles!);
+
+        // Preload first 3 images
+        for (int i = 0; i < 3 && i < profileList.length; i++) {
+          if (profileList[i].mainPhoto != null &&
+              profileList[i].mainPhoto!.isNotEmpty) {
+            CachedNetworkImageProvider(
+              profileList[i].mainPhoto!,
+            ).resolve(const ImageConfiguration());
+          }
+        }
+
+        currentIndex.value = 0;
+        await _updateInShort();
+
+        isGettingProfile.value = false;
+      }
+    } catch (e) {
+      AppMethods.appPrint(message: e.toString());
+    } finally {}
+  }
+
   Future<void> getProfileList({
     required String filterType,
     required int filter,
@@ -88,12 +119,14 @@ class HomeController extends GetxController {
       if (response.success && response.data?.profiles != null) {
         profileList.assignAll(response.data!.profiles!);
         profileListCount.assignAll(response.data!.profiles!);
-        
+
         // Preload first 3 images
         for (int i = 0; i < 3 && i < profileList.length; i++) {
-          if (profileList[i].mainPhoto != null && profileList[i].mainPhoto!.isNotEmpty) {
-            CachedNetworkImageProvider(profileList[i].mainPhoto!)
-                .resolve(const ImageConfiguration());
+          if (profileList[i].mainPhoto != null &&
+              profileList[i].mainPhoto!.isNotEmpty) {
+            CachedNetworkImageProvider(
+              profileList[i].mainPhoto!,
+            ).resolve(const ImageConfiguration());
           }
         }
 
@@ -175,29 +208,31 @@ class HomeController extends GetxController {
       action: direction == CardSwiperDirection.right ? "like" : "dislike",
     );
 
-    /// 🚫 DO NOT update currentIndex using swiper index
-    /// We always keep index at 0 because we remove items
-
-    /// 🕒 Delay removal to avoid RangeError
-    currentIndex.value = newIndex;
-    profileListCount.removeAt(0);
-    
-    if (profileList.isNotEmpty) {
-      _updateInShort();
-      
-      // Preload next image
-      final nextIndex = newIndex + 2;
-      if (nextIndex < profileList.length && 
-          profileList[nextIndex].mainPhoto != null &&
-          profileList[nextIndex].mainPhoto!.isNotEmpty) {
-        CachedNetworkImageProvider(profileList[nextIndex].mainPhoto!)
-            .resolve(const ImageConfiguration());
-      }
+    /// Remove swiped profile from both lists
+    if (previousIndex < profileList.length) {
+      profileList.removeAt(previousIndex);
+    }
+    if (profileListCount.isNotEmpty) {
+      profileListCount.removeAt(0);
     }
 
-    if (profileListCount.isEmpty) {
+    if (profileList.isNotEmpty) {
+      currentIndex.value = 0;
+      _updateInShort();
+
+      // Preload next image
+      if (profileList.length > 2 &&
+          profileList[2].mainPhoto != null &&
+          profileList[2].mainPhoto!.isNotEmpty) {
+        CachedNetworkImageProvider(
+          profileList[2].mainPhoto!,
+        ).resolve(const ImageConfiguration());
+      }
+    } else {
+      currentIndex.value = 0;
       _loadMoreProfilesIfNeeded();
     }
+
     return true;
   }
 

@@ -13,17 +13,29 @@ class BaseResponse<T> {
   });
 
   factory BaseResponse.fromJson(
-    Map<String, dynamic> json,
+    dynamic json,
     int statusCode,
     T Function(dynamic json)? fromJsonT,
   ) {
+    // Handle string responses
+    if (json is String) {
+      return BaseResponse<T>(
+        success: true,
+        message: json,
+        statusCode: statusCode,
+        data: null,
+      );
+    }
+
+    // Handle map responses
+    final jsonMap = json as Map<String, dynamic>? ?? {};
     return BaseResponse<T>(
-      success: json['success'] ?? true,
-      message: json['message']?.toString() ?? '',
+      success: jsonMap['success'] ?? true,
+      message: jsonMap['message']?.toString() ?? '',
       statusCode: statusCode,
       data:
-          fromJsonT != null && json['data'] != null
-              ? fromJsonT(json['data'])
+          fromJsonT != null && jsonMap['data'] != null
+              ? fromJsonT(jsonMap['data'])
               : null,
     );
   }

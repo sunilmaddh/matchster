@@ -1,5 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:matchster/core/constants/app_assets.dart';
@@ -35,7 +34,6 @@ class _LikeWidgetState extends State<LikeWidget> {
             fontWeight: FontWeight.w600,
             fontFamily: "Caros",
           ),
-
           // 20.hBox,
           CommonText.text(
             maxLines: 4,
@@ -53,7 +51,6 @@ class _LikeWidgetState extends State<LikeWidget> {
                 OnboardHalper.likeList.map((v) {
                   final String value = v['value'];
                   final bool isSelected = selectedItems.contains(value);
-
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -123,7 +120,6 @@ class _LanguageListWidgetState extends State<LanguageListWidget> {
           // 20.hBox,
           CommonText.text(
             maxLines: 3,
-
             AppConstants.langDescr,
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
@@ -137,7 +133,6 @@ class _LanguageListWidgetState extends State<LanguageListWidget> {
             children:
                 OnboardHalper.languegeList.map((v) {
                   final bool isSelected = selectedItems.contains(v);
-
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -190,7 +185,6 @@ class ReligionWidget extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontFamily: "Caros",
           ),
-
           // 10.hBox,
           CommonText.text(
             maxLines: 3,
@@ -199,7 +193,6 @@ class ReligionWidget extends StatelessWidget {
             fontWeight: FontWeight.w400,
             fontFamily: "Caros",
           ),
-
           20.hBox,
           Expanded(
             child: ListView.builder(

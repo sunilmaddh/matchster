@@ -21,6 +21,14 @@ class HomeServices {
     );
   }
 
+  Future<BaseResponse<HomeResponse>> getRetriveProfileList() async {
+    return _baseServices.getRequest<HomeResponse>(
+      path: ApiEndpoints.swipedProfiles,
+
+      fromJsonT: (json) => HomeResponse.fromJson(json),
+    );
+  }
+
   Future<BaseResponse<void>> createInterection({
     required String userId,
     required String action,
