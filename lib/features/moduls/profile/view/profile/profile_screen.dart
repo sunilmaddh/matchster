@@ -144,10 +144,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           null
                                                       ? CommonAssets.networkImage(
                                                         _controller
-                                                            .basicInfo
-                                                            .value
-                                                            .profilePic!
-                                                            .url!,
+                                                                .basicInfo
+                                                                .value
+                                                                .profilePic!
+                                                                .url ??
+                                                            "",
                                                       )
                                                       : SizedBox(),
                                             ),
