@@ -1,85 +1,126 @@
-// lib/core/network/base_service.dart
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
 import 'base_response.dart';
 
 class BaseService {
-  BaseService._internal() {
+  BaseService({required MatchsterLocalStorage storage}) : _storage = storage {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiEndpoints.baseUrl,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
         validateStatus: (status) {
           return status != null && status < 500;
         },
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
       ),
     );
 
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await MatchsterLocalStorage.instance.getAccessToken();
+          final token = await _storage.getAccessToken();
 
-          if (token != null && token.toString().isNotEmpty) {
+          if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
 
-          return handler.next(options);
+          debugPrint(
+            'REQUEST[${options.method}] => PATH: ${options.path} '
+            'HEADERS: ${options.headers} '
+            'QUERY: ${options.queryParameters} '
+            'BODY: ${options.data}',
+          );
+
+          handler.next(options);
+        },
+        onResponse: (response, handler) {
+          debugPrint(
+            'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path} '
+            'DATA: ${response.data}',
+          );
+          handler.next(response);
         },
         onError: (DioException e, handler) {
-          // Optional: handle 401 / refresh token
-          return handler.next(e);
+          debugPrint(
+            'ERROR[${e.response?.statusCode}] => PATH: ${e.requestOptions.path} '
+            'MESSAGE: ${e.message}',
+          );
+
+          handler.next(e);
         },
       ),
     );
   }
 
-  static final BaseService _instance = BaseService._internal();
-  factory BaseService() => _instance;
-
+  final MatchsterLocalStorage _storage;
   late final Dio _dio;
 
-  // ---------------- LOW LEVEL ----------------
-
-  Future<Response> _get(String path, {Map<String, dynamic>? queryParameters}) {
-    return _dio.get(path, queryParameters: queryParameters);
+  Future<Response<dynamic>> _get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) {
+    return _dio.get(path, queryParameters: queryParameters, options: options);
   }
 
-  Future<Response> _post(
+  Future<Response<dynamic>> _post(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    Options? options,
   }) {
-    return _dio.post(path, data: data, queryParameters: queryParameters);
+    return _dio.post(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
 
-  Future<Response> _put(
+  Future<Response<dynamic>> _put(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    Options? options,
   }) {
-    return _dio.put(path, data: data, queryParameters: queryParameters);
+    return _dio.put(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
 
-  Future<Response> _delete(
+  Future<Response<dynamic>> _delete(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    Options? options,
   }) {
-    return _dio.delete(path, data: data, queryParameters: queryParameters);
+    return _dio.delete(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
-
-  // ---------------- HIGH LEVEL (COMMON) ----------------
 
   Future<BaseResponse<T>> getRequest<T>({
     required String path,
     Map<String, dynamic>? queryParameters,
     T Function(dynamic json)? fromJsonT,
+    Options? options,
   }) {
     return request<T>(
-      apiCall: () => _get(path, queryParameters: queryParameters),
+      apiCall:
+          () => _get(path, queryParameters: queryParameters, options: options),
       fromJsonT: fromJsonT,
     );
   }
@@ -89,9 +130,16 @@ class BaseService {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     T Function(dynamic json)? fromJsonT,
+    Options? options,
   }) {
     return request<T>(
-      apiCall: () => _post(path, data: data, queryParameters: queryParameters),
+      apiCall:
+          () => _post(
+            path,
+            data: data,
+            queryParameters: queryParameters,
+            options: options,
+          ),
       fromJsonT: fromJsonT,
     );
   }
@@ -101,9 +149,16 @@ class BaseService {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     T Function(dynamic json)? fromJsonT,
+    Options? options,
   }) {
     return request<T>(
-      apiCall: () => _put(path, data: data, queryParameters: queryParameters),
+      apiCall:
+          () => _put(
+            path,
+            data: data,
+            queryParameters: queryParameters,
+            options: options,
+          ),
       fromJsonT: fromJsonT,
     );
   }
@@ -113,32 +168,61 @@ class BaseService {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     T Function(dynamic json)? fromJsonT,
+    Options? options,
   }) {
     return request<T>(
       apiCall:
-          () => _delete(path, data: data, queryParameters: queryParameters),
+          () => _delete(
+            path,
+            data: data,
+            queryParameters: queryParameters,
+            options: options,
+          ),
       fromJsonT: fromJsonT,
     );
   }
 
-  // ---------------- CORE SAFE REQUEST ----------------
-
   Future<BaseResponse<T>> request<T>({
-    required Future<Response> Function() apiCall,
+    required Future<Response<dynamic>> Function() apiCall,
     T Function(dynamic json)? fromJsonT,
   }) async {
     try {
       final response = await apiCall();
+      final responseData = response.data;
+
+      if (responseData is! Map<String, dynamic>) {
+        return BaseResponse<T>.error(
+          message: 'Invalid response format',
+          statusCode: response.statusCode ?? -1,
+        );
+      }
 
       return BaseResponse<T>.fromJson(
-        response.data,
+        responseData,
         response.statusCode ?? 200,
         fromJsonT,
       );
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode ?? -1;
+      final responseData = e.response?.data;
+
+      String message = 'Something went wrong';
+
+      if (responseData is Map<String, dynamic>) {
+        message =
+            responseData['message']?.toString() ??
+            responseData['error']?.toString() ??
+            e.message ??
+            message;
+      } else {
+        message = e.message ?? message;
+      }
+
+      return BaseResponse<T>.error(message: message, statusCode: statusCode);
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('Unexpected error: $e');
       return BaseResponse<T>.error(
-        message: 'Networkdd error  ${e.toString()}',
+        message: 'Unexpected error: $e',
         statusCode: -1,
       );
     }

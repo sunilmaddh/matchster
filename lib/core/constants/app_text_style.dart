@@ -61,5 +61,5 @@ class AppTextStyles {
     );
   }
 
-  static String fontFamilyGilroy = "Gilroy-Medium";
+  static String fontFamilyGilroy = "Caros";
 }

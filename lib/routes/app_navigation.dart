@@ -10,6 +10,20 @@ class AppNavigation {
     }
   }
 
+  static Future<T?>? toWithClassName<T>(
+    dynamic route, {
+    VoidCallback? action,
+    dynamic arguments,
+  }) {
+    final future = Get.to<T>(route, arguments: arguments);
+
+    if (action != null) {
+      future?.whenComplete(action);
+    }
+
+    return future;
+  }
+
   /// Replace the current screen with a new one
   static void off(String route, {VoidCallback? action, dynamic arguments}) {
     final future = Get.offNamed(route, arguments: arguments);

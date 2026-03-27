@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hand_landmarker/hand_landmarker.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/features/moduls/posture/controller/posture_controller.dart';
+import 'package:matchster/features/modules/posture/controller/posture_controller.dart';
 
 class HandTrackerView extends StatefulWidget {
   const HandTrackerView({super.key});
