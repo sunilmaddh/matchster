@@ -4,10 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/features/modules/home/models/home_response.dart';
-import 'package:matchster/features/modules/like/view/match_screen.dart';
-import 'package:matchster/features/modules/like/widget/match_card_widget.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

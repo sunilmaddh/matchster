@@ -1,11 +1,11 @@
 import 'package:get/route_manager.dart';
-import 'package:matchster/features/modules/auth/binding/auth_binding.dart';
-import 'package:matchster/features/modules/auth/views/login/country_list_screen.dart';
-import 'package:matchster/features/modules/auth/views/login/login_screen.dart';
-import 'package:matchster/features/modules/auth/views/onboarding/onboard_screen.dart';
-import 'package:matchster/features/modules/auth/views/onboarding/photo_preview_screen.dart';
-import 'package:matchster/features/modules/home/binding/landing_binding.dart';
-import 'package:matchster/features/modules/home/view/landing_screen.dart';
+import 'package:matchster/features/auth/binding/auth_binding.dart';
+import 'package:matchster/features/auth/views/login/country_list_screen.dart';
+import 'package:matchster/features/auth/views/login/login_screen.dart';
+import 'package:matchster/features/auth/views/onboarding/onboard_screen.dart';
+import 'package:matchster/features/auth/views/onboarding/photo_preview_screen.dart';
+import 'package:matchster/features/home/binding/landing_binding.dart';
+import 'package:matchster/features/home/view/landing_screen.dart';
 import 'package:matchster/routes/app_routes.dart';
 
 class AppPages {

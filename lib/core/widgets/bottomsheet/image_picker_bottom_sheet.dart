@@ -4,9 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/modules/auth/helpers/onboard_halper.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
+import 'package:matchster/features/auth/helpers/onboard_halper.dart';
 
 class ImagePickerBottomSheet {
   static void show({required Function(File file) onImageSelected}) {

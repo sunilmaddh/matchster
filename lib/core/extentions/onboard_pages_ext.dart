@@ -1,4 +1,4 @@
-import 'package:matchster/features/modules/auth/models/otp_verification_response.dart';
+import 'package:matchster/features/auth/models/otp_verification_response.dart';
 
 extension OnboardPagesExtension on OnboardPages {
   List<bool> toStepStatusList() {
