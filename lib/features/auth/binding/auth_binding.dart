@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:matchster/core/network/base_service.dart';
+import 'package:matchster/core/network/api_service.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/features/auth/auth_controllers/country_controller.dart';
 import 'package:matchster/features/auth/auth_controllers/login_controller.dart';
@@ -18,10 +18,10 @@ class AuthBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<FirebaseAuthService>(() => FirebaseAuthService());
     Get.lazyPut<LoginService>(
-      () => LoginService(baseService: Get.find<BaseService>()),
+      () => LoginService(baseService: Get.find<ApiService>()),
     );
     Get.lazyPut<OnboardingService>(
-      () => OnboardingService(baseService: Get.find<BaseService>()),
+      () => OnboardingService(baseService: Get.find<ApiService>()),
     );
     Get.lazyPut<AuthRepository>(
       () => AuthRepository(loginService: Get.find<LoginService>()),

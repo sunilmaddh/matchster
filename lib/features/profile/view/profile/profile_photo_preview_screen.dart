@@ -1,202 +1,86 @@
-// import 'dart:io';
-// import 'dart:ui' as ui;
+import 'dart:io';
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter/rendering.dart';
-// import 'package:get/get.dart';
-// import 'package:matchster/core/constants/app_strings.dart';
-// import 'package:matchster/core/extentions/extentions.dart';
-// import 'package:matchster/features/common/widgets/buttons/app_button.dart';
-// import 'package:matchster/features/common/widgets/fields/common_text.dart';
-// import 'package:matchster/features/profile/controller/profile_controller.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:matchster/core/base/base_view.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/utils/app_toast_message.dart';
+import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
+import 'package:matchster/features/auth/widgets/onboard_widget/photo_review_bottomsheet.dart';
+import 'package:matchster/features/common/screen/common_preview_screen.dart';
+import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/routes/app_navigation.dart';
+import 'package:matchster/routes/app_routes.dart';
 
-// class CropGridOverlay extends StatelessWidget {
-//   const CropGridOverlay({super.key});
+class ProfilePhotoPreviewScreen extends BaseView<ProfileController> {
+  const ProfilePhotoPreviewScreen({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return const IgnorePointer(
-//       child: SizedBox.expand(child: CustomPaint(painter: _GridPainter())),
-//     );
-//   }
-// }
+  @override
+  bool get useDefaultLoader => false;
 
-// class _GridPainter extends CustomPainter {
-//   const _GridPainter();
+  @override
+  State<ProfilePhotoPreviewScreen> createState() => _PhotoPreviewScreenState();
+}
 
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final paint = Paint()
-//       ..color = Colors.white.withOpacity(0.7)
-//       ..strokeWidth = 1;
+class _PhotoPreviewScreenState
+    extends BaseViewState<ProfileController, ProfilePhotoPreviewScreen> {
+  late final OnboardController _onboardController;
 
-//     final thirdW = size.width / 3;
-//     final thirdH = size.height / 3;
+  late final File _imageFile;
+  late final int _index;
+  late final String _page;
 
-//     for (int i = 1; i <= 2; i++) {
-//       canvas.drawLine(
-//         Offset(thirdW * i, 0),
-//         Offset(thirdW * i, size.height),
-//         paint,
-//       );
-//       canvas.drawLine(
-//         Offset(0, thirdH * i),
-//         Offset(size.width, thirdH * i),
-//         paint,
-//       );
-//     }
-//   }
+  @override
+  void onInit() {
+    super.onInit();
 
-//   @override
-//   bool shouldRepaint(_) => false;
-// }
+    _onboardController = Get.find<OnboardController>();
 
-// class ProfilePhotoPreviewScreen extends StatefulWidget {
-//   final File imageFile;
+    final args = (Get.arguments as Map<String, dynamic>?) ?? {};
+    final image = args['image'];
 
-//   const ProfilePhotoPreviewScreen({super.key, required this.imageFile});
+    _imageFile = image is File ? image : File('');
+    _index = args['index'] is int ? args['index'] as int : 0;
+    _page = args['page']?.toString() ?? '';
+  }
 
-//   @override
-//   State<ProfilePhotoPreviewScreen> createState() =>
-//       _ProfilePhotoPreviewScreenState();
-// }
+  @override
+  Widget buildView(BuildContext context) {
+    return CommonPhotoPreviewScreen(
+      imageFile: _imageFile,
+      isUploading: _onboardController.isImageUploading,
+      title: AppStrings.cropPhoto,
+      onUpload: (croppedFile) async {
+        try {
+          await _onboardController.validateAndUploadPhoto(
+            file: croppedFile,
+            index: _index,
+          );
 
-// class _ProfilePhotoPreviewScreenState extends State<ProfilePhotoPreviewScreen> {
-//   final GlobalKey _cropKey = GlobalKey();
-//   final _profileController = Get.find<ProfileController>();
-
-//   Offset _offset = Offset.zero;
-//   double _scale = 1.0;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//       floatingActionButton: Padding(
-//         padding: 15.horizontalPadding + 20.verticalPadding,
-//         child: Obx(() {
-//           if (_profileController.isImageUploading.isTrue) {
-//             return const Center(child: CircularProgressIndicator());
-//           }
-//           return AppButton(
-//             name: AppStrings.upload,
-//             isEnable: true,
-//             onTop: _onUploadTap,
-//           );
-//         }),
-//       ),
-//       body: SafeArea(
-//         child: Column(
-//           children: [
-//             Row(
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.all(16.r),
-//                   child: IconButton(
-//                     icon: const Icon(Icons.close),
-//                     onPressed: Get.back,
-//                   ),
-//                 ),
-//                 CommonText.text(
-//                   AppStrings.cropPhoto,
-//                   fontWeight: FontWeight.w400,
-//                 ),
-//               ],
-//             ),
-
-//             /// 🔥 Crop Area
-//             Center(
-//               child: AspectRatio(
-//                 aspectRatio: 3 / 4,
-//                 child: Stack(
-//                   fit: StackFit.expand,
-//                   children: [
-//                     RepaintBoundary(
-//                       key: _cropKey,
-//                       child: GestureDetector(
-//                         onScaleUpdate: (details) {
-//                           setState(() {
-//                             _scale =
-//                                 (_scale * details.scale).clamp(1.0, 4.0);
-//                             _offset += details.focalPointDelta;
-//                           });
-//                         },
-//                         onScaleEnd: (_) {
-//                           if (_scale < 1) {
-//                             setState(() {
-//                               _scale = 1;
-//                               _offset = Offset.zero;
-//                             });
-//                           }
-//                         },
-//                         child: ClipRect(
-//                           child: Transform(
-//                             alignment: Alignment.center,
-//                             transform: Matrix4.identity()
-//                               ..translate(_offset.dx, _offset.dy)
-//                               ..scale(_scale),
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(8.0),
-//                               child: ClipRRect(
-//                                 borderRadius: BorderRadius.circular(20.r),
-//                                 child: Image.file(
-//                                   widget.imageFile,
-//                                   fit: BoxFit.cover,
-//                                   cacheWidth: 600,
-//                                   filterQuality: FilterQuality.high,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     const CropGridOverlay(),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Future<void> _onUploadTap() async {
-//     try {
-//       _profileController.isImageUploading.value = true;
-
-//       final file = await _cropImage();
-
-//       await _profileController.validateAndUploadPhoto(file: file);
-//     } catch (e) {
-//       debugPrint(e.toString());
-//     } finally {
-//       _profileController.isImageUploading.value = false;
-//     }
-//   }
-
-//   Future<File> _cropImage() async {
-//     final context = _cropKey.currentContext;
-
-//     if (context == null) {
-//       throw Exception(AppStrings.cropAreaNotReady);
-//     }
-
-//     final boundary = context.findRenderObject() as RenderRepaintBoundary;
-
-//     final image = await boundary.toImage(pixelRatio: 3);
-//     final byteData =
-//         await image.toByteData(format: ui.ImageByteFormat.png);
-
-//     final pngBytes = byteData!.buffer.asUint8List();
-//     final dir = await getTemporaryDirectory();
-
-//     final file = File('${dir.path}/${AppStrings.croppedFileName}');
-//     await file.writeAsBytes(pngBytes);
-
-//     return file;
-//   }
-// }
+          if (_onboardController.showPhotoReview.isTrue) {
+            PhotoReviewBottomsheet.show(
+              onImageSelected: (selectedImage) {
+                AppNavigation.back();
+                AppNavigation.to(
+                  AppRoutes.profilePreviewScreen,
+                  arguments: {
+                    "image": selectedImage,
+                    "index": _onboardController.failedIndex ?? _index,
+                    "page": _page,
+                  },
+                );
+                _onboardController.showPhotoReview.value = false;
+              },
+            );
+          }
+        } catch (e) {
+          AppToastMessage.show(
+            title: AppStrings.error,
+            message: e.toString(),
+            isError: true,
+          );
+        }
+      },
+    );
+  }
+}

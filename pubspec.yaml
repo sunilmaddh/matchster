@@ -53,6 +53,7 @@ dependencies:
   tflite_flutter: ^0.12.1
   diacritic: ^0.1.6
   logger: ^2.7.0
+  flutter_secure_storage: ^10.0.0
   
  
 

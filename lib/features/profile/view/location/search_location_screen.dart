@@ -8,7 +8,7 @@ import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
-import 'package:matchster/features/home/controller/location_controller.dart';
+import 'package:matchster/features/profile/controller/location_controller.dart';
 
 class SearchLocationScreen extends BaseView<LocationController> {
   const SearchLocationScreen({super.key});

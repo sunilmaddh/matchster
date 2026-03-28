@@ -1,4 +1,4 @@
-import 'package:matchster/core/network/base_response.dart';
+import 'package:matchster/core/network/api_response.dart';
 import 'package:matchster/features/auth/models/add_date_with_response.dart';
 import 'package:matchster/features/auth/models/add_dob_response.dart';
 import 'package:matchster/features/auth/models/add_gender_response.dart';
@@ -11,11 +11,11 @@ import 'package:matchster/features/auth/services/onboarding_service.dart';
 class OnboardingRepository {
   OnboardingRepository({required this.onboardingService});
   final OnboardingService onboardingService;
-  Future<BaseResponse<AddNameResponse>> addName({required String name}) async {
+  Future<ApiResponse<AddNameResponse>> addName({required String name}) async {
     return onboardingService.addName(name: name);
   }
 
-  Future<BaseResponse<AddGenderResponse>> addGender({
+  Future<ApiResponse<AddGenderResponse>> addGender({
     required String gender,
     required bool genderPreview,
   }) async {
@@ -25,36 +25,36 @@ class OnboardingRepository {
     );
   }
 
-  Future<BaseResponse<AddDobResponse>> addDob({required String dob}) async {
+  Future<ApiResponse<AddDobResponse>> addDob({required String dob}) async {
     return onboardingService.addDob(dob: dob);
   }
 
-  Future<BaseResponse<AddHieghtResponse>> addHeight({
+  Future<ApiResponse<AddHieghtResponse>> addHeight({
     required double feet,
     required double cm,
   }) async {
     return onboardingService.addHieght(feet: feet, cm: cm);
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addDateWith({
+  Future<ApiResponse<AddDateWithResponse>> addDateWith({
     required List<String> dateWith,
   }) async {
     return onboardingService.addDateWith(dateWith: dateWith);
   }
 
-  Future<BaseResponse<void>> allOfFame({
+  Future<ApiResponse<void>> allOfFame({
     required List<String> imageListUrl,
   }) async {
     return onboardingService.allOfFame(imageUrlList: imageListUrl);
   }
 
-  Future<BaseResponse<UploadPhotoResponse>?> uploadUserPhoto({
+  Future<ApiResponse<UploadPhotoResponse>?> uploadUserPhoto({
     required String imagePath,
   }) async {
     return await onboardingService.uploadImageWithDio(imagePath);
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addCurrentLocation({
+  Future<ApiResponse<AddDateWithResponse>> addCurrentLocation({
     required double lat,
     required double lng,
     required String label,
@@ -72,7 +72,7 @@ class OnboardingRepository {
     );
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addHomeLocation({
+  Future<ApiResponse<AddDateWithResponse>> addHomeLocation({
     required double lat,
     required double lng,
     required String label,
@@ -90,7 +90,7 @@ class OnboardingRepository {
     );
   }
 
-  Future<BaseResponse<ReverseGeocodeResponse>> getAddress({
+  Future<ApiResponse<ReverseGeocodeResponse>> getAddress({
     required double lat,
     required double lng,
   }) async {

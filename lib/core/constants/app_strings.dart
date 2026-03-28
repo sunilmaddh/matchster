@@ -198,6 +198,11 @@ class AppStrings {
   static const String connectAccounts = "Connect Accounts";
   static const String buildYourConnectionMore = "build your connection more";
 
+  static const profilePreview = 'Profile preview';
+  static const locationIcon = '📍';
+  static const expressYourInterests =
+      'Express your interests to find your ideal match';
+
   static String profileTitle({required String? name, required dynamic age}) {
     final safeName = name ?? '';
     final safeAge = age?.toString() ?? '';

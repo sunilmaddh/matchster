@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:matchster/core/extentions/date_x_ext.dart';
@@ -9,7 +10,9 @@ class AppMethods {
   }
 
   static void appPrint({required String message}) {
-    debugPrint(message);
+    if (kDebugMode) {
+      debugPrint(message);
+    }
   }
 
   static Future<List<String>> toApiValues(List<String> uiValues) async {

@@ -7,8 +7,8 @@ import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
+import 'package:matchster/features/profile/controller/profile_details_list_controller.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
-import 'package:matchster/features/profile/profile_details_list_controller.dart';
 import 'package:matchster/features/profile/widgets/interest_card.dart';
 import 'package:matchster/routes/app_routes.dart';
 

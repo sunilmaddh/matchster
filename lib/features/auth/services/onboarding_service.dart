@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:matchster/core/network/base_response.dart';
-import 'package:matchster/core/network/base_service.dart';
+import 'package:matchster/core/network/api_response.dart';
+import 'package:matchster/core/network/api_service.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
 import 'package:matchster/features/auth/models/add_date_with_response.dart';
 import 'package:matchster/features/auth/models/add_dob_response.dart';
@@ -13,8 +13,8 @@ import 'package:matchster/features/auth/models/upload_photo_response.dart';
 
 class OnboardingService {
   OnboardingService({required this.baseService});
-  final BaseService baseService;
-  Future<BaseResponse<AddNameResponse>> addName({required String name}) async {
+  final ApiService baseService;
+  Future<ApiResponse<AddNameResponse>> addName({required String name}) async {
     return baseService.postRequest<AddNameResponse>(
       path: ApiEndpoints.addName,
       data: {"name": name},
@@ -22,7 +22,7 @@ class OnboardingService {
     );
   }
 
-  Future<BaseResponse<AddGenderResponse>> addGender({
+  Future<ApiResponse<AddGenderResponse>> addGender({
     required String gender,
     required bool genderPreview,
   }) async {
@@ -33,7 +33,7 @@ class OnboardingService {
     );
   }
 
-  Future<BaseResponse<AddDobResponse>> addDob({required String dob}) async {
+  Future<ApiResponse<AddDobResponse>> addDob({required String dob}) async {
     return baseService.postRequest<AddDobResponse>(
       path: ApiEndpoints.addDob,
       data: {"dob": dob},
@@ -41,7 +41,7 @@ class OnboardingService {
     );
   }
 
-  Future<BaseResponse<AddHieghtResponse>> addHieght({
+  Future<ApiResponse<AddHieghtResponse>> addHieght({
     required double feet,
     required double cm,
   }) async {
@@ -54,7 +54,7 @@ class OnboardingService {
     );
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addDateWith({
+  Future<ApiResponse<AddDateWithResponse>> addDateWith({
     required List dateWith,
   }) async {
     return baseService.postRequest<AddDateWithResponse>(
@@ -64,14 +64,14 @@ class OnboardingService {
     );
   }
 
-  Future<BaseResponse<void>> allOfFame({required List imageUrlList}) async {
+  Future<ApiResponse<void>> allOfFame({required List imageUrlList}) async {
     return baseService.postRequest<void>(
       path: ApiEndpoints.allOfFame,
       data: {"urls": imageUrlList},
     );
   }
 
-  Future<BaseResponse<ReverseGeocodeResponse>> getAddress({
+  Future<ApiResponse<ReverseGeocodeResponse>> getAddress({
     required double lat,
     required double lng,
   }) async {
@@ -81,7 +81,7 @@ class OnboardingService {
     );
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addCurrentLocation({
+  Future<ApiResponse<AddDateWithResponse>> addCurrentLocation({
     required double lat,
     required double lng,
     required String label,
@@ -106,7 +106,7 @@ class OnboardingService {
     );
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addHomeLocation({
+  Future<ApiResponse<AddDateWithResponse>> addHomeLocation({
     required double lat,
     required double lng,
     required String label,
@@ -131,7 +131,7 @@ class OnboardingService {
     );
   }
 
-  Future<BaseResponse<UploadPhotoResponse>?> uploadImageWithDio(
+  Future<ApiResponse<UploadPhotoResponse>?> uploadImageWithDio(
     String filePath,
   ) async {
     try {

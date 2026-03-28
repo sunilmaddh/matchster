@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:matchster/core/network/base_service.dart';
+import 'package:matchster/core/network/api_service.dart';
 import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart'
@@ -24,17 +24,17 @@ class AppBinding extends Bindings {
       permanent: true,
     );
 
-    Get.put<BaseService>(
-      BaseService(storage: Get.find<MatchsterLocalStorage>()),
+    Get.put<ApiService>(
+      ApiService(storage: Get.find<MatchsterLocalStorage>()),
       permanent: true,
     );
 
     Get.lazyPut<FirebaseAuthService>(() => FirebaseAuthService());
     Get.lazyPut<LoginService>(
-      () => LoginService(baseService: Get.find<BaseService>()),
+      () => LoginService(baseService: Get.find<ApiService>()),
     );
     Get.lazyPut<OnboardingService>(
-      () => OnboardingService(baseService: Get.find<BaseService>()),
+      () => OnboardingService(baseService: Get.find<ApiService>()),
       fenix: true,
     );
     Get.lazyPut<AuthRepository>(

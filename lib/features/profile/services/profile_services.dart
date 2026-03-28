@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart' show FormData, MultipartFile;
 import 'package:flutter/material.dart';
-import 'package:matchster/core/network/base_response.dart';
-import 'package:matchster/core/network/base_service.dart';
+import 'package:matchster/core/network/api_response.dart';
+import 'package:matchster/core/network/api_service.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
 import 'package:matchster/features/auth/models/add_date_with_response.dart';
 import 'package:matchster/features/auth/models/add_hieght_response.dart';
@@ -12,9 +12,9 @@ import 'package:matchster/features/profile/models/place_details_response.dart';
 
 class ProfileService {
   ProfileService({required this.baseService});
-  final BaseService baseService;
+  final ApiService baseService;
 
-  Future<BaseResponse<Map<String, dynamic>>> addWorkout({
+  Future<ApiResponse<Map<String, dynamic>>> addWorkout({
     required String workout,
   }) async {
     return await baseService.postRequest(
@@ -24,7 +24,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addSmoking({
+  Future<ApiResponse<Map<String, dynamic>>> addSmoking({
     required String smoking,
   }) async {
     return await baseService.postRequest(
@@ -34,7 +34,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addDrinking({
+  Future<ApiResponse<Map<String, dynamic>>> addDrinking({
     required String drinking,
   }) async {
     return await baseService.postRequest(
@@ -44,7 +44,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addInterests({
+  Future<ApiResponse<Map<String, dynamic>>> addInterests({
     required List interests,
   }) async {
     return await baseService.postRequest(
@@ -54,7 +54,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addLanguages({
+  Future<ApiResponse<Map<String, dynamic>>> addLanguages({
     required List languages,
   }) async {
     return await baseService.postRequest(
@@ -64,7 +64,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addZodiacsign({
+  Future<ApiResponse<Map<String, dynamic>>> addZodiacsign({
     required String zodiacsign,
   }) async {
     return await baseService.postRequest(
@@ -74,7 +74,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addReligion({
+  Future<ApiResponse<Map<String, dynamic>>> addReligion({
     required String religion,
   }) async {
     return await baseService.postRequest(
@@ -84,7 +84,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addVisibility({
+  Future<ApiResponse<Map<String, dynamic>>> addVisibility({
     required String visibility,
   }) async {
     return await baseService.postRequest(
@@ -94,7 +94,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addLooking({
+  Future<ApiResponse<Map<String, dynamic>>> addLooking({
     required List<String> lookingFor,
   }) async {
     return await baseService.postRequest(
@@ -104,7 +104,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addQualification({
+  Future<ApiResponse<Map<String, dynamic>>> addQualification({
     required String qualification,
   }) async {
     return await baseService.postRequest(
@@ -114,7 +114,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Work>> addWork({
+  Future<ApiResponse<Work>> addWork({
     required String jobTitle,
     required String company,
   }) async {
@@ -127,7 +127,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<AddHieghtResponse>> addHieght({
+  Future<ApiResponse<AddHieghtResponse>> addHieght({
     required double feet,
     required double cm,
   }) async {
@@ -140,7 +140,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addAbout({
+  Future<ApiResponse<Map<String, dynamic>>> addAbout({
     required String about,
   }) async {
     return await baseService.postRequest(
@@ -150,7 +150,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<List<AutoCompleteResponse>>> autoCompleteSearchLocation({
+  Future<ApiResponse<List<AutoCompleteResponse>>> autoCompleteSearchLocation({
     required String query,
   }) async {
     return await baseService.postRequest<List<AutoCompleteResponse>>(
@@ -163,7 +163,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<PlaceDetailsResponse>> placeDetails({
+  Future<ApiResponse<PlaceDetailsResponse>> placeDetails({
     required String placeId,
   }) async {
     return await baseService.postRequest<PlaceDetailsResponse>(
@@ -172,27 +172,27 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<MyProfilResponse>> getMyProfile() async {
+  Future<ApiResponse<MyProfilResponse>> getMyProfile() async {
     return await baseService.getRequest<MyProfilResponse>(
       path: ApiEndpoints.myProfile,
       fromJsonT: (json) => MyProfilResponse.fromJson(json),
     );
   }
 
-  Future<BaseResponse<void>> deleteProfile({required String profileId}) async {
+  Future<ApiResponse<void>> deleteProfile({required String profileId}) async {
     return await baseService.deleteRequest(
       path: "${ApiEndpoints.deleteProfile}/$profileId",
     );
   }
 
-  Future<BaseResponse<void>> addPhoto({required String url}) async {
+  Future<ApiResponse<void>> addPhoto({required String url}) async {
     return await baseService.postRequest(
       path: ApiEndpoints.addProfilePicture,
       data: {'url': url},
     );
   }
 
-  Future<BaseResponse<UploadPhotoResponse>?> uploadImageWithDio(
+  Future<ApiResponse<UploadPhotoResponse>?> uploadImageWithDio(
     String filePath,
   ) async {
     try {
@@ -217,7 +217,7 @@ class ProfileService {
     }
   }
 
-  Future<BaseResponse<AddDateWithResponse>> allOfFame({
+  Future<ApiResponse<AddDateWithResponse>> allOfFame({
     required List imageUrlList,
   }) async {
     return baseService.postRequest<AddDateWithResponse>(
@@ -226,7 +226,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addProfile({
+  Future<ApiResponse<AddDateWithResponse>> addProfile({
     required List imageUrlList,
   }) async {
     return baseService.postRequest<AddDateWithResponse>(
@@ -235,7 +235,7 @@ class ProfileService {
     );
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addHomeLocation({
+  Future<ApiResponse<AddDateWithResponse>> addHomeLocation({
     required String city,
     required String state,
     required String country,

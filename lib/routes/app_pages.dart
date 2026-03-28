@@ -21,6 +21,7 @@ import 'package:matchster/features/profile/view/location/current_location.dart';
 import 'package:matchster/features/profile/view/location/search_location_screen.dart';
 import 'package:matchster/features/profile/view/profile/education_screen.dart';
 import 'package:matchster/features/profile/view/profile/height_screen.dart';
+import 'package:matchster/features/profile/view/profile/profile_photo_preview_screen.dart';
 import 'package:matchster/features/profile/view/profile/profile_preview_screen.dart';
 import 'package:matchster/features/profile/view/profile/work_screen.dart';
 import 'package:matchster/routes/app_routes.dart';
@@ -44,8 +45,8 @@ class AppPages {
       binding: LandingBinding(),
     ),
     GetPage(
-      name: AppRoutes.profilePreviewScreen,
-      page: () => PhotoPreviewScreen(),
+      name: AppRoutes.profilePhotoPreviewScreen,
+      page: () => ProfilePhotoPreviewScreen(),
     ),
     GetPage(name: AppRoutes.countryListScreen, page: () => CountryListScreen()),
 

@@ -1,4 +1,4 @@
-import 'package:matchster/core/network/base_response.dart';
+import 'package:matchster/core/network/api_response.dart';
 import 'package:matchster/features/auth/models/add_date_with_response.dart';
 import 'package:matchster/features/auth/models/add_hieght_response.dart';
 import 'package:matchster/features/auth/models/upload_photo_response.dart';
@@ -11,129 +11,129 @@ class ProfileRepository {
   ProfileRepository({required this.profileService});
   final ProfileService profileService;
 
-  Future<BaseResponse<MyProfilResponse>> getMyProfile() async {
+  Future<ApiResponse<MyProfilResponse>> getMyProfile() async {
     return await profileService.getMyProfile();
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addWorkout({
+  Future<ApiResponse<Map<String, dynamic>>> addWorkout({
     required String workout,
   }) async {
     return await profileService.addWorkout(workout: workout);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addSmoking({
+  Future<ApiResponse<Map<String, dynamic>>> addSmoking({
     required String smoking,
   }) async {
     return await profileService.addSmoking(smoking: smoking);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addDrinking({
+  Future<ApiResponse<Map<String, dynamic>>> addDrinking({
     required String drinking,
   }) async {
     return await profileService.addDrinking(drinking: drinking);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addInterests({
+  Future<ApiResponse<Map<String, dynamic>>> addInterests({
     required List interests,
   }) async {
     return await profileService.addInterests(interests: interests);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addLanguages({
+  Future<ApiResponse<Map<String, dynamic>>> addLanguages({
     required List languages,
   }) async {
     return await profileService.addLanguages(languages: languages);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addZodiacsign({
+  Future<ApiResponse<Map<String, dynamic>>> addZodiacsign({
     required String zodiacsign,
   }) async {
     return await addZodiacsign(zodiacsign: zodiacsign);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addReligion({
+  Future<ApiResponse<Map<String, dynamic>>> addReligion({
     required String religion,
   }) async {
     return await profileService.addReligion(religion: religion);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addVisibility({
+  Future<ApiResponse<Map<String, dynamic>>> addVisibility({
     required String visibility,
   }) async {
     return await profileService.addVisibility(visibility: visibility);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addLooking({
+  Future<ApiResponse<Map<String, dynamic>>> addLooking({
     required List<String> lookingFor,
   }) async {
     return await profileService.addLooking(lookingFor: lookingFor);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addQualification({
+  Future<ApiResponse<Map<String, dynamic>>> addQualification({
     required String qualification,
   }) async {
     return await profileService.addQualification(qualification: qualification);
   }
 
-  Future<BaseResponse<Work>> addWork({
+  Future<ApiResponse<Work>> addWork({
     required String jobTitle,
     required String company,
   }) async {
     return await profileService.addWork(jobTitle: jobTitle, company: company);
   }
 
-  Future<BaseResponse<AddHieghtResponse>> addHeight({
+  Future<ApiResponse<AddHieghtResponse>> addHeight({
     required double feet,
     required double cm,
   }) async {
     return await profileService.addHieght(feet: feet, cm: cm);
   }
 
-  Future<BaseResponse<Map<String, dynamic>>> addAbout({
+  Future<ApiResponse<Map<String, dynamic>>> addAbout({
     required String about,
   }) async {
     return await profileService.addAbout(about: about);
   }
 
-  Future<BaseResponse<List<AutoCompleteResponse>>> autoCompleteSearchLocation({
+  Future<ApiResponse<List<AutoCompleteResponse>>> autoCompleteSearchLocation({
     required String query,
   }) async {
     return await profileService.autoCompleteSearchLocation(query: query);
   }
 
-  Future<BaseResponse<PlaceDetailsResponse>> placeDetails({
+  Future<ApiResponse<PlaceDetailsResponse>> placeDetails({
     required String placeId,
   }) async {
     return await profileService.placeDetails(placeId: placeId);
   }
 
-  Future<BaseResponse<void>> deleteProfile({required String profileId}) async {
+  Future<ApiResponse<void>> deleteProfile({required String profileId}) async {
     return await profileService.deleteProfile(profileId: profileId);
   }
 
-  Future<BaseResponse<void>> addPhoto({required String url}) async {
+  Future<ApiResponse<void>> addPhoto({required String url}) async {
     return await profileService.addPhoto(url: url);
   }
 
-  Future<BaseResponse<UploadPhotoResponse>?> uploadImageWithDio(
+  Future<ApiResponse<UploadPhotoResponse>?> uploadImageWithDio(
     String filePath,
   ) async {
     return await profileService.uploadImageWithDio(filePath);
   }
 
-  Future<BaseResponse<AddDateWithResponse>> allOfFame({
+  Future<ApiResponse<AddDateWithResponse>> allOfFame({
     required List imageUrlList,
   }) async {
     return profileService.allOfFame(imageUrlList: imageUrlList);
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addProfile({
+  Future<ApiResponse<AddDateWithResponse>> addProfile({
     required List imageUrlList,
   }) async {
     return await profileService.addProfile(imageUrlList: imageUrlList);
   }
 
-  Future<BaseResponse<AddDateWithResponse>> addHomeLocation({
+  Future<ApiResponse<AddDateWithResponse>> addHomeLocation({
     required String city,
     required String state,
     required String country,

@@ -18,7 +18,7 @@ import 'package:matchster/features/common/widgets/bar/linear_progress_bar_with_b
 import 'package:matchster/features/common/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/features/common/widgets/buttons/app_button.dart';
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
-import 'package:matchster/features/home/controller/location_controller.dart';
+import 'package:matchster/features/profile/controller/location_controller.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/controller/profile_form_controller.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';

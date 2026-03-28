@@ -1,15 +1,15 @@
-import 'package:matchster/core/network/base_response.dart';
+import 'package:matchster/core/network/api_response.dart';
 import 'package:matchster/features/auth/models/otp_verification_response.dart';
 import 'package:matchster/features/auth/services/login_service.dart';
 
 class AuthRepository {
   AuthRepository({required this.loginService});
   final LoginService loginService;
-  Future<BaseResponse<void>> getOtp({required String phoneNumber}) async {
+  Future<ApiResponse<void>> getOtp({required String phoneNumber}) async {
     return await loginService.sendOtp(number: phoneNumber);
   }
 
-  Future<BaseResponse<OtpVerificationResponse>> verifyOtp({
+  Future<ApiResponse<OtpVerificationResponse>> verifyOtp({
     required String phoneNumber,
     required String otp,
   }) async {

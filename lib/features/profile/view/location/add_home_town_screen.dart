@@ -10,7 +10,7 @@ import 'package:matchster/features/common/widgets/bottomsheet/custom_bottomsheet
 import 'package:matchster/features/common/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/common/widgets/fields/custom_form_field.dart';
-import 'package:matchster/features/home/controller/location_controller.dart';
+import 'package:matchster/features/profile/controller/location_controller.dart';
 import 'package:matchster/features/profile/helper/profile_helper.dart';
 
 class AddHomeTownScreen extends BaseView<LocationController> {

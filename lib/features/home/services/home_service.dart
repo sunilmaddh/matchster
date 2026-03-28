@@ -1,5 +1,5 @@
-import 'package:matchster/core/network/base_response.dart';
-import 'package:matchster/core/network/base_service.dart';
+import 'package:matchster/core/network/api_response.dart';
+import 'package:matchster/core/network/api_service.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
 import 'package:matchster/features/home/models/home_response.dart';
 import 'package:matchster/features/home/models/like_response.dart';
@@ -9,9 +9,9 @@ import 'package:matchster/features/home/models/requests/get_profile_request.dart
 class HomeService {
   HomeService({required this.baseServices});
 
-  final BaseService baseServices;
+  final ApiService baseServices;
 
-  Future<BaseResponse<HomeResponse>> getProfileList({
+  Future<ApiResponse<HomeResponse>> getProfileList({
     required GetProfileRequest request,
   }) async {
     return baseServices.postRequest<HomeResponse>(
@@ -21,7 +21,7 @@ class HomeService {
     );
   }
 
-  Future<BaseResponse<void>> createInterection({
+  Future<ApiResponse<void>> createInterection({
     required CreateInteractionRequest request,
   }) async {
     return baseServices.postRequest(
@@ -30,7 +30,7 @@ class HomeService {
     );
   }
 
-  Future<BaseResponse<LikeResponse>> likeOnMe() async {
+  Future<ApiResponse<LikeResponse>> likeOnMe() async {
     return baseServices.getRequest<LikeResponse>(
       path: ApiEndpoints.likesOnme,
       fromJsonT: (json) => LikeResponse.fromJson(json),

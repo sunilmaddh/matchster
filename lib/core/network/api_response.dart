@@ -1,23 +1,23 @@
 // lib/core/network/base_response.dart
-class BaseResponse<T> {
+class ApiResponse<T> {
   final bool success;
   final String message;
   final T? data;
   final int statusCode;
 
-  BaseResponse({
+  ApiResponse({
     required this.success,
     required this.message,
     required this.statusCode,
     this.data,
   });
 
-  factory BaseResponse.fromJson(
+  factory ApiResponse.fromJson(
     Map<String, dynamic> json,
     int statusCode,
     T Function(dynamic json)? fromJsonT,
   ) {
-    return BaseResponse<T>(
+    return ApiResponse<T>(
       success: json['success'] ?? true,
       message: json['message']?.toString() ?? '',
       statusCode: statusCode,
@@ -28,11 +28,11 @@ class BaseResponse<T> {
     );
   }
 
-  factory BaseResponse.error({
+  factory ApiResponse.error({
     required String message,
     required int statusCode,
   }) {
-    return BaseResponse<T>(
+    return ApiResponse<T>(
       success: false,
       message: message,
       statusCode: statusCode,

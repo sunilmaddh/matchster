@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 class AppLogger {
+  AppLogger._();
+
   static final Logger _logger = Logger(
     printer: PrettyPrinter(
       methodCount: 0,

@@ -25,6 +25,7 @@ abstract class AppRoutes {
   static const alcohol = '/alcohal_screen';
   static const interest = '/interest';
   static const languages = '/languages',
+      profilePhotoPreviewScreen = "/profile_photo_preview_screen",
       profilePreviewScreen = "/profile_preview_screen",
       currentLoadingScreen = "/current_loading_screen";
 }
