@@ -6,10 +6,10 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/extentions/date_x_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
-import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/features/common/widgets/buttons/circle_button_widget.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
 
 class DobWidget extends StatelessWidget {

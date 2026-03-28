@@ -4,16 +4,21 @@ import 'package:get/get.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
-import 'package:matchster/core/widgets/buttons/app_button.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/features/common/widgets/buttons/app_button.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 
-class CurrentLocation extends StatelessWidget {
-  CurrentLocation({super.key});
-  final RxBool isEnable = true.obs;
-  final _controller = Get.find<ProfileController>();
+class CurrentLocationScreen extends StatefulWidget {
+  const CurrentLocationScreen({super.key});
+
+  @override
+  State<CurrentLocationScreen> createState() => _CurrentLocationScreenState();
+}
+
+class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
+  int selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +26,14 @@ class CurrentLocation extends StatelessWidget {
       backgroundColor: AppColors.whiteColor,
       appBar: CustomAppBar(
         isCenterTitle: false,
-        title: "Current Location",
-        onTop: () {
-          Get.back();
-        },
+        title: AppStrings.currentLocation,
+        onTop: Get.back,
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: 20.horizontalPadding + 20.verticalPadding,
           child: Container(
-            margin: 20.horizontalPadding + 20.verticalPadding,
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.r),
               border: Border.all(color: Colors.black.withAlpha(77)),
@@ -41,39 +43,42 @@ class CurrentLocation extends StatelessWidget {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
+                  width: double.infinity,
                   height: 65.h,
                   decoration: BoxDecoration(
                     gradient: AppColors.gradiantPrimary,
-                    borderRadius: BorderRadius.circular(20.r),
-                    // BorderRadius.only(
-                    //   topLeft: Radius.circular(20.r),
-                    //   topRight: Radius.circular(20.r),
-                    // ),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20.r),
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(AppAssets.locations),
-                      15.wBox,
-                      CommonText.text(
-                        "${_controller.currentLocations.value.address!.city!},  ${_controller.currentLocations.value.address!.country!}",
-
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.whiteColor,
-                      ),
-                    ],
+                  child: Padding(
+                    padding: 12.horizontalPadding,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(AppAssets.locations),
+                        15.wBox,
+                        Expanded(
+                          child: CommonText.text(
+                            AppStrings.currentLocation,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 30.hBox,
                 Padding(
                   padding: 7.horizontalPadding,
                   child: CommonText.text(
+                    AppStrings.changeCurrentLocationTitle,
                     textAlign: TextAlign.center,
                     maxLines: 2,
-                    "Want to change your current location?",
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w500,
                   ),
@@ -82,28 +87,36 @@ class CurrentLocation extends StatelessWidget {
                 Padding(
                   padding: 15.horizontalPadding,
                   child: CommonText.text(
+                    AppStrings.changeCurrentLocationDescription,
                     textAlign: TextAlign.center,
                     maxLines: 3,
-                    "Don’t miss out! Upgrade to Matchster Premium to change your current location!",
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
                 40.hBox,
-                SubscriptionRow(),
+                SubscriptionRow(
+                  selectedIndex: selectedIndex,
+                  onPlanSelected: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },
+                ),
                 20.hBox,
-                PlanTypeFaqList(),
+                const PlanTypeFaqList(),
                 30.hBox,
                 Padding(
                   padding: 20.horizontalPadding,
                   child: AppButton(
                     isEnable: true,
-                    name: 'Upgrade to Change',
+                    name: AppStrings.upgradeToChange,
                     onTop: () {
-                      // _controller.getLocation();
+                      // Add premium purchase action here
                     },
                   ),
                 ),
+                20.hBox,
               ],
             ),
           ),
@@ -116,210 +129,229 @@ class CurrentLocation extends StatelessWidget {
 class PlanTypeFaqList extends StatelessWidget {
   const PlanTypeFaqList({super.key});
 
+  static const List<Map<String, String>> faqItems = [
+    {
+      "title": AppStrings.lookDifferent,
+      "subtitle": AppStrings.premiumProfileCover,
+    },
+    {
+      "title": AppStrings.lookDifferent,
+      "subtitle": AppStrings.premiumProfileCover,
+    },
+    {
+      "title": AppStrings.lookDifferent,
+      "subtitle": AppStrings.premiumProfileCover,
+    },
+    {
+      "title": AppStrings.lookDifferent,
+      "subtitle": AppStrings.premiumProfileCover,
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: 8.allPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(4, (index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(Icons.check, color: Colors.black, size: 20),
-                SizedBox(width: 8.w),
-                Expanded(
-                  child: RichText(
-                    text: TextSpan(
-                      text: "Look Different ",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: "(Get a Premium Profile cover)",
+        children:
+            faqItems.map((item) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.check, color: Colors.black, size: 20),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          text: item["title"],
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 16.sp,
-                            fontWeight: FontWeight.w300,
+                            fontWeight: FontWeight.w700,
                           ),
+                          children: [
+                            TextSpan(
+                              text: item["subtitle"],
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }),
+              );
+            }).toList(),
       ),
     );
   }
 }
 
 class SubscriptionRow extends StatelessWidget {
-  SubscriptionRow({super.key});
+  const SubscriptionRow({
+    super.key,
+    required this.selectedIndex,
+    required this.onPlanSelected,
+  });
 
-  final controller = Get.find<ProfileController>();
+  final int selectedIndex;
+  final ValueChanged<int> onPlanSelected;
 
-  final List<Map<String, dynamic>> plans = [
+  static const List<Map<String, String>> plans = [
     {
-      "duration": "3",
-      "label": "Month",
-      "price": "₹349/",
-      "unit": "3mo",
-      "discount": "10%",
+      "duration": AppStrings.three,
+      "label": AppStrings.month,
+      "price": AppStrings.priceThreeMonth,
+      "unit": AppStrings.unitThreeMonth,
+      "discount": AppStrings.discountTen,
     },
     {
-      "duration": "1",
-      "label": "Week",
-      "price": "₹49/",
-      "unit": "wk",
-      "discount": "45%",
-      "tag": "Popular",
+      "duration": AppStrings.one,
+      "label": AppStrings.week,
+      "price": AppStrings.priceOneWeek,
+      "unit": AppStrings.unitOneWeek,
+      "discount": AppStrings.discountFortyFive,
+      "tag": AppStrings.popular,
     },
     {
-      "duration": "1",
-      "label": "Month",
-      "price": "₹149/",
-      "unit": "mo",
-      "discount": "20%",
+      "duration": AppStrings.one,
+      "label": AppStrings.month,
+      "price": AppStrings.priceOneMonth,
+      "unit": AppStrings.unitOneMonth,
+      "discount": AppStrings.discountTwenty,
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(plans.length, (index) {
-          final plan = plans[index];
-          final isSelected = controller.selectedIndex.value == index;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(plans.length, (index) {
+        final plan = plans[index];
+        final isSelected = selectedIndex == index;
 
-          return GestureDetector(
-            onTap: () => controller.selectedIndex.value = index,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 0),
-              curve: Curves.easeInOut,
-              margin: EdgeInsets.symmetric(horizontal: 0.w),
-              width: 106.w,
-              height: isSelected ? 190.h : 183.h, // subtle height bump
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(index == 0 ? 20.r : 0),
-                  bottomLeft: Radius.circular(index == 0 ? 20.r : 0),
-                  topRight: Radius.circular(
-                    index == plans.length - 1 ? 20.r : 0,
-                  ),
-                  bottomRight: Radius.circular(
-                    index == plans.length - 1 ? 20.r : 0,
-                  ),
+        return GestureDetector(
+          onTap: () => onPlanSelected(index),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            width: 106.w,
+            height: isSelected ? 190.h : 183.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(index == 0 ? 20.r : 0),
+                bottomLeft: Radius.circular(index == 0 ? 20.r : 0),
+                topRight: Radius.circular(index == plans.length - 1 ? 20.r : 0),
+                bottomRight: Radius.circular(
+                  index == plans.length - 1 ? 20.r : 0,
                 ),
-                color: Colors.white,
-                border:
-                    isSelected
-                        ? const GradientBoxBorder(
-                          width: 2,
-                          gradient: LinearGradient(
-                            colors: [Color(0xff1B8CF5), Color(0xffFFC100)],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        )
-                        : Border.all(color: Colors.black.withAlpha(77)),
-                boxShadow:
-                    isSelected
-                        ? [
-                          BoxShadow(
-                            color: const Color(0xff1B8CF5).withAlpha(77),
-                            blurRadius: 8,
-                            spreadRadius: 1,
-                            offset: const Offset(0, 4),
-                          ),
-                        ]
-                        : [],
               ),
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Top tag for "Popular"
-                  if (plan["tag"] != null)
-                    Container(
-                      width: double.infinity,
-                      height: 22.h,
-                      decoration: BoxDecoration(
+              color: Colors.white,
+              border:
+                  isSelected
+                      ? const GradientBoxBorder(
+                        width: 2,
                         gradient: LinearGradient(
-                          colors: [
-                            const Color(0xffFFC592).withAlpha(128),
-                            const Color(0xff1B8CF5).withAlpha(128),
-                          ],
+                          colors: [Color(0xff1B8CF5), Color(0xffFFC100)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
-                      ),
-                      alignment: Alignment.center,
-                      child: CommonText.text(
-                        plan["tag"],
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.blackColor,
-                      ),
-                    ),
-                  8.hBox,
-                  CommonText.text(
-                    plan["duration"],
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.w600,
-                    color: isSelected ? const Color(0xff1B8CF5) : Colors.black,
-                  ),
-                  CommonText.text(
-                    plan["label"],
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w300,
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      text: plan["price"],
-                      children: [
-                        TextSpan(
-                          text: plan["unit"],
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      )
+                      : Border.all(color: Colors.black.withAlpha(77)),
+              boxShadow:
+                  isSelected
+                      ? [
+                        BoxShadow(
+                          color: const Color(0xff1B8CF5).withAlpha(77),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 4),
                         ),
-                      ],
-                    ),
-                  ),
-                  10.hBox,
+                      ]
+                      : [],
+            ),
+            child: Column(
+              children: [
+                if (plan["tag"] != null)
                   Container(
-                    padding: 2.horizontalPadding + 2.verticalPadding,
+                    width: double.infinity,
+                    height: 22.h,
                     alignment: Alignment.center,
-                    width: 76.w,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.r),
-                      color: const Color(0xffF2F2F2),
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xffFFC592).withAlpha(128),
+                          const Color(0xff1B8CF5).withAlpha(128),
+                        ],
+                      ),
                     ),
                     child: CommonText.text(
-                      plan["discount"],
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xff1B8CF5),
+                      plan["tag"]!,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.blackColor,
                     ),
                   ),
-                ],
-              ),
+                8.hBox,
+                CommonText.text(
+                  plan["duration"]!,
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? const Color(0xff1B8CF5) : Colors.black,
+                ),
+                CommonText.text(
+                  plan["label"]!,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w300,
+                ),
+                RichText(
+                  text: TextSpan(
+                    text: plan["price"]!,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: plan["unit"]!,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                10.hBox,
+                Container(
+                  padding: 2.horizontalPadding + 2.verticalPadding,
+                  alignment: Alignment.center,
+                  width: 76.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4.r),
+                    color: const Color(0xffF2F2F2),
+                  ),
+                  child: CommonText.text(
+                    plan["discount"]!,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xff1B8CF5),
+                  ),
+                ),
+              ],
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 }

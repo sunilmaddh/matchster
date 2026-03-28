@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/common_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 
 class PhotoCard extends StatelessWidget {
   final String image;

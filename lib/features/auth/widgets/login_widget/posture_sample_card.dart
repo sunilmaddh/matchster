@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 
 class PostureSampleCard extends StatelessWidget {
   const PostureSampleCard({super.key, required this.image});

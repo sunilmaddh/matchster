@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 
 class AnimatedSeekBar extends StatefulWidget {
   const AnimatedSeekBar({

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
-import 'package:matchster/core/widgets/buttons/app_button.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/features/common/widgets/buttons/app_button.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/profile/widgets/dark_mode_card.dart';
 import 'package:matchster/features/profile/widgets/setting_card.dart';
 

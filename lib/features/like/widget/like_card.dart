@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:matchster/core/utils/common_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 
 class LikeCard extends StatelessWidget {
   const LikeCard({
@@ -36,17 +36,11 @@ class LikeCard extends StatelessWidget {
           5.hBox,
           CommonText.text(
             text1,
-            fontFamily: "Caros",
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
             color: Color(0xff1D48EF),
           ),
-          CommonText.text(
-            text2,
-            fontFamily: "Caros",
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w700,
-          ),
+          CommonText.text(text2, fontSize: 16.sp, fontWeight: FontWeight.w700),
         ],
       ),
     );

@@ -3,151 +3,150 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/base/base_view.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/widgets/card/circle_gradiant_card.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/features/common/widgets/card/circle_gradiant_card.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/home/controller/home_controller.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget {
+class CustomBottomNavigationBar extends BaseView<HomeController> {
   const CustomBottomNavigationBar({super.key, required this.pageList});
+
   final List<Widget> pageList;
 
   @override
   State<CustomBottomNavigationBar> createState() =>
       _CustomBottomNavigationBarState();
+
+  @override
+  bool get useDefaultLoader => false;
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  final HomeController _controller = Get.find<HomeController>();
+class _CustomBottomNavigationBarState
+    extends BaseViewState<HomeController, CustomBottomNavigationBar> {
   @override
-  void initState() {
-    super.initState();
-    _controller.pageController = PageController(
-      initialPage: _controller.selectedIndex.value,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildView(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return false; // ❌ block back
-      },
-
+      onWillPop: () async => false,
       child: Scaffold(
         extendBody: true,
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _controller.pageController,
-              onPageChanged: _controller.onTabTapped,
-              children: widget.pageList,
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-
-              bottom: 40,
-              child: IgnorePointer(
-                child: Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.white],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            /// 🔹 Bottom navigation
+            _buildPageView(),
+            _buildBottomGradient(),
             Positioned(
               left: 0,
               right: 0,
               bottom: 0,
-              child: Obx(() => _bottomNavigation()),
+              child: Obx(_buildBottomNavigation),
             ),
-            Obx(
-              () =>
-                  _controller.isOverlay.isTrue
-                      ? Container(
-                        alignment: Alignment.center,
-                        color: Colors.white.withAlpha(153),
-                        child: Hero(
-                          tag: "like_dislike",
-                          transitionOnUserGestures: true,
-
-                          child: CircleGradiantCard(
-                            isGradiant:
-                                _controller.isLike.isTrue ? true : false,
-                            widget: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                _controller.isLike.isTrue
-                                    ? AppAssets.likeAssets
-                                    : AppAssets.dislike,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                      : SizedBox.shrink(),
-            ),
+            Obx(_buildOverlay),
           ],
         ),
       ),
     );
   }
 
-  // ================= HOME BACKGROUND =================
-  Widget _homeBackground() {
+  Widget _buildPageView() {
+    return PageView(
+      physics: const NeverScrollableScrollPhysics(),
+      controller: controller.pageController,
+      onPageChanged: controller.onPageChanged,
+      children: widget.pageList,
+    );
+  }
+
+  Widget _buildBottomGradient() {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 40,
+      child: IgnorePointer(
+        child: Container(
+          height: 35,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [Colors.white, Colors.transparent],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOverlay() {
+    if (!controller.isOverlay.value) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            const Color(0xFF7A96F8).withValues(alpha: 0),
-            const Color(0xFF587DFF).withValues(alpha: 128),
-            const Color(0xFF5174FF).withValues(alpha: 191), // 0.75
-            const Color(0xFF3F66FF).withValues(alpha: 222), // 0.87
-            const Color(0xFF1D48EF).withValues(alpha: 0), // 0.0
-          ],
+      alignment: Alignment.center,
+      color: Colors.white.withAlpha(153),
+      child: Hero(
+        tag: 'like_dislike',
+        transitionOnUserGestures: true,
+        child: CircleGradiantCard(
+          isGradiant: controller.isLike.value,
+          widget: Padding(
+            padding: const EdgeInsets.all(8),
+            child: SvgPicture.asset(
+              controller.isLike.value
+                  ? AppAssets.likeAssets
+                  : AppAssets.dislike,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  // ================= BOTTOM NAV =================
-  Widget _bottomNavigation() {
+  Widget _buildBottomNavigation() {
     return SafeArea(
       top: false,
       child: ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
           child: Container(
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(8.0),
-
+            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(color: Color(0xffE6E6E6)),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xffE6E6E6)),
             ),
-
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _navItem(0, "Home", AppAssets.homeAssets),
-                _navItem(1, "Likes", AppAssets.likesAssets),
-                _navItem(2, "Premium", AppAssets.premuimAssets),
-                _navItem(3, "Chats", AppAssets.chatAssets),
-                _navItem(4, "Profile", AppAssets.profileAssets),
+                _buildNavItem(
+                  index: 0,
+                  label: AppStrings.home,
+                  icon: AppAssets.homeAssets,
+                ),
+                _buildNavItem(
+                  index: 1,
+                  label: AppStrings.likes,
+                  icon: AppAssets.likesAssets,
+                ),
+                _buildNavItem(
+                  index: 2,
+                  label: AppStrings.premium,
+                  icon: AppAssets.premuimAssets,
+                ),
+                _buildNavItem(
+                  index: 3,
+                  label: AppStrings.chats,
+                  icon: AppAssets.chatAssets,
+                ),
+                _buildNavItem(
+                  index: 4,
+                  label: AppStrings.profile,
+                  icon: AppAssets.profileAssets,
+                ),
               ],
             ),
           ),
@@ -156,30 +155,35 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     );
   }
 
-  // ================= NAV ITEM =================
-  Widget _navItem(int index, String label, String icon) {
-    final bool selected = _controller.selectedIndex.value == index;
+  Widget _buildNavItem({
+    required int index,
+    required String label,
+    required String icon,
+  }) {
+    final bool isSelected = controller.selectedIndex.value == index;
 
     return InkWell(
-      onTap: () => _controller.onTabTapped(index),
+      onTap: () => controller.onTabTapped(index),
       borderRadius: BorderRadius.circular(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            icon,
-            height: 22,
-            color: selected ? AppColors.primary : AppColors.blackColor,
-            // const Color(0xFF9AA0A6),
-          ),
-          const SizedBox(height: 4),
-          CommonText.text(
-            label,
-            fontSize: 11.5,
-            fontWeight: FontWeight.w500,
-            color: selected ? AppColors.primary : AppColors.blackColor,
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              icon,
+              height: 22,
+              color: isSelected ? AppColors.primary : AppColors.blackColor,
+            ),
+            const SizedBox(height: 4),
+            CommonText.text(
+              label,
+              fontSize: 11.5,
+              fontWeight: FontWeight.w500,
+              color: isSelected ? AppColors.primary : AppColors.blackColor,
+            ),
+          ],
+        ),
       ),
     );
   }

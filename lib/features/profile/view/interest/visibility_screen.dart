@@ -4,12 +4,14 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/common_lists.dart';
 import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/features/profile/controller/profile_form_controller.dart';
 import 'package:matchster/features/profile/widgets/common_widget.dart';
 
 class VisibilityScreen extends StatelessWidget {
   VisibilityScreen({super.key});
 
   final _profileController = Get.find<ProfileController>();
+  final _profileFormController = Get.find<ProfileFormController>();
   @override
   Widget build(BuildContext context) {
     return CommonWidget(
@@ -18,7 +20,7 @@ class VisibilityScreen extends StatelessWidget {
       subtitle: "My profile should be visible to",
       list: CommonLists.visibilities,
       onTop: (v) {
-        _profileController.selectedVisibility.value = v;
+        _profileFormController.selectedVisibility.value = v;
         // if (_profileController.selectedItems.contains(v)) {
         //   _profileController.selectedItems.remove(v);
         // } else {
@@ -27,15 +29,14 @@ class VisibilityScreen extends StatelessWidget {
       },
       isSelected:
           (v) =>
-              _profileController.selectedVisibility.value
+              _profileFormController.selectedVisibility.value
                   .toLowerCase()
                   .trim() ==
               v.toLowerCase().trim(),
       onTopButton: () {
         _profileController.addVisibility(
-          visibility:
-              _profileController.selectedVisibility.value
-                  .toSnakeCaseLowerCase(),
+          _profileFormController.selectedVisibility.value
+              .toSnakeCaseLowerCase(),
         );
       },
       appBarTitle: 'Profile visibility',

@@ -1,30 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
-import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/core/widgets/fields/custom_form_field.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/features/common/widgets/buttons/circle_button_widget.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
+import 'package:matchster/features/common/widgets/fields/custom_form_field.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/features/profile/controller/profile_form_controller.dart';
 
 class WorkScreen extends StatelessWidget {
   WorkScreen({super.key});
 
-  final _controller = Get.find<ProfileController>();
-  final _formKey = GlobalKey<FormState>();
+  final ProfileController _controller = Get.find<ProfileController>();
+  final ProfileFormController _formController =
+      Get.find<ProfileFormController>();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void _updateButtonState() {
+    final hasJobTitle =
+        _formController.jobTitleController.text.trim().isNotEmpty;
+    final hasCompany = _formController.companyController.text.trim().isNotEmpty;
+
+    _formController.isEditEnable.value = hasJobTitle && hasCompany;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Obx(
         () => CircleButtonWidget(
           icon: Icons.check,
-          isEnable: _controller.isEditEnable.isTrue,
+          isEnable: _formController.isEditEnable.value,
           onTap: () {
-            if (_formKey.currentState!.validate()) {
+            if (_formKey.currentState?.validate() ?? false) {
               _controller.addWork(
-                jobTitle: _controller.jobTtileController.text,
-                company: _controller.companyController.text,
+                jobTitle: _formController.jobTitleController.text.trim(),
+                company: _formController.companyController.text.trim(),
               );
             }
           },
@@ -32,10 +46,8 @@ class WorkScreen extends StatelessWidget {
       ),
       appBar: CustomAppBar(
         isCenterTitle: false,
-        title: "Work",
-        onTop: () {
-          Get.back();
-        },
+        title: AppStrings.work,
+        onTop: Get.back,
       ),
       body: Padding(
         padding: 15.horizontalPadding,
@@ -45,73 +57,37 @@ class WorkScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               20.hBox,
-
               CommonText.text(
-                "What about your work?",
+                AppStrings.whatAboutYourWork,
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w500,
                 fontFamily: "Caros",
               ),
-
               20.hBox,
-              CommonText.text("Job title"),
+              CommonText.text(AppStrings.jobTitle),
               10.hBox,
               CustomFormField(
                 inputFormatters: [
                   FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
                 ],
-                label: "",
-                hint: "Enter you job title",
-                controller: _controller.jobTtileController,
+                label: '',
+                hint: AppStrings.enterYourJobTitle,
+                controller: _formController.jobTitleController,
                 enableBorder: false.obs,
-                // validator: (v) {
-                //   if (v == null && v!.isEmpty) {
-                //     return "Please enter job title";
-                //   } else if (AppMethods.isValid(v)) {
-                //     return "Please enter valid text";
-                //   } else {
-                //     return null;
-                //   }
-                // },
-                onChanged: (job) {
-                  if (job != null &&
-                      job.isNotEmpty &&
-                      _controller.companyController.text.isNotEmpty) {
-                    _controller.isEditEnable.value = true;
-                  } else {
-                    _controller.isEditEnable.value = false;
-                  }
-                },
+                onChanged: (_) => _updateButtonState(),
               ),
               20.hBox,
-              CommonText.text("Company(or industry)"),
+              CommonText.text(AppStrings.companyOrIndustry),
               10.hBox,
               CustomFormField(
                 inputFormatters: [
                   FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
                 ],
-                label: "",
-                hint: "Enter your company name",
-                controller: _controller.companyController,
+                label: '',
+                hint: AppStrings.enterYourCompanyName,
+                controller: _formController.companyController,
                 enableBorder: false.obs,
-                // validator: (v) {
-                //   if (v == null && v!.isEmpty) {
-                //     return "Please enter your company name";
-                //   } else if (!AppMethods.isValid(v)) {
-                //     return "Please enter valid text";
-                //   } else {
-                //     return null;
-                //   }
-                // },
-                onChanged: (com) {
-                  if (com != null &&
-                      com.isNotEmpty &&
-                      _controller.jobTtileController.text.isNotEmpty) {
-                    _controller.isEditEnable.value = true;
-                  } else {
-                    _controller.isEditEnable.value = false;
-                  }
-                },
+                onChanged: (_) => _updateButtonState(),
               ),
             ],
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 
 class CommonWrapCard extends StatelessWidget {
   const CommonWrapCard({super.key, required this.text, required this.img});

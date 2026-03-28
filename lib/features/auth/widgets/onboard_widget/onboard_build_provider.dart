@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
 import 'package:matchster/features/auth/widgets/onboard_widget/matchster_progress_indicator.dart';
 

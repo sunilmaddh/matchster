@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
+import 'package:matchster/core/base/base_controller.dart';
 
-class FilterController extends GetxController {
+class FilterController extends BaseController {
   RxString isFilterType = "Basic Filter".obs;
   RxBool isSwitchOn = false.obs;
 

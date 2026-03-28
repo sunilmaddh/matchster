@@ -52,6 +52,7 @@ dependencies:
   hand_landmarker: ^2.2.0
   tflite_flutter: ^0.12.1
   diacritic: ^0.1.6
+  logger: ^2.7.0
   
  
 

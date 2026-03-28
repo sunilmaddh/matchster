@@ -1,39 +1,55 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/base/base_view.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/app_input_formetters.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/common_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/utils/navigation_halper.dart';
-import 'package:matchster/core/widgets/buttons/app_button.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/core/widgets/fields/custom_form_field.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/buttons/app_button.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
+import 'package:matchster/features/common/widgets/fields/custom_form_field.dart';
 import 'package:matchster/features/auth/auth_controllers/country_controller.dart';
 import 'package:matchster/features/auth/auth_controllers/login_controller.dart';
 import 'package:matchster/features/auth/views/login/country_list_screen.dart';
-import 'package:matchster/features/auth/views/otp_screen.dart';
 import 'package:matchster/routes/app_navigation.dart';
 
-class LoginFieldWithButton extends StatelessWidget {
-  LoginFieldWithButton({super.key});
-
-  final _countryController = Get.find<CountryController>();
-  final _loginController = Get.find<LoginController>();
-  final _formKey = GlobalKey<FormState>();
+class LoginFieldWithButtonView extends BaseView<LoginController> {
+  const LoginFieldWithButtonView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<LoginFieldWithButtonView> createState() => _LoginFieldWithButtonState();
+}
+
+class _LoginFieldWithButtonState
+    extends BaseViewState<LoginController, LoginFieldWithButtonView> {
+  final CountryController _countryController = Get.find<CountryController>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  late final TextEditingController phoneController;
+
+  @override
+  void onInit() {
+    phoneController = TextEditingController();
+  }
+
+  @override
+  void onDispose() {
+    phoneController.dispose();
+  }
+
+  @override
+  Widget buildView(BuildContext context) {
     return SafeArea(
       bottom: true,
       left: true,
       right: true,
       top: true,
       child: Scaffold(
-        resizeToAvoidBottomInset: true, // 🔥 KEY FIX
+        resizeToAvoidBottomInset: true,
         bottomNavigationBar: Obx(
           () => Padding(
             padding: EdgeInsets.only(
@@ -43,28 +59,25 @@ class LoginFieldWithButton extends StatelessWidget {
                   MediaQuery.of(context).viewInsets.bottom > 0 ? 10.h : 20.h,
             ),
             child: AppButton(
-              isEnable: _loginController.isEnable.value,
+              isEnable: controller.isEnable.value,
               name: AppConstants.verify,
               onTop: () async {
-                final number =
-                    _loginController.countryCode +
-                    _loginController.controller.text;
+                AppMethods.hideKeyboard();
 
-                _loginController.phoneNumber.value = number;
-                if (_loginController.isEnable.isTrue) {
-                  await _loginController.sendOtp(number);
-                  NavigationHelper.push(OtpScreen());
-                }
+                if (!(_formKey.currentState?.validate() ?? false)) return;
+
+                final number =
+                    '${controller.countryCode.value}${phoneController.text.trim()}';
+
+                await controller.submitPhone(number);
               },
             ),
           ),
         ),
-
         body: SingleChildScrollView(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -73,13 +86,10 @@ class LoginFieldWithButton extends StatelessWidget {
                 alignment: Alignment.center,
                 child: CommonAssets.svgAsset(AppAssets.appLogo),
               ),
-
               60.hBox,
-
               Container(
                 margin: EdgeInsets.only(right: 5.w),
                 width: Get.width,
-                // height: 350.h,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(AppAssets.loginImage2),
@@ -95,45 +105,41 @@ class LoginFieldWithButton extends StatelessWidget {
                       50.hBox,
                       Align(
                         alignment: Alignment.center,
-                        child: CommonText.text(
-                          textAlign: TextAlign.center,
-                          _loginController.isAccessAccount.isTrue
-                              ? AppConstants.loginTitle
-                              : "Create account",
-                          fontSize: 30.sp,
-                          fontWeight: FontWeight.w600,
+                        child: Obx(
+                          () => CommonText.text(
+                            textAlign: TextAlign.center,
+                            controller.isAccessAccount.isTrue
+                                ? AppConstants.loginTitle
+                                : 'Create account',
+                            fontSize: 30.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-
                       20.hBox,
-
-                      CommonText.text(
-                        textAlign: TextAlign.center,
-                        maxLines: 3,
-                        _loginController.isAccessAccount.isTrue
-                            ? AppConstants.loginDescription
-                            : AppConstants.loginSubtile,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.loginTitleColor,
+                      Obx(
+                        () => CommonText.text(
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
+                          controller.isAccessAccount.isTrue
+                              ? AppConstants.loginDescription
+                              : AppConstants.loginSubtile,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.loginTitleColor,
+                        ),
                       ),
-
                       50.hBox,
-
                       CommonText.text(
-                        "Phone Number",
+                        'Phone Number',
                         fontWeight: FontWeight.w500,
                         fontSize: 14.sp,
                       ),
-
                       5.hBox,
-
-                      /// PHONE FIELD ROW
                       Form(
                         key: _formKey,
                         child: Row(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start, // IMPORTANT
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,13 +147,19 @@ class LoginFieldWithButton extends StatelessWidget {
                                 Obx(
                                   () => InkWell(
                                     onTap: () async {
-                                      _countryController.selectedCountry.value =
+                                      final selectedCountry =
                                           await AppNavigation.toWithClassName<
                                             Country
                                           >(CountryListScreen());
 
-                                      _loginController.countryCode.value =
-                                          "+${_countryController.selectedCountry.value!.phoneCode}";
+                                      if (selectedCountry == null) return;
+
+                                      _countryController.selectedCountry.value =
+                                          selectedCountry;
+
+                                      controller.updateCountryCode(
+                                        '+${selectedCountry.phoneCode}',
+                                      );
                                     },
                                     child: Container(
                                       height:
@@ -163,7 +175,7 @@ class LoginFieldWithButton extends StatelessWidget {
                                         border: Border.all(
                                           width: 2,
                                           color:
-                                              _loginController.isEnable.isTrue
+                                              controller.isEnable.value
                                                   ? AppColors.textFieldColor
                                                   : AppColors.blackColor
                                                       .withAlpha(64),
@@ -176,8 +188,8 @@ class LoginFieldWithButton extends StatelessWidget {
                                                         .selectedCountry
                                                         .value !=
                                                     null
-                                                ? "${_countryController.selectedCountry.value!.countryCode} +${_countryController.selectedCountry.value!.phoneCode}"
-                                                : "IN +91",
+                                                ? '${_countryController.selectedCountry.value!.countryCode} +${_countryController.selectedCountry.value!.phoneCode}'
+                                                : 'IN +91',
                                             fontSize: 16.sp,
                                             color: Colors.black.withAlpha(128),
                                           ),
@@ -190,15 +202,10 @@ class LoginFieldWithButton extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-
-                                /// 👇 Reserve error space (same height as TextFormField error)
                                 SizedBox(height: 20.h),
                               ],
                             ),
-
                             5.wBox,
-
-                            /// PHONE INPUT
                             Expanded(
                               child: CustomFormField(
                                 maxLength: 10,
@@ -206,20 +213,17 @@ class LoginFieldWithButton extends StatelessWidget {
                                 inputFormatters: [
                                   AppInputFormatters.onlyNumbers(),
                                 ],
-                                enableBorder: _loginController.isEnable,
-                                controller: _loginController.controller,
+                                enableBorder: controller.isEnable,
+                                controller: phoneController,
                                 validator: (number) {
                                   return AppMethods.validateMobile(number);
                                 },
                                 hint: AppConstants.hintLoginMessage,
                                 onChanged: (value) {
-                                  if (_formKey.currentState!.validate()) {
-                                    if (value != null && value.length == 10) {
-                                      _loginController.isEnable.value = true;
-                                      AppMethods.hideKeyboard();
-                                    } else {
-                                      _loginController.isEnable.value = false;
-                                    }
+                                  controller.updatePhoneNumber(value ?? '');
+
+                                  if ((value ?? '').length == 10) {
+                                    AppMethods.hideKeyboard();
                                   }
                                 },
                                 label: 'Enter Mobile Number',
@@ -233,9 +237,6 @@ class LoginFieldWithButton extends StatelessWidget {
                   ),
                 ),
               ),
-
-              /// MAIN CONTENT
-              ///
             ],
           ),
         ),

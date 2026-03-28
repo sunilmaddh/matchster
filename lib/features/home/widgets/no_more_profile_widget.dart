@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/common_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/buttons/app_button.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/buttons/app_button.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 
 class NoMoreProfileWidget extends StatelessWidget {
   const NoMoreProfileWidget({super.key});
@@ -24,11 +25,7 @@ class NoMoreProfileWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   30.hBox,
-                  CommonAssets.imageAsset(
-                    AppAssets.noMProfile,
-                    // height: 150.h,
-                    // width: 150.w,
-                  ),
+                  CommonAssets.imageAsset(AppAssets.noMProfile),
                   30.hBox,
                   Padding(
                     padding: 40.horizontalPadding,
@@ -51,22 +48,12 @@ class NoMoreProfileWidget extends StatelessWidget {
                   50.hBox,
                   AppButton(
                     isEnable: true,
-                    name: "Update Preferences",
+                    name: AppStrings.updatePreference,
                     onTop: () {},
                   ),
                 ],
               ),
             ),
-
-            // Positioned(
-            //   left: 16.w,
-            //   right: 16.w,
-            //   bottom:
-            //       kBottomNavigationBarHeight +
-            //       MediaQuery.of(context).padding.bottom +
-            //       40.h,
-            //   child: AppButton(name: "Update Preferences", onTop: () {}),
-            // ),
           ],
         ),
       ),

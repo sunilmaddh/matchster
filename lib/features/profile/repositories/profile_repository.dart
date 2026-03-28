@@ -30,7 +30,7 @@ class ProfileRepository {
   Future<BaseResponse<Map<String, dynamic>>> addDrinking({
     required String drinking,
   }) async {
-    return await addDrinking(drinking: drinking);
+    return await profileService.addDrinking(drinking: drinking);
   }
 
   Future<BaseResponse<Map<String, dynamic>>> addInterests({

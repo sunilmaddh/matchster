@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 
 class OtpWidget extends StatelessWidget {
   OtpWidget({

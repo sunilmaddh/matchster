@@ -6,10 +6,10 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/common_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
-import 'package:matchster/core/widgets/bottomsheet/image_picker_bottom_sheet.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/features/common/widgets/bottomsheet/image_picker_bottom_sheet.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 
 class PhotoReviewBottomsheet {
   static void show({required Function(File file) onImageSelected}) {

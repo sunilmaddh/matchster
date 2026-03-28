@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
 import 'package:matchster/features/profile/widgets/location_card.dart';
 

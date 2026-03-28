@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/core/extentions/interests_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/common_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/home/models/home_response.dart';
 import 'package:matchster/features/home/widgets/circle_widget.dart';
 
@@ -24,7 +25,7 @@ class MainPhotoCard extends StatelessWidget {
   final VoidCallback onLikeTap;
   final VoidCallback onDislikeTap;
   final void Function(double dy) onVerticalDrag;
-  final ValueNotifier<bool> showUpArrow;
+  final RxBool showUpArrow;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,6 @@ class MainPhotoCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            /// MAIN IMAGE
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(40.r)),
@@ -47,19 +47,9 @@ class MainPhotoCard extends StatelessWidget {
                   image: NetworkImage(data.mainPhoto.toString()),
                   fit: BoxFit.cover,
                 ),
-                // CommonAssets.networkImage(
-                //   data.mainPhoto.toString(),
-                //   placeholder: const SizedBox(),
-                //   errorWidget: Container(
-                //     padding: 20.horizontalPadding,
-                //     color: Colors.white,
-                //     child: SvgPicture.asset(AppAssets.appLogo),
-                //   ),
-                // ),
               ),
             ),
 
-            /// GRADIENT OVERLAY
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
@@ -78,29 +68,25 @@ class MainPhotoCard extends StatelessWidget {
               ),
             ),
 
-            /// UP / DOWN ARROW
-            ValueListenableBuilder<bool>(
-              valueListenable: showUpArrow,
-              builder: (_, isUp, __) {
-                return Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SafeArea(
-                    minimum: EdgeInsets.only(bottom: 120.h),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      child: SvgPicture.asset(
-                        isUp
-                            ? AppAssets.downArrowAssets
-                            : AppAssets.upArrowAssets,
-                        key: ValueKey(isUp),
-                      ),
+            Obx(() {
+              final isUp = showUpArrow.value;
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: SafeArea(
+                  minimum: EdgeInsets.only(bottom: 120.h),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: SvgPicture.asset(
+                      isUp
+                          ? AppAssets.downArrowAssets
+                          : AppAssets.upArrowAssets,
+                      key: ValueKey(isUp),
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            }),
 
-            /// BOTTOM CONTENT (ALWAYS ABOVE BOTTOM NAV)
             Positioned(
               left: 0,
               right: 0,
@@ -115,7 +101,6 @@ class MainPhotoCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    /// LEFT DETAILS
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,7 +128,7 @@ class MainPhotoCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(top: 4.h),
                               child: CommonText.text(
-                                "${data.distance} km away",
+                                "${data.distance} km ${AppStrings.away}",
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.whiteColor,
@@ -188,20 +173,19 @@ class MainPhotoCard extends StatelessWidget {
                       ),
                     ),
 
-                    /// RIGHT ACTION BUTTONS
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CircleWidget(
                           image: AppAssets.likeAssets,
-                          text: "Like",
+                          text: AppStrings.like,
                           onTop: onLikeTap,
                         ),
                         10.hBox,
                         CircleWidget(
                           isGradient: false,
                           image: AppAssets.dislike,
-                          text: "Dislike",
+                          text: AppStrings.dislike,
                           onTop: onDislikeTap,
                         ),
                       ],

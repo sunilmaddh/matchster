@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/card/switch_card.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/card/switch_card.dart';
 import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
 
 class SwitchWidget extends StatelessWidget {

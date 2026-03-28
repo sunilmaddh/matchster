@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/core/extentions/height_enum_ext.dart';
+import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/features/profile/controller/profile_form_controller.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
-import 'package:matchster/features/profile/view/interest/alcohal_screen.dart';
-import 'package:matchster/features/profile/view/interest/interest_screen.dart';
-import 'package:matchster/features/profile/view/interest/languages_screen.dart';
-import 'package:matchster/features/profile/view/interest/smoke_screen.dart';
-import 'package:matchster/features/profile/view/interest/workout_screen.dart';
 import 'package:matchster/features/profile/widgets/interest_card.dart';
+import 'package:matchster/routes/app_routes.dart';
 
 class PreferenceListWidget extends StatelessWidget {
   PreferenceListWidget({
@@ -20,11 +18,12 @@ class PreferenceListWidget extends StatelessWidget {
     required this.lifestyle,
     required this.personal,
   });
+
   final Lifestyle lifestyle;
   final Personal personal;
 
-  final _comtroller = Get.find<ProfileController>();
-
+  final ProfileController _profileController = Get.find<ProfileController>();
+  final ProfileFormController _controller = Get.find<ProfileFormController>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,110 +31,106 @@ class PreferenceListWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CommonText.text(
-          "Preferences",
+          AppStrings.preferences,
           fontSize: 16.sp,
           fontWeight: FontWeight.w500,
-          fontFamily: "Caros",
         ),
         5.hBox,
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (lifestyle.workout != null && lifestyle.workout!.isNotEmpty) {
-                _comtroller.selectedWorkout.value = lifestyle.workout!;
-              } else {
-                _comtroller.selectedWorkout.value = "";
-              }
-              Get.to(() => WorkoutScreen());
-            },
-            child: InterestCard(
-              title: "Workout",
-              subTitle: AppMethods.capitalizeFirst(lifestyle.workout!),
-              image: AppAssets.gymAssets2,
-            ),
+        _buildCard(
+          onTap: () {
+            _controller.selectedWorkout.value = lifestyle.workout ?? '';
+            _profileController.navigateTo(AppRoutes.workout);
+          },
+          child: InterestCard(
+            title: AppStrings.workout,
+            subTitle: _formatSingleValue(lifestyle.workout),
+            image: AppAssets.gymAssets2,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (lifestyle.smoking != null && lifestyle.smoking!.isNotEmpty) {
-                _comtroller.selectedSmoke.value = lifestyle.smoking!;
-              } else {
-                _comtroller.selectedSmoke.value = "";
-              }
-              Get.to(() => SmokeScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffDEB4B4),
-              title: 'Smoking',
-              subTitle: AppMethods.capitalizeFirst(lifestyle.smoking!),
-              image: AppAssets.smokingAssets,
-            ),
+        _buildCard(
+          onTap: () {
+            _controller.selectedSmoke.value = lifestyle.smoking ?? '';
+            _profileController.navigateTo(AppRoutes.smoke);
+          },
+          child: InterestCard(
+            color: AppColors.smokingCardColor,
+            title: AppStrings.smoking,
+            subTitle: _formatSingleValue(lifestyle.smoking),
+            image: AppAssets.smokingAssets,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (lifestyle.drinking != null &&
-                  lifestyle.drinking!.isNotEmpty) {
-                _comtroller.selectedDrinking.value = lifestyle.drinking!;
-              } else {
-                _comtroller.selectedDrinking.value = "";
-              }
-              Get.to(() => AlcohalScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffDEB4C8),
-              title: 'Drinking',
-              subTitle: AppMethods.capitalizeFirst(lifestyle.drinking!),
-              image: AppAssets.drinkAsssets,
-            ),
+        _buildCard(
+          onTap: () {
+            _controller.selectedDrinking.value = lifestyle.drinking ?? '';
+            _profileController.navigateTo(AppRoutes.alcohol);
+          },
+          child: InterestCard(
+            color: AppColors.drinkingCardColor,
+            title: AppStrings.drinking,
+            subTitle: _formatSingleValue(lifestyle.drinking),
+            image: AppAssets.drinkAsssets,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () async {
-              if (personal.interests != null &&
-                  personal.interests!.isNotEmpty) {
-                _comtroller.loadFromApi(personal.interests!);
-              } else {
-                _comtroller.selectedInterests.clear();
-              }
-              Get.to(() => InterestScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffB4B8DE),
-              title: 'Interest',
-              subTitle: personal.interests!.capitalizeFirstAndJoin(),
-              image: AppAssets.interestAssets,
-            ),
+        _buildCard(
+          onTap: () {
+            if (personal.interests != null && personal.interests!.isNotEmpty) {
+              // _profileController.(personal.interests!);
+            } else {
+              _controller.selectedInterests.clear();
+            }
+            _profileController.navigateTo(AppRoutes.interest);
+          },
+          child: InterestCard(
+            color: AppColors.interestCardColor,
+            title: AppStrings.interest,
+            subTitle: _formatListValue(personal.interests),
+            image: AppAssets.interestAssets,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () async {
-              if (personal.languages != null &&
-                  personal.languages!.isNotEmpty) {
-                await _comtroller.setLanguageFromApi(personal.languages);
-              } else {
-                _comtroller.selectedInterests.clear();
-              }
-              Get.to(() => LanguagesScreen());
-            },
-            child: InterestCard(
-              color: Color(0xff85CFCF),
-              title: 'Languages',
-              subTitle: personal.languages!.capitalizeFirstAndJoin(),
-              image: AppAssets.gymAssets2,
-            ),
+        _buildCard(
+          onTap: () async {
+            if (personal.languages != null && personal.languages!.isNotEmpty) {
+              // await _profileController.setLanguageFromApi(personal.languages);
+            } else {
+              _controller.selectedLanguages.clear();
+            }
+            _profileController.navigateTo(AppRoutes.landingScreen);
+          },
+          child: InterestCard(
+            color: AppColors.languagesCardColor,
+            title: AppStrings.languages,
+            subTitle: _formatListValue(personal.languages),
+            image: AppAssets.gymAssets2,
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildCard({required VoidCallback onTap, required Widget child}) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 15.h),
+      child: InkWell(onTap: onTap, child: child),
+    );
+  }
+
+  String _formatSingleValue(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppStrings.notAdded;
+    }
+    return AppMethods.capitalizeFirst(value);
+  }
+
+  String _formatListValue(dynamic value) {
+    if (value == null) {
+      return AppStrings.notAdded;
+    }
+
+    final text = value.toString().trim();
+    if (text.isEmpty) {
+      return AppStrings.notAdded;
+    }
+
+    return text;
   }
 }

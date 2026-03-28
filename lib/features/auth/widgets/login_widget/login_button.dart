@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({
@@ -33,7 +33,6 @@ class LoginButton extends StatelessWidget {
             image.isNotEmpty ? SvgPicture.asset(image) : SizedBox.shrink(),
             10.wBox,
             CommonText.text(
-              fontFamily: "Caros",
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
               name,

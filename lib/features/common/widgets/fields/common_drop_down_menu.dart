@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 
 class CommonDropdown<T> extends StatelessWidget {
   final List<T> items;

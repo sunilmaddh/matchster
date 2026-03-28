@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bottomsheet/common_bottom_sheet.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
 import 'package:matchster/features/auth/helpers/onboard_halper.dart';
 
@@ -24,15 +25,12 @@ class YourHeightWidget extends StatelessWidget {
             AppConstants.whatYourHeight,
             fontSize: 24.sp,
             fontWeight: FontWeight.w600,
-            fontFamily: "Caros",
           ),
-          // 20.hBox,
           CommonText.text(
             maxLines: 2,
             AppConstants.heightDescription,
             fontSize: 16.sp,
             fontWeight: FontWeight.w400,
-            fontFamily: "Caros",
           ),
 
           20.hBox,
@@ -50,7 +48,7 @@ class YourHeightWidget extends StatelessWidget {
                   );
                   _controller.cm.value = height.cm;
                   _controller.heightController.value =
-                      "${height.feet} feet ${height.inch} inch";
+                      "${height.feet} ${AppStrings.feet} ${height.inch} ${AppStrings.inch}";
                   _controller.isHeightSelected.value = true;
                   _controller.updateButtonState();
                   debugPrint(_controller.isHeightSelected.value.toString());
@@ -61,7 +59,6 @@ class YourHeightWidget extends StatelessWidget {
                     _controller.isNextPageEnable.value = false;
                     final current = _controller.currentIndex.value;
                     final isSuccess = await _controller.submitStep(current);
-
                     _controller.completeStep(current);
                   }
                   AppMethods.hideKeyboard();
@@ -89,7 +86,7 @@ class YourHeightWidget extends StatelessWidget {
                 child: CommonText.text(
                   _controller.heightController.isNotEmpty
                       ? _controller.heightController.value
-                      : "Select your height",
+                      : AppStrings.selectYourHeight,
 
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.w500,
@@ -101,14 +98,6 @@ class YourHeightWidget extends StatelessWidget {
                 ),
               ),
             ),
-
-            // CustomFormField(
-            //   enable: false,
-            //   label: "",
-            //   hint: AppConstants.hintHeight,
-            //   controller: _controller.heightController,
-            //   enableBorder: true.obs,
-            // ),
           ),
         ],
       ),

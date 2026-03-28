@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/features/home/controller/filter_controller.dart';
 import 'package:matchster/features/home/view/filter/widgets/age_widget.dart';
 import 'package:matchster/features/home/view/filter/widgets/distance_widget.dart';

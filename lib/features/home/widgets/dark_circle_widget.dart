@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 
 class DarkCircleWidget extends StatelessWidget {
   const DarkCircleWidget({

@@ -4,12 +4,14 @@ import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/common_lists.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/features/profile/controller/profile_form_controller.dart';
 import 'package:matchster/features/profile/widgets/common_widget.dart';
 
 class LanguagesScreen extends StatelessWidget {
   LanguagesScreen({super.key});
 
   final _profileController = Get.find<ProfileController>();
+  final _profileFormController = Get.find<ProfileFormController>();
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +21,18 @@ class LanguagesScreen extends StatelessWidget {
       subtitle: "Build your connection more",
       list: CommonLists.languageList,
       onTop: (v) {
-        if (_profileController.selectedLanguage.contains(v)) {
-          _profileController.selectedLanguage.remove(v);
+        if (_profileFormController.selectedLanguages.contains(v)) {
+          _profileFormController.selectedLanguages.remove(v);
         } else {
-          _profileController.selectedLanguage.add(v);
+          _profileFormController.selectedLanguages.add(v);
         }
       },
-      isSelected: (v) => _profileController.selectedLanguage.contains(v),
+      isSelected: (v) => _profileFormController.selectedLanguages.contains(v),
       onTopButton: () async {
         final languages = await AppMethods.toApiValues(
-          _profileController.selectedLanguage,
+          _profileFormController.selectedLanguages,
         );
-        _profileController.addLanguages(languages: languages);
+        _profileController.addLanguages(languages);
       },
       appBarTitle: 'Languages',
     );

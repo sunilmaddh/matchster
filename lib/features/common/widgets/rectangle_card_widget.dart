@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 
 class RectangleCardWidget extends StatelessWidget {
   const RectangleCardWidget({super.key, this.isBlur = false});

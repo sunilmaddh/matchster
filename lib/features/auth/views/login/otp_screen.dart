@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
-import 'package:matchster/core/widgets/buttons/app_button.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/features/common/widgets/buttons/app_button.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controllers/login_controller.dart';
 import 'package:matchster/features/auth/widgets/login_widget/otp_widget.dart';
 
@@ -37,7 +37,6 @@ class OtpScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: Color(0xff0C0C0C),
                   AppConstants.otpDiscription,
-                  // " ${AppConstants.otpDiscription} ${_controller.phoneNumber.value}",
                 ),
                 45.hBox,
                 Obx(
@@ -104,17 +103,6 @@ class OtpScreen extends StatelessWidget {
               ],
             ),
           ),
-          // Obx(
-          //   () =>
-          //       _controller.isResend.isTrue
-          //           ? Align(
-          //             alignment: Alignment.center,
-          //             child: CircularProgressIndicator(
-          //               color: AppColors.primary,
-          //             ),
-          //           )
-          //           : SizedBox.shrink(),
-          // ),
         ],
       ),
     );

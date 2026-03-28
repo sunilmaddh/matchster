@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
+import 'package:matchster/core/base/base_view.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/core/constants/common_lists.dart';
-import 'package:matchster/core/extentions/height_enum_ext.dart';
+import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
-import 'package:matchster/features/profile/view/interest/looking_screen.dart';
-import 'package:matchster/features/profile/view/interest/religion_screen.dart';
-import 'package:matchster/features/profile/view/interest/visibility_screen.dart';
-import 'package:matchster/features/profile/view/interest/zodiac_screen.dart';
-import 'package:matchster/features/profile/view/profile/education_screen.dart';
-import 'package:matchster/features/profile/view/profile/height_screen.dart'
-    show HeightScreen;
-import 'package:matchster/features/profile/view/profile/work_screen.dart';
+import 'package:matchster/features/profile/profile_details_list_controller.dart';
 import 'package:matchster/features/profile/widgets/interest_card.dart';
+import 'package:matchster/routes/app_routes.dart';
 
-class ProfileDetailsListScreen extends StatelessWidget {
-  ProfileDetailsListScreen({
+class ProfileDetailsListScreen extends BaseView<ProfileDetailsListController> {
+  const ProfileDetailsListScreen({
     super.key,
     required this.personal,
     required this.preference,
@@ -34,173 +26,182 @@ class ProfileDetailsListScreen extends StatelessWidget {
   final Professional professional;
   final BasicInfo basicInfo;
 
-  final _controller = Get.find<ProfileController>();
+  @override
+  bool get useDefaultLoader => false;
 
   @override
-  Widget build(BuildContext context) {
+  State<ProfileDetailsListScreen> createState() =>
+      _ProfileDetailsListScreenState();
+}
+
+class _ProfileDetailsListScreenState
+    extends
+        BaseViewState<ProfileDetailsListController, ProfileDetailsListScreen> {
+  @override
+  void onInit() {
+    super.onInit();
+    controller.setData(
+      personalData: widget.personal,
+      preferenceData: widget.preference,
+      professionalData: widget.professional,
+      basicInfoData: widget.basicInfo,
+    );
+  }
+
+  @override
+  Widget buildView(BuildContext context) {
+    final personal = controller.personal;
+    final preference = controller.preference;
+    final professional = controller.professional;
+    final basicInfo = controller.basicInfo;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CommonText.text(
-          "Profile Details",
+          AppStrings.profileDetails,
           fontSize: 16.sp,
           fontWeight: FontWeight.w500,
-          fontFamily: "Caros",
         ),
         5.hBox,
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (personal.zodiacSign != null &&
-                  personal.zodiacSign!.isNotEmpty) {
-                _controller.selectedZodiac.value = personal.zodiacSign!;
-              } else {
-                _controller.selectedZodiac.value = "";
-              }
-              Get.to(() => ZodiacScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffB4CADE),
-              title: 'Zodiac Sign',
-              subTitle: AppMethods.capitalizeFirst(personal.zodiacSign!),
-              image: AppAssets.zodizcAssets,
-            ),
-          ),
+        _buildProfileCard(
+          context: context,
+          title: AppStrings.zodiacSign,
+          subTitle: _formattedText(personal.zodiacSign),
+          image: AppAssets.zodizcAssets,
+          color: AppColors.zodiacCardColor,
+          onTap: () {
+            controller.onTapZodiac();
+            controller.navigateTo(AppRoutes.zodiacScreen);
+          },
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (personal.religion != null && personal.religion!.isNotEmpty) {
-                _controller.selectedReligion.value = personal.religion!;
-              } else {
-                _controller.selectedReligion.value = "";
-              }
-              Get.to(() => ReligionScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffB4DEC5),
-              title: 'Religion',
-              subTitle: personal.religion!.removeSnakeAndCapitalize(),
-              image: AppAssets.religionAssest,
-            ),
-          ),
+        _buildProfileCard(
+          context: context,
+          title: AppStrings.religion,
+          subTitle: _formattedSnakeText(personal.religion),
+          image: AppAssets.religionAssest,
+          color: AppColors.religionCardColor,
+          onTap: () {
+            controller.onTapReligion();
+            controller.navigateTo(AppRoutes.religionScreen);
+          },
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (preference.visibility != null &&
-                  preference.visibility!.isNotEmpty) {
-                _controller.selectedVisibility.value = preference.visibility!;
-              } else {
-                _controller.selectedVisibility.value = "";
-              }
-              Get.to(() => VisibilityScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffDEDCB4),
-              title: 'Profile Visibility',
-              subTitle: preference.visibility!.removeSnakeAndCapitalize(),
-              image: AppAssets.profileEditAssets,
-            ),
-          ),
+        _buildProfileCard(
+          context: context,
+          title: AppStrings.profileVisibility,
+          subTitle: _formattedSnakeText(preference.visibility),
+          image: AppAssets.profileEditAssets,
+          color: AppColors.visibilityCardColor,
+          onTap: () {
+            controller.onTapVisibility();
+            controller.navigateTo(AppRoutes.visibilityScreen);
+          },
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (preference.lookingFor != null &&
-                  preference.lookingFor!.isNotEmpty) {
-                _controller.setLookingFromApi(preference.lookingFor);
-              } else {
-                _controller.selectedLookingFor.clear();
-              }
-              Get.to(() => LookingScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffB4CADE),
-              title: 'Looking For',
-              subTitle: preference.lookingFor!.capitalizeFirstAndJoin(),
-              image: AppAssets.lookingAssets,
-            ),
-          ),
+        _buildProfileCard(
+          context: context,
+          title: AppStrings.lookingFor,
+          subTitle: _formattedLookingFor(preference.lookingFor?.first),
+          image: AppAssets.lookingAssets,
+          color: AppColors.lookingForCardColor,
+          onTap: () {
+            controller.onTapLookingFor();
+            controller.navigateTo(AppRoutes.lookingScreen);
+          },
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (basicInfo.height != null && basicInfo.height!.isNotEmpty) {
-                _controller.heightController.value = basicInfo.height!;
-              } else {
-                _controller.heightController.value = "";
-              }
-              Get.to(() => HeightScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffE5C3FF),
-              title: 'Height',
-              subTitle: AppMethods.capitalizeFirst(basicInfo.height!),
-              image: AppAssets.heightAssets,
-            ),
-          ),
+        _buildProfileCard(
+          context: context,
+          title: AppStrings.height,
+          subTitle: _formattedText(basicInfo.height),
+          image: AppAssets.heightAssets,
+          color: AppColors.heightCardColor,
+          onTap: () {
+            controller.onTapHeight();
+            controller.navigateTo(AppRoutes.height);
+          },
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (personal.qualification != null &&
-                  personal.qualification!.isNotEmpty) {
-                _controller.qualification.value = personal.qualification!;
-                int index = CommonLists.studieList.indexWhere(
-                  (element) =>
-                      element.toLowerCase() ==
-                      personal.qualification!
-                          .replaceAll('_', ' ')
-                          .toLowerCase(),
-                );
-                _controller.selectedEduIndex.value = index;
-              } else {
-                _controller.qualification.value = "";
-              }
-              Get.to(() => EducationScreen());
-            },
-            child: InterestCard(
-              color: Color(0xff92C58F),
-              title: 'Education',
-              subTitle: personal.qualification!.removeSnakeAndCapitalize(),
-              image: AppAssets.educationAssets,
-            ),
-          ),
+        _buildProfileCard(
+          context: context,
+          title: AppStrings.education,
+          subTitle: _formattedSnakeText(personal.qualification),
+          image: AppAssets.educationAssets,
+          color: AppColors.educationCardColor,
+          onTap: () {
+            controller.onTapEducation();
+            controller.navigateTo(AppRoutes.education);
+          },
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: InkWell(
-            onTap: () {
-              if (_controller.professional.value.work != null &&
-                  _controller.professional.value.work!.jobTitle!.isNotEmpty) {
-                _controller.jobTtileController.text =
-                    _controller.professional.value.work!.jobTitle!;
-                _controller.companyController.text =
-                    _controller.professional.value.work!.company!;
-              } else {
-                _controller.jobTtileController.clear();
-                _controller.companyController.clear();
-              }
-
-              Get.to(() => WorkScreen());
-            },
-            child: InterestCard(
-              color: Color(0xffA2D2FF),
-              title: 'Work',
-              subTitle:
-                  "${AppMethods.capitalizeFirst(professional.work!.jobTitle!)}, ${AppMethods.capitalizeFirst(professional.work!.company!)}",
-              image: AppAssets.workAssets,
-            ),
+        _buildProfileCard(
+          context: context,
+          title: AppStrings.work,
+          subTitle: _formattedWork(
+            professional.work?.jobTitle,
+            professional.work?.company,
           ),
+          image: AppAssets.workAssets,
+          color: AppColors.workCardColor,
+          onTap: () {
+            controller.onTapWork();
+            controller.navigateTo(AppRoutes.work);
+          },
         ),
       ],
     );
+  }
+
+  Widget _buildProfileCard({
+    required BuildContext context,
+    required String title,
+    required String subTitle,
+    required String image,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 15.h),
+      child: InkWell(
+        onTap: onTap,
+        child: InterestCard(
+          color: color,
+          title: title,
+          subTitle: subTitle,
+          image: image,
+        ),
+      ),
+    );
+  }
+
+  String _formattedText(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppStrings.notAdded;
+    }
+    return AppMethods.capitalizeFirst(value);
+  }
+
+  String _formattedSnakeText(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppStrings.notAdded;
+    }
+    return value.removeSnakeAndCapitalize();
+  }
+
+  String _formattedLookingFor(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppStrings.notAdded;
+    }
+    return value;
+  }
+
+  String _formattedWork(String? jobTitle, String? company) {
+    final safeJobTitle =
+        (jobTitle == null || jobTitle.trim().isEmpty)
+            ? AppStrings.notAdded
+            : AppMethods.capitalizeFirst(jobTitle);
+
+    final safeCompany =
+        (company == null || company.trim().isEmpty)
+            ? AppStrings.notAdded
+            : AppMethods.capitalizeFirst(company);
+
+    return "$safeJobTitle, $safeCompany";
   }
 }

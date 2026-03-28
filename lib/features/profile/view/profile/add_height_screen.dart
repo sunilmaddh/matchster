@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bottomsheet/common_bottom_sheet.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
 import 'package:matchster/features/auth/helpers/onboard_halper.dart';
 

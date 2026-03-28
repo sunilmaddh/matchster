@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/core/widgets/rectangle_card_widget.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
+import 'package:matchster/features/common/widgets/rectangle_card_widget.dart';
 import 'package:matchster/features/home/controller/home_controller.dart';
 import 'package:matchster/features/like/widget/like_card.dart';
 
@@ -15,6 +16,7 @@ class LikesScreen extends StatelessWidget {
     if (_controller.likeList.isEmpty) {
       _controller.likeOnMe();
     }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -24,12 +26,14 @@ class LikesScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CommonText.text(
-                  "Likes",
-                  fontFamily: "Caros",
+                  AppStrings.likesTitle,
+
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),
                 20.hBox,
+
+                /// Top Card Section
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,26 +44,26 @@ class LikesScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CommonText.text(
-                            fontFamily: "Caros",
+                            AppStrings.multipleMatchesMessage,
+
                             fontWeight: FontWeight.w300,
                             fontSize: 14.sp,
                             maxLines: 5,
-                            "You have got multiple matches. Find out who they are",
                           ),
                           Row(
                             children: [
                               CommonText.text(
-                                fontFamily: "Caros",
+                                AppStrings.explore,
+
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16.sp,
                                 maxLines: 5,
-                                color: Color(0xff1D48EF),
-                                "Explore",
+                                color: const Color(0xff1D48EF),
                               ),
                               10.wBox,
-                              Icon(
-                                size: 30,
+                              const Icon(
                                 Icons.arrow_forward,
+                                size: 30,
                                 color: Color(0xff1D48EF),
                               ),
                             ],
@@ -69,21 +73,24 @@ class LikesScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+
+                /// Header Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CommonText.text(
-                      fontFamily: "Caros",
+                      AppStrings.likesTitle,
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp,
                       maxLines: 5,
-
-                      "Likes",
                     ),
-                    Icon(Icons.filter_list, color: Color(0xff797979)),
+                    const Icon(Icons.filter_list, color: Color(0xff797979)),
                   ],
                 ),
+
                 20.hBox,
+
+                /// Grid
                 GridView.builder(
                   shrinkWrap: true,
                   itemCount: _controller.likeList.length,
@@ -95,10 +102,11 @@ class LikesScreen extends StatelessWidget {
                   ),
                   itemBuilder: (context, index) {
                     final value = _controller.likeList[index];
+
                     return LikeCard(
                       isBlur: true,
                       image: value.mainPhoto!,
-                      text1: "99% match",
+                      text1: AppStrings.matchPercentage,
                       text2: "${value.name}, ${value.age}",
                     );
                   },

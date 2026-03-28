@@ -8,7 +8,6 @@ import 'package:matchster/core/bindings/app_binding.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
-import 'package:matchster/core/utils/navigation_halper.dart';
 import 'package:matchster/features/auth/services/splash_video_service.dart';
 import 'package:matchster/features/auth/services/video_services.dart';
 import 'package:matchster/features/auth/views/splash_screen.dart';
@@ -58,7 +57,6 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialBinding: AppBinding(),
           title: 'Matchster',
-          navigatorKey: NavigationHelper.navigatorKey,
           home: SplashScreen(),
           getPages: AppPages.getPages,
         ),

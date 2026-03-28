@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/card/switch_card.dart';
-import 'package:matchster/core/widgets/fields/common_card.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/card/switch_card.dart';
+import 'package:matchster/features/common/widgets/fields/common_card.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/home/controller/filter_controller.dart';
 import 'package:matchster/features/home/widgets/seek_bar_widget.dart';
 import 'package:matchster/features/home/widgets/text_with_widget.dart';
@@ -21,8 +22,8 @@ class AgeWidget extends StatelessWidget {
       widget: Column(
         children: [
           TextWithWidget(
-            title: "Age",
-            subTitle: "Set preferred age range?",
+            title: AppStrings.ageTitle,
+            subTitle: AppStrings.ageSubtitle,
             widget: Stack(
               children: [
                 Flexible(child: AnimatedSeekBar(value: 50, onChanged: (v) {})),
@@ -61,7 +62,7 @@ class AgeWidget extends StatelessWidget {
                       },
                       blendMode: BlendMode.srcIn,
                       child: CommonText.text(
-                        "gg",
+                        AppStrings.ageValuePlaceholder,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.blackColor,
@@ -75,7 +76,7 @@ class AgeWidget extends StatelessWidget {
           15.hBox,
           Obx(
             () => SwitchCard(
-              text: "Show me more profiles if I run out.",
+              text: AppStrings.showMoreProfiles,
               isSwitch: controller.isSwitchOn.value,
               onChanged: (value) {
                 controller.toggleSwitch(value);

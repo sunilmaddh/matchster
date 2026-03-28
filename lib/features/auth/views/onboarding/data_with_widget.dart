@@ -4,13 +4,15 @@ import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/card/switch_card.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/card/switch_card.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
 import 'package:matchster/features/auth/helpers/onboard_halper.dart';
 
+// ignore: must_be_immutable
 class DateWidget extends StatelessWidget {
   DateWidget({super.key});
   final _controller = Get.find<OnboardController>();
@@ -27,7 +29,6 @@ class DateWidget extends StatelessWidget {
             AppConstants.datingTitle,
             fontSize: 24.sp,
             fontWeight: FontWeight.w600,
-            fontFamily: "Caros",
           ),
 
           2.hBox,
@@ -38,7 +39,6 @@ class DateWidget extends StatelessWidget {
               AppConstants.dateDescription,
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              fontFamily: "Caros",
             ),
           ),
           20.hBox,
@@ -48,7 +48,7 @@ class DateWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CommonText.text(
-                  "Open to Date Everybody",
+                  AppStrings.openToDateEverybody,
                   fontSize: 17.sp,
                   fontWeight: FontWeight.w600,
                 ),
@@ -57,14 +57,6 @@ class DateWidget extends StatelessWidget {
                     value: _controller.isDateWithSwitchOn.value,
                     onChanged: _controller.toggleDateSwitch,
                   ),
-                  //  Switch(
-                  //   focusColor: Color(0xff1D48EF),
-                  //   activeTrackColor: Color(0xff1D48EF),
-                  //   padding: EdgeInsets.zero,
-                  //   value: _controller.isSwitchOn.value,
-                  //   onChanged:
-                  //      , // ← Select All / Unselect All
-                  // ),
                 ),
               ],
             ),

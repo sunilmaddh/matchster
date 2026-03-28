@@ -4,12 +4,14 @@ import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/common_lists.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/features/profile/controller/profile_form_controller.dart';
 import 'package:matchster/features/profile/widgets/common_widget.dart';
 
 class ReligionScreen extends StatelessWidget {
   ReligionScreen({super.key});
 
   final _profileController = Get.find<ProfileController>();
+  final _profileFormController = Get.find<ProfileFormController>();
   @override
   Widget build(BuildContext context) {
     return CommonWidget(
@@ -18,7 +20,7 @@ class ReligionScreen extends StatelessWidget {
       subtitle: "Build your connection more",
       list: CommonLists.religions,
       onTop: (v) {
-        _profileController.selectedReligion.value = v;
+        _profileFormController.selectedReligion.value = v;
         // if (_profileController.selectedItems.contains(v)) {
         //   _profileController.selectedItems.remove(v);
         // } else {
@@ -27,12 +29,14 @@ class ReligionScreen extends StatelessWidget {
       },
       isSelected:
           (v) =>
-              _profileController.selectedReligion.value.toLowerCase().trim() ==
+              _profileFormController.selectedReligion.value
+                  .toLowerCase()
+                  .trim() ==
               v.toLowerCase().trim(),
       onTopButton: () {
         _profileController.addReligion(
-          religion: normalizeValue(
-            _profileController.selectedReligion.value.toLowerCase(),
+          normalizeValue(
+            _profileFormController.selectedReligion.value.toLowerCase(),
           ),
         );
       },

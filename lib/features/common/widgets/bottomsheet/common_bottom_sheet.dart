@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
-import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
+import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/common/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/features/common/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/auth/helpers/onboard_halper.dart';
 
 class CommonBottomSheet {

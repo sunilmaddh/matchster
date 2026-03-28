@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/utils/extentions.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 
 class MatchCard extends StatelessWidget {
   const MatchCard({super.key, required this.onTop, required this.image});

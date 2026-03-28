@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/base/base_controller.dart';
-import 'package:matchster/core/base/base_listener.dart';
+import 'base_controller.dart';
+import 'base_listener.dart';
 
 abstract class BaseView<T extends BaseController> extends StatefulWidget {
   const BaseView({super.key});
 
-  Widget buildView(BuildContext context, T controller);
-
-  void onInit(T controller) {}
-  void onReady(T controller) {}
-  void onDispose(T controller) {}
-
   bool get useDefaultLoader => true;
+
   Color get loaderBarrierColor => Colors.black26;
 
   Widget buildLoader(BuildContext context) {
     return const Center(child: CircularProgressIndicator());
   }
-
-  @override
-  State<BaseView<T>> createState() => _BaseViewState<T>();
 }
 
-class _BaseViewState<T extends BaseController> extends State<BaseView<T>> {
+abstract class BaseViewState<T extends BaseController, V extends BaseView<T>>
+    extends State<V> {
   late final T controller;
+
+  @protected
+  Widget buildView(BuildContext context);
+
+  void onInit() {}
+
+  void onReady() {}
+
+  void onDispose() {}
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<T>();
-
-    widget.onInit(controller);
+    onInit();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      widget.onReady(controller);
+      onReady();
     });
   }
 
   @override
   void dispose() {
-    widget.onDispose(controller);
+    onDispose();
     super.dispose();
   }
 
@@ -51,7 +52,7 @@ class _BaseViewState<T extends BaseController> extends State<BaseView<T>> {
         widget.useDefaultLoader
             ? Stack(
               children: [
-                widget.buildView(context, controller),
+                buildView(context),
                 Obx(() {
                   if (!controller.isLoading.value) {
                     return const SizedBox.shrink();
@@ -66,7 +67,7 @@ class _BaseViewState<T extends BaseController> extends State<BaseView<T>> {
                 }),
               ],
             )
-            : widget.buildView(context, controller);
+            : buildView(context);
 
     return BaseListener<T>(controller: controller, child: content);
   }

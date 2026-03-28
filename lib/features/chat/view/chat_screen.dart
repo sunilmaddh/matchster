@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
