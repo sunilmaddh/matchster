@@ -5,16 +5,17 @@ import 'package:matchster/core/base/base_view.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/core/utils/app_input_formetters.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/common_assets.dart';
-import 'package:matchster/core/extentions/extentions.dart';
-import 'package:matchster/features/common/widgets/buttons/app_button.dart';
-import 'package:matchster/features/common/widgets/fields/common_text.dart';
-import 'package:matchster/features/common/widgets/fields/custom_form_field.dart';
 import 'package:matchster/features/auth/auth_controllers/country_controller.dart';
 import 'package:matchster/features/auth/auth_controllers/login_controller.dart';
 import 'package:matchster/features/auth/views/login/country_list_screen.dart';
+import 'package:matchster/features/common/widgets/buttons/app_button.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
+import 'package:matchster/features/common/widgets/fields/custom_form_field.dart';
 import 'package:matchster/routes/app_navigation.dart';
 
 class LoginFieldWithButtonView extends BaseView<LoginController> {
@@ -44,10 +45,6 @@ class _LoginFieldWithButtonState
   @override
   Widget buildView(BuildContext context) {
     return SafeArea(
-      bottom: true,
-      left: true,
-      right: true,
-      top: true,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         bottomNavigationBar: Obx(
@@ -106,35 +103,29 @@ class _LoginFieldWithButtonState
                       Align(
                         alignment: Alignment.center,
                         child: Obx(
-                          () => CommonText.text(
-                            textAlign: TextAlign.center,
+                          () => CommonText.displayLarge(
                             controller.isAccessAccount.isTrue
                                 ? AppConstants.loginTitle
-                                : 'Create account',
-                            fontSize: 30.sp,
+                                : AppStrings.createAccount,
+                            textAlign: TextAlign.center,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       20.hBox,
                       Obx(
-                        () => CommonText.text(
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
+                        () => CommonText.titleMedium(
                           controller.isAccessAccount.isTrue
                               ? AppConstants.loginDescription
                               : AppConstants.loginSubtile,
-                          fontSize: 16.sp,
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
                           fontWeight: FontWeight.w400,
                           color: AppColors.loginTitleColor,
                         ),
                       ),
                       50.hBox,
-                      CommonText.text(
-                        'Phone Number',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
-                      ),
+                      CommonText.labelLarge(AppStrings.phoneNumber),
                       5.hBox,
                       Form(
                         key: _formKey,
@@ -150,7 +141,7 @@ class _LoginFieldWithButtonState
                                       final selectedCountry =
                                           await AppNavigation.toWithClassName<
                                             Country
-                                          >(CountryListScreen());
+                                          >(const CountryListScreen());
 
                                       if (selectedCountry == null) return;
 
@@ -183,14 +174,8 @@ class _LoginFieldWithButtonState
                                       ),
                                       child: Row(
                                         children: [
-                                          CommonText.text(
-                                            _countryController
-                                                        .selectedCountry
-                                                        .value !=
-                                                    null
-                                                ? '${_countryController.selectedCountry.value!.countryCode} +${_countryController.selectedCountry.value!.phoneCode}'
-                                                : 'IN +91',
-                                            fontSize: 16.sp,
+                                          CommonText.titleMedium(
+                                            _getSelectedCountryText(),
                                             color: Colors.black.withAlpha(128),
                                           ),
                                           Icon(
@@ -219,6 +204,7 @@ class _LoginFieldWithButtonState
                                   return AppMethods.validateMobile(number);
                                 },
                                 hint: AppConstants.hintLoginMessage,
+                                label: AppStrings.enterMobileNumber,
                                 onChanged: (value) {
                                   controller.updatePhoneNumber(value ?? '');
 
@@ -226,7 +212,6 @@ class _LoginFieldWithButtonState
                                     AppMethods.hideKeyboard();
                                   }
                                 },
-                                label: 'Enter Mobile Number',
                               ),
                             ),
                           ],
@@ -242,5 +227,15 @@ class _LoginFieldWithButtonState
         ),
       ),
     );
+  }
+
+  String _getSelectedCountryText() {
+    final selectedCountry = _countryController.selectedCountry.value;
+
+    if (selectedCountry == null) {
+      return AppStrings.defaultCountryCode;
+    }
+
+    return '${selectedCountry.countryCode} +${selectedCountry.phoneCode}';
   }
 }

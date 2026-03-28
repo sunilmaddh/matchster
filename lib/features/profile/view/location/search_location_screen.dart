@@ -104,11 +104,9 @@ class _SearchLocationScreenState
                             ),
                             10.wBox,
                             Expanded(
-                              child: CommonText.text(
+                              child: CommonText.titleMedium(
                                 description,
                                 maxLines: 3,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.sp,
                                 color: Colors.black.withAlpha(156),
                               ),
                             ),

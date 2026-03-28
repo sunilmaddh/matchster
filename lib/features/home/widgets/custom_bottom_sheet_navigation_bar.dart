@@ -176,10 +176,8 @@ class _CustomBottomNavigationBarState
               color: isSelected ? AppColors.primary : AppColors.blackColor,
             ),
             const SizedBox(height: 4),
-            CommonText.text(
+            CommonText.labelMedium(
               label,
-              fontSize: 11.5,
-              fontWeight: FontWeight.w500,
               color: isSelected ? AppColors.primary : AppColors.blackColor,
             ),
           ],

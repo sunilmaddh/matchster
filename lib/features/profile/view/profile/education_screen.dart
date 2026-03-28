@@ -38,9 +38,8 @@ class EducationScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonText.text(
+            CommonText.headlineMedium(
               AppStrings.whatAboutStudies,
-              fontSize: 20.sp,
               fontWeight: FontWeight.w500,
             ),
             20.hBox,
@@ -69,9 +68,9 @@ class EducationScreen extends StatelessWidget {
                                 ? AppColors.primary
                                 : AppColors.educationItemBg,
                       ),
-                      child: CommonText.text(
+                      child: CommonText.titleMedium(
                         CommonLists.studieList[index],
-                        fontSize: 16.sp,
+
                         fontWeight: FontWeight.w300,
                         color:
                             isSelected

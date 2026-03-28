@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/api_contants.dart';
 import 'package:matchster/core/constants/app_logs_strings.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/api_endpoints.dart';
@@ -20,21 +20,18 @@ class ApiService {
       baseUrl: ApiEndpoints.baseUrl,
       headers: _defaultHeaders,
       validateStatus:
-          (status) =>
-              status != null && status < AppConstants.maxValidStatusCode,
-      connectTimeout: const Duration(
-        seconds: AppConstants.defaultTimeoutSeconds,
-      ),
+          (status) => status != null && status < ApiContants.maxValidStatusCode,
+      connectTimeout: Duration(seconds: ApiContants.defaultTimeoutSeconds),
       receiveTimeout: const Duration(
-        seconds: AppConstants.defaultTimeoutSeconds,
+        seconds: ApiContants.defaultTimeoutSeconds,
       ),
-      sendTimeout: const Duration(seconds: AppConstants.defaultTimeoutSeconds),
+      sendTimeout: const Duration(seconds: ApiContants.defaultTimeoutSeconds),
     );
   }
 
   Map<String, String> get _defaultHeaders => const {
-    AppConstants.contentTypeKey: AppConstants.applicationJson,
-    AppConstants.acceptKey: AppConstants.applicationJson,
+    ApiContants.contentTypeKey: ApiContants.applicationJson,
+    ApiContants.acceptKey: ApiContants.applicationJson,
   };
 
   InterceptorsWrapper _buildInterceptors() {
@@ -59,8 +56,8 @@ class ApiService {
     final token = await _storage.getAccessToken();
 
     if (token != null && token.isNotEmpty) {
-      options.headers[AppConstants.authorizationKey] =
-          '${AppConstants.bearer} $token';
+      options.headers[ApiContants.authorizationKey] =
+          '${ApiContants.bearer} $token';
     }
   }
 
@@ -235,20 +232,20 @@ class ApiService {
     if (responseData is! Map<String, dynamic>) {
       return ApiResponse<T>.error(
         message: AppLogStrings.invalidResponseFormat,
-        statusCode: response.statusCode ?? AppConstants.defaultErrorStatusCode,
+        statusCode: response.statusCode ?? ApiContants.defaultErrorStatusCode,
       );
     }
 
     return ApiResponse<T>.fromJson(
       responseData,
-      response.statusCode ?? AppConstants.successStatusCode,
+      response.statusCode ?? ApiContants.successStatusCode,
       fromJsonT,
     );
   }
 
   ApiResponse<T> _handleDioException<T>(DioException error) {
     final statusCode =
-        error.response?.statusCode ?? AppConstants.defaultErrorStatusCode;
+        error.response?.statusCode ?? ApiContants.defaultErrorStatusCode;
     final responseData = error.response?.data;
 
     String message = AppLogStrings.somethingWentWrong;
@@ -278,7 +275,7 @@ class ApiService {
 
     return ApiResponse<T>.error(
       message: '${AppLogStrings.unexpectedError}: $error',
-      statusCode: AppConstants.defaultErrorStatusCode,
+      statusCode: ApiContants.defaultErrorStatusCode,
     );
   }
 }

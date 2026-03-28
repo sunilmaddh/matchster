@@ -81,10 +81,9 @@ class _ToggleItem extends StatelessWidget {
                   color: AppColors.blackColor,
                 )
                 : null,
-        child: CommonText.text(
+        child: CommonText.labelMedium(
           text,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
+
           color:
               isSelected
                   ? AppColors.whiteColor

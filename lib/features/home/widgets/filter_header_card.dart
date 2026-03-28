@@ -37,9 +37,8 @@ class FilterHeaderCard extends StatelessWidget {
               ),
           ],
         ),
-        child: CommonText.text(
+        child: CommonText.titleMedium(
           text,
-          fontSize: 16.sp,
           fontWeight: FontWeight.w700,
           color: AppColors.whiteColor,
         ),

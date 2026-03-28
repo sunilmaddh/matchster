@@ -45,18 +45,18 @@ class _HomeTownLocationScreenState
             10.hBox,
             SvgPicture.asset(AppAssets.loctionMarker),
             10.hBox,
-            CommonText.text(
+            CommonText.displaySmall(
               AppStrings.areYouSure,
-              fontSize: 24.sp,
+
               fontWeight: FontWeight.w600,
             ),
             Padding(
               padding: 30.horizontalPadding,
-              child: CommonText.text(
+              child: CommonText.headlineSmall(
                 AppStrings.changeCurrentLocation,
                 maxLines: 2,
                 textAlign: TextAlign.center,
-                fontSize: 18.sp,
+
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -67,19 +67,19 @@ class _HomeTownLocationScreenState
                 Get.back();
                 await controller.confirmCurrentLocationChange();
               },
-              child: CommonText.text(
+              child: CommonText.headlineSmall(
                 AppStrings.confirm,
-                fontSize: 18.sp,
+
                 fontWeight: FontWeight.w400,
               ),
             ),
             const Divider(height: 1),
             TextButton(
               onPressed: Get.back,
-              child: CommonText.text(
+              child: CommonText.headlineSmall(
                 AppStrings.dismiss,
                 color: AppColors.textFieldColor,
-                fontSize: 18.sp,
+
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -128,9 +128,9 @@ class _HomeTownLocationScreenState
                           onPressed: Get.back,
                           icon: const Icon(Icons.arrow_back),
                         ),
-                        CommonText.text(
+                        CommonText.titleMedium(
                           AppStrings.currentLocation,
-                          fontSize: 16.sp,
+
                           fontWeight: FontWeight.w600,
                         ),
                       ],

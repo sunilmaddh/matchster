@@ -67,13 +67,9 @@ class _LoginScreenState extends BaseViewState<LoginController, LoginScreen> {
                     const Spacer(),
                     Padding(
                       padding: 15.horizontalPadding,
-                      child: CommonText.text(
+                      child: CommonText.displayMedium(
                         AppConstants.discoverSolumates,
                         textAlign: TextAlign.center,
-                        maxLines: 2,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.blackColor,
-                        fontSize: 28.sp,
                       ),
                     ),
                     Obx(

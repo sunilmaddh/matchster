@@ -30,11 +30,7 @@ class PreferenceListWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        CommonText.text(
-          AppStrings.preferences,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
-        ),
+        CommonText.titleMedium(AppStrings.preferences),
         5.hBox,
         _buildCard(
           onTap: () {

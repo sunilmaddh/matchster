@@ -4,9 +4,7 @@ abstract class AppRoutes {
       onboardScreen = '/onboard_screen',
       landingScreen = '/landing_screen',
       loginScreen = '/login_screen',
-          // profilePreviewScreen = "/photo_preview_screen",
-          countryListScreen =
-          "/country_list_screen",
+      countryListScreen = "/country_list_screen",
       loginFieldWitButton = "/LoginFieldWithButtonView",
       otpScreen = "/otp_screen",
       searchLocationScreen = "/search_location_screen",

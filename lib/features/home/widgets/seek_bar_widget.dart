@@ -137,9 +137,8 @@ class _AnimatedSeekBarState extends State<AnimatedSeekBar> {
                               );
                             },
                             blendMode: BlendMode.srcIn,
-                            child: CommonText.text(
+                            child: CommonText.labelLarge(
                               value.round().toString(),
-                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
                               color: AppColors.whiteColor,
                             ),

@@ -1,38 +1,38 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/features/auth/widgets/login_widget/posture_sample_card.dart';
 import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/features/common/widgets/buttons/app_button.dart';
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
-import 'package:matchster/features/auth/widgets/login_widget/posture_sample_card.dart';
 import 'package:matchster/features/posture/controller/posture_controller.dart';
 import 'package:matchster/test/hand_landmark.dart';
 
 class PostureGestureScreen extends StatelessWidget {
   PostureGestureScreen({super.key});
 
-  final _postureController = Get.find<PostureController>();
+  final PostureController _postureController = Get.find<PostureController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Posture Gesture", onTop: () {}),
+      appBar: CustomAppBar(title: AppStrings.postureGesture, onTop: () {}),
       body: SafeArea(
         child: Padding(
           padding: 15.horizontalPadding + 15.verticalPadding,
-          child: Obx(() {
-            return Column(
+          child: Obx(
+            () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
+                CommonText.titleMedium(
                   AppConstants.copyThePosture,
-                  fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
                 ),
                 10.hBox,
@@ -43,10 +43,9 @@ class PostureGestureScreen extends StatelessWidget {
                           .value],
                 ),
                 10.hBox,
-                CommonText.text(
-                  maxLines: 4,
+                CommonText.titleMedium(
                   AppConstants.matchYourPose,
-                  fontSize: 16.sp,
+                  maxLines: 4,
                   fontWeight: FontWeight.w400,
                 ),
                 20.hBox,
@@ -61,11 +60,10 @@ class PostureGestureScreen extends StatelessWidget {
                             padding: 20.horizontalPadding,
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
-
                               child: Image.asset(
+                                AppAssets.photoFrame3,
                                 width: MediaQuery.of(context).size.width,
                                 height: 310.h,
-                                AppAssets.photoFrame3,
                                 fit: BoxFit.fill,
                               ),
                             ),
@@ -82,8 +80,7 @@ class PostureGestureScreen extends StatelessWidget {
                                     child: SizedBox(
                                       width: MediaQuery.of(context).size.width,
                                       child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadiusGeometry.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                         child: Image.file(
                                           File(
                                             _postureController
@@ -106,13 +103,11 @@ class PostureGestureScreen extends StatelessWidget {
                                         SvgPicture.asset(
                                           AppAssets.successfully,
                                         ),
-                                        CommonText.text(
+                                        CommonText.labelLarge(
+                                          AppStrings.photoVerified,
                                           color: AppColors.whiteColor,
                                           textAlign: TextAlign.center,
                                           maxLines: 3,
-                                          "Your photo has been successfully verified",
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w500,
                                         ),
                                       ],
                                     ),
@@ -125,44 +120,25 @@ class PostureGestureScreen extends StatelessWidget {
                               bottom: 30.h,
                               left: 30.w,
                               right: 30.w,
-
                               child: HandTrackerView(),
-
-                              // CommonText.text(
-                              //   maxLines: 2,
-                              //   "When you are ready, tap the button below and snap your gesture!",
-                              //   fontSize: 14.sp,
-                              //   textAlign: TextAlign.center,
-                              //   color: Color(0xff7B7B7B),
-                              // ),
                             ),
                         ],
                       ),
                     ),
                     30.hBox,
                     AppButton(
-                      name: "Take My Photo",
+                      name: AppStrings.takeMyPhoto,
                       onTop: () async {
                         _postureController.moveToNextStep();
                         _postureController.restartDetection();
-                        // _controller.pickImageFromCameraForPosture();
-                        // if (_controller.faceImage.value != null) {
-                        //   await _controller.loadImageSize(
-                        //     _controller.faceImage.value!,
-                        //   );
-                        //   await _controller.analyzeFace(
-                        //     _controller.faceImage.value!,
-                        //   );
-                        //   // Get.to(FaceRecognisationPage());
-                        // }
                       },
                       isEnable: true,
                     ),
                   ],
                 ),
               ],
-            );
-          }),
+            ),
+          ),
         ),
       ),
     );

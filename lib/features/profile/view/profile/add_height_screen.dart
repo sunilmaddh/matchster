@@ -20,19 +20,15 @@ class AddHeightScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             AppConstants.whatYourHeight,
-            fontSize: 24.sp,
             fontWeight: FontWeight.w600,
-            fontFamily: "Caros",
           ),
           // 20.hBox,
-          CommonText.text(
+          CommonText.titleMedium(
             maxLines: 2,
             AppConstants.heightDescription,
-            fontSize: 16.sp,
             fontWeight: FontWeight.w400,
-            fontFamily: "Caros",
           ),
 
           20.hBox,
@@ -86,15 +82,13 @@ class AddHeightScreen extends StatelessWidget {
                             : AppColors.blackColor.withAlpha(64),
                   ),
                 ),
-                child: CommonText.text(
+                child: CommonText.titleLarge(
                   _controller.heightController.isNotEmpty &&
                           _controller.isEnable.value
                       ? _controller.heightController.value
                       : "Select your height",
-
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.w500,
-                  fontSize: 17.sp,
                   color:
                       _controller.heightController.isNotEmpty
                           ? AppColors.blackColor
@@ -102,14 +96,6 @@ class AddHeightScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            // CustomFormField(
-            //   enable: false,
-            //   label: "",
-            //   hint: AppConstants.hintHeight,
-            //   controller: _controller.heightController,
-            //   enableBorder: true.obs,
-            // ),
           ),
         ],
       ),

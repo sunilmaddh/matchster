@@ -3,9 +3,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:matchster/core/base/base_controller.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-class FaceController extends GetxController {
+class FaceController extends BaseController {
   late CameraController cameraController;
   late FaceDetector faceDetector;
 

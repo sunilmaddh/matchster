@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:matchster/core/bindings/app_binding.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/features/auth/services/splash_video_service.dart';
 import 'package:matchster/features/auth/services/video_services.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
           useInheritedMediaQuery: true,
           debugShowCheckedModeBanner: false,
           initialBinding: AppBinding(),
-          title: 'Matchster',
+          title: AppStrings.appTitle,
           home: SplashScreen(),
           getPages: AppPages.getPages,
         ),

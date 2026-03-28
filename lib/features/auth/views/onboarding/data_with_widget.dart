@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_font.dart';
 import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/extentions/extentions.dart';
@@ -24,20 +25,20 @@ class DateWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             maxLines: 2,
             AppConstants.datingTitle,
-            fontSize: 24.sp,
+
             fontWeight: FontWeight.w600,
           ),
 
           2.hBox,
           Padding(
             padding: EdgeInsets.only(right: 15.w),
-            child: CommonText.text(
+            child: CommonText.titleMedium(
               maxLines: 3,
               AppConstants.dateDescription,
-              fontSize: 16.sp,
+
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -47,11 +48,7 @@ class DateWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CommonText.text(
-                  AppStrings.openToDateEverybody,
-                  fontSize: 17.sp,
-                  fontWeight: FontWeight.w600,
-                ),
+                CommonText.titleLarge(AppStrings.openToDateEverybody),
                 Obx(
                   () => GradientSwitch(
                     value: _controller.isDateWithSwitchOn.value,
@@ -89,14 +86,12 @@ class DateWidget extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CommonText.text(
-                              fontFamily: "DM Sans",
+                            CommonText.titleLarge(
+                              fontType: AppFontType.mono,
                               color: AppColors.blackColor,
                               AppMethods.capitalizeFirst(
                                 OnboardHalper.dateList[index],
                               ),
-                              fontSize: 17.sp,
-                              fontWeight: FontWeight.w600,
                             ),
 
                             // ✔ filled checkbox if selected, else outline

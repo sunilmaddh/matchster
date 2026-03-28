@@ -4,12 +4,13 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hand_landmarker/hand_landmarker.dart';
+import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/main.dart';
 
 enum GestureStep { detectVictory, detectOk, detectThumbOnchin, completed }
 
-class PostureController extends GetxController {
+class PostureController extends BaseController {
   final currentStep = GestureStep.detectVictory.obs;
   RxInt postureIndex = 0.obs;
   final List<String> postureList = [

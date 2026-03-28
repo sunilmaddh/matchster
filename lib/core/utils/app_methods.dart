@@ -47,6 +47,7 @@ class AppMethods {
   }
 
   static String? validateWorkText({required String value}) {
+    // ignore: unnecessary_null_comparison
     if (value == null && value.isEmpty) {
       return null;
     } else if (!isValid(value)) {

@@ -109,13 +109,13 @@ class MainPhotoCard extends StatelessWidget {
                           Row(
                             children: [
                               Flexible(
-                                child: CommonText.text(
+                                child: CommonText.headlineMedium(
                                   "${getFirstLetter(data.name)}, ${data.age}",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  fontSize: 20.sp,
+
                                   fontWeight: FontWeight.w700,
-                                  fontFamily: "Caros",
+
                                   color: AppColors.whiteColor,
                                 ),
                               ),
@@ -127,10 +127,8 @@ class MainPhotoCard extends StatelessWidget {
                           if (data.distance?.isNotEmpty ?? false)
                             Padding(
                               padding: EdgeInsets.only(top: 4.h),
-                              child: CommonText.text(
+                              child: CommonText.labelMedium(
                                 "${data.distance} km ${AppStrings.away}",
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w500,
                                 color: AppColors.whiteColor,
                               ),
                             ),
@@ -158,11 +156,9 @@ class MainPhotoCard extends StatelessWidget {
                                           width: 1,
                                         ),
                                       ),
-                                      child: CommonText.text(
+                                      child: CommonText.labelMedium(
                                         interest?.label ??
                                             AppMethods.capitalizeFirst(v),
-                                        fontSize: 11.5.sp,
-                                        fontWeight: FontWeight.w500,
                                         color: AppColors.whiteColor,
                                       ),
                                     );

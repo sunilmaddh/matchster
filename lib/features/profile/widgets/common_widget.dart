@@ -55,17 +55,13 @@ class CommonWidget extends StatelessWidget {
             children: [
               Image.asset(height: 66.h, width: 66.w, image),
               40.hBox,
-              CommonText.text(
+              CommonText.headlineMedium(
                 textAlign: TextAlign.center,
                 title,
-                fontSize: 20.sp,
+
                 fontWeight: FontWeight.w500,
               ),
-              CommonText.text(
-                subtitle,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w300,
-              ),
+              CommonText.labelLarge(subtitle, fontWeight: FontWeight.w300),
               20.hBox,
               Obx(
                 () => Wrap(
@@ -89,15 +85,12 @@ class CommonWidget extends StatelessWidget {
                               color: !selected ? Color(0xffE8E8E8) : null,
                               borderRadius: BorderRadius.circular(20.r),
                             ),
-                            child: CommonText.text(
+                            child: CommonText.titleMedium(
                               v,
                               color:
                                   selected
                                       ? AppColors.whiteColor
                                       : AppColors.blackColor,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "Caros",
                             ),
                           ),
                         );

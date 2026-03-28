@@ -27,7 +27,7 @@ class DarkModeCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CommonText.text(text, fontSize: 17.sp, fontWeight: FontWeight.w600),
+          CommonText.titleLarge(text),
           Switch(
             focusColor: Color(0xff1D48EF),
             activeTrackColor: Color(0xff1D48EF),

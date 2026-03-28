@@ -29,19 +29,18 @@ class NoMoreProfileWidget extends StatelessWidget {
                   30.hBox,
                   Padding(
                     padding: 40.horizontalPadding,
-                    child: CommonText.text(
+                    child: CommonText.displaySmall(
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       AppConstants.nOProfilesTtile,
-                      fontSize: 24.sp,
+
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   20.hBox,
-                  CommonText.text(
+                  CommonText.titleMedium(
                     maxLines: 3,
                     AppConstants.noProfileDes,
-                    fontSize: 16.sp,
                     fontWeight: FontWeight.w300,
                     textAlign: TextAlign.center,
                   ),

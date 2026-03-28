@@ -29,10 +29,10 @@ class PreferenceMenuWidget extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CommonText.text(
+                      CommonText.bodyMedium(
                         v,
                         color: AppColors.whiteColor,
-                        fontSize: 14.sp,
+
                         fontWeight: FontWeight.w500,
                       ),
                       5.wBox,

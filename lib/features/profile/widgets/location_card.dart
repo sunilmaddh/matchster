@@ -18,18 +18,8 @@ class LocationCard extends StatelessWidget {
       ),
       child: ListTile(
         leading: SvgPicture.asset(AppAssets.locationAssets),
-        title: CommonText.text(
-          title,
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w700,
-          fontFamily: "Caros",
-        ),
-        subtitle: CommonText.text(
-          subTitle,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w300,
-          fontFamily: "Caros",
-        ),
+        title: CommonText.labelLarge(title, fontWeight: FontWeight.w700),
+        subtitle: CommonText.labelSmall(subTitle, fontWeight: FontWeight.w300),
         trailing: Icon(Icons.arrow_forward_ios),
       ),
     );

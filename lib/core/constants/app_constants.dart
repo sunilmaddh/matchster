@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 class AppConstants {
+  AppConstants._();
   static Size deviceSize = Size(375, 812);
   static const String
   commonFont = "Caros",
@@ -97,16 +98,4 @@ class AppConstants {
       "Your recent upload didn’t pass our photo standards. Try submitting a clear picture of yourself.",
   uploadAnOtherPhoto = "Upload another Photo",
   discoverSolumates = "Discover Soulmates Near You";
-
-  static const contentTypeKey = 'Content-Type';
-  static const acceptKey = 'Accept';
-  static const authorizationKey = 'Authorization';
-
-  static const applicationJson = 'application/json';
-  static const bearer = 'Bearer';
-
-  static const defaultTimeoutSeconds = 30;
-  static const maxValidStatusCode = 500;
-  static const defaultErrorStatusCode = -1;
-  static const successStatusCode = 200;
 }

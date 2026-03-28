@@ -21,15 +21,15 @@ class YourHeightWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             AppConstants.whatYourHeight,
-            fontSize: 24.sp,
+
             fontWeight: FontWeight.w600,
           ),
-          CommonText.text(
+          CommonText.titleMedium(
             maxLines: 2,
             AppConstants.heightDescription,
-            fontSize: 16.sp,
+
             fontWeight: FontWeight.w400,
           ),
 
@@ -83,14 +83,14 @@ class YourHeightWidget extends StatelessWidget {
                             : AppColors.blackColor.withAlpha(64),
                   ),
                 ),
-                child: CommonText.text(
+                child: CommonText.titleLarge(
                   _controller.heightController.isNotEmpty
                       ? _controller.heightController.value
                       : AppStrings.selectYourHeight,
 
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.w500,
-                  fontSize: 17.sp,
+
                   color:
                       _controller.heightController.isNotEmpty
                           ? AppColors.blackColor

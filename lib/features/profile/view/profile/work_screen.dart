@@ -57,11 +57,9 @@ class WorkScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               20.hBox,
-              CommonText.text(
+              CommonText.headlineMedium(
                 AppStrings.whatAboutYourWork,
-                fontSize: 20.sp,
                 fontWeight: FontWeight.w500,
-                fontFamily: "Caros",
               ),
               20.hBox,
               CommonText.text(AppStrings.jobTitle),

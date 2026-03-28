@@ -52,13 +52,19 @@ class MatchsterProgressIndicator extends StatelessWidget {
 
             10.wBox,
 
-            CommonText.text(
-              '${currentIndex + 1}/${pages.length}',
+            isLarge
+                ? CommonText.titleMedium(
+                  '${currentIndex + 1}/${pages.length}',
 
-              fontSize: isLarge ? 16.sp : 14.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.blackColor,
-            ),
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.blackColor,
+                )
+                : CommonText.labelLarge(
+                  '${currentIndex + 1}/${pages.length}',
+
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.blackColor,
+                ),
           ],
         );
       },

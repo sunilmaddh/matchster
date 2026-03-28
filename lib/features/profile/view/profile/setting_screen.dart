@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/features/common/widgets/buttons/app_button.dart';
@@ -12,7 +13,7 @@ import 'package:matchster/features/profile/widgets/setting_card.dart';
 class SettingScreen extends StatelessWidget {
   SettingScreen({super.key});
 
-  RxBool isSwitchOn = true.obs;
+  final RxBool isSwitchOn = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -20,59 +21,83 @@ class SettingScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: 15.horizontalPadding,
-        child: AppButton(
-          name: "Log out",
-          onTop: () {},
-          isEnable: isSwitchOn.value,
+        child: Obx(
+          () => AppButton(
+            name: AppStrings.logout,
+            onTop: () {},
+            isEnable: isSwitchOn.value,
+          ),
         ),
       ),
       appBar: CustomAppBar(
         isCenterTitle: false,
-        title: "Setting",
-        onTop: () {
-          Get.back();
-        },
+        title: AppStrings.settings,
+        onTop: Get.back,
       ),
       body: Padding(
         padding: 15.horizontalPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonText.text(
-              "Account",
-              fontSize: 16.sp,
+            CommonText.titleMedium(
+              AppStrings.account,
               fontWeight: FontWeight.w300,
             ),
             15.hBox,
+
+            /// Privacy
             SettingCard(
               image: AppAssets.privacySettingAssets,
-              title: "Privacy Setting",
+              title: AppStrings.privacySetting,
               onTop: () {},
             ),
+
             SizedBox(height: 20.h),
+
+            /// Account
             SettingCard(
               image: AppAssets.accountSettingAssets,
-              title: "Account Setting",
+              title: AppStrings.accountSetting,
               onTop: () {},
             ),
+
             20.hBox,
-            DarkModeCard(
-              isSwitchOn: isSwitchOn.value,
-              onChanged: (bool value) {},
-              text: 'Dark Mode',
+
+            /// Dark mode
+            Obx(
+              () => DarkModeCard(
+                isSwitchOn: isSwitchOn.value,
+                onChanged: (bool value) {
+                  isSwitchOn.value = value;
+                },
+                text: AppStrings.darkMode,
+              ),
             ),
+
             20.hBox,
-            SettingCard(image: AppAssets.faqAssets, title: "FAQ", onTop: () {}),
+
+            /// FAQ
+            SettingCard(
+              image: AppAssets.faqAssets,
+              title: AppStrings.faq,
+              onTop: () {},
+            ),
+
             20.hBox,
+
+            /// Terms
             SettingCard(
               image: AppAssets.termAssets,
-              title: "Terms & Conditions",
+              title: AppStrings.termsAndConditions,
               onTop: () {},
             ),
+
             20.hBox,
+
+            /// Privacy Policy
             SettingCard(
               image: AppAssets.privacyPolicyAssets,
-              title: "Privacy Policy",
+              title: AppStrings.privacyPolicy,
               onTop: () {},
             ),
           ],

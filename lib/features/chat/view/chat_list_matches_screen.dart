@@ -31,24 +31,14 @@ class ChatListMetchesScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CommonText.text(
-                    "Chats",
-                    fontFamily: "Caros",
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  CommonText.titleMedium("Chats", fontWeight: FontWeight.w700),
                   IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
                 ],
               ),
               20.hBox,
               SearchWidget(onChanged: (String value) {}),
               20.hBox,
-              CommonText.text(
-                "Matches",
-                fontFamily: "Caros",
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-              ),
+              CommonText.titleMedium("Matches"),
               10.hBox,
               MatchesWidget(list: list, onTop: () {}),
               15.hBox,
@@ -56,18 +46,8 @@ class ChatListMetchesScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CommonText.text(
-                    "Message",
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Caros",
-                  ),
-                  CommonText.text(
-                    "12 unread chats",
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Caros",
-                  ),
+                  CommonText.titleMedium("Message"),
+                  CommonText.labelMedium("12 unread chats"),
                 ],
               ),
               10.hBox,

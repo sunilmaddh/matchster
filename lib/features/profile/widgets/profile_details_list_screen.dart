@@ -58,11 +58,7 @@ class _ProfileDetailsListScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CommonText.text(
-          AppStrings.profileDetails,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
-        ),
+        CommonText.titleMedium(AppStrings.profileDetails),
         5.hBox,
         _buildProfileCard(
           context: context,

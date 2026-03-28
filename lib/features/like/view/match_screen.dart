@@ -150,9 +150,8 @@ class _MatchScreenState extends State<MatchScreen>
                 children: [
                   Align(
                     alignment: Alignment.center,
-                    child: CommonText.text(
+                    child: CommonText.titleMedium(
                       "Say Hi...",
-                      fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
                       color: AppColors.whiteColor,
                       textAlign: TextAlign.center,
@@ -261,10 +260,8 @@ class _MatchScreenState extends State<MatchScreen>
                   shaderCallback: (bounds) {
                     return AppColors.matchTilGradiantColor.createShader(bounds);
                   },
-                  child: CommonText.text(
+                  child: CommonText.displayLarge(
                     "It's a Match",
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.w700,
                     fontStyle: FontStyle.italic,
                     textAlign: TextAlign.center,
                     color: Colors.white, // REQUIRED for ShaderMask

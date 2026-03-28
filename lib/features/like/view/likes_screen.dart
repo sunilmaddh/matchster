@@ -25,10 +25,8 @@ class LikesScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
+                CommonText.titleMedium(
                   AppStrings.likesTitle,
-
-                  fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),
                 20.hBox,
@@ -43,20 +41,16 @@ class LikesScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CommonText.text(
+                          CommonText.bodyMedium(
                             AppStrings.multipleMatchesMessage,
-
                             fontWeight: FontWeight.w300,
-                            fontSize: 14.sp,
+
                             maxLines: 5,
                           ),
                           Row(
                             children: [
-                              CommonText.text(
+                              CommonText.titleMedium(
                                 AppStrings.explore,
-
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.sp,
                                 maxLines: 5,
                                 color: const Color(0xff1D48EF),
                               ),
@@ -78,12 +72,7 @@ class LikesScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CommonText.text(
-                      AppStrings.likesTitle,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
-                      maxLines: 5,
-                    ),
+                    CommonText.titleMedium(AppStrings.likesTitle, maxLines: 5),
                     const Icon(Icons.filter_list, color: Color(0xff797979)),
                   ],
                 ),

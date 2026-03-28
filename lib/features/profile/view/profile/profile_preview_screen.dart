@@ -131,9 +131,9 @@ class _NameSection extends StatelessWidget {
 
     return Padding(
       padding: 20.horizontalPadding,
-      child: CommonText.text(
+      child: CommonText.titleMedium(
         _buildNameAge(name, age),
-        fontSize: 16.sp,
+
         fontWeight: FontWeight.w700,
       ),
     );
@@ -161,10 +161,8 @@ class _InShortSection extends StatelessWidget {
         children: [
           CommonText.text(AppStrings.inShort, color: AppColors.whiteColor),
           if (about.trim().isNotEmpty) ...[
-            CommonText.text(
+            CommonText.displaySmall(
               '“$about.”',
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w700,
 
               maxLines: 7,
               fontStyle: FontStyle.italic,
@@ -192,11 +190,10 @@ class _LookingForSection extends StatelessWidget {
       widget: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.titleMedium(
             AppStrings.lookingFor,
             color: AppColors.whiteColor,
 
-            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
           ),
           10.hBox,
@@ -220,11 +217,10 @@ class _LocationSection extends StatelessWidget {
       widget: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.titleMedium(
             AppStrings.location,
             color: AppColors.whiteColor,
 
-            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
           ),
           10.hBox,
@@ -241,10 +237,8 @@ class _LocationSection extends StatelessWidget {
                   child: CommonText.text(AppStrings.locationIcon),
                 ),
                 5.wBox,
-                CommonText.text(
+                CommonText.labelLarge(
                   city.isNotEmpty ? '${AppStrings.away}, $city' : '',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.sp,
                 ),
               ],
             ),
@@ -268,16 +262,14 @@ class _InterestSection extends StatelessWidget {
       widget: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.titleMedium(
             AppStrings.myInterest,
 
-            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
           ),
-          CommonText.text(
+          CommonText.labelMedium(
             AppStrings.expressYourInterests,
 
-            fontSize: 12.sp,
             fontWeight: FontWeight.w300,
           ),
           10.hBox,
@@ -301,10 +293,9 @@ class _ProfessionSection extends StatelessWidget {
       widget: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.titleMedium(
             AppStrings.profession,
 
-            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
           ),
           5.hBox,
@@ -330,10 +321,9 @@ class _MorePictureSection extends StatelessWidget {
       widget: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.titleMedium(
             AppStrings.morePicture,
 
-            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
           ),
           10.hBox,
@@ -369,11 +359,10 @@ class _LanguageSection extends StatelessWidget {
           widget: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CommonText.text(
+              CommonText.titleMedium(
                 AppStrings.language,
                 color: AppColors.blackColor,
 
-                fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
               ),
               10.hBox,
@@ -443,10 +432,10 @@ class _LanguageChip extends StatelessWidget {
           width: 1.w,
         ),
       ),
-      child: CommonText.text(
+      child: CommonText.bodyMedium(
         title,
         color: AppColors.blackColor,
-        fontSize: 14.sp,
+
         fontWeight: FontWeight.w300,
       ),
     );

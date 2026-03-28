@@ -22,12 +22,9 @@ class InterestWrapWidget extends StatelessWidget {
           list.map((v) {
             final interest = InterestEnumX.fromString(v);
             return SubCommonCard(
-              widget: CommonText.text(
+              widget: CommonText.labelLarge(
                 interest?.label ?? AppMethods.capitalizeFirst(v),
                 color: AppColors.blackColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Caros",
               ),
             );
           }).toList(),

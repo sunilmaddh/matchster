@@ -19,16 +19,15 @@ class TextWithWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CommonText.text(
+        CommonText.titleMedium(
           title,
-          fontSize: 16.sp,
+
           fontWeight: FontWeight.w700,
           color: AppColors.blackColor,
         ),
 
-        CommonText.text(
+        CommonText.labelLarge(
           subTitle,
-          fontSize: 14.sp,
           fontWeight: FontWeight.w500,
           color: AppColors.blackColor,
         ),

@@ -38,12 +38,7 @@ class RadioWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CommonText.text(
-                text,
-                fontSize: 17.sp,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
+              CommonText.titleLarge(text),
               SvgPicture.asset(
                 isSelected ? AppAssets.radioEnable : AppAssets.radioDisable,
               ),

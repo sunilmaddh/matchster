@@ -21,9 +21,8 @@ class NameWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             AppConstants.whatYourname,
-            fontSize: 24.sp,
             fontWeight: FontWeight.w600,
           ),
           15.hBox,

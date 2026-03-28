@@ -1,9 +1,9 @@
 import 'package:get/route_manager.dart';
+import 'package:matchster/features/auth/binding/auth_binding.dart';
 import 'package:matchster/features/auth/views/login/country_list_screen.dart';
 import 'package:matchster/features/auth/views/login/login_screen.dart';
 import 'package:matchster/features/auth/views/login/otp_screen.dart';
 import 'package:matchster/features/auth/views/onboarding/onboard_screen.dart';
-import 'package:matchster/features/auth/views/onboarding/photo_preview_screen.dart';
 import 'package:matchster/features/auth/views/login/login_field_with_button_view.dart';
 import 'package:matchster/features/home/binding/landing_binding.dart';
 import 'package:matchster/features/home/view/landing_screen.dart';
@@ -32,12 +32,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.loginScreen,
       page: () => const LoginScreen(),
-      // binding: AuthBinding(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.onboardScreen,
       page: () => OnboardScreen(),
-      // binding: AuthBinding(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.landingScreen,

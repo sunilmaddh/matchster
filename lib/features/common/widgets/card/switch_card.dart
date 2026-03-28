@@ -20,12 +20,7 @@ class SwitchCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CommonText.text(
-          text,
-          fontSize: 17.sp,
-          fontWeight: FontWeight.w600,
-          color: AppColors.blackColor,
-        ),
+        CommonText.titleLarge(text, color: AppColors.blackColor),
         GradientSwitch(
           value: isSwitch,
           onChanged: (bool value) {

@@ -168,9 +168,8 @@ class _ProfileScreenState
                         Obx(
                           () => Row(
                             children: [
-                              CommonText.text(
+                              CommonText.titleMedium(
                                 "${controller.basicInfo?.name}, ${controller.basicInfo?.age}",
-                                fontSize: 16.sp,
 
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.whiteColor,
@@ -196,9 +195,9 @@ class _ProfileScreenState
                                 color: AppColors.previewBorder,
                               ),
                             ),
-                            child: CommonText.text(
+                            child: CommonText.labelLarge(
                               AppStrings.preview,
-                              fontSize: 14.sp,
+
                               fontWeight: FontWeight.w500,
                               color: AppColors.blackColor.withAlpha(153),
                             ),
@@ -235,11 +234,7 @@ class _ProfileScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
-            AppStrings.verifyYourProfile,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-          ),
+          CommonText.titleMedium(AppStrings.verifyYourProfile),
           5.hBox,
           Padding(
             padding: EdgeInsets.only(bottom: 15.h),
@@ -290,11 +285,7 @@ class _ProfileScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           10.hBox,
-          CommonText.text(
-            AppStrings.location,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-          ),
+          CommonText.titleMedium(AppStrings.location),
           5.hBox,
           InkWell(
             onTap: () => controller.navigateTo(AppRoutes.currentLocationScreen),
@@ -333,12 +324,7 @@ class _ProfileScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           10.hBox,
-          CommonText.text(
-            AppStrings.makeItShortAndFunky,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-            fontFamily: "Caros",
-          ),
+          CommonText.titleMedium(AppStrings.makeItShortAndFunky),
           5.hBox,
           Container(
             height: 90.h,
@@ -351,9 +337,9 @@ class _ProfileScreenState
               child: TextFormField(
                 controller: _formController.aboutController,
                 decoration: InputDecoration(
-                  hint: CommonText.text(
+                  hint: CommonText.bodyMedium(
                     AppStrings.aboutHint,
-                    fontSize: 14.sp,
+
                     fontWeight: FontWeight.w300,
                     color: AppColors.aboutHintColor,
                   ),
@@ -393,14 +379,14 @@ class _ProfileScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.labelLarge(
             AppStrings.connectAccounts,
-            fontSize: 14.sp,
+
             fontWeight: FontWeight.w700,
           ),
-          CommonText.text(
+          CommonText.labelMedium(
             AppStrings.buildYourConnectionMore,
-            fontSize: 12.sp,
+
             fontWeight: FontWeight.w300,
           ),
           5.hBox,
@@ -433,9 +419,9 @@ class _ProfileScreenState
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             SvgPicture.asset(option["image"] ?? ''),
-                            CommonText.text(
+                            CommonText.labelLarge(
                               option["text"] ?? '',
-                              fontSize: 14.sp,
+
                               fontWeight: FontWeight.w400,
                             ),
                           ],
@@ -448,9 +434,8 @@ class _ProfileScreenState
             10.hBox,
             TextButton(
               onPressed: Get.back,
-              child: CommonText.text(
+              child: CommonText.headlineSmall(
                 AppStrings.cancel,
-                fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
@@ -34,11 +35,10 @@ class MaintenceScreen extends StatelessWidget {
             ),
             20.hBox,
 
-            CommonText.text(
-              "Work in progress",
+            CommonText.displayLarge(
+              AppStrings.workInProgress,
               fontWeight: FontWeight.w700,
               color: AppColors.primary,
-              fontSize: 30.sp,
             ),
           ],
         ),

@@ -35,11 +35,7 @@ class SettingCard extends StatelessWidget {
                   ? SvgPicture.asset(height: 17.3.h, width: 17.28.w, image)
                   : SizedBox.shrink(),
 
-          title: CommonText.text(
-            title,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w300,
-          ),
+          title: CommonText.titleMedium(title, fontWeight: FontWeight.w300),
           trailing: Icon(Icons.arrow_forward_ios, size: 20.w),
         ),
       ),

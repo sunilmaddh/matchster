@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_font.dart';
 import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
 
@@ -23,11 +24,10 @@ class DeviderWidget extends StatelessWidget {
             ),
           ),
           20.wBox,
-          CommonText.text(
+          CommonText.labelLarge(
             AppConstants.oRcontinue,
-            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
-            fontFamily: "DM Sans",
+            fontType: AppFontType.mono,
             color: AppColors.blackColor,
           ),
           20.wBox,

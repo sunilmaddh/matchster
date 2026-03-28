@@ -40,16 +40,16 @@ class HeightScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             20.hBox,
-            CommonText.text(
+            CommonText.headlineMedium(
               AppStrings.whatIsYourHeight,
-              fontSize: 20.sp,
+
               fontWeight: FontWeight.w500,
             ),
             10.hBox,
-            CommonText.text(
+            CommonText.titleMedium(
               AppStrings.heightDescription,
               maxLines: 2,
-              fontSize: 16.sp,
+
               fontWeight: FontWeight.w400,
             ),
             20.hBox,
@@ -96,13 +96,12 @@ class HeightScreen extends StatelessWidget {
                               : AppColors.blackColor.withAlpha(64),
                     ),
                   ),
-                  child: CommonText.text(
+                  child: CommonText.titleLarge(
                     _controller.height.value.isNotEmpty
                         ? _controller.height.value
                         : AppStrings.selectYourHeight,
                     textAlign: TextAlign.center,
                     fontWeight: FontWeight.w500,
-                    fontSize: 17.sp,
                     color:
                         _controller.height.value.isNotEmpty
                             ? AppColors.blackColor

@@ -22,20 +22,18 @@ class DobWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             AppConstants.whatYourDob,
-            fontSize: 24.sp,
+
             fontWeight: FontWeight.w600,
-            fontFamily: "Caros",
           ),
 
           // 20.hBox,
-          CommonText.text(
+          CommonText.titleMedium(
             maxLines: 2,
             AppConstants.dobDiscription,
-            fontSize: 16.sp,
+
             fontWeight: FontWeight.w400,
-            fontFamily: "Caros",
           ),
           20.hBox,
           InkWell(
@@ -66,28 +64,9 @@ class DobWidget extends StatelessWidget {
                               }
                               Get.back();
                               AppMethods.hideKeyboard();
-
-                              // if (!isSuccess) return;
-                              // _onboardController.completeStep(current);
                             },
                           ),
                         ),
-                        //  TextButton(
-                        //   child: CommonText.text("Done"),
-                        //   onPressed: () async {
-                        //     Get.back();
-                        //     if (_controller.isButtonEnabled.value) {
-                        //       _controller.isNextPageEnable.value = false;
-                        //       final current =
-                        //           _controller.currentIndex.value;
-                        //       final isSuccess = await _controller
-                        //           .submitStep(current);
-
-                        //       _controller.completeStep(current);
-                        //     }
-                        //     AppMethods.hideKeyboard();
-                        //   },
-                        // ),
                       ),
 
                       /// DATE PICKER
@@ -137,13 +116,12 @@ class DobWidget extends StatelessWidget {
                             : AppColors.blackColor.withAlpha(64),
                   ),
                 ),
-                child: CommonText.text(
+                child: CommonText.titleLarge(
                   _controller.dobController.isNotEmpty
                       ? _controller.dobController.value
                       : "Select your birthdate",
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.w500,
-                  fontSize: 17.sp,
                   color:
                       _controller.dobController.isNotEmpty
                           ? AppColors.blackColor
@@ -151,13 +129,6 @@ class DobWidget extends StatelessWidget {
                 ),
               ),
             ),
-            //  CustomFormField(
-            //   enable: false,
-            //   label: "",
-            //   hint: AppConstants.hintDob,
-            //   controller: _controller.dobController,
-            //   enableBorder: true.obs,
-            // ),
           ),
           10.hBox,
           Row(

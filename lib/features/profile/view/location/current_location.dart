@@ -59,12 +59,11 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
                         SvgPicture.asset(AppAssets.locations),
                         15.wBox,
                         Expanded(
-                          child: CommonText.text(
+                          child: CommonText.titleMedium(
                             AppStrings.currentLocation,
                             textAlign: TextAlign.center,
                             maxLines: 2,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
+
                             color: AppColors.whiteColor,
                           ),
                         ),
@@ -75,22 +74,21 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
                 30.hBox,
                 Padding(
                   padding: 7.horizontalPadding,
-                  child: CommonText.text(
+                  child: CommonText.headlineSmall(
                     AppStrings.changeCurrentLocationTitle,
                     textAlign: TextAlign.center,
                     maxLines: 2,
-                    fontSize: 20.sp,
+
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 10.hBox,
                 Padding(
                   padding: 15.horizontalPadding,
-                  child: CommonText.text(
+                  child: CommonText.titleMedium(
                     AppStrings.changeCurrentLocationDescription,
                     textAlign: TextAlign.center,
                     maxLines: 3,
-                    fontSize: 16.sp,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
@@ -292,23 +290,23 @@ class SubscriptionRow extends StatelessWidget {
                         ],
                       ),
                     ),
-                    child: CommonText.text(
+                    child: CommonText.labelMedium(
                       plan["tag"]!,
-                      fontSize: 12.sp,
+
                       fontWeight: FontWeight.w600,
                       color: AppColors.blackColor,
                     ),
                   ),
                 8.hBox,
-                CommonText.text(
+                CommonText.displayLarge(
                   plan["duration"]!,
-                  fontSize: 32.sp,
+
                   fontWeight: FontWeight.w600,
                   color: isSelected ? const Color(0xff1B8CF5) : Colors.black,
                 ),
-                CommonText.text(
+                CommonText.titleMedium(
                   plan["label"]!,
-                  fontSize: 16.sp,
+
                   fontWeight: FontWeight.w300,
                 ),
                 RichText(
@@ -340,9 +338,8 @@ class SubscriptionRow extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4.r),
                     color: const Color(0xffF2F2F2),
                   ),
-                  child: CommonText.text(
+                  child: CommonText.labelLarge(
                     plan["discount"]!,
-                    fontSize: 14.sp,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xff1B8CF5),
                   ),

@@ -61,11 +61,9 @@ class AgeWidget extends StatelessWidget {
                         );
                       },
                       blendMode: BlendMode.srcIn,
-                      child: CommonText.text(
+                      child: CommonText.bodyMedium(
                         AppStrings.ageValuePlaceholder,
-                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.blackColor,
                       ),
                     ),
                   ],

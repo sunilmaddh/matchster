@@ -1,7 +1,7 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:matchster/core/extentions/extentions.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/features/common/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controllers/country_controller.dart';
@@ -30,10 +30,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: "Country Codes",
-        onTop: () {
-          AppNavigation.back();
-        },
+        title: AppStrings.countryCodes,
+        onTop: AppNavigation.back,
         isCenterTitle: false,
       ),
       body: Column(
@@ -56,11 +54,7 @@ class _SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: SearchWidget(
-        onChanged: (String value) {
-          controller.search(value);
-        },
-      ),
+      child: SearchWidget(onChanged: controller.search),
     );
   }
 }
@@ -77,28 +71,32 @@ class _CountryList extends StatelessWidget {
         final list = controller.filteredCountries;
 
         if (list.isEmpty) {
-          return const Center(child: Text("No countries found"));
+          return Center(
+            child: CommonText.bodyMedium(AppStrings.noCountriesFound),
+          );
         }
 
         return ListView.separated(
           itemCount: list.length,
-          separatorBuilder: (_, __) => SizedBox(),
+          separatorBuilder: (_, __) => const SizedBox(),
           itemBuilder: (_, index) {
             final country = list[index];
 
             return ListTile(
-              leading: CommonText.text(country.flagEmoji, fontSize: 35.sp),
-              title: CommonText.text(
-                "${country.name} +${country.phoneCode}",
-                fontSize: 16.sp,
+              leading: CommonText.displayLarge(country.flagEmoji),
+              title: CommonText.titleMedium(
+                _formatCountry(country.name, country.phoneCode),
                 fontWeight: FontWeight.w400,
               ),
-
               onTap: () => Get.back(result: country),
             );
           },
         );
       }),
     );
+  }
+
+  String _formatCountry(String name, String code) {
+    return '$name +$code';
   }
 }

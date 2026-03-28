@@ -11,6 +11,7 @@ import 'package:matchster/features/common/widgets/bottomsheet/custom_bottomsheet
 import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
+import 'package:matchster/routes/app_navigation.dart';
 import 'package:matchster/routes/app_routes.dart';
 
 class AddLocationScreen extends BaseView<ProfileController> {
@@ -61,18 +62,16 @@ class _AddLocationScreenState
             10.hBox,
             SvgPicture.asset(AppAssets.loctionMarker),
             10.hBox,
-            CommonText.text(
+            CommonText.displaySmall(
               AppStrings.areYouSure,
-              fontSize: 24.sp,
               fontWeight: FontWeight.w600,
             ),
             Padding(
               padding: 30.horizontalPadding,
-              child: CommonText.text(
+              child: CommonText.headlineSmall(
                 AppStrings.changeCurrentLocation,
                 maxLines: 2,
                 textAlign: TextAlign.center,
-                fontSize: 18.sp,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -89,19 +88,19 @@ class _AddLocationScreenState
                   country: details.country!,
                 );
               },
-              child: CommonText.text(
+              child: CommonText.headlineSmall(
                 AppStrings.confirm,
-                fontSize: 18.sp,
+
                 fontWeight: FontWeight.w400,
               ),
             ),
             const Divider(height: 1),
             TextButton(
-              onPressed: Get.back,
-              child: CommonText.text(
+              onPressed: AppNavigation.back,
+              child: CommonText.headlineSmall(
                 AppStrings.dismiss,
                 color: AppColors.textFieldColor,
-                fontSize: 18.sp,
+
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -177,9 +176,8 @@ class _AddLocationScreenState
                           onPressed: Get.back,
                           icon: const Icon(Icons.arrow_back),
                         ),
-                        CommonText.text(
+                        CommonText.titleMedium(
                           AppStrings.currentLocation,
-                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ],

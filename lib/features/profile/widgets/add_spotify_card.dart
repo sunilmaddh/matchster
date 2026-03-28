@@ -24,21 +24,14 @@ class AddSpotifyCard extends StatelessWidget {
             children: [
               SvgPicture.asset(AppAssets.spotifyAssets),
               10.wBox,
-              CommonText.text(
-                "Add your Spotify",
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Caros",
-              ),
+              CommonText.titleMedium("Add your Spotify"),
             ],
           ),
           10.hBox,
-          CommonText.text(
+          CommonText.labelSmall(
             maxLines: 4,
             AppConstants.linkingSpotify,
             fontWeight: FontWeight.w300,
-            fontSize: 10.sp,
-            fontFamily: "Caros",
           ),
           20.hBox,
           Row(

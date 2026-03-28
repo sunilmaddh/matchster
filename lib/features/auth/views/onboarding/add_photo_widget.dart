@@ -1,23 +1,26 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/utils/app_methods.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/extentions/extentions.dart';
-import 'package:matchster/features/common/widgets/bottomsheet/custom_bottomsheet.dart';
-import 'package:matchster/features/common/widgets/fields/common_text.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/features/auth/auth_controllers/onboard_controller.dart';
 import 'package:matchster/features/auth/helpers/onboard_halper.dart';
 import 'package:matchster/features/auth/widgets/onboard_widget/photo_card.dart';
+import 'package:matchster/features/common/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/features/common/widgets/fields/common_text.dart';
 import 'package:matchster/routes/app_navigation.dart';
 import 'package:matchster/routes/app_routes.dart';
 
 class AddPhotoWidget extends StatelessWidget {
   AddPhotoWidget({super.key});
-  final _controller = Get.find<OnboardController>();
+
+  final OnboardController _controller = Get.find<OnboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +31,14 @@ class AddPhotoWidget extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CommonText.text(
+              CommonText.displaySmall(
+                AppStrings.addPhotoTitle,
                 maxLines: 2,
-                "Show off your best photos!",
-                fontSize: 24.sp,
                 fontWeight: FontWeight.w600,
               ),
-              // 10.hBox,
-              CommonText.text(
+              CommonText.labelLarge(
+                AppStrings.addPhotoDescription,
                 maxLines: 3,
-                "Upload 5-6 favorite photos to let your personality shine. Make sure your uploads are clear and capture the real you!",
-                fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),
               25.hBox,
@@ -59,127 +59,7 @@ class AddPhotoWidget extends StatelessWidget {
                     return InkWell(
                       onTap: () {
                         _controller.selectedImageIndex.value = index;
-
-                        CustomBottomSheet.show(
-                          borderRadius: 40.r,
-                          backgroundColor: const Color(0xffF4F4F4),
-                          padding: EdgeInsets.zero,
-                          child: SafeArea(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding:
-                                      15.horizontalPadding + 30.verticalPadding,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children:
-                                        OnboardHalper.addPhotoOption.map((v) {
-                                          return InkWell(
-                                            onTap: () async {
-                                              try {
-                                                final context = Get.context;
-                                                if (context != null &&
-                                                    Navigator.of(
-                                                      context,
-                                                      rootNavigator: true,
-                                                    ).canPop()) {
-                                                  Navigator.of(
-                                                    context,
-                                                    rootNavigator: true,
-                                                  ).pop();
-                                                }
-
-                                                await Future.delayed(
-                                                  const Duration(
-                                                    milliseconds: 300,
-                                                  ),
-                                                );
-
-                                                PaintingBinding
-                                                    .instance
-                                                    .imageCache
-                                                    .clear();
-                                                PaintingBinding
-                                                    .instance
-                                                    .imageCache
-                                                    .clearLiveImages();
-
-                                                File? selectedImage;
-
-                                                if (v["text"] == "Camera") {
-                                                  selectedImage =
-                                                      await _controller
-                                                          .imageService
-                                                          .getImageFromCamera();
-                                                } else {
-                                                  selectedImage =
-                                                      await _controller
-                                                          .imageService
-                                                          .getImageFromGallery();
-                                                }
-                                                if (selectedImage == null ||
-                                                    selectedImage
-                                                        .path
-                                                        .isEmpty) {
-                                                  return;
-                                                }
-
-                                                _controller.isSelectingImage(
-                                                  true,
-                                                );
-
-                                                AppNavigation.to(
-                                                  AppRoutes
-                                                      .profilePreviewScreen,
-                                                  arguments: {
-                                                    "image": selectedImage,
-                                                    "index": index,
-                                                    "page": "onboard",
-                                                  },
-                                                );
-                                              } catch (e, s) {
-                                                AppMethods.appPrint(
-                                                  message: e.toString(),
-                                                );
-                                                debugPrintStack(stackTrace: s);
-                                              } finally {
-                                                _controller.isSelectingImage(
-                                                  false,
-                                                );
-                                              }
-                                            },
-
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                SvgPicture.asset(v["image"]),
-                                                CommonText.text(
-                                                  v["text"],
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }).toList(),
-                                  ),
-                                ),
-                                Divider(height: 1),
-                                10.hBox,
-                                TextButton(
-                                  onPressed: Get.back,
-                                  child: CommonText.text(
-                                    "Cancel",
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                        _showPhotoPickerBottomSheet(index: index);
                       },
                       child: PhotoCard(
                         image: image,
@@ -203,10 +83,110 @@ class AddPhotoWidget extends StatelessWidget {
                         indicatorType: Indicator.lineSpinFadeLoader,
                       ),
                     )
-                    : SizedBox.shrink(),
+                    : const SizedBox.shrink(),
           ),
         ],
       ),
     );
+  }
+
+  void _showPhotoPickerBottomSheet({required int index}) {
+    CustomBottomSheet.show(
+      borderRadius: 40.r,
+      backgroundColor: const Color(0xffF4F4F4),
+      padding: EdgeInsets.zero,
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: 15.horizontalPadding + 30.verticalPadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children:
+                    OnboardHalper.addPhotoOption.map((option) {
+                      return InkWell(
+                        onTap: () async {
+                          await _handlePhotoOptionTap(
+                            optionText: option['text'],
+                            index: index,
+                          );
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(option['image']),
+                            CommonText.labelLarge(
+                              option['text'],
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+              ),
+            ),
+            const Divider(height: 1),
+            10.hBox,
+            TextButton(
+              onPressed: Get.back,
+              child: CommonText.headlineSmall(AppStrings.cancel),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handlePhotoOptionTap({
+    required String optionText,
+    required int index,
+  }) async {
+    try {
+      _closeBottomSheet();
+      await Future.delayed(const Duration(milliseconds: 300));
+      _clearImageCache();
+
+      File? selectedImage;
+
+      if (optionText == AppStrings.camera) {
+        selectedImage = await _controller.imageService.getImageFromCamera();
+      } else {
+        selectedImage = await _controller.imageService.getImageFromGallery();
+      }
+
+      if (selectedImage == null || selectedImage.path.isEmpty) {
+        return;
+      }
+
+      _controller.isSelectingImage(true);
+
+      AppNavigation.to(
+        AppRoutes.profilePreviewScreen,
+        arguments: {
+          AppStrings.imageKey: selectedImage,
+          AppStrings.indexKey: index,
+          AppStrings.pageKey: AppStrings.onboardPage,
+        },
+      );
+    } catch (error, stackTrace) {
+      AppMethods.appPrint(message: error.toString());
+      debugPrintStack(stackTrace: stackTrace);
+    } finally {
+      _controller.isSelectingImage(false);
+    }
+  }
+
+  void _closeBottomSheet() {
+    final context = Get.context;
+    if (context != null &&
+        Navigator.of(context, rootNavigator: true).canPop()) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  void _clearImageCache() {
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
   }
 }

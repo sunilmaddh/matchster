@@ -192,11 +192,9 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: CommonText.text(
+                child: CommonText.titleMedium(
                   AppStrings.profileTitle(name: profile.name, age: profile.age),
-                  fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
-                  fontFamily: 'Caros',
                 ),
               ),
             ],
@@ -213,11 +211,8 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
                   AppStrings.inShort,
                   color: AppColors.whiteColor,
                 ),
-                CommonText.text(
+                CommonText.displayMedium(
                   AppStrings.quotedAbout(profile.about ?? ''),
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Caros',
                   maxLines: 7,
                   fontStyle: FontStyle.italic,
                   color: AppColors.whiteColor,
@@ -233,11 +228,9 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
             widget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
+                CommonText.titleMedium(
                   AppStrings.lookingFor,
                   color: AppColors.whiteColor,
-                  fontFamily: 'Caros',
-                  fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),
                 10.hBox,
@@ -251,11 +244,9 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
             widget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
+                CommonText.titleMedium(
                   AppStrings.location,
                   color: AppColors.whiteColor,
-                  fontFamily: 'Caros',
-                  fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),
                 10.hBox,
@@ -272,18 +263,16 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
                         child: CommonText.text('📍'),
                       ),
                       5.wBox,
-                      CommonText.text(
+                      CommonText.bodyMedium(
                         AppStrings.distanceKm(profile.distance.toString()),
                         color: const Color(0xffD90380),
                         fontWeight: FontWeight.w700,
-                        fontSize: 14.sp,
                       ),
                       5.wBox,
                       Expanded(
-                        child: CommonText.text(
+                        child: CommonText.labelLarge(
                           AppStrings.awayFromCity(city: city),
                           fontWeight: FontWeight.w500,
-                          fontSize: 14.sp,
                         ),
                       ),
                     ],
@@ -298,16 +287,12 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
             widget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
+                CommonText.titleMedium(
                   AppStrings.myInterest,
-                  fontFamily: 'Caros',
-                  fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),
-                CommonText.text(
+                CommonText.bodySmall(
                   AppStrings.interestSubtitle,
-                  fontFamily: 'Caros',
-                  fontSize: 12.sp,
                   fontWeight: FontWeight.w300,
                 ),
                 10.hBox,
@@ -321,10 +306,8 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
             widget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
+                CommonText.titleMedium(
                   AppStrings.profession,
-                  fontFamily: 'Caros',
-                  fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),
                 5.hBox,
@@ -338,10 +321,9 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
             widget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
+                CommonText.titleMedium(
                   AppStrings.morePicture,
-                  fontFamily: 'Caros',
-                  fontSize: 16.sp,
+
                   fontWeight: FontWeight.w700,
                 ),
                 10.hBox,
@@ -358,11 +340,9 @@ class _HomeScreenState extends BaseViewState<HomeController, HomeScreen> {
             widget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
+                CommonText.titleMedium(
                   AppStrings.language,
                   color: AppColors.blackColor,
-                  fontFamily: 'Caros',
-                  fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
                 ),
                 10.hBox,

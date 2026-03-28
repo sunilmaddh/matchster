@@ -3,6 +3,7 @@ class AppStrings {
   // ===== Common =====
   static const String errorTitle = "Error";
   static const String successTitle = "Success";
+  static const String appTitle = "'Matchster'";
 
   // ===== Login / Auth =====
   static const String failedToSendOtp = "Failed to send OTP";
@@ -202,7 +203,41 @@ class AppStrings {
   static const locationIcon = '📍';
   static const expressYourInterests =
       'Express your interests to find your ideal match';
+  static const settings = 'Setting';
+  static const logout = 'Log out';
 
+  static const account = 'Account';
+  static const privacySetting = 'Privacy Setting';
+  static const accountSetting = 'Account Setting';
+  static const darkMode = 'Dark Mode';
+  static const faq = 'FAQ';
+  static const termsAndConditions = 'Terms & Conditions';
+  static const privacyPolicy = 'Privacy Policy';
+  static const countryCodes = 'Country Codes';
+  static const noCountriesFound = 'No countries found';
+
+  static const countryCodeFormat = '%s +%s';
+  // Login
+  static const createAccount = 'Create account';
+  static const phoneNumber = 'Phone Number';
+  static const enterMobileNumber = 'Enter Mobile Number';
+
+  // Default country
+  static const defaultCountryCode = 'IN +91';
+  // Add Photo
+  static const addPhotoTitle = 'Show off your best photos!';
+  static const addPhotoDescription =
+      'Upload 5-6 favorite photos to let your personality shine. Make sure your uploads are clear and capture the real you!';
+  // Navigation args
+  static const onboard = 'onboard';
+  static const imageKey = 'image';
+  static const indexKey = 'index';
+  static const pageKey = 'page';
+  static const onboardPage = 'onboard';
+  static const String workInProgress = "Work in progress";
+  static const postureGesture = 'Posture Gesture';
+  static const photoVerified = 'Your photo has been successfully verified';
+  static const takeMyPhoto = 'Take My Photo';
   static String profileTitle({required String? name, required dynamic age}) {
     final safeName = name ?? '';
     final safeAge = age?.toString() ?? '';
