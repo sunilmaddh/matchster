@@ -1,8 +1,9 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:matchster/core/storage/storage_keys.dart';
+import 'package:matchster/core/storage/storages_strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MatchsterLocalStorage {
-  SharedPreferences? _preferences;
-
   MatchsterLocalStorage._internal();
 
   static final MatchsterLocalStorage _instance =
@@ -10,157 +11,197 @@ class MatchsterLocalStorage {
 
   static MatchsterLocalStorage get instance => _instance;
 
-  /// Call this before using the instance to ensure prefs are ready
+  SharedPreferences? _preferences;
+
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    iOptions: IOSOptions(),
+  );
+
   Future<void> init() async {
     _preferences ??= await SharedPreferences.getInstance();
   }
 
   void _checkInit() {
     if (_preferences == null) {
-      throw Exception(
-        "SharedPreferences not initialized. Call IndoSharedPreference.instance.init() first.",
-      );
+      throw Exception(StorageStrings.storageNotInitialized);
     }
   }
 
-  Future<void> saveUserId(String userId) async {
+  SharedPreferences get _prefs {
     _checkInit();
-    await _preferences!.setString("user_id", userId);
+    return _preferences!;
+  }
+
+  Future<void> clearAll() async {
+    _checkInit();
+    await _prefs.clear();
+    await _secureStorage.deleteAll();
+  }
+
+  Future<void> clearSession() async {
+    await deleteAccessToken();
+    await deleteRefreshToken();
+    await deleteUserId();
+    await deleteUserEmail();
+  }
+
+  Future<void> _saveString(String key, String value) async {
+    await _prefs.setString(key, value);
+  }
+
+  String _getString(String key) {
+    return _prefs.getString(key) ?? '';
+  }
+
+  Future<void> _saveBool(String key, bool value) async {
+    await _prefs.setBool(key, value);
+  }
+
+  bool _getBool(String key) {
+    return _prefs.getBool(key) ?? false;
+  }
+
+  Future<void> _saveSecureString(String key, String value) async {
+    await _secureStorage.write(key: key, value: value);
+  }
+
+  Future<String> _getSecureString(String key) async {
+    return await _secureStorage.read(key: key) ?? '';
+  }
+
+  Future<void> _deleteSecureString(String key) async {
+    await _secureStorage.delete(key: key);
+  }
+
+  // Secure storage
+  Future<void> saveUserId(String userId) async {
+    await _saveSecureString(StorageKeys.userId, userId);
   }
 
   Future<String> getUserId() async {
-    _checkInit();
-    return _preferences!.getString("user_id") ?? "";
+    return _getSecureString(StorageKeys.userId);
   }
 
-  Future<void> saveWalkScreen(bool walkScreen) async {
-    _checkInit();
-    await _preferences!.setBool("walk_screen", walkScreen);
-  }
-
-  Future<bool> getWalkScreen() async {
-    _checkInit();
-    return _preferences!.getBool("walk_screen") ?? false;
-  }
-
-  Future<void> saveOnBoard(String onBoard) async {
-    _checkInit();
-    await _preferences!.setString("on_board", onBoard);
-  }
-
-  Future<String> getOnBoard() async {
-    _checkInit();
-    return _preferences!.getString("on_board") ?? "";
+  Future<void> deleteUserId() async {
+    await _deleteSecureString(StorageKeys.userId);
   }
 
   Future<void> saveAccessToken(String accessToken) async {
-    _checkInit();
-    await _preferences!.setString("access_token", accessToken);
+    await _saveSecureString(StorageKeys.accessToken, accessToken);
   }
 
   Future<String> getAccessToken() async {
-    _checkInit();
-    return _preferences!.getString("access_token") ?? "";
+    return _getSecureString(StorageKeys.accessToken);
   }
 
-  Future<void> saveUserName(String userName) async {
-    _checkInit();
-    await _preferences!.setString("user_name", userName);
-  }
-
-  Future<String> getUserName() async {
-    _checkInit();
-    return _preferences!.getString("user_name") ?? "";
-  }
-
-  Future<void> saveUserEmail(String userName) async {
-    _checkInit();
-    await _preferences!.setString("user_email", userName);
-  }
-
-  Future<String> getUserEmail() async {
-    _checkInit();
-    return _preferences!.getString("user_email") ?? "";
-  }
-
-  Future<void> saveUserImage(String userName) async {
-    _checkInit();
-    await _preferences!.setString("user_image", userName);
-  }
-
-  Future<String> getUserImage() async {
-    _checkInit();
-    return _preferences!.getString("user_image") ?? "";
+  Future<void> deleteAccessToken() async {
+    await _deleteSecureString(StorageKeys.accessToken);
   }
 
   Future<void> saveRefreshToken(String refreshToken) async {
-    _checkInit();
-    await _preferences!.setString("refresh_token", refreshToken);
+    await _saveSecureString(StorageKeys.refreshToken, refreshToken);
   }
 
   Future<String> getRefreshToken() async {
-    _checkInit();
-    return _preferences!.getString("refresh_token") ?? "";
+    return _getSecureString(StorageKeys.refreshToken);
+  }
+
+  Future<void> deleteRefreshToken() async {
+    await _deleteSecureString(StorageKeys.refreshToken);
+  }
+
+  Future<void> saveUserEmail(String userEmail) async {
+    await _saveSecureString(StorageKeys.userEmail, userEmail);
+  }
+
+  Future<String> getUserEmail() async {
+    return _getSecureString(StorageKeys.userEmail);
+  }
+
+  Future<void> deleteUserEmail() async {
+    await _deleteSecureString(StorageKeys.userEmail);
+  }
+
+  // SharedPreferences
+  Future<void> saveWalkScreen(bool walkScreen) async {
+    await _saveBool(StorageKeys.walkScreen, walkScreen);
+  }
+
+  Future<bool> getWalkScreen() async {
+    return _getBool(StorageKeys.walkScreen);
+  }
+
+  Future<void> saveOnBoard(String onBoard) async {
+    await _saveString(StorageKeys.onBoard, onBoard);
+  }
+
+  Future<String> getOnBoard() async {
+    return _getString(StorageKeys.onBoard);
+  }
+
+  Future<void> saveUserName(String userName) async {
+    await _saveString(StorageKeys.userName, userName);
+  }
+
+  Future<String> getUserName() async {
+    return _getString(StorageKeys.userName);
+  }
+
+  Future<void> saveUserImage(String userImage) async {
+    await _saveString(StorageKeys.userImage, userImage);
+  }
+
+  Future<String> getUserImage() async {
+    return _getString(StorageKeys.userImage);
   }
 
   Future<void> saveHeight(String height) async {
-    _checkInit();
-    await _preferences!.setString("height", height);
+    await _saveString(StorageKeys.height, height);
   }
 
   Future<String> getHeight() async {
-    _checkInit();
-    return _preferences!.getString("height") ?? "";
+    return _getString(StorageKeys.height);
   }
 
   Future<void> saveWeight(String weight) async {
-    _checkInit();
-    await _preferences!.setString("weight", weight);
+    await _saveString(StorageKeys.weight, weight);
   }
 
   Future<String> getWeight() async {
-    _checkInit();
-    return _preferences!.getString("weight") ?? "";
+    return _getString(StorageKeys.weight);
   }
 
   Future<void> saveAge(String age) async {
-    _checkInit();
-    await _preferences!.setString("age", age);
+    await _saveString(StorageKeys.age, age);
   }
 
   Future<String> getAge() async {
-    _checkInit();
-    return _preferences!.getString("age") ?? "";
+    return _getString(StorageKeys.age);
   }
 
   Future<void> saveGenderType(String genderType) async {
-    _checkInit();
-    await _preferences!.setString("gender_type", genderType);
+    await _saveString(StorageKeys.genderType, genderType);
   }
 
   Future<String> getGenderType() async {
-    _checkInit();
-    return _preferences!.getString("gender_type") ?? "";
+    return _getString(StorageKeys.genderType);
   }
 
-  Future<void> saveSmokerType(String genderType) async {
-    _checkInit();
-    await _preferences!.setString("smoker_type", genderType);
+  Future<void> saveSmokerType(String smokerType) async {
+    await _saveString(StorageKeys.smokerType, smokerType);
   }
 
   Future<String> getSmokerType() async {
-    _checkInit();
-    return _preferences!.getString("smoker_type") ?? "";
+    return _getString(StorageKeys.smokerType);
   }
 
-  Future<void> saveHistoryType(bool genderType) async {
-    _checkInit();
-    await _preferences!.setBool("history_type", genderType);
+  Future<void> saveHistoryType(bool historyType) async {
+    await _saveBool(StorageKeys.historyType, historyType);
   }
 
   Future<bool> getHistoryType() async {
-    _checkInit();
-    return _preferences!.getBool("history_type") ?? false;
+    return _getBool(StorageKeys.historyType);
   }
 
   Future<void> saveProfilePopupShown(bool shown) async {

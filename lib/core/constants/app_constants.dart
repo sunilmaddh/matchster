@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 class AppConstants {
+  AppConstants._();
   static Size deviceSize = Size(375, 812);
   static const String
   commonFont = "Caros",

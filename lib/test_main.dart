@@ -1,264 +1,277 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'dart:typed_data';
 
+// import 'package:camera/camera.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
-}
+// void main() {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   runApp(const MyApp());
+// }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// late List<CameraDescription> cameras;
 
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-    );
-  }
-}
+// Future<void> initCamera() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   cameras = await availableCameras();
+// }
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
 
-  final controller = Get.put(ProfileController());
+//   @override
+//   Widget build(BuildContext context) {
+//     return GetMaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: HomeScreen(),
+//     );
+//   }
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: const MyBottomNav(),
-      body: Stack(
-        children: [
-          /// Scrollable content
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 190),
-            child: Column(
-              children: const [ProfileImages(), SizedBox(height: 24)],
-            ),
-          ),
+// class HomeScreen extends StatelessWidget {
+//   HomeScreen({super.key});
 
-          /// Fixed bottom card
-          BottomProfileCard(controller: controller),
-        ],
-      ),
-    );
-  }
-}
+//   final controller = Get.put(ProfileController());
 
-class ProfileImages extends StatelessWidget {
-  const ProfileImages({super.key});
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       bottomNavigationBar: const MyBottomNav(),
+//       body: Stack(
+//         children: [
+//           /// Scrollable content
+//           SingleChildScrollView(
+//             padding: const EdgeInsets.only(bottom: 190),
+//             child: Column(
+//               children: const [ProfileImages(), SizedBox(height: 24)],
+//             ),
+//           ),
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.7,
-      child: PageView(
-        children: [
-          Image.asset("assets/user1.jpg", fit: BoxFit.cover),
-          Image.asset("assets/user2.jpg", fit: BoxFit.cover),
-          Image.asset("assets/user3.jpg", fit: BoxFit.cover),
-        ],
-      ),
-    );
-  }
-}
+//           /// Fixed bottom card
+//           BottomProfileCard(controller: controller),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class BottomProfileCard extends StatelessWidget {
-  final ProfileController controller;
+// class ProfileImages extends StatelessWidget {
+//   const ProfileImages({super.key});
 
-  const BottomProfileCard({super.key, required this.controller});
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: MediaQuery.of(context).size.height * 0.7,
+//       child: PageView(
+//         children: [
+//           Image.asset("assets/user1.jpg", fit: BoxFit.cover),
+//           Image.asset("assets/user2.jpg", fit: BoxFit.cover),
+//           Image.asset("assets/user3.jpg", fit: BoxFit.cover),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
-              BoxShadow(blurRadius: 10, color: Colors.black.withValues(alpha: 0.1)),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              /// Name + Age + Distance
-              Obx(
-                () => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "${controller.name.value}, ${controller.age.value}",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(controller.distance.value),
-                  ],
-                ),
-              ),
+// class BottomProfileCard extends StatelessWidget {
+//   final ProfileController controller;
 
-              const SizedBox(height: 8),
+//   const BottomProfileCard({super.key, required this.controller});
 
-              /// Interests
-              Obx(
-                () => Wrap(
-                  spacing: 8,
-                  children:
-                      controller.interests
-                          .map((e) => Chip(label: Text(e)))
-                          .toList(),
-                ),
-              ),
+//   @override
+//   Widget build(BuildContext context) {
+//     return Positioned(
+//       left: 0,
+//       right: 0,
+//       bottom: 0,
+//       child: SafeArea(
+//         child: Container(
+//           padding: const EdgeInsets.all(16),
+//           decoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+//             boxShadow: [
+//               BoxShadow(
+//                 blurRadius: 10,
+//                 color: Colors.black.withValues(alpha: 0.1),
+//               ),
+//             ],
+//           ),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               /// Name + Age + Distance
+//               Obx(
+//                 () => Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     Text(
+//                       "${controller.name.value}, ${controller.age.value}",
+//                       style: const TextStyle(
+//                         fontSize: 18,
+//                         fontWeight: FontWeight.bold,
+//                       ),
+//                     ),
+//                     Text(controller.distance.value),
+//                   ],
+//                 ),
+//               ),
 
-              const SizedBox(height: 16),
+//               const SizedBox(height: 8),
 
-              /// Action Buttons
-              ActionButtons(controller: controller),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+//               /// Interests
+//               Obx(
+//                 () => Wrap(
+//                   spacing: 8,
+//                   children:
+//                       controller.interests
+//                           .map((e) => Chip(label: Text(e)))
+//                           .toList(),
+//                 ),
+//               ),
 
-class ActionButtons extends StatelessWidget {
-  final ProfileController controller;
+//               const SizedBox(height: 16),
 
-  const ActionButtons({super.key, required this.controller});
+//               /// Action Buttons
+//               ActionButtons(controller: controller),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _circleButton(
-          icon: Icons.close,
-          color: Colors.red,
-          onTap: controller.dislike,
-        ),
-        _circleButton(
-          icon: Icons.favorite,
-          color: Colors.blue,
-          onTap: controller.like,
-        ),
-      ],
-    );
-  }
+// class ActionButtons extends StatelessWidget {
+//   final ProfileController controller;
 
-  Widget _circleButton({
-    required IconData icon,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CircleAvatar(
-        radius: 28,
-        backgroundColor: color.withValues(alpha: 0.12),
-        child: Icon(icon, color: color, size: 28),
-      ),
-    );
-  }
-}
+//   const ActionButtons({super.key, required this.controller});
 
-class ProfileController extends GetxController {
-  final name = "Ryle Sharma".obs;
-  final age = 28.obs;
-  final distance = "4 km away".obs;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         _circleButton(
+//           icon: Icons.close,
+//           color: Colors.red,
+//           onTap: controller.dislike,
+//         ),
+//         _circleButton(
+//           icon: Icons.favorite,
+//           color: Colors.blue,
+//           onTap: controller.like,
+//         ),
+//       ],
+//     );
+//   }
 
-  final interests = ["Travel", "Music"].obs;
+//   Widget _circleButton({
+//     required IconData icon,
+//     required Color color,
+//     required VoidCallback onTap,
+//   }) {
+//     return GestureDetector(
+//       onTap: onTap,
+//       child: CircleAvatar(
+//         radius: 28,
+//         backgroundColor: color.withValues(alpha: 0.12),
+//         child: Icon(icon, color: color, size: 28),
+//       ),
+//     );
+//   }
+// }
 
-  void like() {
-    // TODO: swipe right / API call
-    
-  }
+// class ProfileController extends GetxController {
+//   final name = "Ryle Sharma".obs;
+//   final age = 28.obs;
+//   final distance = "4 km away".obs;
 
-  void dislike() {
-    // TODO: swipe left / API call
-   
-  }
-}
+//   final interests = ["Travel", "Music"].obs;
 
-class MyBottomNav extends StatelessWidget {
-  const MyBottomNav({super.key});
+//   void like() {
+//     // TODO: swipe right / API call
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Container(
-        height: 70,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(blurRadius: 10, color: Colors.black.withValues(alpha: 0.08)),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            _NavItem(icon: Icons.home, index: 0),
-            _NavItem(icon: Icons.favorite, index: 1),
-            _NavItem(icon: Icons.star, index: 2),
-            _NavItem(icon: Icons.chat, index: 3),
-            _NavItem(icon: Icons.person, index: 4),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   void dislike() {
+//     // TODO: swipe left / API call
+//   }
+// }
 
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final int index;
+// class MyBottomNav extends StatelessWidget {
+//   const MyBottomNav({super.key});
 
-  const _NavItem({required this.icon, required this.index});
+//   @override
+//   Widget build(BuildContext context) {
+//     return SafeArea(
+//       top: false,
+//       child: Container(
+//         height: 70,
+//         padding: const EdgeInsets.symmetric(horizontal: 24),
+//         decoration: BoxDecoration(
+//           color: Colors.white,
+//           boxShadow: [
+//             BoxShadow(
+//               blurRadius: 10,
+//               color: Colors.black.withValues(alpha: 0.08),
+//             ),
+//           ],
+//         ),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: const [
+//             _NavItem(icon: Icons.home, index: 0),
+//             _NavItem(icon: Icons.favorite, index: 1),
+//             _NavItem(icon: Icons.star, index: 2),
+//             _NavItem(icon: Icons.chat, index: 3),
+//             _NavItem(icon: Icons.person, index: 4),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    final controller = Get.put(BottomNavController());
+// class _NavItem extends StatelessWidget {
+//   final IconData icon;
+//   final int index;
 
-    return Obx(() {
-      final isActive = controller.selectedIndex.value == index;
+//   const _NavItem({required this.icon, required this.index});
 
-      return GestureDetector(
-        onTap: () => controller.changeTab(index),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 26, color: isActive ? Colors.blue : Colors.grey),
-            const SizedBox(height: 4),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              height: 4,
-              width: isActive ? 16 : 0,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final controller = Get.put(BottomNavController());
 
-class BottomNavController extends GetxController {
-  final selectedIndex = 0.obs;
+//     return Obx(() {
+//       final isActive = controller.selectedIndex.value == index;
 
-  void changeTab(int index) {
-    selectedIndex.value = index;
-  }
-}
+//       return GestureDetector(
+//         onTap: () => controller.changeTab(index),
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Icon(icon, size: 26, color: isActive ? Colors.blue : Colors.grey),
+//             const SizedBox(height: 4),
+//             AnimatedContainer(
+//               duration: const Duration(milliseconds: 250),
+//               height: 4,
+//               width: isActive ? 16 : 0,
+//               decoration: BoxDecoration(
+//                 color: Colors.blue,
+//                 borderRadius: BorderRadius.circular(8),
+//               ),
+//             ),
+//           ],
+//         ),
+//       );
+//     });
+//   }
+// }
+
+// class BottomNavController extends GetxController {
+//   final selectedIndex = 0.obs;
+
+//   void changeTab(int index) {
+//     selectedIndex.value = index;
+//   }
+// }
