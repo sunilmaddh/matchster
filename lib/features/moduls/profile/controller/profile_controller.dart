@@ -591,6 +591,8 @@ class ProfileController extends GetxController {
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
       isProfileLoading(false);
+    } finally {
+      isAboutEnable.value = false;
     }
   }
 
@@ -897,14 +899,14 @@ class ProfileController extends GetxController {
     print("SelectedLanguage: $selectedLanguage");
   }
 
-Future<void> setLookingFromApi(String? apiValue) async {
-  if (apiValue == null || apiValue.trim().isEmpty) return;
+  Future<void> setLookingFromApi(String? apiValue) async {
+    if (apiValue == null || apiValue.trim().isEmpty) return;
 
-  final match = RelationshipIntentEnumX.fromApi(apiValue);
-  selectedLookingFor
-    ..clear()
-    ..add(match?.label ?? apiValue);
-}
+    final match = RelationshipIntentEnumX.fromApi(apiValue);
+    selectedLookingFor
+      ..clear()
+      ..add(match?.label ?? apiValue);
+  }
 
   Future<void> swapFames({
     required int position1,

@@ -1,8 +1,8 @@
 class ApiEndpoints {
   static const String baseUrl =
-      //"https://acknowledge-tray-consequently-dim.trycloudflare.com";
+      //  "https://demand-concerned-veterans-electron.trycloudflare.com";
       "http://209.38.123.49:8002/";
-  //  "https://watt-clan-cabinet-formats.trycloudflare.com";
+
   static const String apiPrefix = "/api/v1/matchster";
   static const String urlUserType = "$apiPrefix/user-auth";
   static const String urlProfileType = "$apiPrefix/user-profile";
