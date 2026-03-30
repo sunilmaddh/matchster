@@ -10,6 +10,7 @@ import 'package:matchster/core/enum/enum.dart';
 import 'package:matchster/core/extentions/gender_enum_ext.dart';
 import 'package:matchster/core/extentions/height_enum_ext.dart';
 import 'package:matchster/core/extentions/interests_enum_ext.dart';
+import 'package:matchster/core/extentions/looking_for_ext.dart';
 import 'package:matchster/core/extentions/religion_level_ext.dart';
 import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/core/extentions/zodiac_enum_ext.dart';
@@ -71,9 +72,13 @@ class ProfileController extends GetxController {
   RxBool isProfileLoading = false.obs;
   RxString selectedState = "".obs;
   RxString selectedCountry = "".obs;
+  RxString selectedCountryCode = "".obs;
+  RxString selectedStateCode = "".obs;
   RxList<String> countryList = <String>[].obs;
   RxList<String> stateList = <String>[].obs;
   RxList<String> cityList = <String>[].obs;
+  // Maps name -> isoCode for states
+  final Map<String, String> stateIsoMap = {};
   RxBool isLoadingCountries = false.obs;
   RxBool isLoadingStates = false.obs;
   RxBool isLoadingCities = false.obs;
@@ -138,13 +143,8 @@ class ProfileController extends GetxController {
       );
 
       if (response.success) {
-        // final workoutValue = UtilMethods.stringParser(
-        //   response.data?['workout'],
-        // );
-
-        // lifestyle.value = lifestyle.value.copyWith(workout: workoutValue);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -163,11 +163,8 @@ class ProfileController extends GetxController {
         drinking: drinking.toLowerCase(),
       );
       if (response.success) {
-        // final drinking = UtilMethods.stringParser(response.data?['drinking']);
-
-        // lifestyle.value = lifestyle.value.copyWith(drinking: drinking);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -186,11 +183,8 @@ class ProfileController extends GetxController {
         smoking: smoking.toLowerCase(),
       );
       if (response.success) {
-        // final smoking = UtilMethods.stringParser(response.data?['smoking']);
-
-        // lifestyle.value = lifestyle.value.copyWith(smoking: smoking);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -211,8 +205,8 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Get.back();
-        Get.back();
+        Navigator.pop(Get.context!);
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -231,16 +225,9 @@ class ProfileController extends GetxController {
         interests: interests,
       );
       if (response.success) {
-        // final interestsValue =
-        //     (response.data?['interests'] as List?)
-        //         ?.map((e) => e.toString())
-        //         .toList();
-
-        // personal.value = personal.value.copyWith(interests: interestsValue);
         await getMyProfile(false);
-
         AppMethods.appPrint(message: response.message);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -259,13 +246,8 @@ class ProfileController extends GetxController {
         languages: languages,
       );
       if (response.success) {
-        // final languages =
-        //     (response.data?['languages'] as List?)
-        //         ?.map((e) => e.toString())
-        //         .toList();
-        // personal.value = personal.value.copyWith(languages: languages);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -284,11 +266,8 @@ class ProfileController extends GetxController {
         zodiacsign: zodiacsign,
       );
       if (response.success) {
-        // final zodiac = UtilMethods.stringParser(response.data?['zodiacSign']);
-
-        // personal.value = personal.value.copyWith(zodiacSign: zodiac);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -307,11 +286,8 @@ class ProfileController extends GetxController {
         religion: religion.toSnakeCaseLowerCase(),
       );
       if (response.success) {
-        // final religion = UtilMethods.stringParser(response.data?['religion']);
-
-        // personal.value = personal.value.copyWith(religion: religion);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -330,13 +306,8 @@ class ProfileController extends GetxController {
         visibility: visibility,
       );
       if (response.success) {
-        // final visibility = UtilMethods.stringParser(
-        //   response.data?['visibility'],
-        // );
-
-        // prefeence.value = prefeence.value.copyWith(visibility: visibility);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -349,21 +320,15 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<void> addLookingFor({required List<String> lookingFor}) async {
+  Future<void> addLookingFor({required String lookingFor}) async {
     try {
       final response = await _profileServices.addLooking(
         lookingFor: lookingFor,
       );
       if (response.success) {
-        // final lookingFor =
-        //     (response.data?['lookingFor'] as List?)
-        //         ?.map((e) => e.toString())
-        //         .toList();
-
-        // prefeence.value = prefeence.value.copyWith(lookingFor: lookingFor);
         await getMyProfile(false);
         selectedLookingFor.clear();
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         selectedLookingFor.clear();
         AppToastMessage.show(
@@ -383,13 +348,8 @@ class ProfileController extends GetxController {
         qualification: qualification,
       );
       if (response.success) {
-        final qualification = UtilMethods.stringParser(
-          response.data?['qualification'],
-        );
-
-        // personal.value = personal.value.copyWith(qualification: qualification);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -497,9 +457,8 @@ class ProfileController extends GetxController {
         company: company,
       );
       if (response.success) {
-        // professional.value = professional.value.copyWith(work: response.data);
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -586,12 +545,27 @@ class ProfileController extends GetxController {
         if (data != null) {
           basicInfo.value = data.basicInfo!;
           final hallList = data.hallOfFame ?? [];
-          allPfFame.value = hallList;
-          print(
-            '✅ getMyProfile: Updated allPfFame with ${hallList.length} photos: ${hallList.map((e) => e.id).toList()}',
-          );
+          // If profilePic exists and is not already in hallOfFame, prepend it
+          final profilePicUrl = data.basicInfo?.profilePic?.url;
+          final profilePicId = data.basicInfo?.profilePic?.id;
+          if (profilePicUrl != null &&
+              profilePicUrl.isNotEmpty &&
+              hallList.every((e) => e.id != profilePicId)) {
+            allPfFame.value = [
+              HallOfFame(
+                url: profilePicUrl,
+                type: data.basicInfo?.profilePic?.type,
+                id: profilePicId,
+                position: 1,
+              ),
+              ...hallList,
+            ];
+          } else {
+            allPfFame.value = hallList;
+          }
           lifestyle.value = data.lifestyle!;
           prefeence.value = data.preferences!;
+          // await setLookingFromApi(data.preferences?.lookingFor);
           personal.value = data.personal!;
           professional.value = data.professional!;
           locations.value = data.locations!;
@@ -715,43 +689,33 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Get.back();
+        Navigator.pop(Get.context!);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
     }
   }
 
-  // UPDATED METHOD: Fixed the List<String>? assignment error
+  // Maps country name -> isoCode
+  final Map<String, String> countryIsoMap = {};
+
   Future<void> getCountry({String? search}) async {
     try {
       isLoadingCountries(true);
       final response = await _profileServices.getCountries(search: search);
-
       if (response.success && response.data != null) {
-        // 1. Corrected variable name to 'rawData'
-        final List rawData = response.data!;
-
-        // 2. Map through the items safely
-        final List<String> names =
-            rawData
-                .map((item) {
-                  // If the item is a Map (which matches the [{name: Afghanistan...}] format you showed)
-                  if (item is Map) {
-                    return item['name']?.toString() ?? '';
-                  }
-                  // If the item is already a String
-                  return item.toString();
-                })
-                .where((name) => name.isNotEmpty)
-                .toList();
-
-        // 3. Update the RxList
+        countryIsoMap.clear();
+        final names = <String>[];
+        for (final item in response.data!) {
+          final name = item['name'] ?? '';
+          final iso = item['isoCode'] ?? '';
+          if (name.isNotEmpty) {
+            names.add(name);
+            countryIsoMap[name] = iso;
+          }
+        }
         countryList.assignAll(names);
-
-        print("Countries updated successfully: ${countryList} items");
       }
-
       isLoadingCountries(false);
     } catch (e) {
       isLoadingCountries(false);
@@ -767,7 +731,17 @@ class ProfileController extends GetxController {
         search: search,
       );
       if (response.success && response.data != null) {
-        stateList.value = response.data!;
+        stateIsoMap.clear();
+        final names = <String>[];
+        for (final item in response.data!) {
+          final name = item['name'] ?? '';
+          final iso = item['isoCode'] ?? '';
+          if (name.isNotEmpty) {
+            names.add(name);
+            stateIsoMap[name] = iso;
+          }
+        }
+        stateList.assignAll(names);
       }
       isLoadingStates(false);
     } catch (e) {
@@ -789,7 +763,12 @@ class ProfileController extends GetxController {
         search: search,
       );
       if (response.success && response.data != null) {
-        cityList.value = response.data!;
+        cityList.assignAll(
+          response.data!
+              .map((e) => e['name'] ?? '')
+              .where((n) => n.isNotEmpty)
+              .toList(),
+        );
       }
       isLoadingCities(false);
     } catch (e) {
@@ -918,14 +897,28 @@ class ProfileController extends GetxController {
     print("SelectedLanguage: $selectedLanguage");
   }
 
-  Future<void> setLookingFromApi(List<String>? apiList) async {
-    if (apiList == null || apiList.isEmpty) return;
+Future<void> setLookingFromApi(String? apiValue) async {
+  if (apiValue == null || apiValue.trim().isEmpty) return;
 
-    selectedLookingFor
-      ..clear()
-      ..add(apiList.first.toCapitalizedWords());
+  final match = RelationshipIntentEnumX.fromApi(apiValue);
+  selectedLookingFor
+    ..clear()
+    ..add(match?.label ?? apiValue);
+}
 
-    print("SelectedLookingFor: $selectedLookingFor");
+  Future<void> swapFames({
+    required int position1,
+    required int position2,
+  }) async {
+    try {
+      await _profileServices.swapFames(
+        position1: position1,
+        position2: position2,
+      );
+      await getMyProfile(false);
+    } catch (e) {
+      AppMethods.appPrint(message: e.toString());
+    }
   }
 
   Future<void> sendEmailOtp(String email) async {

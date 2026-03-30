@@ -59,12 +59,13 @@ class ProfilePreviewScreen extends StatelessWidget {
                         topLeft: Radius.circular(20.r),
                         topRight: Radius.circular(20.r),
                       ),
-                      child: CommonAssets.networkImage(
-                        _controller.basicInfo.value.profilePic!.url!,
-                        height: 518..h,
-
-                        fit: BoxFit.fill,
-                      ),
+                      child: _controller.allPfFame.isNotEmpty
+                          ? CommonAssets.networkImage(
+                              _controller.allPfFame[0].url!,
+                              height: 518..h,
+                              fit: BoxFit.fill,
+                            )
+                          : SizedBox(height: 518..h),
                       // Image.asset(
                       //   height: 518..h,
                       //   AppAssets.imageAssets6,

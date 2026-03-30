@@ -15,16 +15,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+    // kotlinOptions block DELETED here
 
     defaultConfig {
         applicationId = "com.matchster.matchster"
-
         // ⚠️ Firebase + Facebook require minSdk 21
         minSdk =24
-
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -43,15 +39,12 @@ android {
 }
 
 dependencies {
-
-implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
-implementation("com.google.firebase:firebase-auth")
-implementation("com.google.firebase:firebase-analytics")
-implementation("com.facebook.android:facebook-login:16.3.0")
-
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.facebook.android:facebook-login:16.3.0")
 }
 
 flutter {
     source = "../.."
 }
-

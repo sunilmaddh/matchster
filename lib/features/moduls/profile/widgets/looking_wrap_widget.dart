@@ -5,18 +5,21 @@ import 'package:matchster/features/moduls/profile/widgets/common_wrap_card.dart'
 
 class LookingWrapWidget extends StatelessWidget {
   const LookingWrapWidget({super.key, required this.list});
-  final List<String> list;
+
+  final String list;
 
   @override
   Widget build(BuildContext context) {
+    final intent = RelationshipIntentEnumX.fromApi(list);
+
     return CommonWrapWidget(
-      listWidget:
-          list.map((v) {
-            final intent = RelationshipIntentEnumX.fromApi(v);
-            return v.isNotEmpty
-                ? CommonWrapCard(text: intent!.label, img: intent.emoji)
-                : SizedBox.shrink();
-          }).toList(),
+      listWidget: [
+        if (list.isNotEmpty)
+          CommonWrapCard(
+            text: intent?.label ?? list,
+            img: intent?.emoji ?? '',
+          ),
+      ],
     );
   }
 }

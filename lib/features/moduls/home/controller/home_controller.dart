@@ -44,6 +44,7 @@ class HomeController extends GetxController {
   final HomeServices _homeService = HomeServices();
   RxList<InshortList> inshortList = <InshortList>[].obs;
   RxBool isFetchingMore = false.obs;
+  bool _isProgrammaticSwipe = false;
 
   /* ----------------------------------------------------
    * GETTERS (SAFE)
@@ -51,9 +52,7 @@ class HomeController extends GetxController {
 
   Profile? get currentProfile {
     if (profileList.isEmpty) return null;
-    if (currentIndex.value < 0 || currentIndex.value >= profileList.length) {
-      return null;
-    }
+    if (currentIndex.value < 0 || currentIndex.value >= profileList.length) return null;
     return profileList[currentIndex.value];
   }
 
@@ -189,47 +188,27 @@ class HomeController extends GetxController {
     int? newIndex,
     CardSwiperDirection direction,
   ) {
-    /// Safety checks
-    if (newIndex == null) return true;
     if (profileList.isEmpty) return true;
-    if (previousIndex < 0 || previousIndex >= profileList.length) {
-      return true;
-    }
+    if (previousIndex < 0 || previousIndex >= profileList.length) return true;
 
-    if (direction == CardSwiperDirection.right) {
+    if (!_isProgrammaticSwipe && direction == CardSwiperDirection.right) {
       playLike();
     }
 
-    final swipedProfile = profileList[previousIndex];
-
-    /// 🔥 Call API
-    createInterection(
-      userId: swipedProfile.userId!,
-      action: direction == CardSwiperDirection.right ? "like" : "dislike",
-    );
-
-    /// Remove swiped profile from both lists
-    if (previousIndex < profileList.length) {
-      profileList.removeAt(previousIndex);
-    }
-    if (profileListCount.isNotEmpty) {
-      profileListCount.removeAt(0);
+    if (!_isProgrammaticSwipe) {
+      createInterection(
+        userId: profileList[previousIndex].userId!,
+        action: direction == CardSwiperDirection.right ? "like" : "dislike",
+      );
     }
 
-    if (profileList.isNotEmpty) {
-      currentIndex.value = 0;
-      _updateInShort();
+    _isProgrammaticSwipe = false;
 
-      // Preload next image
-      if (profileList.length > 2 &&
-          profileList[2].mainPhoto != null &&
-          profileList[2].mainPhoto!.isNotEmpty) {
-        CachedNetworkImageProvider(
-          profileList[2].mainPhoto!,
-        ).resolve(const ImageConfiguration());
-      }
-    } else {
-      currentIndex.value = 0;
+    final nextIndex = previousIndex + 1;
+    currentIndex.value = nextIndex < profileList.length ? nextIndex : previousIndex;
+    _updateInShort();
+
+    if (newIndex == null || newIndex >= profileList.length - 1) {
       _loadMoreProfilesIfNeeded();
     }
 
@@ -288,16 +267,24 @@ class HomeController extends GetxController {
   void handleInteraction({required bool isLikeAction}) {
     if (profileList.isEmpty) return;
 
-    /// Show overlay animation
+    final profile = currentProfile;
+    if (profile == null) return;
+
     isLike.value = isLikeAction;
     isOverlay.value = true;
 
-    /// Hide overlay after animation
-    Future.delayed(const Duration(seconds: 1), () {
+    if (isLikeAction) playLike();
+
+    createInterection(
+      userId: profile.userId!,
+      action: isLikeAction ? "like" : "dislike",
+    );
+
+    Future.delayed(const Duration(milliseconds: 400), () {
       isOverlay.value = false;
       isLike.value = false;
 
-      /// Trigger swipe ONLY
+      _isProgrammaticSwipe = true;
       swiperController.swipe(
         isLikeAction ? CardSwiperDirection.right : CardSwiperDirection.left,
       );

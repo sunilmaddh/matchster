@@ -79,7 +79,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen> {
                             ? Icon(Icons.check, color: Colors.green)
                             : null,
                     onTap: () {
-                      Get.back(result: item);
+                      Navigator.pop(context, item);
                     },
                   );
                 },

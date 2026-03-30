@@ -19,11 +19,6 @@ class AppToastMessage {
     }
     _lastShownTime = now;
 
-    // Close any existing snackbar
-    if (Get.isSnackbarOpen) {
-      Get.closeCurrentSnackbar();
-    }
-
     // Show snackbar
     Get.snackbar(
       title,

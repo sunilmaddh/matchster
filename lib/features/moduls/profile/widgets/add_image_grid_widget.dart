@@ -11,11 +11,13 @@ class AddImageGrid extends StatelessWidget {
     required this.imageList,
     required this.onTop,
     required this.onTopRemove,
+    required this.onSwap,
   });
 
   final RxList<HallOfFame> imageList;
   final Function(int index) onTop;
   final Function(String id) onTopRemove;
+  final Function(int position1, int position2) onSwap;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class AddImageGrid extends StatelessWidget {
         return ReorderableGridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: 6,
+          itemCount: count == 6 ? 6 : count + 1,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             crossAxisSpacing: 8,
@@ -35,22 +37,20 @@ class AddImageGrid extends StatelessWidget {
           ),
 
           onReorder: (oldIndex, newIndex) {
-            /// prevent dragging placeholders
-            if (oldIndex >= count || newIndex >= count) {
-              return;
-            }
+            if (oldIndex >= count || newIndex >= count) return;
+            if (oldIndex < newIndex) newIndex -= 1;
 
-            /// fix index shift
-            if (oldIndex < newIndex) {
-              newIndex -= 1;
-            }
+            final pos1 = imageList[oldIndex].position ?? (oldIndex + 1);
+            final pos2 = imageList[newIndex].position ?? (newIndex + 1);
+
             final item = imageList.removeAt(oldIndex);
             imageList.insert(newIndex, item);
             imageList.refresh();
+
+            onSwap(pos1, pos2);
           },
 
           itemBuilder: (context, index) {
-            /// Uploaded images
             if (index < count) {
               final item = imageList[index];
               return Container(
@@ -66,16 +66,12 @@ class AddImageGrid extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                    /// remove button
                     if (index != 0)
                       Positioned(
                         top: 8,
                         right: 8,
                         child: GestureDetector(
-                          onTap: () {
-                            onTopRemove(item.id!);
-                          },
+                          onTap: () => onTopRemove(item.id!),
                           child: Container(
                             decoration: const BoxDecoration(
                               color: Colors.white,
@@ -91,13 +87,10 @@ class AddImageGrid extends StatelessWidget {
               );
             }
 
-            /// empty slot
             return Container(
               key: ValueKey("empty_$index"),
               child: GestureDetector(
-                onTap: () {
-                  onTop(index);
-                },
+                onTap: () => onTop(index),
                 child: const ProfilePhotoCard(),
               ),
             );

@@ -137,16 +137,18 @@ class HallOfFame {
   String? url;
   String? type;
   String? id;
+  int? position;
 
-  HallOfFame({this.url, this.type, this.id});
+  HallOfFame({this.url, this.type, this.id, this.position});
 
   factory HallOfFame.fromJson(Map<String, dynamic> json) => HallOfFame(
     url: UtilMethods.stringParser(json["url"]),
     type: UtilMethods.stringParser(json["type"]),
     id: UtilMethods.stringParser(json["_id"]),
+    position: UtilMethods.intParser(json["position"]),
   );
 
-  Map<String, dynamic> toJson() => {"url": url, "type": type, "_id": id};
+  Map<String, dynamic> toJson() => {"url": url, "type": type, "_id": id, "position": position};
 }
 
 class Lifestyle {
@@ -327,25 +329,22 @@ class Personal {
 }
 
 class Preferences {
-  List<String>? lookingFor;
+  String? lookingFor;
   String? visibility;
 
   Preferences({this.lookingFor, this.visibility});
 
   factory Preferences.fromJson(Map<String, dynamic> json) => Preferences(
-    lookingFor:
-        json["lookingFor"] == null
-            ? []
-            : List<String>.from(json["lookingFor"].map((x) => x)),
-    visibility: UtilMethods.stringParser(json["visibility"]),
-  );
+        lookingFor: UtilMethods.stringParser(json["lookingFor"]),
+        visibility: UtilMethods.stringParser(json["visibility"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "lookingFor": lookingFor,
-    "visibility": visibility,
-  };
+        "lookingFor": lookingFor,
+        "visibility": visibility,
+      };
 
-  Preferences copyWith({List<String>? lookingFor, String? visibility}) {
+  Preferences copyWith({String? lookingFor, String? visibility}) {
     return Preferences(
       lookingFor: lookingFor ?? this.lookingFor,
       visibility: visibility ?? this.visibility,

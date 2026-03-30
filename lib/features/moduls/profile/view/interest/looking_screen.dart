@@ -13,6 +13,7 @@ class LookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonWidget(
+      isSelctOnlyOne: true,
       image: AppAssets.looking,
       title: "Looking for",
       subtitle: "Build your connection more",
@@ -20,8 +21,9 @@ class LookingScreen extends StatelessWidget {
 
       /// Single selection
       onTop: (v) {
-        _profileController.selectedLookingFor.clear();
-        _profileController.selectedLookingFor.add(v);
+        _profileController.selectedLookingFor
+          ..clear()
+          ..add(v);
       },
 
       /// Selected check
@@ -30,11 +32,8 @@ class LookingScreen extends StatelessWidget {
       /// Submit
       onTopButton: () {
         if (_profileController.selectedLookingFor.isEmpty) return;
-
         _profileController.addLookingFor(
-          lookingFor: [
-            _profileController.selectedLookingFor.first.toLowerCase(),
-          ],
+          lookingFor: _profileController.selectedLookingFor.first.toLowerCase(),
         );
       },
 

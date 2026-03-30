@@ -7,8 +7,6 @@ import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/widgets/otp_widget.dart';
-import 'package:matchster/features/moduls/home/controller/home_controller.dart';
-import 'package:matchster/features/moduls/home/view/landing_screen.dart';
 import 'package:matchster/features/moduls/profile/controller/profile_controller.dart';
 
 class VerifyEmailOtpScreen extends StatefulWidget {
@@ -36,11 +34,10 @@ class _VerifyEmailOtpScreenState extends State<VerifyEmailOtpScreen> {
       );
 
       if (result) {
-        _controller.getMyProfile(true);
-        Get.offAll(() => const LandingScreen());
-        Future.delayed(const Duration(milliseconds: 200), () {
-          Get.find<HomeController>().onTabTapped(4);
-        });
+        await _controller.getMyProfile(false);
+        if (!mounted) return;
+        Navigator.pop(context);
+        Navigator.pop(context);
       } else {
         Get.snackbar(
           "Error",

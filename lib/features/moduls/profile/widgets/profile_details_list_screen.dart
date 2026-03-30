@@ -120,11 +120,14 @@ class ProfileDetailsListScreen extends StatelessWidget {
               }
               Get.to(() => LookingScreen());
             },
-            child: InterestCard(
-              color: Color(0xffB4CADE),
-              title: 'Looking For',
-              subTitle: (preference.lookingFor ?? []).capitalizeFirstAndJoin(),
-              image: AppAssets.lookingAssets,
+            child: Obx(
+              () => InterestCard(
+                color: Color(0xffB4CADE),
+                title: 'Looking For',
+                subTitle:
+                    (_controller.prefeence.value.lookingFor ?? ""),
+                image: AppAssets.lookingAssets,
+              ),
             ),
           ),
         ),

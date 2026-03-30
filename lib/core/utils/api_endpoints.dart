@@ -49,5 +49,6 @@ class ApiEndpoints {
       uploadProfileimage = "$urlUserType/update-profile-pic",
       swipedProfiles = '$apiPrefix/interaction/swiped-profiles',
       sendEmailOtp = '$apiPrefix/user-profile/send-email-otp',
-      verifyEmailOtp = '$apiPrefix/user-profile/verify-email-otp';
+      verifyEmailOtp = '$apiPrefix/user-profile/verify-email-otp',
+      swapFames = '$urlProfileType/swap-fames';
 }

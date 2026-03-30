@@ -171,16 +171,14 @@ class MainPhotoCard extends StatelessWidget {
         /// NAME + VERIFIED
         Row(
           children: [
-            Expanded(
-              child: CommonText.text(
-                "${getFirstLetter(data.name)}, ${data.age}",
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                fontSize: 24.sp,
-                fontWeight: FontWeight.w700,
-                fontFamily: "Caros",
-                color: AppColors.whiteColor,
-              ),
+            CommonText.text(
+              "${getFirstLetter(data.name)}, ${data.age}",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w700,
+              fontFamily: "Caros",
+              color: AppColors.whiteColor,
             ),
 
             6.wBox,

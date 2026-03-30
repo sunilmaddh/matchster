@@ -13,9 +13,11 @@ class CommonWidget extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.list,
+    this.isSelctOnlyOne,
     required this.onTop,
     required this.isSelected,
     required this.onTopButton,
+    // required this.onTapBack,
     required this.appBarTitle,
   });
 
@@ -24,6 +26,7 @@ class CommonWidget extends StatelessWidget {
   final String appBarTitle;
   final String subtitle;
   final List<String> list;
+  final bool? isSelctOnlyOne;
   final VoidCallback onTopButton;
   final Function(String) onTop; // changed to accept selected item
   final bool Function(String) isSelected; // dynamic item-based selection
@@ -40,7 +43,7 @@ class CommonWidget extends StatelessWidget {
         title: appBarTitle,
         isCenterTitle: false,
         onTop: () {
-          Get.back();
+          Navigator.of(context).pop();
         },
       ),
       body: SizedBox(
@@ -78,7 +81,11 @@ class CommonWidget extends StatelessWidget {
                       list.map((v) {
                         final selected = isSelected(v);
                         return GestureDetector(
-                          onTap: () => onTop(v),
+                          onTap: () {
+                            if ((isSelctOnlyOne == true) && isSelected(v))
+                              return;
+                            onTop(v);
+                          },
                           child: Container(
                             margin: 5.verticalPadding,
 

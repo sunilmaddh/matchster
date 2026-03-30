@@ -133,7 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
             /// MAIN CONTENT
             Expanded(
               child:
-                  data == null || _homeController.profileList.isEmpty
+                  data == null ||
+                          _homeController.profileList.isEmpty ||
+                          _homeController.currentIndex.value >=
+                              _homeController.profileList.length
                       ? NoMoreProfileWidget(
                         retrieveProfileonTap: () {
                           callGetRetriveProfileApi();
@@ -192,13 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             topRight: Radius.circular(40.r),
                                           ),
                                           child: Obx(() {
-                                            final currentIndex = _homeController
-                                                .profileList
-                                                .indexOf(
-                                                  _homeController
-                                                      .currentProfile,
-                                                );
-                                            final nextIndex = currentIndex + 2;
+                                            final nextIndex =
+                                                _homeController
+                                                    .currentIndex
+                                                    .value +
+                                                2;
                                             if (nextIndex <
                                                 _homeController
                                                     .profileList
@@ -255,13 +256,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             topRight: Radius.circular(40.r),
                                           ),
                                           child: Obx(() {
-                                            final currentIndex = _homeController
-                                                .profileList
-                                                .indexOf(
-                                                  _homeController
-                                                      .currentProfile,
-                                                );
-                                            final nextIndex = currentIndex + 1;
+                                            final nextIndex =
+                                                _homeController
+                                                    .currentIndex
+                                                    .value +
+                                                1;
                                             if (nextIndex <
                                                 _homeController
                                                     .profileList
@@ -417,11 +416,14 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CommonText.text(
-                "${data.name}, ${data.age}",
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w700,
-                fontFamily: "Caros",
+              Expanded(
+                child: CommonText.text(
+                  "${data.name}, ${data.age}",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: "Caros",
+                  overflow: TextOverflow.fade,
+                ),
               ),
               // SvgPicture.asset(
               //   AppAssets.shareAssets,

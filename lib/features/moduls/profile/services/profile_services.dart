@@ -94,7 +94,7 @@ class ProfileServices {
   }
 
   Future<BaseResponse<Map<String, dynamic>>> addLooking({
-    required List<String> lookingFor,
+    required String lookingFor,
   }) async {
     return await _baseService.postRequest(
       path: ApiEndpoints.addLookingfor,
@@ -256,34 +256,73 @@ class ProfileServices {
     );
   }
 
-  Future<BaseResponse<List<String>>> getCountries({String? search}) async {
-    return await _baseService.getRequest<List<String>>(
+  Future<BaseResponse<List<Map<String, String>>>> getCountries({String? search}) async {
+    return await _baseService.getRequest<List<Map<String, String>>>(
       path:
           "${ApiEndpoints.cscCountry}${search != null ? '?search=$search' : ''}",
-      fromJsonT: (json) => (json as List).map((e) => e.toString()).toList(),
+      fromJsonT:
+          (json) =>
+              (json as List)
+                  .map(
+                    (e) => {
+                      'name': (e['name'] ?? '').toString(),
+                      'isoCode': (e['isoCode'] ?? '').toString(),
+                    },
+                  )
+                  .toList(),
     );
   }
 
-  Future<BaseResponse<List<String>>> getStates({
+  /// Returns list of maps with 'name' and 'isoCode'
+  Future<BaseResponse<List<Map<String, String>>>> getStates({
     required String country,
     String? search,
   }) async {
-    return await _baseService.getRequest<List<String>>(
+    return await _baseService.getRequest<List<Map<String, String>>>(
       path:
           "${ApiEndpoints.cscState}?country=$country${search != null ? '&search=$search' : ''}",
-      fromJsonT: (json) => (json as List).map((e) => e.toString()).toList(),
+      fromJsonT:
+          (json) =>
+              (json as List)
+                  .map(
+                    (e) => {
+                      'name': (e['name'] ?? '').toString(),
+                      'isoCode': (e['isoCode'] ?? '').toString(),
+                    },
+                  )
+                  .toList(),
     );
   }
 
-  Future<BaseResponse<List<String>>> getCities({
+  /// Returns list of maps with 'name'
+  Future<BaseResponse<List<Map<String, String>>>> getCities({
     required String country,
     required String state,
     String? search,
   }) async {
-    return await _baseService.getRequest<List<String>>(
+    return await _baseService.getRequest<List<Map<String, String>>>(
       path:
           "${ApiEndpoints.cscCity}?country=$country&state=$state${search != null ? '&search=$search' : ''}",
-      fromJsonT: (json) => (json as List).map((e) => e.toString()).toList(),
+      fromJsonT:
+          (json) =>
+              (json as List)
+                  .map(
+                    (e) => {
+                      'name': (e['name'] ?? '').toString(),
+                    },
+                  )
+                  .toList(),
+    );
+  }
+
+  Future<BaseResponse<void>> swapFames({
+    required int position1,
+    required int position2,
+  }) async {
+    return await _baseService.postRequest<void>(
+      path: ApiEndpoints.swapFames,
+      data: {"position1": position1, "position2": position2},
+      fromJsonT: (json) => null,
     );
   }
 

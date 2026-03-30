@@ -73,16 +73,24 @@ class _AddHomeTownScreenState extends State<AddHomeTownScreen> {
                     title: "Select Country",
                     type: 'country',
                     selectedValue: _controller.selectedCountry.value,
-                    dataList: _controller.countryList, // ✅ FIX
+                    dataList: _controller.countryList,
                   ),
                 );
 
                 if (result != null) {
                   _controller.selectedCountry.value = result;
+                  _controller.selectedCountryCode.value =
+                      _controller.countryIsoMap[result] ?? result;
                   _controller.selectedState.value = '';
+                  _controller.selectedStateCode.value = '';
                   _controller.cityController.clear();
+                  _controller.stateList.clear();
+                  _controller.cityList.clear();
 
-                  await _controller.getCountry(search: result.toLowerCase());
+                  await _controller.getState(
+                    country:
+                        _controller.selectedCountryCode.value.toLowerCase(),
+                  );
                 }
               },
               child: Obx(
@@ -110,17 +118,21 @@ class _AddHomeTownScreenState extends State<AddHomeTownScreen> {
                     title: "Select State",
                     type: 'state',
                     selectedValue: _controller.selectedState.value,
-                    dataList: _controller.stateList, // ✅ FIX
+                    dataList: _controller.stateList,
                   ),
                 );
 
                 if (result != null) {
                   _controller.selectedState.value = result;
+                  _controller.selectedStateCode.value =
+                      _controller.stateIsoMap[result] ?? result;
                   _controller.cityController.clear();
+                  _controller.cityList.clear();
 
                   await _controller.getCity(
-                    country: _controller.selectedCountry.value.toLowerCase(),
-                    state: result.toLowerCase(),
+                    country:
+                        _controller.selectedCountryCode.value.toLowerCase(),
+                    state: _controller.selectedStateCode.value,
                   );
                 }
               },

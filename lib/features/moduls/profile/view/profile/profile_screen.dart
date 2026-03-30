@@ -251,75 +251,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Stack(
                                       clipBehavior: Clip.none,
                                       children: [
-                                        GestureDetector(
-                                          onTap:
-                                              () =>
-                                                  _showProfileImageUploadOptions(),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              100.r,
-                                            ),
-                                            child: Container(
-                                              padding: EdgeInsets.all(2.r),
-                                              height: 69.h,
-                                              width: 69.w,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Color(0xffE6D534),
-                                                  width: 3,
-                                                ),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            100.r,
+                                          ),
+                                          child: Container(
+                                            padding: EdgeInsets.all(2.r),
+                                            height: 69.h,
+                                            width: 69.w,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Color(0xffE6D534),
+                                                width: 3,
                                               ),
-                                              child: ClipOval(
-                                                child:
-                                                    _controller
-                                                                    .basicInfo
-                                                                    .value
-                                                                    .profilePic !=
-                                                                null &&
-                                                            _controller
-                                                                    .basicInfo
-                                                                    .value
-                                                                    .profilePic
-                                                                    ?.url !=
-                                                                null
-                                                        ? CommonAssets.networkImage(
-                                                          fit: BoxFit.cover,
+                                            ),
+                                            child: ClipOval(
+                                              child:
+                                                  _controller
+                                                              .allPfFame
+                                                              .isNotEmpty &&
                                                           _controller
-                                                              .basicInfo
-                                                              .value
-                                                              .profilePic!
-                                                              .url!,
-                                                        )
-                                                        : Container(
-                                                          color: Color(
-                                                            0xffF0F0F0,
-                                                          ),
-                                                          child: Icon(
-                                                            Icons.camera_alt,
-                                                            color:
-                                                                AppColors
-                                                                    .primary,
-                                                          ),
+                                                                  .allPfFame[0]
+                                                                  .url !=
+                                                              null
+                                                      ? CommonAssets.networkImage(
+                                                        fit: BoxFit.cover,
+                                                        _controller
+                                                            .allPfFame[0]
+                                                            .url!,
+                                                      )
+                                                      : Container(
+                                                        color: Color(
+                                                          0xffF0F0F0,
                                                         ),
-                                              ),
+                                                        child: Icon(
+                                                          Icons.camera_alt,
+                                                          color:
+                                                              AppColors.primary,
+                                                        ),
+                                                      ),
                                             ),
                                           ),
                                         ),
-                                        Positioned(
-                                          right: 0,
-                                          bottom: 0,
-                                          child: CircleAvatar(
-                                            backgroundColor:
-                                                AppColors.whiteColor,
-                                            radius: 12,
-                                            child: Icon(
-                                              Icons.edit,
-                                              color: AppColors.primary,
-                                              size: 10.sp,
-                                            ),
-                                          ),
-                                        ),
+                                        // Positioned(
+                                        //   right: 0,
+                                        //   bottom: 0,
+                                        //   child: CircleAvatar(
+                                        //     backgroundColor:
+                                        //         AppColors.whiteColor,
+                                        //     radius: 12,
+                                        //     child: Icon(
+                                        //       Icons.edit,
+                                        //       color: AppColors.primary,
+                                        //       size: 10.sp,
+                                        //     ),
+                                        //   ),
+                                        // ),
                                         Positioned(
                                           right: 1,
                                           top: -3,
@@ -585,6 +573,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ],
                             ),
                           ),
+                        );
+                      },
+                      onSwap: (position1, position2) {
+                        _controller.swapFames(
+                          position1: position1,
+                          position2: position2,
                         );
                       },
                     ),
