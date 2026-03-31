@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:matchster/core/extentions/date_x_ext.dart';
@@ -9,7 +10,9 @@ class AppMethods {
   }
 
   static void appPrint({required String message}) {
-    debugPrint(message);
+    if (kDebugMode) {
+      debugPrint(message);
+    }
   }
 
   static Future<List<String>> toApiValues(List<String> uiValues) async {
@@ -44,7 +47,8 @@ class AppMethods {
   }
 
   static String? validateWorkText({required String value}) {
-    if (value == null || value.isEmpty) {
+    // ignore: unnecessary_null_comparison
+    if (value == null && value.isEmpty) {
       return null;
     } else if (!isValid(value)) {
       return "Please enter valid text";
@@ -74,6 +78,14 @@ class AppMethods {
     }
 
     return null;
+  }
+
+  static bool isValidEmail(String email) {
+    if (email == null || email.isEmpty) return false;
+    if (RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      return true;
+    }
+    return false;
   }
 
   String toSnakeCase(String value) {

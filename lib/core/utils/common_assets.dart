@@ -92,6 +92,6 @@ class CommonAssets {
 
   /// Default error widget
   static Widget _defaultErrorWidget() {
-    return const Center(child: Icon(Icons.error, color: Colors.red));
+    return const Center(child: Icon(Icons.person, color: Colors.red, size: 50));
   }
 }

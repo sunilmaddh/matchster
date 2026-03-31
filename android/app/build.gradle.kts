@@ -39,11 +39,27 @@ android {
 }
 
 dependencies {
+
+    // 🔥 Firebase BOM
     implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-analytics")
+
+    // Facebook Login
     implementation("com.facebook.android:facebook-login:16.3.0")
+
+    // 📷 CameraX
+    val cameraxVersion = "1.5.3"
+    implementation("androidx.camera:camera-core:$cameraxVersion")
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
+
+    // ✋ MediaPipe
+    implementation("com.google.mediapipe:tasks-vision:0.20230731")
+    implementation("androidx.appcompat:appcompat:1.7.1")
 }
+
 
 flutter {
     source = "../.."
