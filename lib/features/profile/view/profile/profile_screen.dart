@@ -22,6 +22,7 @@ import 'package:matchster/features/profile/controller/location_controller.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/controller/profile_form_controller.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
+import 'package:matchster/features/profile/view/profile/profile_header_section.dart';
 import 'package:matchster/features/profile/widgets/add_image_grid_widget.dart';
 import 'package:matchster/features/profile/widgets/add_instagram_card.dart';
 import 'package:matchster/features/profile/widgets/add_spotify_card.dart';
@@ -61,12 +62,14 @@ class _ProfileScreenState
         isCenterTitle: false,
         isLeading: false,
         title: AppStrings.profile,
-        onTop: Get.back,
+        onTop: () {},
         actions: [
           Padding(
             padding: 15.horizontalPadding,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                controller.navigateTo(AppRoutes.settingScreen);
+              },
               child: SvgPicture.asset(AppAssets.settingAssets),
             ),
           ),
@@ -86,7 +89,14 @@ class _ProfileScreenState
             ),
             child: ListView(
               children: [
-                _buildHeaderSection(),
+                ProfileHeaderSection(
+                  basicInfo: controller.basicInfo,
+                  meta: controller.meta,
+                  onPreviewTap: () {
+                    controller.navigateTo(AppRoutes.profilePreviewScreen);
+                  },
+                ),
+                // _buildHeaderSection(),
                 _buildImageSection(context),
                 _buildVerificationSection(),
                 _buildDetailsSection(),

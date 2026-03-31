@@ -38,6 +38,7 @@ class CommonText {
     TextDecoration? decoration,
     TextOverflow overflow = TextOverflow.ellipsis,
     bool softWrap = true,
+    double? fontSize,
   }) {
     final baseStyle = style ?? AppTextStyles.bodyMedium(fontType: fontType);
 
@@ -54,6 +55,7 @@ class CommonText {
         fontFamily: fontType.value,
         fontStyle: fontStyle ?? baseStyle.fontStyle,
         decoration: decoration ?? baseStyle.decoration,
+        fontSize: baseStyle.fontSize,
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:matchster/features/profile/controller/location_controller.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/controller/profile_details_list_controller.dart';
 import 'package:matchster/features/profile/controller/profile_form_controller.dart';
+import 'package:matchster/features/profile/controller/setting_controller.dart';
 import 'package:matchster/features/profile/repositories/profile_repository.dart';
 import 'package:matchster/features/profile/services/profile_services.dart';
 
@@ -51,5 +52,6 @@ class LandingBinding extends Bindings {
         onboardController: Get.find(),
       ),
     );
+    Get.lazyPut<SettingController>(() => SettingController());
   }
 }

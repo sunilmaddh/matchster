@@ -26,5 +26,6 @@ abstract class AppRoutes {
       profilePhotoPreviewScreen = "/profile_photo_preview_screen",
       profilePreviewScreen = "/profile_preview_screen",
       verifyEmailOtpScreen = "/verify_email_otp_screen",
+      settingScreen = "/setting_screen",
       currentLoadingScreen = "/current_loading_screen";
 }

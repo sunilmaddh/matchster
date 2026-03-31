@@ -23,6 +23,7 @@ import 'package:matchster/features/profile/view/profile/education_screen.dart';
 import 'package:matchster/features/profile/view/profile/height_screen.dart';
 import 'package:matchster/features/profile/view/profile/profile_photo_preview_screen.dart';
 import 'package:matchster/features/profile/view/profile/profile_preview_screen.dart';
+import 'package:matchster/features/profile/view/profile/setting_screen.dart';
 import 'package:matchster/features/profile/view/profile/work_screen.dart';
 import 'package:matchster/features/profile/view/verify_email_otp_screen.dart';
 import 'package:matchster/routes/app_routes.dart';
@@ -85,5 +86,6 @@ class AppPages {
       name: AppRoutes.verifyEmailOtpScreen,
       page: () => VerifyEmailOtpScreen(),
     ),
+    GetPage(name: AppRoutes.settingScreen, page: () => SettingScreen()),
   ];
 }

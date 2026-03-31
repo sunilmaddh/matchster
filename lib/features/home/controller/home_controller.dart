@@ -44,6 +44,8 @@ class HomeController extends BaseController {
   final RxInt selectedIndex = 0.obs;
   final RxInt currentProfileIndex = 0.obs;
 
+  RxInt currentIndex = 0.obs;
+
   double _lastOffset = 0.0;
 
   static const int _defaultFilterCount = 10;

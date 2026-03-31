@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/extentions/extentions.dart';
 import 'package:matchster/core/extentions/interests_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
@@ -19,6 +21,7 @@ class MainPhotoCard extends StatelessWidget {
     required this.onDislikeTap,
     required this.onVerticalDrag,
     required this.showUpArrow,
+    required this.cardId,
   });
 
   final Profile data;
@@ -26,173 +29,204 @@ class MainPhotoCard extends StatelessWidget {
   final VoidCallback onDislikeTap;
   final void Function(double dy) onVerticalDrag;
   final RxBool showUpArrow;
+  final String cardId;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onVerticalDragUpdate: (details) {
-        onVerticalDrag(details.delta.dy);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(40.r)),
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(40.r)),
-                child: Image(
-                  image: NetworkImage(data.mainPhoto.toString()),
+      onVerticalDragUpdate: (details) => onVerticalDrag(details.delta.dy),
+
+      child: SizedBox(
+        height: context.height,
+        width: double.infinity,
+
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40.r),
+            topRight: Radius.circular(40.r),
+          ),
+
+          child: Stack(
+            children: [
+              /// PROFILE IMAGE
+              Positioned.fill(
+                child: CachedNetworkImage(
+                  imageUrl: data.mainPhoto ?? "",
                   fit: BoxFit.cover,
+                  fadeInDuration: const Duration(milliseconds: 200),
+
+                  placeholder:
+                      (_, __) => Container(
+                        color: Colors.grey[200],
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ),
+
+                  errorWidget:
+                      (_, _, _) => Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: SvgPicture.asset(AppAssets.appLogo),
+                        ),
+                      ),
                 ),
               ),
-            ),
 
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.bottomCenter,
-                    stops: const [0.0, 0.6, 0.85, 1.0],
-                    colors: [
-                      const Color(0xFF7A96F8).withAlpha(0),
-                      const Color(0xFF587DFF).withAlpha(150),
-                      const Color(0xFF3F66FF).withAlpha(220),
-                      const Color(0xFF1D48EF),
+              /// GRADIENT OVERLAY
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.center,
+                      end: Alignment.bottomCenter,
+                      stops: const [0.0, 0.7, 1.0],
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.3),
+                        Colors.black.withOpacity(0.85),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              /// ARROW ICON
+              Obx(
+                () => Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SafeArea(
+                    minimum: EdgeInsets.only(bottom: 120.h),
+
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+
+                      child: SvgPicture.asset(
+                        showUpArrow.value
+                            ? AppAssets.downArrowAssets
+                            : AppAssets.upArrowAssets,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              /// BOTTOM CONTENT
+              Positioned(
+                left: 16.w,
+                right: 16.w,
+                bottom: 90.h,
+
+                child: SafeArea(
+                  top: false,
+
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      /// USER DETAILS
+                      Expanded(child: _buildUserDetails()),
+
+                      /// LIKE / DISLIKE BUTTONS
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleWidget(
+                            image: AppAssets.likeAssets,
+                            text: "Like",
+                            onTop: onLikeTap,
+                          ),
+
+                          10.hBox,
+
+                          CircleWidget(
+                            isGradient: false,
+                            image: AppAssets.dislike,
+                            text: "Dislike",
+                            onTop: onDislikeTap,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ),
-            ),
-
-            Obx(() {
-              final isUp = showUpArrow.value;
-              return Align(
-                alignment: Alignment.bottomCenter,
-                child: SafeArea(
-                  minimum: EdgeInsets.only(bottom: 120.h),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    child: SvgPicture.asset(
-                      isUp
-                          ? AppAssets.downArrowAssets
-                          : AppAssets.upArrowAssets,
-                      key: ValueKey(isUp),
-                    ),
-                  ),
-                ),
-              );
-            }),
-
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: SafeArea(
-                top: false,
-                minimum: EdgeInsets.only(
-                  left: 15.w,
-                  right: 15.w,
-                  bottom: 110.h,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: CommonText.headlineMedium(
-                                  "${getFirstLetter(data.name)}, ${data.age}",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-
-                                  fontWeight: FontWeight.w700,
-
-                                  color: AppColors.whiteColor,
-                                ),
-                              ),
-                              6.wBox,
-                              SvgPicture.asset(AppAssets.verified),
-                            ],
-                          ),
-
-                          if (data.distance?.isNotEmpty ?? false)
-                            Padding(
-                              padding: EdgeInsets.only(top: 4.h),
-                              child: CommonText.labelMedium(
-                                "${data.distance} km ${AppStrings.away}",
-                                color: AppColors.whiteColor,
-                              ),
-                            ),
-
-                          if (data.interests?.isNotEmpty ?? false) ...[
-                            12.hBox,
-                            Wrap(
-                              spacing: 6.w,
-                              runSpacing: 6.h,
-                              children:
-                                  data.interests!.take(2).map((v) {
-                                    final interest = InterestEnumX.fromString(
-                                      v,
-                                    );
-                                    return Container(
-                                      padding:
-                                          10.horizontalPadding +
-                                          3.verticalPadding,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          20.r,
-                                        ),
-                                        border: Border.all(
-                                          color: AppColors.whiteColor,
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: CommonText.labelMedium(
-                                        interest?.label ??
-                                            AppMethods.capitalizeFirst(v),
-                                        color: AppColors.whiteColor,
-                                      ),
-                                    );
-                                  }).toList(),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircleWidget(
-                          image: AppAssets.likeAssets,
-                          text: AppStrings.like,
-                          onTop: onLikeTap,
-                        ),
-                        10.hBox,
-                        CircleWidget(
-                          isGradient: false,
-                          image: AppAssets.dislike,
-                          text: AppStrings.dislike,
-                          onTop: onDislikeTap,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  /// USER DETAILS
+  Widget _buildUserDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+
+      children: [
+        /// NAME + VERIFIED
+        Row(
+          children: [
+            CommonText.displaySmall(
+              "${getFirstLetter(data.name)}, ${data.age}",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              color: AppColors.whiteColor,
+            ),
+
+            6.wBox,
+
+            SvgPicture.asset(AppAssets.verified),
+          ],
+        ),
+
+        /// DISTANCE
+        if (data.distance?.isNotEmpty ?? false)
+          Padding(
+            padding: EdgeInsets.only(top: 4.h),
+
+            child: CommonText.text(
+              "${data.distance} km away",
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.whiteColor,
+            ),
+          ),
+
+        /// INTEREST TAGS
+        if (data.interests?.isNotEmpty ?? false) ...[
+          12.hBox,
+
+          Wrap(
+            spacing: 6.w,
+            runSpacing: 6.h,
+
+            children:
+                data.interests!.take(2).map((v) {
+                  final interest = InterestEnumX.fromString(v);
+
+                  return Container(
+                    padding: 10.horizontalPadding + 3.verticalPadding,
+
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      border: Border.all(color: AppColors.whiteColor),
+                    ),
+
+                    child: CommonText.text(
+                      interest?.label ?? AppMethods.capitalizeFirst(v),
+                      fontSize: 11.5.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.whiteColor,
+                    ),
+                  );
+                }).toList(),
+          ),
+        ],
+      ],
     );
   }
 
