@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -162,7 +161,7 @@ class AddPhotoWidget extends StatelessWidget {
       _controller.isSelectingImage(true);
 
       AppNavigation.to(
-        AppRoutes.profilePreviewScreen,
+        AppRoutes.onboardPhotoPreviewView,
         arguments: {
           AppStrings.imageKey: selectedImage,
           AppStrings.indexKey: index,

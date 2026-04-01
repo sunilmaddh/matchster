@@ -47,14 +47,14 @@ class AppBinding extends Bindings {
       fenix: true,
     );
 
-    Get.lazyPut<OnboardController>(
-      () => OnboardController(
+    Get.put<OnboardController>(
+      OnboardController(
         onboardingRepository: Get.find<OnboardingRepository>(),
         faceDetectionService: Get.find<FaceDetectionService>(),
         imageService: Get.find<ImageUploadServices>(),
         locationService: Get.find<LocationService>(),
       ),
-      fenix: true,
+      permanent: true,
     );
   }
 }

@@ -27,21 +27,21 @@ class AuthBinding extends Bindings {
     );
     Get.lazyPut<CountryController>(() => CountryController());
 
-    Get.lazyPut<OnboardingRepository>(
-      () => OnboardingRepository(
-        onboardingService: Get.find<OnboardingService>(),
-      ),
-      fenix: true,
-    );
+    // Get.lazyPut<OnboardingRepository>(
+    //   () => OnboardingRepository(
+    //     onboardingService: Get.find<OnboardingService>(),
+    //   ),
+    //   fenix: true,
+    // );
 
-    Get.lazyPut<OnboardController>(
-      () => OnboardController(
-        onboardingRepository: Get.find<OnboardingRepository>(),
-        faceDetectionService: Get.find<FaceDetectionService>(),
-        imageService: Get.find<ImageUploadServices>(),
-        locationService: Get.find<LocationService>(),
-      ),
-      fenix: true,
-    );
+    // Get.lazyPut<OnboardController>(
+    //   () => OnboardController(
+    //     onboardingRepository: Get.find<OnboardingRepository>(),
+    //     faceDetectionService: Get.find<FaceDetectionService>(),
+    //     imageService: Get.find<ImageUploadServices>(),
+    //     locationService: Get.find<LocationService>(),
+    //   ),
+    //   fenix: true,
+    // );
   }
 }

@@ -12,6 +12,7 @@ import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/extentions/onboard_pages_ext.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
+import 'package:matchster/core/utils/app_logger.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/features/auth/helpers/onboard_halper.dart';
@@ -385,7 +386,7 @@ class OnboardController extends BaseController {
       if (!response.success) {
         return false;
       }
-
+      updateButtonState();
       goToNextPage();
       return true;
     } catch (e) {
@@ -721,7 +722,6 @@ class OnboardController extends BaseController {
   Future<void> completeStep(int index) async {
     if (index < 0 || index >= stepStatus.length) return;
     stepStatus[index] = true;
-    AppMethods.appPrint(message: stepStatus.toString());
     _goToNextStepOrFinish();
   }
 

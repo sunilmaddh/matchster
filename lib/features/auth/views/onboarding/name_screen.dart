@@ -51,7 +51,6 @@ class NameWidget extends StatelessWidget {
                 } else {
                   _onboardController.isNameValid.value = false;
                 }
-
                 _onboardController.updateButtonState();
               },
             ),

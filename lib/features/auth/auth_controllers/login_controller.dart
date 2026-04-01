@@ -63,7 +63,6 @@ class LoginController extends BaseController {
 
         if (pages != null && pagesValue != null) {
           final onboardController = Get.find<OnboardController>();
-
           await onboardController.setOnboardPages(pages);
           await onboardController.setPagesValue(pagesValue);
 

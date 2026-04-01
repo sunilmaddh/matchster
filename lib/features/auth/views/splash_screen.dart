@@ -38,13 +38,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
     final token = await MatchsterLocalStorage.instance.getAccessToken();
 
-    if (token.isNotEmpty) {
-      // Token exists, navigate to home
-      AppNavigation.offAll(AppRoutes.landingScreen);
-    } else {
-      // No token, navigate to login
-      AppNavigation.offAll(AppRoutes.loginScreen);
-    }
+    AppNavigation.offAll(AppRoutes.loginScreen);
+
+    // if (token.isNotEmpty) {
+    //   // Token exists, navigate to home
+    //   AppNavigation.offAll(AppRoutes.landingScreen);
+    // } else {
+    //   // No token, navigate to login
+    //   AppNavigation.offAll(AppRoutes.loginScreen);
+    // }
   }
 
   @override

@@ -19,6 +19,7 @@ import 'package:media_kit/media_kit.dart';
 late List<CameraDescription> camerasList;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  AppBinding().dependencies();
   MatchsterLocalStorage.instance.init();
   MediaKit.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -73,7 +74,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
           useInheritedMediaQuery: true,
           debugShowCheckedModeBanner: false,
-          initialBinding: AppBinding(),
+
           title: AppStrings.appTitle,
           home: SplashScreen(),
           getPages: AppPages.getPages,

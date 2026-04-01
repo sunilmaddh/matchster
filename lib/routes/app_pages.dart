@@ -5,6 +5,7 @@ import 'package:matchster/features/auth/views/login/login_screen.dart';
 import 'package:matchster/features/auth/views/login/otp_screen.dart';
 import 'package:matchster/features/auth/views/onboarding/onboard_screen.dart';
 import 'package:matchster/features/auth/views/login/login_field_with_button_view.dart';
+import 'package:matchster/features/auth/widgets/onboard_photo_preview_view.dart';
 import 'package:matchster/features/home/binding/landing_binding.dart';
 import 'package:matchster/features/home/view/landing_screen.dart';
 import 'package:matchster/features/posture/face_screen.dart';
@@ -41,7 +42,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.onboardScreen,
       page: () => OnboardScreen(),
-      binding: AuthBinding(),
+      // binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.landingScreen,
@@ -97,6 +98,10 @@ class AppPages {
       name: AppRoutes.settingScreen,
       page: () => SettingScreen(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.onboardPhotoPreviewView,
+      page: () => OnboardPhotoPreviewView(),
     ),
   ];
 }

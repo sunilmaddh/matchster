@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CropGridOverlay extends StatelessWidget {
-  const CropGridOverlay({super.key});
+  const CropGridOverlay({super.key, this.borderRadius = 20});
+
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
-    return const IgnorePointer(
-      child: SizedBox.expand(child: CustomPaint(painter: _GridPainter())),
+    return IgnorePointer(
+      child: SizedBox.expand(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: CustomPaint(painter: _GridPainter()),
+        ),
+      ),
     );
   }
 }
