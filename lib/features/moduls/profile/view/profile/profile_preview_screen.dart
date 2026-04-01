@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/common_assets.dart';
@@ -12,7 +14,7 @@ import 'package:matchster/features/moduls/profile/widgets/inshort_wrap_widget.da
 import 'package:matchster/features/moduls/profile/widgets/interest_wrap_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/looking_wrap_widget.dart';
 import 'package:matchster/features/moduls/profile/widgets/sub_common_card.dart';
-
+import 'package:matchster/routes/app_navigation.dart';
 
 import '../../../../../core/widgets/fields/common_text.dart';
 
@@ -27,12 +29,23 @@ class ProfilePreviewScreen extends StatelessWidget {
         isCenterTitle: false,
         title: "Profile preview",
         onTop: () {
-          Get.back();
+          AppNavigation.back();
         },
         actions: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: Icon(Icons.settings),
+            padding: 10.horizontalPadding,
+            child: TextButton(
+              onPressed: () {
+                // Get.to(() => SettingScreen());
+              },
+              child: SvgPicture.asset(AppAssets.settingAssets),
+            ),
+            // IconButton(
+            //   onPressed: () {
+            //     // Get.to<SettingScreen>();
+            //   },
+            //   icon: Icon(Icons.settings_outlined),
+            // ),
           ),
         ],
       ),
@@ -59,13 +72,14 @@ class ProfilePreviewScreen extends StatelessWidget {
                         topLeft: Radius.circular(20.r),
                         topRight: Radius.circular(20.r),
                       ),
-                      child: _controller.allPfFame.isNotEmpty
-                          ? CommonAssets.networkImage(
-                              _controller.allPfFame[0].url!,
-                              height: 518..h,
-                              fit: BoxFit.fill,
-                            )
-                          : SizedBox(height: 518..h),
+                      child:
+                          _controller.allPfFame.isNotEmpty
+                              ? CommonAssets.networkImage(
+                                _controller.allPfFame[0].url!,
+                                height: 518..h,
+                                fit: BoxFit.fill,
+                              )
+                              : SizedBox(height: 518..h),
                       // Image.asset(
                       //   height: 518..h,
                       //   AppAssets.imageAssets6,

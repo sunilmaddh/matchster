@@ -68,7 +68,7 @@ class LoginController extends GetxController {
           response.data!.accessToken.toString(),
         );
         await MatchsterLocalStorage.instance.saveProfilePopupShown(false);
-        
+
         // Debug: Check if token was saved
         await TokenDebug.checkToken();
         final pages = response.data!.pages;
@@ -80,9 +80,10 @@ class LoginController extends GetxController {
           await onboardController.setPagesValue(pagesValue!);
           final allCompleted = onboardController.allCompleted;
           if (allCompleted) {
-            //Get.to(() => MaintenceScreen());
+            await MatchsterLocalStorage.instance.saveUserOnboard(true);
             AppNavigation.offAll(AppRoutes.landingScreen);
           } else {
+            await MatchsterLocalStorage.instance.saveUserOnboard(false);
             AppNavigation.off(AppRoutes.onboardScreen);
           }
         }

@@ -52,7 +52,8 @@ class HomeController extends GetxController {
 
   Profile? get currentProfile {
     if (profileList.isEmpty) return null;
-    if (currentIndex.value < 0 || currentIndex.value >= profileList.length) return null;
+    if (currentIndex.value < 0 || currentIndex.value >= profileList.length)
+      return null;
     return profileList[currentIndex.value];
   }
 
@@ -82,6 +83,10 @@ class HomeController extends GetxController {
         profileList.assignAll(response.data!.profiles!);
         profileListCount.assignAll(response.data!.profiles!);
 
+        if (profileList.isNotEmpty) {
+          profileList.add(Profile());
+        }
+
         // Preload first 3 images
         for (int i = 0; i < 3 && i < profileList.length; i++) {
           if (profileList[i].mainPhoto != null &&
@@ -99,7 +104,9 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
-    } finally {}
+    } finally {
+      isGettingProfile(false);
+    }
   }
 
   Future<void> getProfileList({
@@ -115,9 +122,14 @@ class HomeController extends GetxController {
       );
       profileList.clear();
       profileListCount.clear();
-      if (response.success && response.data?.profiles != null) {
+      if (response.success &&
+          response.data?.profiles != null &&
+          response.data?.profiles != []) {
         profileList.assignAll(response.data!.profiles!);
         profileListCount.assignAll(response.data!.profiles!);
+        if (profileList.isNotEmpty) {
+          profileList.add(Profile());
+        }
 
         // Preload first 3 images
         for (int i = 0; i < 3 && i < profileList.length; i++) {
@@ -136,7 +148,9 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
-    } finally {}
+    } finally {
+      isGettingProfile(false);
+    }
   }
 
   /* ----------------------------------------------------
@@ -205,8 +219,11 @@ class HomeController extends GetxController {
     _isProgrammaticSwipe = false;
 
     final nextIndex = previousIndex + 1;
-    currentIndex.value = nextIndex < profileList.length ? nextIndex : previousIndex;
+    currentIndex.value =
+        nextIndex < profileList.length ? nextIndex : previousIndex;
     _updateInShort();
+
+    debugPrint("New index $nextIndex ProfileList ${profileList.length}");
 
     if (newIndex == null || newIndex >= profileList.length - 1) {
       _loadMoreProfilesIfNeeded();

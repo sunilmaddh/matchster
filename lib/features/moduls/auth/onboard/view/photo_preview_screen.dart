@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -78,7 +79,9 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
         padding: 15.horizontalPadding + 20.verticalPadding,
         child: Obx(() {
           if (_onboardController.isImageUploading.isTrue) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
           }
           return AppButton(
             name: "Crop & Upload",

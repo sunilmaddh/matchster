@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -16,7 +17,6 @@ import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/core/extentions/zodiac_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
-import 'package:matchster/core/utils/utils_methods.dart';
 import 'package:matchster/features/moduls/auth/onboard/widgets/photo_review_bottomsheet.dart';
 import 'package:matchster/features/moduls/home/controller/home_controller.dart';
 import 'package:matchster/features/moduls/home/models/habit_option.dart';
@@ -27,6 +27,7 @@ import 'package:matchster/features/moduls/profile/models/place_details_response.
 import 'package:matchster/features/moduls/profile/services/profile_services.dart';
 import 'package:matchster/features/moduls/profile/view/location/add_location_screen.dart';
 import 'package:matchster/features/moduls/profile/view/profile_photo_preview_screen.dart';
+import 'package:matchster/routes/app_navigation.dart';
 
 class ProfileController extends GetxController {
   final ProfileServices _profileServices = ProfileServices();
@@ -144,7 +145,6 @@ class ProfileController extends GetxController {
 
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -164,11 +164,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -184,11 +184,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -205,12 +205,12 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -226,12 +226,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        AppMethods.appPrint(message: response.message);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -247,11 +246,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -267,11 +266,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -287,11 +286,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -307,11 +306,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -323,17 +322,26 @@ class ProfileController extends GetxController {
   Future<void> addLookingFor({required String lookingFor}) async {
     try {
       final response = await _profileServices.addLooking(
-        lookingFor: lookingFor,
+        lookingFor: lookingFor.toSnakeCaseLowerCase(),
       );
-      if (response.success) {
-        await getMyProfile(false);
-        selectedLookingFor.clear();
-        Navigator.pop(Get.context!);
-      } else {
-        selectedLookingFor.clear();
+
+      debugPrint(response.success.toString());
+      if (!response.success) {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
           message: response.message,
+          isError: true,
+        );
+      }
+
+      if (response.success) {
+        await getMyProfile(false);
+        selectedLookingFor.clear();
+        AppNavigation.back();
+      } else {
+        AppToastMessage.show(
+          title: AppConstants.errorTitle,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -349,11 +357,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -364,25 +372,17 @@ class ProfileController extends GetxController {
 
   Future<bool> uploadPhotoW({required String imagePath}) async {
     try {
-      print('📤 uploadPhotoW: Starting image upload for $imagePath');
       final response = await _profileServices.uploadImageWithDio(imagePath);
       if (response!.success) {
         final image = response.data!.url ?? '';
-        print('📤 uploadPhotoW: Upload success, image URL: $image');
         bool isSuccess = await addPhoto(url: image);
-        print('📤 uploadPhotoW: addPhoto returned $isSuccess');
         await getMyProfile(false);
-        print(
-          '📤 uploadPhotoW: getMyProfile completed, allPfFame.length=${allPfFame.length}',
-        );
         return isSuccess;
       } else {
-        print('❌ uploadPhotoW: Upload failed');
         Get.back();
         return false;
       }
     } catch (e) {
-      print('❌ uploadPhotoW exception: $e');
       debugPrint(e.toString());
       return false;
     }
@@ -409,19 +409,15 @@ class ProfileController extends GetxController {
 
   Future<bool> addProfileImage({required String url}) async {
     try {
-      print('➕ addPhoto: Adding photo with URL: $url');
       final response = await _profileServices.uploadProfileimage(url: url);
-      print('➕ addPhoto response success: ${response.success}');
+
       if (response.success) {
-        print('✅ addPhoto: Photo added successfully');
         return true;
       } else {
-        print('❌ addPhoto: Failed - ${response.message}');
         Get.back();
         return false;
       }
     } catch (e) {
-      print('❌ addPhoto exception: $e');
       debugPrint(e.toString());
       return false;
     }
@@ -429,19 +425,15 @@ class ProfileController extends GetxController {
 
   Future<bool> addPhoto({required String url}) async {
     try {
-      print('➕ addPhoto: Adding photo with URL: $url');
       final response = await _profileServices.addPhoto(url: url);
-      print('➕ addPhoto response success: ${response.success}');
+
       if (response.success) {
-        print('✅ addPhoto: Photo added successfully');
         return true;
       } else {
-        print('❌ addPhoto: Failed - ${response.message}');
         Get.back();
         return false;
       }
     } catch (e) {
-      print('❌ addPhoto exception: $e');
       debugPrint(e.toString());
       return false;
     }
@@ -458,11 +450,11 @@ class ProfileController extends GetxController {
       );
       if (response.success) {
         await getMyProfile(false);
-        Navigator.pop(Get.context!);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
-          message: response.message,
+          message: "Something went wrong",
           isError: true,
         );
       }
@@ -600,24 +592,40 @@ class ProfileController extends GetxController {
     final inputImage = InputImage.fromFile(image);
     final faces = await faceDetector.processImage(inputImage);
 
-    // ❌ No face or multiple faces
     if (faces.length != 1) return false;
 
     final face = faces.first;
+    final imageSize = await _getImageSize(image);
+    final faceRect = face.boundingBox;
 
-    // ❌ Eyes closed
-    if ((face.leftEyeOpenProbability ?? 0) < 0.5 ||
-        (face.rightEyeOpenProbability ?? 0) < 0.5) {
+    final edgeMargin = faceRect.width * 0.08;
+
+    if (faceRect.left <= edgeMargin ||
+        faceRect.top <= edgeMargin ||
+        faceRect.right >= imageSize.width - edgeMargin ||
+        faceRect.bottom >= imageSize.height - edgeMargin) {
       return false;
     }
 
-    // ❌ Face turned too much
-    if ((face.headEulerAngleY ?? 0).abs() > 15 ||
-        (face.headEulerAngleZ ?? 0).abs() > 15) {
+    // if ((face.headEulerAngleX ?? 0).abs() > 10 ||
+    //     (face.headEulerAngleY ?? 0).abs() > 10 ||
+    //     (face.headEulerAngleZ ?? 0).abs() > 10) {
+    //   return false;
+    // }
+
+    if ((face.leftEyeOpenProbability ?? 1) < 0.5 ||
+        (face.rightEyeOpenProbability ?? 1) < 0.5) {
       return false;
     }
 
-    return true; // ✅ Clear face
+    return true;
+  }
+
+  Future<Size> _getImageSize(File file) async {
+    final bytes = await file.readAsBytes();
+    final codec = await instantiateImageCodec(bytes);
+    final frame = await codec.getNextFrame();
+    return Size(frame.image.width.toDouble(), frame.image.height.toDouble());
   }
 
   Future<void> validateAndUploadPhoto({required File file}) async {

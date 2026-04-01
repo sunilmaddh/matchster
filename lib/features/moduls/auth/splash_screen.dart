@@ -25,13 +25,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkTokenAndNavigate() async {
     await Future.delayed(const Duration(seconds: 6));
 
-    final token = await MatchsterLocalStorage.instance.getAccessToken();
-
-    if (token.isNotEmpty) {
-      // Token exists, navigate to home
+    final isUserOnboard = await MatchsterLocalStorage.instance.getUserOnboard();
+    if (isUserOnboard) {
       Get.offAllNamed(AppRoutes.landingScreen);
     } else {
-      // No token, navigate to login
       Get.offAllNamed(AppRoutes.loginScreen);
     }
   }

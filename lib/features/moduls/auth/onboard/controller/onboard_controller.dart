@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,6 +10,7 @@ import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/extentions/onboard_pages_ext.dart';
 import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
+import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/features/moduls/auth/login/models/otp_verification_response.dart';
@@ -170,7 +172,6 @@ class OnboardController extends GetxController {
     }
     isDateSelectedP.value = dateWithList.isNotEmpty;
 
-    updateButtonState();
     updateButtonState();
   }
 
@@ -711,6 +712,7 @@ class OnboardController extends GetxController {
   }
 
   void onboardingCompleted() async {
+    await MatchsterLocalStorage.instance.saveUserOnboard(true);
     final Position? position = await fetchLocation();
     if (position != null) {
       final address = await getAddress(
@@ -821,24 +823,40 @@ class OnboardController extends GetxController {
     final inputImage = InputImage.fromFile(image);
     final faces = await faceDetector.processImage(inputImage);
 
-    // ❌ No face or multiple faces
     if (faces.length != 1) return false;
 
     final face = faces.first;
+    final imageSize = await _getImageSize(image);
+    final faceRect = face.boundingBox;
 
-    // ❌ Eyes closed
-    if ((face.leftEyeOpenProbability ?? 0) < 0.5 ||
-        (face.rightEyeOpenProbability ?? 0) < 0.5) {
+    final edgeMargin = faceRect.width * 0.08;
+
+    if (faceRect.left <= edgeMargin ||
+        faceRect.top <= edgeMargin ||
+        faceRect.right >= imageSize.width - edgeMargin ||
+        faceRect.bottom >= imageSize.height - edgeMargin) {
       return false;
     }
 
-    // ❌ Face turned too much
-    if ((face.headEulerAngleY ?? 0).abs() > 15 ||
-        (face.headEulerAngleZ ?? 0).abs() > 15) {
+    // if ((face.headEulerAngleX ?? 0).abs() > 10 ||
+    //     (face.headEulerAngleY ?? 0).abs() > 10 ||
+    //     (face.headEulerAngleZ ?? 0).abs() > 10) {
+    //   return false;
+    // }
+
+    if ((face.leftEyeOpenProbability ?? 1) < 0.5 ||
+        (face.rightEyeOpenProbability ?? 1) < 0.5) {
       return false;
     }
 
-    return true; // ✅ Clear face
+    return true;
+  }
+
+  Future<Size> _getImageSize(File file) async {
+    final bytes = await file.readAsBytes();
+    final codec = await instantiateImageCodec(bytes);
+    final frame = await codec.getNextFrame();
+    return Size(frame.image.width.toDouble(), frame.image.height.toDouble());
   }
 
   Future<void> validateAndUploadPhoto({

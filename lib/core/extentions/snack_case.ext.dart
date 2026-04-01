@@ -33,8 +33,17 @@ extension StringSnakCaseExtension on String {
   }
 }
 
+// extension StringSnakExtension on String {
+//   // String toSnakeCaseLowerCase() {
+//   //   return trim().toLowerCase().replaceAll(RegExp(r'\s+'), '_');
+//   // }
+
+// }
 extension StringSnakExtension on String {
   String toSnakeCaseLowerCase() {
-    return trim().toLowerCase().replaceAll(RegExp(r'\s+'), '_');
+    return trim()
+        .toLowerCase()
+        .replaceAll(RegExp(r"[^\w\s]"), "") // remove special chars like '
+        .replaceAll(RegExp(r'\s+'), '_'); // replace spaces with _
   }
 }

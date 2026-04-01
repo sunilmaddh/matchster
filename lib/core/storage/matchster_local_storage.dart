@@ -163,6 +163,16 @@ class MatchsterLocalStorage {
     return _preferences!.getBool("history_type") ?? false;
   }
 
+  Future<void> saveUserOnboard(bool genderType) async {
+    _checkInit();
+    await _preferences!.setBool("user_onboard", genderType);
+  }
+
+  Future<bool> getUserOnboard() async {
+    _checkInit();
+    return _preferences!.getBool("user_onboard") ?? false;
+  }
+
   Future<void> saveProfilePopupShown(bool shown) async {
     _checkInit();
     await _preferences!.setBool("profile_popup_shown", shown);
@@ -187,5 +197,6 @@ class MatchsterLocalStorage {
     await _preferences!.remove("user_email");
     await _preferences!.remove("user_image");
     await _preferences!.remove("profile_popup_shown");
+    await _preferences!.remove("user_onboard");
   }
 }

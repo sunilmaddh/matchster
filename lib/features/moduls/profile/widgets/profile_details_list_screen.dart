@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/common_lists.dart';
-import 'package:matchster/core/extentions/height_enum_ext.dart';
 import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
@@ -125,7 +124,8 @@ class ProfileDetailsListScreen extends StatelessWidget {
                 color: Color(0xffB4CADE),
                 title: 'Looking For',
                 subTitle:
-                    (_controller.prefeence.value.lookingFor ?? ""),
+                    (_controller.prefeence.value.lookingFor ?? "")
+                        .removeSnakeAndCapitalize(),
                 image: AppAssets.lookingAssets,
               ),
             ),

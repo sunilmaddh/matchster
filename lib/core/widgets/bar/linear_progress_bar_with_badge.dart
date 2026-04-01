@@ -134,8 +134,8 @@ class _LinearProgressBarWithBadgeState
             final newValue =
                 widget.min + (dx / trackWidth) * (widget.max - widget.min);
 
-            setState(() => _currentValue = newValue);
-            widget.onChanged(newValue);
+            // setState(() => _currentValue = newValue);
+            // widget.onChanged(newValue);
           },
           child: SizedBox(
             height: 48.h,

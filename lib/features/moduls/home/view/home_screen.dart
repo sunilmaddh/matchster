@@ -42,21 +42,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onScroll() {
+    if (!_scrollController.hasClients) return;
+
     final currentOffset = _scrollController.offset;
+
     final currentCardId =
         _homeController.currentProfile?.userId ??
         'card_${_homeController.profileList.indexOf(_homeController.currentProfile)}';
 
     final notifier = _arrowNotifiers.putIfAbsent(
       currentCardId,
-      () => ValueNotifier(true),
+      () => ValueNotifier(false),
     );
 
-    if (currentOffset > _lastOffset && !notifier.value) {
+    const double threshold = 5.0;
+
+    if (currentOffset - _lastOffset > threshold && !notifier.value) {
       notifier.value = true;
-    } else if (currentOffset < _lastOffset && notifier.value) {
+    } else if (_lastOffset - currentOffset > threshold && notifier.value) {
       notifier.value = false;
     }
+
     _lastOffset = currentOffset;
   }
 
@@ -66,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  callGetRetriveProfileApi() async {
+  Future<void> callGetRetriveProfileApi() async {
     if (_homeController.profileList.isEmpty) {
       await _homeController.getRetriveProfileList();
     }
