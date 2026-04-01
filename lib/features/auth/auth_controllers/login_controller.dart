@@ -67,8 +67,10 @@ class LoginController extends BaseController {
           await onboardController.setPagesValue(pagesValue);
 
           if (onboardController.allCompleted) {
+            MatchsterLocalStorage.instance.saveUserOnboard(true);
             navigateOff(AppRoutes.landingScreen);
           } else {
+            MatchsterLocalStorage.instance.saveUserOnboard(false);
             navigateOff(AppRoutes.onboardScreen);
           }
         } else {

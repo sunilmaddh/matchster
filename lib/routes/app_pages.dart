@@ -1,3 +1,4 @@
+import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:matchster/features/auth/binding/auth_binding.dart';
 import 'package:matchster/features/auth/views/login/country_list_screen.dart';
@@ -8,6 +9,7 @@ import 'package:matchster/features/auth/views/login/login_field_with_button_view
 import 'package:matchster/features/auth/widgets/onboard_photo_preview_view.dart';
 import 'package:matchster/features/home/binding/landing_binding.dart';
 import 'package:matchster/features/home/view/landing_screen.dart';
+import 'package:matchster/features/posture/controller/face_controller.dart';
 import 'package:matchster/features/posture/face_screen.dart';
 import 'package:matchster/features/profile/bindings/profile_binding.dart';
 import 'package:matchster/features/profile/view/interest/alcohal_screen.dart';
@@ -70,7 +72,13 @@ class AppPages {
     GetPage(name: AppRoutes.height, page: () => HeightScreen()),
     GetPage(name: AppRoutes.education, page: () => EducationScreen()),
     GetPage(name: AppRoutes.work, page: () => WorkScreen()),
-    GetPage(name: AppRoutes.faceCamera, page: () => FaceCameraScreen()),
+    GetPage(
+      name: AppRoutes.faceCamera,
+      page: () => FaceCameraScreen(),
+      binding: BindingsBuilder(
+        () => Get.lazyPut<FaceController>(() => FaceController()),
+      ),
+    ),
     GetPage(name: AppRoutes.workout, page: () => WorkoutScreen()),
     GetPage(name: AppRoutes.smoke, page: () => SmokeScreen()),
     GetPage(name: AppRoutes.alcohol, page: () => AlcohalScreen()),

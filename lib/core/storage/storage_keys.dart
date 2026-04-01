@@ -15,4 +15,5 @@ class StorageKeys {
   static const genderType = 'gender_type';
   static const smokerType = 'smoker_type';
   static const historyType = 'history_type';
+  static const userOnboard = 'user_onboard';
 }

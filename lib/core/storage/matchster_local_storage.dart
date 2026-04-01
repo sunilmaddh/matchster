@@ -204,6 +204,14 @@ class MatchsterLocalStorage {
     return _getBool(StorageKeys.historyType);
   }
 
+  Future<void> saveUserOnboard(bool onboard) async {
+    await _saveBool(StorageKeys.userOnboard, onboard);
+  }
+
+  Future<bool> getUserOnboard() async {
+    return _getBool(StorageKeys.userOnboard);
+  }
+
   Future<void> saveProfilePopupShown(bool shown) async {
     _checkInit();
     await _preferences!.setBool("profile_popup_shown", shown);
@@ -228,5 +236,6 @@ class MatchsterLocalStorage {
     await _preferences!.remove("user_email");
     await _preferences!.remove("user_image");
     await _preferences!.remove("profile_popup_shown");
+    await _preferences!.remove(StorageKeys.userOnboard);
   }
 }

@@ -12,6 +12,7 @@ import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/extentions/onboard_pages_ext.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
+import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/app_logger.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/app_toast_message.dart';
@@ -745,6 +746,7 @@ class OnboardController extends BaseController {
   bool get isOnboardingCompleted => !stepStatus.contains(false);
 
   Future<void> onboardingCompleted() async {
+    await MatchsterLocalStorage.instance.saveUserOnboard(true);
     final position = await fetchLocation();
     if (position == null) return;
 

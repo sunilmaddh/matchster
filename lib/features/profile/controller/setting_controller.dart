@@ -8,6 +8,7 @@ class SettingController extends BaseController {
   RxBool isLoggingOut = false.obs;
   Future<void> logout() async {
     MatchsterLocalStorage.instance.logout();
+
     navigateOffAll(AppRoutes.loginScreen);
   }
 }
