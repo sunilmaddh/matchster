@@ -29,5 +29,6 @@ abstract class AppRoutes {
       verifyEmailOtpScreen = "/verify_email_otp_screen",
       settingScreen = "/setting_screen",
       onboardPhotoPreviewView = "/onboard_photo_preview_view",
+      faceCameraScreen = "/face_camera_screen",
       currentLoadingScreen = "/current_loading_screen";
 }

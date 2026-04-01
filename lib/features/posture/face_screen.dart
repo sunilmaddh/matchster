@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:matchster/features/posture/controller/face_controller.dart';
 
-class FaceCameraScreen extends StatelessWidget {
+class FaceCameraScreens extends StatelessWidget {
   final controller = Get.find<FaceController>();
 
-  FaceCameraScreen({super.key});
+  FaceCameraScreens({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -9,8 +9,11 @@ import 'package:matchster/features/auth/views/login/login_field_with_button_view
 import 'package:matchster/features/auth/widgets/onboard_photo_preview_view.dart';
 import 'package:matchster/features/home/binding/landing_binding.dart';
 import 'package:matchster/features/home/view/landing_screen.dart';
+import 'package:matchster/features/posture/controller/face_comera_controller.dart';
 import 'package:matchster/features/posture/controller/face_controller.dart';
 import 'package:matchster/features/posture/face_screen.dart';
+import 'package:matchster/features/posture/services/matchster_face_detection_service.dart';
+import 'package:matchster/features/posture/view/face_camera_screen.dart';
 import 'package:matchster/features/profile/bindings/profile_binding.dart';
 import 'package:matchster/features/profile/view/interest/alcohal_screen.dart';
 import 'package:matchster/features/profile/view/interest/interest_screen.dart';
@@ -31,6 +34,7 @@ import 'package:matchster/features/profile/view/profile/profile_screen/work_scre
 import 'package:matchster/features/profile/view/profile/setting_screen.dart';
 import 'package:matchster/features/profile/view/verify_email_otp_screen.dart';
 import 'package:matchster/features/profile/view/verify_email_screen.dart';
+import 'package:matchster/main.dart';
 import 'package:matchster/routes/app_routes.dart';
 
 class AppPages {
@@ -75,10 +79,19 @@ class AppPages {
     GetPage(
       name: AppRoutes.faceCamera,
       page: () => FaceCameraScreen(),
-      binding: BindingsBuilder(
-        () => Get.lazyPut<FaceController>(() => FaceController()),
-      ),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<MatchsterFaceDetectionService>(
+          () => MatchsterFaceDetectionService(),
+        );
+        Get.lazyPut(
+          () => FaceCameraController(
+            cameras: camerasList,
+            faceDetectionService: Get.find<MatchsterFaceDetectionService>(),
+          ),
+        );
+      }),
     ),
+
     GetPage(name: AppRoutes.workout, page: () => WorkoutScreen()),
     GetPage(name: AppRoutes.smoke, page: () => SmokeScreen()),
     GetPage(name: AppRoutes.alcohol, page: () => AlcohalScreen()),
