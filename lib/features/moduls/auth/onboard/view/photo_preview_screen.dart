@@ -80,7 +80,6 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
           if (_onboardController.isImageUploading.isTrue) {
             return const Center(child: CircularProgressIndicator());
           }
-
           return AppButton(
             name: "Crop & Upload",
             isEnable: true,
@@ -101,6 +100,8 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
       ),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -119,8 +120,9 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
             ),
 
             /// 🔥 Image Preview
-            Expanded(
-              child: Center(
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Flexible(
                 child: AspectRatio(
                   aspectRatio: 3 / 4,
                   child: ClipRRect(

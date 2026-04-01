@@ -114,8 +114,9 @@ class _ProfilePhotoPreviewScreenState extends State<ProfilePhotoPreviewScreen> {
             ),
 
             /// 🔥 Image Preview
-            Expanded(
-              child: Center(
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Flexible(
                 child: AspectRatio(
                   aspectRatio: 3 / 4,
                   child: ClipRRect(
