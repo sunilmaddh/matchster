@@ -185,15 +185,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                           borderRadius: BorderRadius.circular(
                                             40.r,
                                           ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(
-                                                0.1,
-                                              ),
-                                              blurRadius: 10,
-                                              offset: const Offset(0, 5),
-                                            ),
-                                          ],
+                                          // boxShadow: [
+                                          //   BoxShadow(
+                                          //     color: Colors.black.withOpacity(
+                                          //       0.1,
+                                          //     ),
+                                          //     blurRadius: 10,
+                                          //     offset: const Offset(0, 5),
+                                          //   ),
+                                          // ],
                                         ),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.only(
@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               );
                                             }
                                             return Container(
-                                              color: const Color(0xffCDF0FF),
+                                              color: Colors.white,
                                             );
                                           }),
                                         ),
@@ -319,9 +319,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         cardBuilder: (context, index, _, __) {
                                           if (index >=
                                               _homeController
-                                                  .profileList
-                                                  .length) {
-                                            return const SizedBox();
+                                                      .profileList
+                                                      .length -
+                                                  1) {
+                                            return Container(
+                                              height: Get.height,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight: Radius.circular(20),
+                                                ),
+                                              ),
+                                            );
                                           }
                                           final cardId =
                                               _homeController

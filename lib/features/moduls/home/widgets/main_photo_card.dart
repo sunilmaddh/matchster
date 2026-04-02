@@ -33,7 +33,6 @@ class MainPhotoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onVerticalDragUpdate: (details) => onVerticalDrag(details.delta.dy),
-
       child: SizedBox(
         height: context.height,
         width: double.infinity,

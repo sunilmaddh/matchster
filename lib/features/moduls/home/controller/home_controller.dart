@@ -223,8 +223,6 @@ class HomeController extends GetxController {
         nextIndex < profileList.length ? nextIndex : previousIndex;
     _updateInShort();
 
-    debugPrint("New index $nextIndex ProfileList ${profileList.length}");
-
     if (newIndex == null || newIndex >= profileList.length - 1) {
       _loadMoreProfilesIfNeeded();
     }
@@ -334,7 +332,7 @@ class HomeController extends GetxController {
         );
       }
     }
-    if (profile.smoking!.isNotEmpty) {
+    if (profile.drinking != null && profile.smoking!.isNotEmpty) {
       final freq = frequencyFromApi(profile.smoking!);
       if (freq != null) {
         final smokeOption = HabitOption(

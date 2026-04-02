@@ -123,9 +123,9 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
             ),
 
             /// 🔥 Image Preview
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Flexible(
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(15),
                 child: AspectRatio(
                   aspectRatio: 3 / 4,
                   child: ClipRRect(
