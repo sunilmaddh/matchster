@@ -46,6 +46,7 @@ class HomeController extends GetxController {
   RxBool isFetchingMore = false.obs;
   bool _isProgrammaticSwipe = false;
   RxList<int> swipedCardIndexList = <int>[].obs;
+  final RxInt swiperKey = 0.obs;
 
   /* ----------------------------------------------------
    * GETTERS (SAFE)
@@ -63,9 +64,11 @@ class HomeController extends GetxController {
    * -------------------------------------------------- */
 
   void onTabTapped(int index) {
-    // if (selectedIndex.value == 0 && index != 0) {
-    //   removeAllSwipedCards();
-    // }
+    if (selectedIndex.value == 0 && index != 0) {
+      Future.delayed(const Duration(milliseconds: 50), () {
+        removeAllSwipedCardsAndReset();
+      });
+    }
     selectedIndex.value = index;
     if (pageController.hasClients) {
       pageController.jumpToPage(index);
@@ -80,30 +83,26 @@ class HomeController extends GetxController {
     }
   }
 
-  void removeAllSwipedCards() {
-    if (swipedUserIds.isEmpty) return;
+  void removeAllSwipedCardsAndReset() {
+    if (profileList.isEmpty) return;
 
-    profileList.removeWhere((item) => swipedUserIds.contains(item.userId));
+    final swipedIds = swipedUserIds.toSet();
+    final updatedList =
+        profileList.where((item) => !swipedIds.contains(item.userId)).toList();
+    profileList.clear();
+    profileList.assignAll(updatedList);
+
     swipedUserIds.clear();
-
-    if (profileList.isEmpty) {
-      currentIndex.value = 0;
-    } else if (currentIndex.value >= profileList.length) {
-      currentIndex.value = profileList.length - 1;
-    }
+    currentIndex.value = 0;
+    swiperKey.value++;
   }
-
-  /* ----------------------------------------------------
-   * PROFILE LIST
-   * -------------------------------------------------- */
 
   Future<void> getRetriveProfileList() async {
     try {
       isGettingProfile.value = true;
 
       final response = await _homeService.getRetriveProfileList();
-      profileList.clear();
-      profileListCount.clear();
+      await clearList();
       if (response.success && response.data?.profiles != null) {
         profileList.assignAll(response.data!.profiles!);
         profileListCount.assignAll(response.data!.profiles!);
@@ -145,8 +144,7 @@ class HomeController extends GetxController {
         filterType: filterType,
         filter: filter,
       );
-      profileList.clear();
-      profileListCount.clear();
+      await clearList();
       if (response.success &&
           response.data?.profiles != null &&
           response.data?.profiles != []) {
@@ -178,6 +176,11 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> clearList() async {
+    profileList.clear();
+    profileListCount.clear();
+    swipedUserIds.clear();
+  }
   /* ----------------------------------------------------
    * CREATE INTERACTION
    * -------------------------------------------------- */
@@ -242,14 +245,12 @@ class HomeController extends GetxController {
     }
 
     _isProgrammaticSwipe = false;
-    // final swipedUserId = profileList[previousIndex].userId;
-    // markCardAsSwiped(swipedUserId.toString());
+    final swipedUserId = profileList[previousIndex].userId;
+    markCardAsSwiped(swipedUserId.toString());
 
     final nextIndex = previousIndex + 1;
     currentIndex.value =
         nextIndex < profileList.length ? nextIndex : previousIndex;
-
-    debugPrint("Swiped list ${swipedCardIndexList.toString()}");
     _updateInShort();
 
     if (newIndex == null || newIndex >= profileList.length - 1) {
@@ -271,51 +272,7 @@ class HomeController extends GetxController {
       swipedCardIndexList.clear();
     }
   }
-  /* ----------------------------------------------------
-   * LIKE / DISLIKE BUTTON TAP
-   * -------------------------------------------------- */
 
-  // void handleInteraction({required bool isLikeAction}) async {
-  //   final profile = currentProfile;
-  //   if (profile == null) return;
-
-  //   isLike.value = isLikeAction;
-  //   isOverlay.value = true;
-
-  //   await createInterection(
-  //     userId: profile.userId!,
-  //     action: isLikeAction ? "like" : "dislike",
-  //   );
-
-  //   Future.delayed(const Duration(seconds: 2), () {
-  //     isOverlay.value = false;
-  //     isLike.value = false;
-  //     swiperController.swipe(
-  //       isLikeAction ? CardSwiperDirection.right : CardSwiperDirection.left,
-  //     );
-  //   });
-  //    Future.delayed(const Duration(milliseconds: 300), () {
-  //     if (previousIndex < profileList.length) {
-  //       profileList.removeAt(previousIndex);
-  //     }
-
-  //     /// Update UI safely
-  //     if (profileList.isNotEmpty) {
-  //       _updateInShort();
-  //     }
-
-  //     /// 🚀 Load more when only 1 left
-  //     if (profileList.length <= 1) {
-  //       _loadMoreProfilesIfNeeded();
-  //     }
-  //   });
-  //   if (profileList.isNotEmpty) {
-  //     _updateInShort();
-  //   }
-
-  //   /// 🚀 Load more if only 1 left
-  //   _loadMoreProfilesIfNeeded();
-  // }
   void handleInteraction({required bool isLikeAction}) {
     if (profileList.isEmpty) return;
 
@@ -343,9 +300,6 @@ class HomeController extends GetxController {
     });
   }
 
-  /* ----------------------------------------------------
-   * UPDATE "IN SHORT"
-   * -------------------------------------------------- */
   void playLike() {
     showLike.value = true;
     Future.delayed(const Duration(milliseconds: 800), () {

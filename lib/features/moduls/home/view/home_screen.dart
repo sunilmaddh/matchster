@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           0.65,
                                       child: CardSwiper(
                                         key: ValueKey(
-                                          _homeController.profileList.length,
+                                          _homeController.swiperKey.value,
                                         ),
                                         padding: EdgeInsets.zero,
                                         backCardOffset: const Offset(0, 0),
