@@ -490,15 +490,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                             .take(remaining)
                                                             .toList();
 
-                                                    for (var file
-                                                        in selectedFiles) {
-                                                      await Get.to(
-                                                        () =>
-                                                            ProfilePhotoPreviewScreen(
-                                                              imageFile: file,
-                                                            ),
-                                                      );
-                                                    }
+                                                    await _controller
+                                                        .processSelectedFiles(
+                                                          selectedFiles,
+                                                        );
+
+                                                    // for (var file
+                                                    //     in selectedFiles) {
+                                                    //   await Get.to(
+                                                    //     () =>
+                                                    //         ProfilePhotoPreviewScreen(
+                                                    //           imageFile: file,
+                                                    //           imageIndex: index,
+                                                    //         ),
+                                                    //   );
+                                                    // }
                                                   }
                                                 }
                                                 if (selectedImage != null &&
@@ -510,6 +516,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         ProfilePhotoPreviewScreen(
                                                           imageFile:
                                                               selectedImage!,
+                                                          imageIndex: index,
                                                         ),
                                                   );
                                                 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -53,7 +54,11 @@ class _GridPainter extends CustomPainter {
 class ProfilePhotoPreviewScreen extends StatefulWidget {
   final File imageFile;
 
-  const ProfilePhotoPreviewScreen({super.key, required this.imageFile});
+  const ProfilePhotoPreviewScreen({
+    super.key,
+    required this.imageFile,
+    required int imageIndex,
+  });
 
   @override
   State<ProfilePhotoPreviewScreen> createState() =>
@@ -72,7 +77,9 @@ class _ProfilePhotoPreviewScreenState extends State<ProfilePhotoPreviewScreen> {
         padding: 15.horizontalPadding + 20.verticalPadding,
         child: Obx(() {
           if (_profileController.isImageUploading.isTrue) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
           }
           return AppButton(
             name: "Crop & Upload",
@@ -114,7 +121,7 @@ class _ProfilePhotoPreviewScreenState extends State<ProfilePhotoPreviewScreen> {
             ),
 
             /// 🔥 Image Preview
-            Expanded(
+            Flexible(
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: AspectRatio(

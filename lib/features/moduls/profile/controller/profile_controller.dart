@@ -145,6 +145,7 @@ class ProfileController extends GetxController {
 
       if (response.success) {
         await getMyProfile(false);
+        AppNavigation.back();
       } else {
         AppToastMessage.show(
           title: AppConstants.errorTitle,
@@ -630,21 +631,17 @@ class ProfileController extends GetxController {
 
   Future<void> validateAndUploadPhoto({required File file}) async {
     try {
-      // isImageUploading(true);
+      isImageUploading(true);
 
       final isValid = await isFaceClear(file);
 
       if (!isValid) {
         isImageUploading(false);
 
-        if (Get.isOverlaysOpen || Get.key.currentState?.canPop() == true) {
-          Get.back();
-        }
-
         PhotoReviewBottomsheet.show(
           onImageSelected: (selectedImage) {
-            Get.back();
-            Get.to(() => ProfilePhotoPreviewScreen(imageFile: selectedImage));
+            Get.back(); // close bottomsheet
+            Get.back(result: {'success': false, 'retryFile': selectedImage});
           },
         );
         return;
@@ -652,12 +649,49 @@ class ProfileController extends GetxController {
 
       final success = await uploadPhotoW(imagePath: file.path);
       isImageUploading(false);
+
       if (success) {
-        Get.back();
+        Get.back(result: {'success': true});
+      } else {
+        AppToastMessage.show(
+          title: "Error",
+          message: "Photo upload failed. Please try again.",
+          isError: true,
+        );
+
+        PhotoReviewBottomsheet.show(
+          onImageSelected: (selectedImage) {
+            Get.back(); // close bottomsheet
+            Get.back(result: {'success': false, 'retryFile': selectedImage});
+          },
+        );
       }
     } catch (e) {
       isImageUploading(false);
       AppMethods.appPrint(message: e.toString());
+    }
+  }
+
+  Future<void> processSelectedFiles(List<File> selectedFiles) async {
+    int index = 0;
+
+    while (index < selectedFiles.length) {
+      final result = await Get.to<Map<String, dynamic>>(
+        () => ProfilePhotoPreviewScreen(
+          imageFile: selectedFiles[index],
+          imageIndex: index,
+        ),
+      );
+
+      if (result == null) break;
+
+      if (result['success'] == true) {
+        index++;
+      } else if (result['retryFile'] != null) {
+        selectedFiles[index] = result['retryFile'] as File;
+      } else {
+        break;
+      }
     }
   }
 

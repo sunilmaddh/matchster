@@ -7,6 +7,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/app_methods.dart';
+import 'package:matchster/core/utils/app_toast_message.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -204,69 +205,43 @@ class AddPhotoWidget extends StatelessWidget {
                                                           selectedImage
                                                               .path
                                                               .isNotEmpty) {
-                                                        _controller
-                                                            .isSelectingImage(
-                                                              true,
-                                                            );
+                                                        // _controller
+                                                        //     .isSelectingImage(
+                                                        //       true,
+                                                        //     );
                                                         Get.to(
                                                           () => PhotoPreviewScreen(
                                                             imageFile:
                                                                 selectedImage!,
                                                             index: index,
-                                                            page: 'onboard',
                                                           ),
-                                                        )!.whenComplete(() {
-                                                          _controller
-                                                              .isSelectingImage(
-                                                                false,
-                                                              );
-                                                        });
+                                                        );
                                                       }
                                                     } else {
                                                       final selectedImages =
                                                           await ImageUploadServices()
                                                               .pickImagesFromGallery();
 
-                                                      if (selectedImages !=
-                                                              null &&
-                                                          selectedImages
-                                                              .isNotEmpty) {
-                                                        _controller
-                                                            .isSelectingImage(
-                                                              true,
-                                                            );
+                                                      if (selectedImages!
+                                                          .isNotEmpty) {
+                                                        final filledCount =
+                                                            _controller.fileList
+                                                                .where(
+                                                                  (file) =>
+                                                                      file.isNotEmpty,
+                                                                )
+                                                                .length;
+                                                        final remaining =
+                                                            6 - filledCount;
 
-                                                        for (
-                                                          int i = 0;
-                                                          i <
-                                                              selectedImages
-                                                                  .length;
-                                                          i++
-                                                        ) {
-                                                          final nextIndex =
-                                                              _controller
-                                                                  .fileList
-                                                                  .indexWhere(
-                                                                    (file) =>
-                                                                        file.isEmpty,
-                                                                  );
+                                                        final selectedFile =
+                                                            selectedImages
+                                                                .take(remaining)
+                                                                .toList();
 
-                                                          if (nextIndex != -1) {
-                                                            await Get.to(
-                                                              () => PhotoPreviewScreen(
-                                                                imageFile:
-                                                                    selectedImages[i],
-                                                                index:
-                                                                    nextIndex,
-                                                                page: 'onboard',
-                                                              ),
-                                                            );
-                                                          }
-                                                        }
-
-                                                        _controller
-                                                            .isSelectingImage(
-                                                              false,
+                                                        await _controller
+                                                            .addSelectedFiles(
+                                                              selectedFile,
                                                             );
                                                       }
                                                     }
@@ -396,7 +371,6 @@ class AddPhotoWidget extends StatelessWidget {
                                                             imageFile:
                                                                 selectedImage!,
                                                             index: index,
-                                                            page: 'onboard',
                                                           ),
                                                         )!.whenComplete(() {
                                                           _controller
@@ -410,47 +384,39 @@ class AddPhotoWidget extends StatelessWidget {
                                                           await ImageUploadServices()
                                                               .pickImagesFromGallery();
 
-                                                      if (selectedImages !=
-                                                              null &&
-                                                          selectedImages
-                                                              .isNotEmpty) {
-                                                        _controller
-                                                            .isSelectingImage(
-                                                              true,
+                                                      // AppToastMessage.show(
+                                                      //   title: "Image",
+                                                      //   message:
+                                                      //       selectedImages
+                                                      //           .toString(),
+                                                      // );
+
+                                                      if (selectedImages!
+                                                          .isNotEmpty) {
+                                                        final filledCount =
+                                                            _controller.fileList
+                                                                .where(
+                                                                  (file) =>
+                                                                      file.isNotEmpty,
+                                                                )
+                                                                .length;
+                                                        final remaining =
+                                                            6 - filledCount;
+
+                                                        final selectedFile =
+                                                            selectedImages
+                                                                .take(remaining)
+                                                                .toList();
+
+                                                        await _controller
+                                                            .addSelectedFiles(
+                                                              selectedFile,
                                                             );
 
-                                                        for (
-                                                          int i = 0;
-                                                          i <
-                                                              selectedImages
-                                                                  .length;
-                                                          i++
-                                                        ) {
-                                                          final nextIndex =
-                                                              _controller
-                                                                  .fileList
-                                                                  .indexWhere(
-                                                                    (file) =>
-                                                                        file.isEmpty,
-                                                                  );
-
-                                                          if (nextIndex != -1) {
-                                                            await Get.to(
-                                                              () => PhotoPreviewScreen(
-                                                                imageFile:
-                                                                    selectedImages[i],
-                                                                index:
-                                                                    nextIndex,
-                                                                page: 'onboard',
-                                                              ),
-                                                            );
-                                                          }
-                                                        }
-
-                                                        _controller
-                                                            .isSelectingImage(
-                                                              false,
-                                                            );
+                                                        // _controller
+                                                        //     .isSelectingImage(
+                                                        //       false,
+                                                        //     );
                                                       }
                                                     }
                                                   } catch (e, s) {

@@ -6,6 +6,7 @@ import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/moduls/auth/login/controller/country_controller.dart';
 import 'package:matchster/features/moduls/home/widgets/search_widget.dart';
+import 'package:matchster/routes/app_navigation.dart';
 
 class CountryListScreen extends StatefulWidget {
   const CountryListScreen({super.key});
@@ -30,7 +31,9 @@ class _CountryListScreenState extends State<CountryListScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: "Country Codes",
-        onTop: () {},
+        onTop: () {
+          AppNavigation.back();
+        },
         isCenterTitle: false,
       ),
       body: Column(

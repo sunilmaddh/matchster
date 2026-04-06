@@ -17,11 +17,13 @@ class HeightScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: CircleButtonWidget(
-        icon: Icons.check,
-        isEnable: true,
-        onTap: () {},
-      ),
+      // floatingActionButton: CircleButtonWidget(
+      //   icon: Icons.check,
+      //   isEnable: true,
+      //   onTap: () {
+
+      //   },
+      // ),
       appBar: CustomAppBar(
         isCenterTitle: false,
         title: "Height",

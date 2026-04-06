@@ -85,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     for (var notifier in _arrowNotifiers.values) {
       notifier.dispose();
     }
+
     super.dispose();
   }
 
@@ -295,6 +296,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MediaQuery.of(context).size.height *
                                           0.65,
                                       child: CardSwiper(
+                                        key: ValueKey(
+                                          _homeController.profileList.length,
+                                        ),
                                         padding: EdgeInsets.zero,
                                         backCardOffset: const Offset(0, 0),
                                         controller:

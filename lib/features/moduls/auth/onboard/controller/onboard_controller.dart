@@ -94,12 +94,24 @@ class OnboardController extends GetxController {
 
   RxList<String> fileList = List.generate(6, (_) => '').obs;
   void updateFile(int index, String imageUrl) {
-    if (index < fileList.length) {
-      fileList[index] = imageUrl;
-      fileList.refresh();
-      updateButtonState();
-      // if (index == fileList.length - 1) isEnable.value = true;
+    if (index < 0 || index >= fileList.length) {
+      debugPrint("❌ Invalid index: $index");
+      return;
     }
+
+    if (imageUrl.trim().isEmpty) {
+      debugPrint("❌ Empty imageUrl ignored at index $index");
+      return;
+    }
+
+    debugPrint("✅ Updating index $index with $imageUrl");
+
+    fileList[index] = imageUrl;
+    fileList.refresh();
+
+    debugPrint("📦 Updated fileList: $fileList");
+
+    updateButtonState();
   }
 
   void removeFile(int index) {
@@ -871,35 +883,117 @@ class OnboardController extends GetxController {
       if (!isValid) {
         isImageUploading(false);
 
-        if (Get.isOverlaysOpen || Get.key.currentState?.canPop() == true) {
-          Get.back();
-        }
-
         PhotoReviewBottomsheet.show(
           onImageSelected: (selectedImage) {
-            Get.back();
-            Get.to(
-              PhotoPreviewScreen(
-                imageFile: selectedImage,
-                index: index,
-                page: 'onboard',
-              ),
-            );
+            Get.back(); // close bottomsheet
+            Get.back(result: {'success': false, 'retryFile': selectedImage});
           },
         );
         return;
       }
 
       final success = await uploadPhotoW(imagePath: file.path, index: index);
-
       isImageUploading(false);
 
       if (success) {
-        Get.back();
+        Get.back(result: {'success': true});
+      } else {
+        AppToastMessage.show(
+          title: "Error",
+          message: "Photo upload failed. Please try again.",
+          isError: true,
+        );
+
+        PhotoReviewBottomsheet.show(
+          onImageSelected: (selectedImage) {
+            Get.back(); // close bottomsheet
+            Get.back(result: {'success': false, 'retryFile': selectedImage});
+          },
+        );
       }
     } catch (e) {
       isImageUploading(false);
       AppMethods.appPrint(message: e.toString());
+    }
+  }
+
+  // Future<void> processSelectedFiles(
+  //   List<File> selectedFiles,
+  //   int selectedIndex,
+  // ) async {
+  //   int index = 0;
+
+  //   while (index < selectedFiles.length) {
+  //     final result = await Get.to<Map<String, dynamic>>(
+  //       () => PhotoPreviewScreen(
+  //         imageFile: selectedFiles[index],
+  //         index: selectedIndex,
+  //       ),
+  //     );
+
+  //     if (result == null) break;
+
+  //     if (result['success'] == true) {
+  //       index++;
+  //     } else if (result['retryFile'] != null) {
+  //       selectedFiles[index] = result['retryFile'] as File;
+  //     } else {
+  //       break;
+  //     }
+  //   }
+  // }
+  List<int> getEmptyIndexes() {
+    final emptyIndexes = <int>[];
+
+    for (int i = 0; i < fileList.length; i++) {
+      if (fileList[i].isEmpty) {
+        emptyIndexes.add(i);
+      }
+    }
+    return emptyIndexes;
+  }
+
+  Future<void> addSelectedFiles(List<File> selectedFiles) async {
+    final emptyIndexes = getEmptyIndexes();
+    if (emptyIndexes.isEmpty) {
+      AppToastMessage.show(
+        title: "Limit Reached",
+        message: "You can upload only 6 photos",
+        isError: true,
+      );
+      return;
+    }
+
+    final filesToProcess = selectedFiles.take(emptyIndexes.length).toList();
+
+    for (int i = 0; i < filesToProcess.length; i++) {
+      final targetIndex = emptyIndexes[i];
+      final file = filesToProcess[i];
+      debugPrint("Target index${targetIndex.toString()}");
+
+      final result = await Get.to<Map<String, dynamic>>(
+        () => PhotoPreviewScreen(imageFile: file, index: targetIndex),
+      );
+
+      if (result == null) {
+        break;
+      }
+
+      if (result['success'] == true) {
+        final imageUrl = result['imageUrl'] ?? '';
+        // updateFile(targetIndex, imageUrl);
+      } else if (result['retryFile'] != null) {
+        final retryFile = result['retryFile'] as File;
+
+        final retryResult = await Get.to<Map<String, dynamic>>(
+          () => PhotoPreviewScreen(imageFile: retryFile, index: targetIndex),
+        );
+
+        if (retryResult != null && retryResult['success'] == true) {
+          final imageUrl = retryResult['imageUrl'] ?? '';
+          updateFile(targetIndex, imageUrl);
+        }
+      }
     }
   }
 

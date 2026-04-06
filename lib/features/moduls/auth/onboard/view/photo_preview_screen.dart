@@ -54,13 +54,11 @@ class _GridPainter extends CustomPainter {
 class PhotoPreviewScreen extends StatefulWidget {
   final File imageFile;
   final int index;
-  final String page;
 
   const PhotoPreviewScreen({
     super.key,
     required this.imageFile,
     required this.index,
-    required this.page,
   });
 
   @override
@@ -123,7 +121,7 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
             ),
 
             /// 🔥 Image Preview
-            Expanded(
+            Flexible(
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: AspectRatio(

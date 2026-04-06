@@ -45,6 +45,7 @@ class HomeController extends GetxController {
   RxList<InshortList> inshortList = <InshortList>[].obs;
   RxBool isFetchingMore = false.obs;
   bool _isProgrammaticSwipe = false;
+  RxList<int> swipedCardIndexList = <int>[].obs;
 
   /* ----------------------------------------------------
    * GETTERS (SAFE)
@@ -62,9 +63,33 @@ class HomeController extends GetxController {
    * -------------------------------------------------- */
 
   void onTabTapped(int index) {
+    // if (selectedIndex.value == 0 && index != 0) {
+    //   removeAllSwipedCards();
+    // }
     selectedIndex.value = index;
     if (pageController.hasClients) {
       pageController.jumpToPage(index);
+    }
+  }
+
+  final RxList<String> swipedUserIds = <String>[].obs;
+
+  void markCardAsSwiped(String userId) {
+    if (!swipedUserIds.contains(userId)) {
+      swipedUserIds.add(userId);
+    }
+  }
+
+  void removeAllSwipedCards() {
+    if (swipedUserIds.isEmpty) return;
+
+    profileList.removeWhere((item) => swipedUserIds.contains(item.userId));
+    swipedUserIds.clear();
+
+    if (profileList.isEmpty) {
+      currentIndex.value = 0;
+    } else if (currentIndex.value >= profileList.length) {
+      currentIndex.value = profileList.length - 1;
     }
   }
 
@@ -217,10 +242,14 @@ class HomeController extends GetxController {
     }
 
     _isProgrammaticSwipe = false;
+    // final swipedUserId = profileList[previousIndex].userId;
+    // markCardAsSwiped(swipedUserId.toString());
 
     final nextIndex = previousIndex + 1;
     currentIndex.value =
         nextIndex < profileList.length ? nextIndex : previousIndex;
+
+    debugPrint("Swiped list ${swipedCardIndexList.toString()}");
     _updateInShort();
 
     if (newIndex == null || newIndex >= profileList.length - 1) {
@@ -234,6 +263,14 @@ class HomeController extends GetxController {
     await getProfileList(filterType: "basic", filter: 10);
   }
 
+  Future<void> removeSwipCardFromList() async {
+    if (swipedCardIndexList.isNotEmpty) {
+      for (var index in swipedCardIndexList) {
+        profileList.removeAt(index);
+      }
+      swipedCardIndexList.clear();
+    }
+  }
   /* ----------------------------------------------------
    * LIKE / DISLIKE BUTTON TAP
    * -------------------------------------------------- */
