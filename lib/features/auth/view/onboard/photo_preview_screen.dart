@@ -70,10 +70,10 @@ class PhotoPreviewScreen extends BaseView<OnboardPhotoController> {
 
 class _PhotoPreviewScreenState
     extends BaseViewState<OnboardPhotoController, PhotoPreviewScreen> {
-  @override
-  void onInit() {
-    controller.setPreviewData(file: widget.imageFile, index: widget.index);
-  }
+  // @override
+  // void onInit() {
+  //   controller.setPreviewData(file: widget.imageFile, index: widget.index);
+  // }
 
   @override
   Widget buildView(BuildContext context) {
@@ -92,7 +92,12 @@ class _PhotoPreviewScreenState
           return AppButton(
             name: 'Crop & Upload',
             isEnable: true,
-            onTop: controller.onCropAndUploadTap,
+            onTop: () {
+              controller.onCropAndUploadTap(
+                fileImage: widget.imageFile,
+                indexx: widget.index,
+              );
+            },
           );
         }),
       ),
@@ -131,16 +136,11 @@ class _PhotoPreviewScreenState
           aspectRatio: 3 / 4,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
-            child: Obx(() {
-              final previewFile =
-                  controller.previewImage.value ?? widget.imageFile;
-
-              return Image.file(
-                previewFile,
-                fit: BoxFit.cover,
-                filterQuality: FilterQuality.high,
-              );
-            }),
+            child: Image.file(
+              widget.imageFile,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.high,
+            ),
           ),
         ),
       ),

@@ -83,9 +83,12 @@ class OnboardPhotoController extends BaseController {
     previewIndex.value = index;
   }
 
-  Future<void> onCropAndUploadTap() async {
-    final file = previewImage.value;
-    final index = previewIndex.value;
+  Future<void> onCropAndUploadTap({
+    required File fileImage,
+    required int indexx,
+  }) async {
+    final file = fileImage;
+    final index = indexx;
 
     if (file == null || index == null) {
       setError('Image not found');
