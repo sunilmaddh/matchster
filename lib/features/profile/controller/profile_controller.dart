@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -10,6 +11,8 @@ import 'package:matchster/core/extentions/religion_level_ext.dart';
 import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/core/extentions/zodiac_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
+import 'package:matchster/core/utils/app_toast_message.dart';
+import 'package:matchster/features/auth/widgets/onboard_widget/photo_review_bottomsheet.dart';
 import 'package:matchster/features/home/controller/home_controller.dart';
 import 'package:matchster/features/home/models/habit_option.dart';
 import 'package:matchster/features/home/models/inshort_list.dart';
@@ -17,6 +20,7 @@ import 'package:matchster/features/profile/models/auto_complete_response.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
 import 'package:matchster/features/profile/models/place_details_response.dart';
 import 'package:matchster/features/profile/repositories/profile_repository.dart';
+import 'package:matchster/features/profile/view/profile/profile_update_screen/profile_photo_preview_screen.dart';
 
 class ProfileController extends BaseController {
   ProfileController({required this.profileRepository});
@@ -302,39 +306,39 @@ class ProfileController extends BaseController {
     }
   }
 
-  Future<bool> isFaceClear(File image) async {
-    final inputImage = InputImage.fromFile(image);
-    final faces = await _faceDetector.processImage(inputImage);
+  // Future<bool> isFaceClear(File image) async {
+  //   final inputImage = InputImage.fromFile(image);
+  //   final faces = await _faceDetector.processImage(inputImage);
 
-    if (faces.length != 1) return false;
+  //   if (faces.length != 1) return false;
 
-    final face = faces.first;
+  //   final face = faces.first;
 
-    if ((face.leftEyeOpenProbability ?? 0) < 0.5 ||
-        (face.rightEyeOpenProbability ?? 0) < 0.5) {
-      return false;
-    }
+  //   if ((face.leftEyeOpenProbability ?? 0) < 0.5 ||
+  //       (face.rightEyeOpenProbability ?? 0) < 0.5) {
+  //     return false;
+  //   }
 
-    if ((face.headEulerAngleY ?? 0).abs() > 15 ||
-        (face.headEulerAngleZ ?? 0).abs() > 15) {
-      return false;
-    }
+  //   if ((face.headEulerAngleY ?? 0).abs() > 15 ||
+  //       (face.headEulerAngleZ ?? 0).abs() > 15) {
+  //     return false;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  Future<bool> uploadValidatedPhoto(File file) async {
-    try {
-      final valid = await isFaceClear(file);
-      if (!valid) return false;
+  // Future<bool> uploadValidatedPhoto(File file) async {
+  //   try {
+  //     final valid = await isFaceClear(file);
+  //     if (!valid) return false;
 
-      return uploadPhoto(file.path);
-    } catch (e) {
-      AppMethods.appPrint(message: e.toString());
-      setError(e.toString());
-      return false;
-    }
-  }
+  //     return uploadPhoto(file.path);
+  //   } catch (e) {
+  //     AppMethods.appPrint(message: e.toString());
+  //     setError(e.toString());
+  //     return false;
+  //   }
+  // }
 
   Future<bool> uploadHallOfFame(List<String> imageUrlList) async {
     try {
@@ -462,4 +466,110 @@ class ProfileController extends BaseController {
   }
 
   void deleteProfile({required String profileId}) {}
+
+  Future<bool> isFaceClear(File image) async {
+    final inputImage = InputImage.fromFile(image);
+    final faces = await _faceDetector.processImage(inputImage);
+
+    if (faces.length != 1) return false;
+
+    final face = faces.first;
+    final imageSize = await _getImageSize(image);
+    final faceRect = face.boundingBox;
+
+    final edgeMargin = faceRect.width * 0.08;
+
+    if (faceRect.left <= edgeMargin ||
+        faceRect.top <= edgeMargin ||
+        faceRect.right >= imageSize.width - edgeMargin ||
+        faceRect.bottom >= imageSize.height - edgeMargin) {
+      return false;
+    }
+
+    // if ((face.headEulerAngleX ?? 0).abs() > 10 ||
+    //     (face.headEulerAngleY ?? 0).abs() > 10 ||
+    //     (face.headEulerAngleZ ?? 0).abs() > 10) {
+    //   return false;
+    // }
+
+    if ((face.leftEyeOpenProbability ?? 1) < 0.5 ||
+        (face.rightEyeOpenProbability ?? 1) < 0.5) {
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<Size> _getImageSize(File file) async {
+    final bytes = await file.readAsBytes();
+    final codec = await instantiateImageCodec(bytes);
+    final frame = await codec.getNextFrame();
+    return Size(frame.image.width.toDouble(), frame.image.height.toDouble());
+  }
+
+  Future<void> validateAndUploadPhoto({required File file}) async {
+    try {
+      // isImageUploading(true);
+
+      final isValid = await isFaceClear(file);
+
+      if (!isValid) {
+        // isImageUploading(false);
+
+        PhotoReviewBottomsheet.show(
+          onImageSelected: (selectedImage) {
+            Get.back(); // close bottomsheet
+            Get.back(result: {'success': false, 'retryFile': selectedImage});
+          },
+        );
+        return;
+      }
+
+      final success = await uploadPhoto(file.path);
+      // isImageUploading(false);
+
+      if (success) {
+        Get.back(result: {'success': true});
+      } else {
+        AppToastMessage.show(
+          title: "Error",
+          message: "Photo upload failed. Please try again.",
+          isError: true,
+        );
+
+        PhotoReviewBottomsheet.show(
+          onImageSelected: (selectedImage) {
+            Get.back(); // close bottomsheet
+            Get.back(result: {'success': false, 'retryFile': selectedImage});
+          },
+        );
+      }
+    } catch (e) {
+      // isImageUploading(false);
+      AppMethods.appPrint(message: e.toString());
+    }
+  }
+
+  Future<void> processSelectedFiles(List<File> selectedFiles) async {
+    int index = 0;
+
+    while (index < selectedFiles.length) {
+      final result = await Get.to<Map<String, dynamic>>(
+        () => ProfilePhotoPreviewScreen(
+          imageFile: selectedFiles[index],
+          imageIndex: index,
+        ),
+      );
+
+      if (result == null) break;
+
+      if (result['success'] == true) {
+        index++;
+      } else if (result['retryFile'] != null) {
+        selectedFiles[index] = result['retryFile'] as File;
+      } else {
+        break;
+      }
+    }
+  }
 }

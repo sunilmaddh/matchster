@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:matchster/features/auth/binding/auth_binding.dart';
@@ -53,7 +55,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.profilePhotoPreviewScreen,
-      page: () => ProfilePhotoPreviewScreen(),
+      page: () => ProfilePhotoPreviewScreen(imageFile: File(""), imageIndex: 0),
     ),
     GetPage(name: AppRoutes.countryListScreen, page: () => CountryListScreen()),
 

@@ -107,9 +107,11 @@ class ProfileImageController extends BaseController {
         final remaining = 6 - hallOfFames.length;
         final selectedFiles = files.take(remaining).toList();
 
-        for (final file in selectedFiles) {
-          navigateTo(AppRoutes.profilePhotoPreviewScreen, arguments: file);
-        }
+        profileController.processSelectedFiles(selectedFiles);
+
+        // for (final file in selectedFiles) {
+        //   navigateTo(AppRoutes.profilePhotoPreviewScreen, arguments: file);
+        // }
       }
     } catch (e, s) {
       AppMethods.appPrint(message: e.toString());

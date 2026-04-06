@@ -85,6 +85,7 @@ class CommonWidget extends StatelessWidget {
                           },
                           child: Container(
                             margin: 5.verticalPadding,
+                            padding: 10.horizontalPadding + 5.verticalPadding,
 
                             decoration: BoxDecoration(
                               gradient:

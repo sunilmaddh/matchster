@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:matchster/core/base/base_controller.dart';
-import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/app_logger.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart'
     show ProfileController;
