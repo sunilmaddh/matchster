@@ -1,7 +1,7 @@
 import 'package:get/route_manager.dart';
-import 'package:matchster/features/moduls/auth/login/view/login_screen.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/onboard_screen.dart';
-import 'package:matchster/features/moduls/home/view/landing_screen.dart';
+import 'package:matchster/features/auth/view/login/login_screen.dart';
+import 'package:matchster/features/auth/view/onboard/onboard_screen.dart';
+import 'package:matchster/features/home/view/landing_screen.dart';
 import 'package:matchster/routes/app_routes.dart';
 
 class AppPages {

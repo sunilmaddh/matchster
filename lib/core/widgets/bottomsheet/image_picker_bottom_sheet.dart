@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
+import 'package:matchster/features/auth/helper/onboard_halper.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/services/image_upload_services.dart';
 

@@ -3,5 +3,6 @@ class AppRoutes {
       onboardScreen = '/onboard_screen',
       landingScreen = '/landing_screen',
       verifyEmailScreen = "/verify_email_screen",
+      currentLoadingScreen = "/current_loading_screen",
       loginScreen = '/login_screen';
 }
