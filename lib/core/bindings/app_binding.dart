@@ -35,6 +35,7 @@ class AppBinding extends Bindings {
       () => OnboardPhotoController(
         onboardingRepository: Get.find(),
         faceService: Get.find(),
+        controller: Get.find(),
       ),
     );
     Get.lazyPut<OnboardLocationController>(

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/extentions/onboard_pages_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
+import 'package:matchster/features/auth/auth_controller/onboard_photo_controller.dart';
 import 'package:matchster/features/auth/helper/onboard_halper.dart';
 import 'package:matchster/features/auth/model/response/otp_verification_response.dart';
 import 'package:matchster/features/auth/repositories/onboard_repository.dart';
@@ -246,7 +247,7 @@ class OnboardController extends BaseController {
         return addDateWith(dateWith: dateWithList);
 
       case OnboardStep.allOfame:
-        return true;
+        return Get.find<OnboardPhotoController>().saveHallOfFame();
     }
   }
 

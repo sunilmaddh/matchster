@@ -122,10 +122,8 @@ class OnboardLocationController extends BaseController {
 
   Future<void> completeOnboarding() async {
     await MatchsterLocalStorage.instance.saveUserOnboard(true);
-
     final position = await fetchLocation();
     if (position == null) return;
-
     final address = await getAddress(
       lat: position.latitude,
       lng: position.longitude,

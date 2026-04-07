@@ -6,15 +6,16 @@ import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
+import 'package:matchster/features/auth/auth_controller/onboard_location_controller.dart';
 
 class CurrentLoadingScreen extends StatelessWidget {
   CurrentLoadingScreen({super.key});
 
-  final _controller = Get.find<OnboardController>();
+  final _controller = Get.find<OnboardLocationController>();
 
   @override
   Widget build(BuildContext context) {
-    // _controller.onboardingCompleted();
+    _controller.completeOnboarding();
     return Scaffold(
       body: Center(
         child: Column(

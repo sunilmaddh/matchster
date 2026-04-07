@@ -36,11 +36,8 @@ class OnboardPageViewBuilder extends StatelessWidget {
                 isEnable: _onboardController.isButtonEnabled.value,
                 onTap: () async {
                   if (!_onboardController.isButtonEnabled.value) return;
-
                   _onboardController.isNextPageEnable.value = false;
-
                   final current = _onboardController.currentIndex.value;
-
                   final isSuccess = await _onboardController.submitStep(
                     current,
                   );

@@ -8,17 +8,21 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/core/utils/app_methods.dart';
+import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
 import 'package:matchster/features/auth/repositories/onboard_repository.dart';
 import 'package:matchster/features/auth/view/onboard/photo_preview_screen.dart';
 import 'package:matchster/features/auth/widgets/photo_review_bottomsheet.dart';
+import 'package:matchster/routes/app_routes.dart';
 
 class OnboardPhotoController extends BaseController {
   OnboardPhotoController({
     required this.onboardingRepository,
     required this.faceService,
+    required this.controller,
   });
   final OnboardingRepository onboardingRepository;
   final FaceDetectionService faceService;
+  final OnboardController controller;
   final Rx<File?> faceImage = Rx<File?>(null);
   final Rx<File?> postureImage = Rx<File?>(null);
   final Rx<Face?> detectedFace = Rx<Face?>(null);
@@ -198,18 +202,20 @@ class OnboardPhotoController extends BaseController {
       showLoading(true);
       clearError();
       clearSuccess();
-
       final filterList = fileList.where((e) => e.isNotEmpty).toList();
       final response = await onboardingRepository.allOfFame(
         imageListUrl: filterList,
       );
 
       if (!response.success) {
-        setError(response.message ?? 'Failed to save photos');
+        setError(response.message);
         return false;
       }
+      if (response.success) {
+        setSuccess(response.message);
+        navigateOff(AppRoutes.currentLoadingScreen);
+      }
 
-      setSuccess(response.message ?? 'Photos saved successfully');
       return true;
     } catch (e) {
       setError('Failed to save photos');
@@ -230,7 +236,6 @@ class OnboardPhotoController extends BaseController {
 
       if (!isValid) {
         isImageUploading(false);
-
         PhotoReviewBottomsheet.show(
           onImageSelected: (selectedImage) {
             Get.back(); // close bottomsheet
@@ -239,11 +244,11 @@ class OnboardPhotoController extends BaseController {
         );
         return;
       }
-
       final success = await uploadPhoto(imagePath: file.path, index: index);
       isImageUploading(false);
 
       if (success) {
+        controller.updateButtonState();
         Get.back(result: {'success': true});
       } else {
         setError("Photo upload failed. Please try again.");
