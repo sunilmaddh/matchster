@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:matchster/core/network/base_service.dart';
+import 'package:matchster/core/services/face_detection_service.dart';
 import 'package:matchster/features/auth/auth_controller/country_controller.dart';
 import 'package:matchster/features/auth/auth_controller/login_controller.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
@@ -29,8 +30,12 @@ class AppBinding extends Bindings {
       () => OnboardController(onboardingRepository: Get.find()),
       fenix: true,
     );
+    Get.lazyPut<FaceDetectionService>(() => FaceDetectionService());
     Get.lazyPut<OnboardPhotoController>(
-      () => OnboardPhotoController(onboardingRepository: Get.find()),
+      () => OnboardPhotoController(
+        onboardingRepository: Get.find(),
+        faceService: Get.find(),
+      ),
     );
     Get.lazyPut<OnboardLocationController>(
       () => OnboardLocationController(onboardingRepository: Get.find()),

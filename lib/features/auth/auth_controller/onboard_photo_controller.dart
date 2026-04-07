@@ -7,20 +7,18 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/services/face_detection_service.dart';
-import 'package:matchster/core/services/image_upload_services.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/features/auth/repositories/onboard_repository.dart';
 import 'package:matchster/features/auth/view/onboard/photo_preview_screen.dart';
 import 'package:matchster/features/auth/widgets/photo_review_bottomsheet.dart';
 
 class OnboardPhotoController extends BaseController {
-  OnboardPhotoController({required this.onboardingRepository});
-
+  OnboardPhotoController({
+    required this.onboardingRepository,
+    required this.faceService,
+  });
   final OnboardingRepository onboardingRepository;
-
-  final ImageUploadServices _imageService = ImageUploadServices();
-  final FaceDetectionService _faceService = FaceDetectionService();
-
+  final FaceDetectionService faceService;
   final Rx<File?> faceImage = Rx<File?>(null);
   final Rx<File?> postureImage = Rx<File?>(null);
   final Rx<Face?> detectedFace = Rx<Face?>(null);
@@ -38,15 +36,6 @@ class OnboardPhotoController extends BaseController {
   final RxList<String> fileList = List.generate(6, (_) => '').obs;
 
   late final FaceDetector faceDetector;
-
-  final FaceDetector _faceDetector = FaceDetector(
-    options: FaceDetectorOptions(
-      enableContours: true,
-      enableClassification: true,
-      performanceMode: FaceDetectorMode.accurate,
-    ),
-  );
-
   @override
   void onInit() {
     super.onInit();
@@ -147,112 +136,6 @@ class OnboardPhotoController extends BaseController {
     return emptyIndexes;
   }
 
-  // Future<void> pickImageFromCamera() async {
-  //   try {
-  //     isProcessing.value = true;
-  //     clearError();
-
-  //     final file = await _imageService.getImageFromCamera();
-  //     if (file == null) {
-  //       setError('No image captured');
-  //       return;
-  //     }
-
-  //     faceImage.value = file;
-  //     await detectFaceFromImage(file);
-
-  //     Future.delayed(const Duration(seconds: 1), () {
-  //       isFaceRecognigation.value = true;
-  //     });
-  //     Future.delayed(const Duration(seconds: 3), () {
-  //       isHumanProccessing.value = true;
-  //     });
-  //     Future.delayed(const Duration(seconds: 6), () {
-  //       isHumanProccessingStep2.value = true;
-  //     });
-  //   } catch (e) {
-  //     setError('Camera failed');
-  //   } finally {
-  //     isProcessing.value = false;
-  //   }
-  // }
-
-  // Future<void> pickImageFromCameraForPosture() async {
-  //   try {
-  //     isProcessing.value = true;
-  //     clearError();
-
-  //     final file = await _imageService.getImageFromCamera();
-  //     if (file == null) {
-  //       setError('No image captured');
-  //       return;
-  //     }
-
-  //     postureImage.value = file;
-  //   } catch (e) {
-  //     setError('Camera failed');
-  //   } finally {
-  //     isProcessing.value = false;
-  //   }
-  // }
-
-  // Future<void> pickImageFromGallery() async {
-  //   try {
-  //     isProcessing.value = true;
-  //     clearError();
-
-  //     final file = await _imageService.getImageFromGallery();
-  //     if (file == null) {
-  //       setError('No image selected');
-  //       return;
-  //     }
-
-  //     await detectFaceFromImage(file);
-  //   } catch (e) {
-  //     setError('Gallery failed');
-  //   } finally {
-  //     isProcessing.value = false;
-  //   }
-  // }
-
-  // Future<void> detectFaceFromImage(File file) async {
-  //   try {
-  //     faceImage.value = file;
-  //     detectedFace.value = null;
-  //     imageSize.value = null;
-
-  //     final inputImage = InputImage.fromFile(file);
-  //     final faces = await _faceDetector.processImage(inputImage);
-
-  //     if (faces.isNotEmpty) {
-  //       detectedFace.value = faces.first;
-  //     } else {
-  //       setError('No face detected. Try again with better lighting.');
-  //     }
-
-  //     final decodedImage =  decodeImageFromList(await file.readAsBytes());
-  //     imageSize.value = Size(
-  //       decodedImage.,
-  //       decodedImage.height.toDouble(),
-  //     );
-  //   } catch (e) {
-  //     setError('Face detection failed');
-  //   }
-  // }
-
-  // Future<void> analyzeFace(File image) async {
-  //   Future.delayed(const Duration(seconds: 2), () async {
-  //     detectedFace.value = await _faceService.detectPrimaryFace(image);
-  //   });
-  // }
-
-  // void resetData() {
-  //   faceImage.value = null;
-  //   postureImage.value = null;
-  //   detectedFace.value = null;
-  //   imageSize.value = null;
-  // }
-
   Future<bool> isFaceClear(File image) async {
     final inputImage = InputImage.fromFile(image);
     final faces = await faceDetector.processImage(inputImage);
@@ -317,7 +200,6 @@ class OnboardPhotoController extends BaseController {
       clearSuccess();
 
       final filterList = fileList.where((e) => e.isNotEmpty).toList();
-
       final response = await onboardingRepository.allOfFame(
         imageListUrl: filterList,
       );
@@ -365,12 +247,6 @@ class OnboardPhotoController extends BaseController {
         Get.back(result: {'success': true});
       } else {
         setError("Photo upload failed. Please try again.");
-        // AppToastMessage.show(
-        //   title: "Error",
-        //   message: "Photo upload failed. Please try again.",
-        //   isError: true,
-        // );
-
         PhotoReviewBottomsheet.show(
           onImageSelected: (selectedImage) {
             Get.back(); // close bottomsheet
@@ -388,11 +264,7 @@ class OnboardPhotoController extends BaseController {
     final emptyIndexes = getEmptyIndexes();
     if (emptyIndexes.isEmpty) {
       setError("You can upload only 6 photos");
-      // AppToastMessage.show(
-      //   title: "Limit Reached",
-      //   message: "You can upload only 6 photos",
-      //   isError: true,
-      // );
+
       return;
     }
 
@@ -401,8 +273,6 @@ class OnboardPhotoController extends BaseController {
     for (int i = 0; i < filesToProcess.length; i++) {
       final targetIndex = emptyIndexes[i];
       final file = filesToProcess[i];
-      debugPrint("Target index${targetIndex.toString()}");
-
       final result = await Get.to<Map<String, dynamic>>(
         () => PhotoPreviewScreen(imageFile: file, index: targetIndex),
       );
@@ -410,17 +280,11 @@ class OnboardPhotoController extends BaseController {
       if (result == null) {
         break;
       }
-
-      if (result['success'] == true) {
-        final imageUrl = result['imageUrl'] ?? '';
-        // updateFile(targetIndex, imageUrl);
-      } else if (result['retryFile'] != null) {
+      if (result['retryFile'] != null) {
         final retryFile = result['retryFile'] as File;
-
         final retryResult = await Get.to<Map<String, dynamic>>(
           () => PhotoPreviewScreen(imageFile: retryFile, index: targetIndex),
         );
-
         if (retryResult != null && retryResult['success'] == true) {
           final imageUrl = retryResult['imageUrl'] ?? '';
           updateFile(targetIndex, imageUrl);
@@ -431,9 +295,8 @@ class OnboardPhotoController extends BaseController {
 
   @override
   void onClose() {
-    _faceDetector.close();
     faceDetector.close();
-    _faceService.dispose();
+    faceService.dispose();
     super.onClose();
   }
 }
