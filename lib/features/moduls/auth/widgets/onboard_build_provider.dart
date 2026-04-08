@@ -1,73 +1,80 @@
+// ignore: must_be_immutable
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
-import 'package:matchster/core/constants/app_colors.dart';
+import 'package:get/get.dart';
+import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/features/moduls/auth/onboard/controller/onboard_controller.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/face_recognisation.dart';
 import 'package:matchster/features/moduls/auth/widgets/matchster_progress_indicator.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
-// ignore: must_be_immutable
 class OnboardPageViewBuilder extends StatelessWidget {
-  final PageController _pageController = PageController();
-  final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
-  final List<Widget> pages;
-
   OnboardPageViewBuilder({super.key, required this.pages});
 
+  final List<Widget> pages;
   final _onboardController = Get.find<OnboardController>();
+
   @override
   Widget build(BuildContext context) {
+    // sync initial index for progress indicator
+    _onboardController.currentIndex.value =
+        _onboardController.firstIncompleteIndex;
+
     return Scaffold(
+      floatingActionButton: Obx(
+        () => AnimatedPadding(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(
+            bottom: 0.h,
+            //  _onboardController.isBottomSheetOpen.isTrue ? 320.h : 0.h,
+          ),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: 10.allPadding,
+              child: CircleButtonWidget(
+                isEnable: _onboardController.isButtonEnabled.value,
+                onTap: () async {
+                  if (!_onboardController.isButtonEnabled.value) return;
+
+                  _onboardController.isNextPageEnable.value = false;
+
+                  final current = _onboardController.currentIndex.value;
+
+                  final isSuccess = await _onboardController.submitStep(
+                    current,
+                  );
+
+                  if (isSuccess) {
+                    _onboardController.completeStep(current);
+                  }
+
+                  AppMethods.hideKeyboard();
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+
       body: Column(
         children: [
           MatchsterProgressIndicator(
             isLarge: true,
             pages: pages,
-            valueCurrentIndex: _currentIndex,
+            valueCurrentIndex: _onboardController.currentIndex,
           ),
           Expanded(
             child: PageView.builder(
-              controller: _pageController,
+              controller: _onboardController.pageController,
               itemCount: pages.length,
+              physics: const NeverScrollableScrollPhysics(),
               onPageChanged: (index) {
-                _currentIndex.value = index;
+                _onboardController.currentIndex.value = index;
+                _onboardController.isButtonEnabled;
+                _onboardController.updateButtonState();
               },
-              itemBuilder: (context, index) {
-                return pages[index];
-              },
-            ),
-          ),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: ValueListenableBuilder<int>(
-              valueListenable: _currentIndex,
-              builder: (context, currentIndex, child) {
-                return Padding(
-                  padding: 10.allPadding,
-                  child: Obx(
-                    () => CircleButtonWidget(
-                      isEnable: _onboardController.isEnable.value,
-                      onTap: () {
-                        if (currentIndex == pages.length - 1) {
-                          // var data = AppMethods.getstoreQuestionAnswer();
-                          Get.to(FaceRecogonizationWidget());
-                          // AppNavigation.to(AppRoutes.congratulationsScreen);
-                        } else {
-                          _pageController.nextPage(
-                            duration: Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                );
-              },
+              itemBuilder: (_, index) => pages[index],
             ),
           ),
         ],

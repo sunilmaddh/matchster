@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-
 class MatchsterProgressIndicator extends StatelessWidget {
   const MatchsterProgressIndicator({
     super.key,
@@ -31,17 +31,18 @@ class MatchsterProgressIndicator extends StatelessWidget {
 
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width:
-                      isCurrent
-                          ? (isLarge ? 28.w : 20.w)
-                          : (isLarge ? 22.w : 16.w),
-                  height: isLarge ? 8.h : 6.h,
+                  // margin: 5.horizontalPadding,
+                  width: isCurrent ? 50.w : 50.w,
+                  height: 6.h,
                   decoration: BoxDecoration(
-                    color:
+                    gradient:
                         isCompleted || isCurrent
-                            ? const Color(0xff1B8CF5)
-                            : const Color(0xffD1E8FD),
+                            ? AppColors.gradiantPrimary
+                            : LinearGradient(
+                              colors: [Color(0xffD1E8FD), Color(0xffD1E8FD)],
+                            ),
+
+                    // color:
                     borderRadius: BorderRadius.circular(6),
                   ),
                 );
@@ -51,11 +52,11 @@ class MatchsterProgressIndicator extends StatelessWidget {
             10.wBox,
 
             CommonText.text(
-              '${currentIndex + 1} / ${pages.length}',
+              '${currentIndex + 1}/${pages.length}',
 
               fontSize: isLarge ? 16.sp : 14.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xff1B8CF5),
+              color: AppColors.blackColor,
             ),
           ],
         );

@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:matchster/core/constants/app_assets.dart';
-import 'package:matchster/features/moduls/auth/onboard/view/face_recognisation.dart';
-import 'package:matchster/features/moduls/auth/widgets/name_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/add_photo_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/data_with_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/dob_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/gender_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/hieght_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/view/name_screen.dart';
+
+enum OnboardStep { name, gender, dob, height, dateWith, allOfame }
 
 class OnboardHalper {
-  static const List<String> radioList = ["Man", "Woman", "Non-Binary"];
+  static const List<String> radioList = ["Men", "Women", "Others"];
 
   static const List<Map<String, dynamic>> likeList = [
     {"value": "Baking", "image": AppAssets.bakimgAssets},
@@ -38,12 +44,8 @@ class OnboardHalper {
     GenderWidget(),
     DobWidget(),
     YourHeightWidget(),
-    LikeWidget(),
-    LanguageListWidget(),
-    ReligionWidget(),
     DateWidget(),
     AddPhotoWidget(),
-    FaceRecogonizationWidget(),
   ];
 
   static const List<Map<String, dynamic>> addPhotoOption = [
@@ -53,7 +55,7 @@ class OnboardHalper {
     {"image": AppAssets.cameraAssets, "text": "Camera"},
   ];
 
-  static const List<String> dateList = ["Man", "Woman", "Others"];
+  static const List<String> dateList = ["men", "women", "others"];
 
   static List<String> heightListFeet = List.generate(
     7,
@@ -91,4 +93,52 @@ class OnboardHalper {
     "Jain",
     "Sikh",
   ];
+  static final List<OnboardStep> steps = [
+    OnboardStep.name,
+    OnboardStep.gender,
+    OnboardStep.dob,
+    OnboardStep.height,
+    OnboardStep.dateWith,
+    OnboardStep.allOfame,
+  ];
+
+  List<HeightItem> generateHeightList() {
+    final List<HeightItem> list = [];
+
+    for (int feet = 3; feet <= 7; feet++) {
+      for (int inch = 0; inch < 12; inch++) {
+        // Min = 5'1"
+        if (feet == 5 && inch < 0) continue;
+
+        // Max = 7'10"
+        if (feet == 7 && inch > 0) break;
+
+        final double cm = ((feet * 12 + inch) * 2.54);
+
+        list.add(
+          HeightItem(
+            feet: feet,
+            inch: inch,
+            cm: cm,
+            label: "$feet feet  $inch inch  (${cm.toStringAsFixed(2)} cm)",
+          ),
+        );
+      }
+    }
+    return list;
+  }
+}
+
+class HeightItem {
+  final int feet;
+  final int inch;
+  final double cm;
+  final String label;
+
+  HeightItem({
+    required this.feet,
+    required this.inch,
+    required this.cm,
+    required this.label,
+  });
 }

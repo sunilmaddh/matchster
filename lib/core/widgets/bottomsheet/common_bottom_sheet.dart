@@ -3,122 +3,100 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
+import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
+import 'package:matchster/features/moduls/auth/onboard/halper/onboard_halper.dart';
 
 class CommonBottomSheet {
-  static void showFullWidthCupertinoPicker({
+  static Future<void> showHeightPicker({
     required BuildContext context,
-    required List<String> listFeet,
-    required List<String> listInch,
-    required Function(String feet, String inch) onSelected,
-    required String defaultFeet,
-    required String defaultInch,
-    required RxBool isNotFeet,
+    required List<HeightItem> heightList,
+    required HeightItem defaultValue,
+    required Function(HeightItem value) onSelected,
+    required VoidCallback onTap,
+    required final RxBool isEnable,
   }) {
-    int selectedFeetIndex = listFeet.indexOf(defaultFeet);
-    int selectedInchIndex = listInch.indexOf(defaultInch);
-
-    if (selectedFeetIndex == -1) selectedFeetIndex = 0;
-    if (selectedInchIndex == -1) selectedInchIndex = 0;
-
-    FixedExtentScrollController feetController = FixedExtentScrollController(
-      initialItem: selectedFeetIndex,
-    );
-    FixedExtentScrollController inchController = FixedExtentScrollController(
-      initialItem: selectedInchIndex,
+    int selectedIndex = heightList.indexWhere(
+      (e) => e.feet == defaultValue.feet && e.inch == defaultValue.inch,
     );
 
-    String selectedFeet = listFeet[selectedFeetIndex];
-    String selectedInch = listInch[selectedInchIndex];
+    if (selectedIndex < 0) selectedIndex = 0;
 
-    CustomBottomSheet.show(
-      context: context,
+    final controller = FixedExtentScrollController(initialItem: selectedIndex);
+
+    /// ✅ IMPORTANT: return the Future
+    return CustomBottomSheet.show(
       child: SizedBox(
         height: 300.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// CLOSE BUTTON
             Obx(
-              () => Expanded(
-                child: CupertinoPicker(
-                  scrollController: feetController,
-                  looping: true,
-                  itemExtent: 50,
-                  squeeze: 1.0,
-                  diameterRatio: 2.0,
-                  onSelectedItemChanged: (int index) {
-                    selectedFeet = listFeet[index];
-                    onSelected(selectedFeet, selectedInch);
-                  },
-                  children:
-                      listFeet.map((e) {
-                        return Center(
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: e,
-                              style: TextStyle(
-                                fontSize: 20.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: isNotFeet.isTrue ? "" : " feet",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(),
+              () => Align(
+                alignment: Alignment.centerRight,
+                child: CircleButtonWidget(
+                  size: 50,
+                  isEnable: isEnable.value,
+
+                  onTap: onTap,
+                  // _controller.isButtonEnabled.value,
+                  // onTap: () async {
+                  //   if (_controller.isButtonEnabled.value) {
+                  //     _controller.isNextPageEnable.value = false;
+                  //     final current = _controller.currentIndex.value;
+                  //     final isSuccess = await _controller.submitStep(
+                  //       current,
+                  //     );
+
+                  //     _controller.completeStep(current);
+                  //   }
+                  //   AppMethods.hideKeyboard();
+
+                  //   // if (!isSuccess) return;
+                  //   // _onboardController.completeStep(current);
+                  // },
                 ),
               ),
             ),
 
-            // Inch Picker
-            Obx(
-              () => Expanded(
-                child: CupertinoPicker(
-                  scrollController: inchController,
-                  looping: true,
-                  itemExtent: 50,
-                  squeeze: 1.0,
-                  diameterRatio: 2.0,
-                  onSelectedItemChanged: (int index) {
-                    selectedInch = listInch[index];
-                    onSelected(selectedFeet, selectedInch);
-                  },
-                  children:
-                      listInch.map((e) {
-                        return Center(
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: isNotFeet.isTrue ? ".$e" : e,
+            /// HEIGHT PICKER (FIXED)
+            Expanded(
+              child: CupertinoPicker(
+                scrollController: controller,
+                itemExtent: 50,
+                looping: true,
+                onSelectedItemChanged: (index) {
+                  onSelected(heightList[index]);
+                },
+                children:
+                    heightList.map((item) {
+                      return Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "${item.feet} feet   ${item.inch} inch",
                               style: TextStyle(
-                                fontSize: 20.sp,
+                                fontFamily: "Caros",
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w600,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w500,
                               ),
-                              children: [
-                                TextSpan(
-                                  text: isNotFeet.isTrue ? "Cm" : " inch",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
-                        );
-                      }).toList(),
-                ),
+                            20.wBox,
+                            Text(
+                              "(${item.cm.toStringAsFixed(2)} cm)",
+                              style: TextStyle(
+                                fontFamily: "Caros",
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
               ),
             ),
           ],

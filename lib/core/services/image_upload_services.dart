@@ -9,16 +9,52 @@ class ImageUploadServices {
   final ImagePicker _picker = ImagePicker();
   late File imagePath = File("");
 
+  bool _isPicking = false;
+  void clearImageMemory() {
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
+  }
+
   Future<File?> pickImageFromCamera() async {
-    XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if (image == null) return null; // User canceled
-    return File(image.path);
+    if (_isPicking) return null; // prevent multiple camera instances
+
+    _isPicking = true;
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 90, // prevents memory crash
+
+        preferredCameraDevice: CameraDevice.front,
+      );
+
+      if (image == null) return null; // user cancelled
+
+      return File(image.path);
+    } catch (e, s) {
+      debugPrint('Camera crash prevented: $e');
+      debugPrintStack(stackTrace: s);
+      return null;
+    } finally {
+      _isPicking = false;
+    }
   }
 
   Future<File?> pickImageFromGallery() async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image == null) return null; // User canceled
     return File(image.path);
+  }
+
+  /// returns list of selected files or null if user cancelled
+  Future<List<File>?> pickImagesFromGallery() async {
+    try {
+      final List<XFile>? images = await _picker.pickMultiImage();
+      if (images == null || images.isEmpty) return null;
+      return images.map((x) => File(x.path)).toList();
+    } catch (e) {
+      debugPrint('Multi pick error: $e');
+      return null;
+    }
   }
 
   Future<File?> getImageFromCamera() async {
@@ -31,6 +67,7 @@ class ImageUploadServices {
     } catch (e) {
       debugPrint(e.toString());
     }
+    return null;
   }
 
   Future<File?> getImageFromGallery() async {
@@ -43,6 +80,7 @@ class ImageUploadServices {
     } catch (e) {
       debugPrint(e.toString());
     }
+    return null;
   }
 
   Future<File> fixExifRotation(File file) async {

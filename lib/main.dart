@@ -1,19 +1,53 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 import 'package:matchster/core/bindings/app_binding.dart';
+import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/navigation_halper.dart';
+import 'package:matchster/features/moduls/auth/login/services/splash_video_service.dart';
+import 'package:matchster/features/moduls/auth/login/services/video_services.dart';
 import 'package:matchster/features/moduls/auth/splash_screen.dart';
+import 'package:matchster/firebase_options.dart';
 import 'package:matchster/routes/app_pages.dart';
+import 'package:media_kit/media_kit.dart';
 
-void main() {
-  AppBinding().dependencies();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  MatchsterLocalStorage.instance.init();
+  MediaKit.ensureInitialized();
+  await Get.putAsync(
+    () =>
+        VideoService().init()
+          ..then((service) => service.preloadAsset(AppAssets.loginBGAssets)),
+  );
+  await Get.putAsync(() => SplashVideoService().init());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //runApp(DevicePreview(builder: (context) => const MyApp()));
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +55,25 @@ class MyApp extends StatelessWidget {
       designSize: AppConstants.deviceSize,
       minTextAdapt: true,
       ensureScreenSize: true,
-      child: GetMaterialApp(
-        useInheritedMediaQuery: true,
-        debugShowCheckedModeBanner: true,
-        initialBinding: AppBinding(),
-        title: 'Matchster',
-        navigatorKey: NavigationHelper.navigatorKey,
-        home: SplashScreen(),
-        getPages: AppPages.getPages,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: GetMaterialApp(
+          theme: ThemeData(
+            appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+            useMaterial3: true,
+            scaffoldBackgroundColor: Colors.white,
+          ),
+          useInheritedMediaQuery: true,
+          debugShowCheckedModeBanner: false,
+          initialBinding: AppBinding(),
+          title: 'Matchster',
+          navigatorKey: NavigationHelper.navigatorKey,
+          home: SplashScreen(),
+          getPages: AppPages.getPages,
+        ),
       ),
     );
   }

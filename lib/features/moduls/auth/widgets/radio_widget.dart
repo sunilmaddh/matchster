@@ -19,7 +19,6 @@ class RadioWidget extends StatelessWidget {
 
     return Obx(() {
       final isSelected = controller.selectedIndex.value == index;
-
       return GestureDetector(
         onTap: () => controller.toggleSelection(index),
         child: Container(
@@ -31,7 +30,7 @@ class RadioWidget extends StatelessWidget {
             border: Border.all(
               color:
                   isSelected
-                      ? const Color(0xFF1B8CF5)
+                      ? const Color(0xFF1D48EF)
                       : const Color(0xFFEBEBEB),
               width: 1,
             ),

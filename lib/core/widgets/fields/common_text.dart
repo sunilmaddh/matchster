@@ -14,9 +14,11 @@ class CommonText {
     TextAlign textAlign = TextAlign.start,
     int? maxLines,
     TextDecoration? decoration,
+    FontStyle fontStyle = FontStyle.normal,
     TextOverflow overflow = TextOverflow.ellipsis,
   }) {
     return Text(
+      softWrap: true,
       key: key,
       text,
       style: TextStyle(
@@ -25,6 +27,7 @@ class CommonText {
         fontSize: fontSize.sp,
         fontWeight: fontWeight,
         color: color,
+        fontStyle: fontStyle,
       ),
       textAlign: textAlign,
       maxLines: maxLines,
