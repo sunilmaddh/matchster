@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/enum/enum.dart';
 import 'package:matchster/core/extentions/gender_enum_ext.dart';
 import 'package:matchster/core/extentions/height_enum_ext.dart';
@@ -13,20 +14,15 @@ import 'package:matchster/features/home/models/habit_option.dart';
 import 'package:matchster/features/home/models/home_response.dart';
 import 'package:matchster/features/home/models/inshort_list.dart';
 import 'package:matchster/features/home/models/like_response.dart';
-import 'package:matchster/features/home/services/home_services.dart';
+import 'package:matchster/features/home/models/request/create_interaction_request.dart';
+import 'package:matchster/features/home/models/request/get_profile_request.dart';
+import 'package:matchster/features/home/repositories/home_repository.dart';
 
-class HomeController extends GetxController {
-  /* ----------------------------------------------------
-   * CONTROLLERS
-   * -------------------------------------------------- */
-
+class HomeController extends BaseController {
+  HomeController({required this.homeRepository});
+  final HomeRepository homeRepository;
   PageController pageController = PageController();
   final CardSwiperController swiperController = CardSwiperController();
-
-  /* ----------------------------------------------------
-   * STATE
-   * -------------------------------------------------- */
-
   final RxList<Profile> profileList = <Profile>[].obs;
   final RxList<Profile> profileListCount = <Profile>[].obs;
   final RxList<Datum> likeList = <Datum>[].obs;
@@ -41,16 +37,12 @@ class HomeController extends GetxController {
   final RxBool isLike = false.obs;
   final RxMap<String, dynamic> singleMap = <String, dynamic>{}.obs;
 
-  final HomeServices _homeService = HomeServices();
   RxList<InshortList> inshortList = <InshortList>[].obs;
   RxBool isFetchingMore = false.obs;
   bool _isProgrammaticSwipe = false;
   RxList<int> swipedCardIndexList = <int>[].obs;
   final RxInt swiperKey = 0.obs;
-
-  /* ----------------------------------------------------
-   * GETTERS (SAFE)
-   * -------------------------------------------------- */
+  final RxList<String> swipedUserIds = <String>[].obs;
 
   Profile? get currentProfile {
     if (profileList.isEmpty) return null;
@@ -75,8 +67,6 @@ class HomeController extends GetxController {
     }
   }
 
-  final RxList<String> swipedUserIds = <String>[].obs;
-
   void markCardAsSwiped(String userId) {
     if (!swipedUserIds.contains(userId)) {
       swipedUserIds.add(userId);
@@ -100,8 +90,7 @@ class HomeController extends GetxController {
   Future<void> getRetriveProfileList() async {
     try {
       isGettingProfile.value = true;
-
-      final response = await _homeService.getRetriveProfileList();
+      final response = await homeRepository.getRetriveProfileList();
       await clearList();
       if (response.success && response.data?.profiles != null) {
         profileList.assignAll(response.data!.profiles!);
@@ -140,10 +129,9 @@ class HomeController extends GetxController {
     try {
       isGettingProfile.value = true;
 
-      final response = await _homeService.getProfileLisr(
-        filterType: filterType,
-        filter: filter,
-      );
+      final data = GetProfileRequest(filterType: filterType, distance: filter);
+
+      final response = await homeRepository.getProfileList(request: data);
       await clearList();
       if (response.success &&
           response.data?.profiles != null &&
@@ -181,19 +169,14 @@ class HomeController extends GetxController {
     profileListCount.clear();
     swipedUserIds.clear();
   }
-  /* ----------------------------------------------------
-   * CREATE INTERACTION
-   * -------------------------------------------------- */
 
   Future<void> createInterection({
     required String userId,
     required String action,
   }) async {
     try {
-      final response = await _homeService.createInterection(
-        userId: userId,
-        action: action,
-      );
+      final data = CreateInteractionRequest(userId: userId, action: action);
+      final response = await homeRepository.createInterection(request: data);
 
       if (!response.success) {
         AppMethods.appPrint(message: response.message);
@@ -209,8 +192,7 @@ class HomeController extends GetxController {
 
   Future<void> likeOnMe() async {
     try {
-      final response = await _homeService.likeOnMe();
-
+      final response = await homeRepository.likeOnMe();
       if (response.success && response.data != null) {
         likeList.assignAll(response.data!.data);
       } else {
@@ -409,10 +391,6 @@ class HomeController extends GetxController {
     }
   }
 
-  /* ----------------------------------------------------
-   * CLEANUP
-   * -------------------------------------------------- */
-
   @override
   void onClose() {
     pageController.dispose();
@@ -429,14 +407,17 @@ class HomeController extends GetxController {
         .toList();
   }
 
-  // void _loadMoreProfilesIfNeeded() {
-  //   if (profileList.length == 2 && !isFetchingMore.value) {
-  //     isFetchingMore.value = true;
-  //     getProfileList(filterType: 'basic', filter: 10).then((_) {
-  //       isFetchingMore.value = false;
-  //     });
-  //   }
-  // }
+  void callGetProfileApi() async {
+    if (profileList.isEmpty) {
+      await getProfileList(filterType: 'basic', filter: 10);
+    }
+  }
+
+  Future<void> callGetRetriveProfileApi() async {
+    if (profileList.isEmpty) {
+      await getRetriveProfileList();
+    }
+  }
 }
 
 FrequencyEnum frequencyFromApi(String value) {

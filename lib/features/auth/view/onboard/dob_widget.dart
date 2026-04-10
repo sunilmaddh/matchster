@@ -11,6 +11,7 @@ import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/buttons/circle_button_widget.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
+import 'package:matchster/routes/app_navigation.dart';
 
 class DobWidget extends StatelessWidget {
   DobWidget({super.key});
@@ -55,6 +56,7 @@ class DobWidget extends StatelessWidget {
                             size: 50,
                             isEnable: _controller.isButtonEnabled.value,
                             onTap: () async {
+                              AppNavigation.back();
                               if (_controller.isButtonEnabled.value) {
                                 _controller.isNextPageEnable.value = false;
                                 final current = _controller.currentIndex.value;
@@ -64,30 +66,11 @@ class DobWidget extends StatelessWidget {
 
                                 _controller.completeStep(current);
                               }
-                              Get.back();
-                              AppMethods.hideKeyboard();
 
-                              // if (!isSuccess) return;
-                              // _onboardController.completeStep(current);
+                              AppMethods.hideKeyboard();
                             },
                           ),
                         ),
-                        //  TextButton(
-                        //   child: CommonText.text("Done"),
-                        //   onPressed: () async {
-                        //     Get.back();
-                        //     if (_controller.isButtonEnabled.value) {
-                        //       _controller.isNextPageEnable.value = false;
-                        //       final current =
-                        //           _controller.currentIndex.value;
-                        //       final isSuccess = await _controller
-                        //           .submitStep(current);
-
-                        //       _controller.completeStep(current);
-                        //     }
-                        //     AppMethods.hideKeyboard();
-                        //   },
-                        // ),
                       ),
 
                       /// DATE PICKER
@@ -151,13 +134,6 @@ class DobWidget extends StatelessWidget {
                 ),
               ),
             ),
-            //  CustomFormField(
-            //   enable: false,
-            //   label: "",
-            //   hint: AppConstants.hintDob,
-            //   controller: _controller.dobController,
-            //   enableBorder: true.obs,
-            // ),
           ),
           10.hBox,
           Row(

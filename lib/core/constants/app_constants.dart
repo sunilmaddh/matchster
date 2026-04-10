@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 class AppConstants {
+  AppConstants._();
   static Size deviceSize = Size(375, 812);
   static const String
   commonFont = "Caros",
@@ -98,4 +99,23 @@ class AppConstants {
       "Your recent upload didn’t pass our photo standards. Try submitting a clear picture of yourself.",
   uploadAnOtherPhoto = "Upload another Photo",
   discoverSolumates = "Discover Soulmates Near You";
+
+  /// 🔹 Errors
+  static const String otpInvalid = "Invalid OTP. Please try again.";
+  static const String otpFailed = "OTP verification failed. Please try again.";
+
+  /// 🔹 Success
+  static const String otpSuccess = "Email verified successfully!";
+
+  static const String verifyEmailTitle = "Verify Email";
+  static const String enterValidEmailTitle = "Enter valid email ID";
+  static const String enterValidEmailDescription =
+      "Please enter a valid email address to continue.";
+
+  static const String emailLabel = "Email";
+  static const String emailHint = "Enter your email";
+  static const String verifyButton = "Verify";
+
+  static const String enterEmailValidation = "Please enter email";
+  static const String enterValidEmailValidation = "Enter a valid email";
 }

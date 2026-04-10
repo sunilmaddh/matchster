@@ -4,79 +4,92 @@ import 'package:matchster/core/base/base_listner.dart';
 import 'base_controller.dart';
 
 abstract class BaseView<T extends BaseController> extends StatefulWidget {
-  const BaseView({super.key});
+  BaseView({super.key});
 
+  /// internal controller storage
+  T? _controller;
+
+  /// direct controller access inside child screens
+  T get controller => _controller ?? Get.find<T>();
+
+  /// set false if screen does not want default loader overlay
   bool get useDefaultLoader => true;
 
+  /// loader barrier color
   Color get loaderBarrierColor => Colors.black26;
 
+  /// custom loader widget
   Widget buildLoader(BuildContext context) {
     return const Center(child: CircularProgressIndicator());
   }
-}
 
-abstract class BaseViewState<T extends BaseController, V extends BaseView<T>>
-    extends State<V> {
-  late final T controller;
+  /// screen ui
+  Widget body(BuildContext context);
+
+  /// optional lifecycle hooks
+  @protected
+  void onInit(T controller) {}
 
   @protected
-  Widget buildView(BuildContext context);
+  void onReady(T controller) {}
 
-  void onInit() {}
+  @protected
+  void onDispose(T controller) {}
 
-  void onReady() {}
+  @override
+  State<BaseView<T>> createState() => _BaseViewState<T>();
+}
 
-  void onDispose() {}
+class _BaseViewState<T extends BaseController> extends State<BaseView<T>> {
+  late final T controller;
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<T>();
-    onInit();
+    widget._controller = controller;
+
+    widget.onInit(controller);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        onReady();
-      }
+      if (!mounted) return;
+      widget.onReady(controller);
     });
   }
 
   @override
   void dispose() {
-    onDispose();
+    widget.onDispose(controller);
+    widget._controller = null;
     super.dispose();
-  }
-
-  Widget _buildContent(BuildContext context) {
-    if (!widget.useDefaultLoader) {
-      return buildView(context);
-    }
-
-    return Stack(
-      children: [
-        buildView(context),
-        Obx(() {
-          return controller.isLoading.value
-              ? Positioned.fill(
-                child: AbsorbPointer(
-                  absorbing: true,
-                  child: Container(
-                    color: widget.loaderBarrierColor,
-                    child: widget.buildLoader(context),
-                  ),
-                ),
-              )
-              : const SizedBox.shrink();
-        }),
-      ],
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BaseListener<T>(
-      controller: controller,
-      child: _buildContent(context),
-    );
+    final screen = widget.body(context);
+
+    final child =
+        widget.useDefaultLoader
+            ? Stack(
+              children: [
+                screen,
+                Obx(() {
+                  if (!controller.isLoading.value) {
+                    return const SizedBox.shrink();
+                  }
+
+                  return Positioned.fill(
+                    child: Container(
+                      color: widget.loaderBarrierColor,
+                      alignment: Alignment.center,
+                      child: widget.buildLoader(context),
+                    ),
+                  );
+                }),
+              ],
+            )
+            : screen;
+
+    return BaseListener<T>(controller: controller, child: child);
   }
 }

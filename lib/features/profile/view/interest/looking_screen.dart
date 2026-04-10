@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/constants/common_lists.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/widgets/common_widget.dart';
@@ -8,36 +9,34 @@ import 'package:matchster/features/profile/widgets/common_widget.dart';
 class LookingScreen extends StatelessWidget {
   LookingScreen({super.key});
 
-  final _profileController = Get.find<ProfileController>();
+  final ProfileController _profileController = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
     return CommonWidget(
       isSelctOnlyOne: true,
       image: AppAssets.looking,
-      title: "Looking for",
-      subtitle: "Build your connection more",
+      title: AppStrings.lookingForTitle,
+      subtitle: AppStrings.lookingForSubtitle,
       list: CommonLists.releationships,
 
-      /// Single selection
       onTop: (v) {
-        _profileController.selectedLookingFor
-          ..clear()
-          ..add(v);
+        _profileController.selectedLookingFor.value = v;
       },
 
-      /// Selected check
-      isSelected: (v) => _profileController.selectedLookingFor.contains(v),
+      isSelected:
+          (v) =>
+              _profileController.selectedLookingFor.toLowerCase().trim() ==
+              v.toLowerCase().trim(),
 
-      /// Submit
       onTopButton: () {
         if (_profileController.selectedLookingFor.isEmpty) return;
         _profileController.addLookingFor(
-          lookingFor: _profileController.selectedLookingFor.first.toLowerCase(),
+          lookingFor: _profileController.selectedLookingFor.toLowerCase(),
         );
       },
 
-      appBarTitle: 'Looking for',
+      appBarTitle: AppStrings.lookingForAppBarTitle,
     );
   }
 }

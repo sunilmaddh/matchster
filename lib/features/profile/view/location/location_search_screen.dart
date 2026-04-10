@@ -1,65 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/base/base_view.dart';
+import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
+import 'package:matchster/core/widgets/fields/custom_form_field.dart';
+import 'package:matchster/features/profile/controller/profile_location_controller.dart';
+import 'package:matchster/routes/app_navigation.dart';
 
-class LocationSearchScreen extends StatefulWidget {
-  final String title;
-  final String type;
-  final String selectedValue;
-  final RxList<String> dataList;
-
-  const LocationSearchScreen({
-    super.key,
-    required this.title,
-    required this.type,
-    required this.selectedValue,
-    required this.dataList,
-  });
-
-  @override
-  State<LocationSearchScreen> createState() => _LocationSearchScreenState();
-}
-
-class _LocationSearchScreenState extends State<LocationSearchScreen> {
+class LocationSearchScreen extends BaseView<ProfileLocationController> {
+  String title = "";
+  String type = "";
+  String selectedValue = "";
+  RxList<String> dataList = <String>[].obs;
   final TextEditingController searchController = TextEditingController();
 
   RxList<String> filteredList = <String>[].obs;
-
   @override
-  void initState() {
-    super.initState();
-    filteredList.value = List.from(widget.dataList);
+  void onInit(ProfileLocationController controller) {
+    super.onInit(controller);
+    title = Get.arguments["title"] ?? "";
+    type = Get.arguments["type"] ?? "";
+    selectedValue = Get.arguments["selectedValue"] ?? "";
+    dataList = Get.arguments["list"] ?? [];
+    filteredList.value = List.from(dataList);
   }
 
   void filterSearch(String value) {
     if (value.isEmpty) {
-      filteredList.value = widget.dataList;
+      filteredList.value = dataList;
     } else {
       filteredList.value =
-          widget.dataList
+          dataList
               .where((e) => e.toLowerCase().contains(value.toLowerCase()))
               .toList();
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget body(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: CustomAppBar(
+        isCenterTitle: false,
+        title: title,
+        onTop: () {
+          AppNavigation.back();
+        },
+      ),
       body: Column(
         children: [
-          // 🔍 SEARCH FIELD
           Padding(
             padding: const EdgeInsets.all(12),
-            child: TextField(
+            child: CustomFormField(
               controller: searchController,
-              onChanged: filterSearch,
-              decoration: InputDecoration(
-                hintText: "Search ${widget.type}",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
+              onChanged: (query) {
+                filterSearch(query ?? "");
+              },
+              label: '',
+              hint: "Search $type",
+              enableBorder: true.obs,
             ),
           ),
           // 📋 LIST
@@ -75,7 +72,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen> {
                   return ListTile(
                     title: Text(item),
                     trailing:
-                        item == widget.selectedValue
+                        item == selectedValue
                             ? Icon(Icons.check, color: Colors.green)
                             : null,
                     onTap: () {

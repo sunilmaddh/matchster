@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/base/base_view.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
@@ -52,11 +53,7 @@ class _GridPainter extends CustomPainter {
 }
 
 class PhotoPreviewScreen extends BaseView<OnboardPhotoController> {
-  const PhotoPreviewScreen({
-    super.key,
-    required this.imageFile,
-    required this.index,
-  });
+  PhotoPreviewScreen({super.key, required this.imageFile, required this.index});
 
   final File imageFile;
   final int index;
@@ -65,18 +62,7 @@ class PhotoPreviewScreen extends BaseView<OnboardPhotoController> {
   bool get useDefaultLoader => false;
 
   @override
-  State<PhotoPreviewScreen> createState() => _PhotoPreviewScreenState();
-}
-
-class _PhotoPreviewScreenState
-    extends BaseViewState<OnboardPhotoController, PhotoPreviewScreen> {
-  // @override
-  // void onInit() {
-  //   controller.setPreviewData(file: widget.imageFile, index: widget.index);
-  // }
-
-  @override
-  Widget buildView(BuildContext context) {
+  Widget body(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -90,12 +76,12 @@ class _PhotoPreviewScreenState
           }
 
           return AppButton(
-            name: 'Crop & Upload',
+            name: AppStrings.cropAndUpload,
             isEnable: true,
             onTop: () {
               controller.onCropAndUploadTap(
-                fileImage: widget.imageFile,
-                indexx: widget.index,
+                fileImage: imageFile,
+                indexx: index,
               );
             },
           );
@@ -123,7 +109,7 @@ class _PhotoPreviewScreenState
             ),
           ),
         ),
-        CommonText.text('Crop photo', fontWeight: FontWeight.w400),
+        CommonText.text(AppStrings.cropPhoto, fontWeight: FontWeight.w400),
       ],
     );
   }
@@ -137,7 +123,7 @@ class _PhotoPreviewScreenState
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: Image.file(
-              widget.imageFile,
+              imageFile,
               fit: BoxFit.cover,
               filterQuality: FilterQuality.high,
             ),

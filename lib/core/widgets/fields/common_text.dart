@@ -10,7 +10,7 @@ class CommonText {
     Key? key,
     FontWeight fontWeight = FontWeight.normal,
     Color color = Colors.black,
-    String fontFamily = AppTextStyles.fontFamily,
+    String fontFamily = "",
     TextAlign textAlign = TextAlign.start,
     int? maxLines,
     TextDecoration? decoration,

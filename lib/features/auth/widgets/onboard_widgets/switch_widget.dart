@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/card/switch_card.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
@@ -21,7 +22,7 @@ class SwitchWidget extends StatelessWidget {
       ),
       child: Obx(
         () => SwitchCard(
-          text: "Show on your profile",
+          text: AppStrings.showOnYourProfile,
           isSwitch: controller.isSwitchOn.value,
           onChanged: (v) {
             controller.toggleSwitch(v);

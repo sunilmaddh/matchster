@@ -8,6 +8,7 @@ import 'package:matchster/core/widgets/bottomsheet/common_bottom_sheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
 import 'package:matchster/features/auth/helper/onboard_halper.dart';
+import 'package:matchster/routes/app_navigation.dart';
 
 class YourHeightWidget extends StatelessWidget {
   YourHeightWidget({super.key});
@@ -56,11 +57,11 @@ class YourHeightWidget extends StatelessWidget {
                   debugPrint(_controller.isHeightSelected.value.toString());
                 },
                 onTap: () async {
-                  Get.back();
+                  AppNavigation.back();
                   if (_controller.isButtonEnabled.value) {
                     _controller.isNextPageEnable.value = false;
                     final current = _controller.currentIndex.value;
-                    final isSuccess = await _controller.submitStep(current);
+                    await _controller.submitStep(current);
 
                     _controller.completeStep(current);
                   }

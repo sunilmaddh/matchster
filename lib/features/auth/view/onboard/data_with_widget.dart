@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/card/switch_card.dart';
@@ -48,7 +49,7 @@ class DateWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CommonText.text(
-                  "Open to Date Everybody",
+                  AppStrings.openToDateEverybody,
                   fontSize: 17.sp,
                   fontWeight: FontWeight.w600,
                 ),
@@ -57,14 +58,6 @@ class DateWidget extends StatelessWidget {
                     value: _controller.isDateWithSwitchOn.value,
                     onChanged: _controller.toggleDateSwitch,
                   ),
-                  //  Switch(
-                  //   focusColor: Color(0xff1D48EF),
-                  //   activeTrackColor: Color(0xff1D48EF),
-                  //   padding: EdgeInsets.zero,
-                  //   value: _controller.isSwitchOn.value,
-                  //   onChanged:
-                  //      , // ← Select All / Unselect All
-                  // ),
                 ),
               ],
             ),

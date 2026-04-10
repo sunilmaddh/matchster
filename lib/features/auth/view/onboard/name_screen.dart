@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/app_input_formetters.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/core/utils/extentions.dart';
@@ -37,8 +38,8 @@ class NameWidget extends StatelessWidget {
                 AppInputFormatters.firstLetterCapital(),
               ],
               enableBorder: _onboardController.isEnable,
-              label: "Enter your name",
-              hint: "Enter your name",
+              label: AppStrings.enterYourNameLabel,
+              hint: AppStrings.enterYourNameHint,
               controller: _onboardController.nameController,
               validator: (name) {
                 return AppMethods.validateText(name);

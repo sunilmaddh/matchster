@@ -5,7 +5,7 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controller/country_controller.dart';
-import 'package:matchster/features/home/widgets/search_widget.dart';
+import 'package:matchster/features/chat/widget/search_widget.dart';
 import 'package:matchster/routes/app_navigation.dart';
 
 class CountryListScreen extends StatefulWidget {

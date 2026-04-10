@@ -1,5 +1,7 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/extentions/date_x_ext.dart';
 
 class AppMethods {
@@ -121,5 +123,24 @@ class AppMethods {
 
   static void hideKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  static bool isValidEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return false;
+    }
+    if (RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
+      return true;
+    }
+
+    return false;
+  }
+
+  static String normalizeValue(String value) {
+    return removeDiacritics(value)
+        .toLowerCase()
+        .replaceAll(RegExp(r"[’'ʼ]"), '')
+        .replaceAll(RegExp(r'[^a-z\s]'), '')
+        .replaceAll(RegExp(r'\s+'), '_');
   }
 }

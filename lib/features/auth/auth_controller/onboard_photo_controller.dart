@@ -11,7 +11,7 @@ import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
 import 'package:matchster/features/auth/repositories/onboard_repository.dart';
 import 'package:matchster/features/auth/view/onboard/photo_preview_screen.dart';
-import 'package:matchster/features/auth/widgets/photo_review_bottomsheet.dart';
+import 'package:matchster/core/widgets/bottomsheet/photo_review_bottomsheet.dart';
 import 'package:matchster/routes/app_routes.dart';
 
 class OnboardPhotoController extends BaseController {

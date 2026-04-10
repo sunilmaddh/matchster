@@ -10,7 +10,8 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controller/login_controller.dart';
 import 'package:matchster/features/auth/services/video_services.dart';
 import 'package:matchster/features/auth/widgets/login_widgets/login_button.dart';
-import 'package:matchster/features/auth/widgets/login_widgets/login_field_with_button.dart';
+import 'package:matchster/routes/app_navigation.dart';
+import 'package:matchster/routes/app_routes.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -113,7 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isEnable: true,
                                   name: AppConstants.number,
                                   onTop: () {
-                                    Get.to(LoginFieldWithButton());
+                                    AppNavigation.to(
+                                      AppRoutes.loginFieldScreen,
+                                    );
                                   },
                                 ),
                               ],
@@ -126,7 +129,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 isEnable: true,
                                 name: AppConstants.createMyAccount,
                                 onTop: () {
-                                  // _controller.isLoginWithMobile.value = true;
                                   _controller.isAccessMyAccount.value = true;
                                   _controller.isAccessAccount.value = false;
                                 },
@@ -153,8 +155,6 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         }),
       ),
-
-      /// 🔘 Floating Verify Button
     );
   }
 }

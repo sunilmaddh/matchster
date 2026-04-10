@@ -11,15 +11,10 @@ import 'package:matchster/features/auth/auth_controller/login_controller.dart';
 import 'package:matchster/features/auth/widgets/login_widgets/otp_widget.dart';
 
 class OtpScreen extends BaseView<LoginController> {
-  const OtpScreen({super.key});
+  OtpScreen({super.key});
 
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
-}
-
-class _OtpScreenState extends BaseViewState<LoginController, OtpScreen> {
-  @override
-  Widget buildView(BuildContext context) {
+  Widget body(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         isCenterTitle: true,

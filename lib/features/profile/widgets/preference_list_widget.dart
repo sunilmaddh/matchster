@@ -7,12 +7,9 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
-import 'package:matchster/features/profile/view/interest/alcohal_screen.dart';
-import 'package:matchster/features/profile/view/interest/interest_screen.dart';
-import 'package:matchster/features/profile/view/interest/languages_screen.dart';
-import 'package:matchster/features/profile/view/interest/smoke_screen.dart';
-import 'package:matchster/features/profile/view/interest/workout_screen.dart';
 import 'package:matchster/features/profile/widgets/interest_card.dart';
+import 'package:matchster/routes/app_navigation.dart';
+import 'package:matchster/routes/app_routes.dart';
 
 class PreferenceListWidget extends StatelessWidget {
   PreferenceListWidget({
@@ -47,7 +44,7 @@ class PreferenceListWidget extends StatelessWidget {
               } else {
                 _comtroller.selectedWorkout.value = "";
               }
-              Get.to(() => WorkoutScreen());
+              AppNavigation.to(AppRoutes.workoutScreen);
             },
             child: InterestCard(
               title: "Workout",
@@ -67,7 +64,7 @@ class PreferenceListWidget extends StatelessWidget {
               } else {
                 _comtroller.selectedSmoke.value = "";
               }
-              Get.to(() => SmokeScreen());
+              AppNavigation.to(AppRoutes.smokeScreen);
             },
             child: InterestCard(
               color: Color(0xffDEB4B4),
@@ -89,7 +86,7 @@ class PreferenceListWidget extends StatelessWidget {
               } else {
                 _comtroller.selectedDrinking.value = "";
               }
-              Get.to(() => AlcohalScreen());
+              AppNavigation.to(AppRoutes.alcohalScreen);
             },
             child: InterestCard(
               color: Color(0xffDEB4C8),
@@ -111,7 +108,7 @@ class PreferenceListWidget extends StatelessWidget {
               } else {
                 _comtroller.selectedInterests.clear();
               }
-              Get.to(() => InterestScreen());
+              AppNavigation.to(AppRoutes.interestScreen);
             },
             child: InterestCard(
               color: Color(0xffB4B8DE),
@@ -131,7 +128,7 @@ class PreferenceListWidget extends StatelessWidget {
               } else {
                 _comtroller.selectedInterests.clear();
               }
-              Get.to(() => LanguagesScreen());
+              AppNavigation.to(AppRoutes.languagesScreen);
             },
             child: InterestCard(
               color: Color(0xff85CFCF),

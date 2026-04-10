@@ -5,21 +5,29 @@ import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/features/auth/model/response/reverse_geocode_response.dart';
 import 'package:matchster/features/auth/repositories/onboard_repository.dart';
-import 'package:matchster/features/profile/services/location_services.dart'
-    show LocationService;
+import 'package:matchster/features/profile/services/location_services.dart';
 import 'package:matchster/routes/app_routes.dart';
 
 class OnboardLocationController extends BaseController {
-  OnboardLocationController({required this.onboardingRepository});
+  OnboardLocationController({
+    required this.locationService,
+    required this.onboardingRepository,
+  });
+
+  @override
+  void onInit() {
+    completeOnboarding();
+    super.onInit();
+  }
 
   final OnboardingRepository onboardingRepository;
-  final LocationService _locationService = LocationService();
+  final LocationService locationService;
 
   Placemark place = Placemark();
 
   Future<Position?> fetchLocation() async {
     try {
-      return await _locationService.getCurrentLocation();
+      return await locationService.getCurrentLocation();
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
       setError('Unable to fetch location');
@@ -38,7 +46,7 @@ class OnboardLocationController extends BaseController {
       );
 
       if (!response.success) {
-        setError(response.message ?? 'Unable to fetch address');
+        setError(response.message);
         return null;
       }
 
@@ -72,7 +80,7 @@ class OnboardLocationController extends BaseController {
       );
 
       if (!response.success) {
-        setError(response.message ?? 'Failed to save current location');
+        setError(response.message);
         return false;
       }
 
@@ -107,7 +115,7 @@ class OnboardLocationController extends BaseController {
       );
 
       if (!response.success) {
-        setError(response.message ?? 'Failed to save home location');
+        setError(response.message);
         return false;
       }
 

@@ -107,15 +107,14 @@ class OnboardController extends BaseController {
       final response = await onboardingRepository.addName(name: name);
 
       if (!response.success) {
-        setError(response.message ?? 'Failed to add name');
+        setError(response.message);
         return false;
       }
 
-      setSuccess(response.message ?? 'Name added successfully');
       goToNextPage();
       return true;
     } catch (e) {
-      setError('Failed to add name');
+      setError(e.toString());
       return false;
     } finally {
       showLoading(false);
@@ -137,15 +136,14 @@ class OnboardController extends BaseController {
       );
 
       if (!response.success) {
-        setError(response.message ?? 'Failed to add gender');
+        setError(response.message);
         return false;
       }
 
-      setSuccess(response.message ?? 'Gender added successfully');
       goToNextPage();
       return true;
     } catch (e) {
-      setError('Failed to add gender');
+      setError(e.toString());
       return false;
     } finally {
       showLoading(false);
@@ -161,15 +159,13 @@ class OnboardController extends BaseController {
       final response = await onboardingRepository.addDob(dob: dob);
 
       if (!response.success) {
-        setError(response.message ?? 'Failed to add date of birth');
+        setError(response.message);
         return false;
       }
-
-      setSuccess(response.message ?? 'Date of birth added successfully');
       goToNextPage();
       return true;
     } catch (e) {
-      setError('Failed to add date of birth');
+      setError(e.toString());
       return false;
     } finally {
       showLoading(false);
@@ -185,15 +181,13 @@ class OnboardController extends BaseController {
       final response = await onboardingRepository.addHeight(feet: feet, cm: cm);
 
       if (!response.success) {
-        setError(response.message ?? 'Failed to add height');
+        setError(response.message);
         return false;
       }
-
-      setSuccess(response.message ?? 'Height added successfully');
       goToNextPage();
       return true;
     } catch (e) {
-      setError('Failed to add height');
+      setError(e.toString());
       return false;
     } finally {
       showLoading(false);
@@ -211,15 +205,14 @@ class OnboardController extends BaseController {
       );
 
       if (!response.success) {
-        setError(response.message ?? 'Failed to add date preferences');
+        setError(response.message);
         return false;
       }
 
-      setSuccess(response.message ?? 'Date preferences added successfully');
       goToNextPage();
       return true;
     } catch (e) {
-      setError('Failed to add date preferences');
+      setError(e.toString());
       return false;
     } finally {
       showLoading(false);

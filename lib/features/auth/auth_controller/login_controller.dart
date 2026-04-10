@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/base/base_controller.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/token_debug.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
@@ -18,7 +19,7 @@ class LoginController extends BaseController {
   final RxBool isEnable = false.obs;
   final RxBool isOtpEnable = false.obs;
   final RxBool isAccessMyAccount = false.obs;
-  final RxString countryCode = '+91'.obs;
+  final RxString countryCode = AppStrings.defaultCountryCode.obs;
   final RxString phoneNumber = ''.obs;
   final RxBool isResend = false.obs;
   final RxBool isAccessAccount = false.obs;
@@ -36,13 +37,12 @@ class LoginController extends BaseController {
 
       if (response.success) {
         debugPrint(response.message);
-        setSuccess(response.message ?? 'OTP sent successfully');
       } else {
-        setError(response.message ?? 'Failed to send OTP');
+        setError(response.message);
       }
     } catch (e) {
       debugPrint(e.toString());
-      setError('Something went wrong while sending OTP');
+      setError(AppStrings.somethingWentWrongOtp);
     } finally {
       isResend.value = false;
       showLoading(false);
@@ -67,44 +67,40 @@ class LoginController extends BaseController {
         await MatchsterLocalStorage.instance.saveProfilePopupShown(false);
 
         await TokenDebug.checkToken();
+
         final pages = response.data?.pages;
         final pagesValue = response.data?.values;
-        debugPrint("Onboard screen page 1");
+
         if (pages != null) {
-          debugPrint("Onboard screen page 2");
           final onboardController = Get.find<OnboardController>();
           await onboardController.setOnboardPages(pages);
-          debugPrint("Onboard screen page 3");
+
           if (pagesValue != null) {
             await onboardController.setPagesValue(pagesValue);
           }
-          debugPrint("Onboard screen page 4");
+
           final allCompleted = onboardController.allCompleted;
 
           if (allCompleted) {
-            debugPrint("Onboard screen page 5");
             await MatchsterLocalStorage.instance.saveUserOnboard(true);
-            setSuccess(response.message ?? 'Login successful');
             navigateOffAll(AppRoutes.landingScreen);
           } else {
             await MatchsterLocalStorage.instance.saveUserOnboard(false);
-            debugPrint("Onboard screen page 6");
-            setSuccess(response.message ?? 'OTP verified successfully');
+            debugPrint(AppStrings.debugOnboardPage6);
             navigateOff(AppRoutes.onboardScreen);
           }
         } else {
-          debugPrint("Onboard screen page 7");
-          setSuccess(response.message ?? 'OTP verified successfully');
+          debugPrint(AppStrings.debugOnboardPage7);
         }
       } else {
         otpValue.value = '';
         otpRebuildKey.value++;
         isOtpEnable.value = false;
-        setError(response.message ?? 'Invalid OTP');
+        setError(response.message);
       }
     } catch (e) {
       debugPrint(e.toString());
-      setError('Something went wrong while verifying OTP');
+      setError(AppStrings.somethingWentWrongVerifyOtp);
     } finally {
       showLoading(false);
     }
@@ -120,16 +116,17 @@ class LoginController extends BaseController {
 
       if (userCredential != null) {
         await MatchsterLocalStorage.instance.saveProfilePopupShown(false);
+
         debugPrint('User name ${userCredential.user?.displayName}');
 
-        setSuccess('Google sign-in successful');
+        setSuccess(AppStrings.googleSignInSuccess);
         navigateTo(AppRoutes.onboardScreen);
       } else {
-        setError('Google sign-in cancelled');
+        setError(AppStrings.googleSignInCancelled);
       }
     } catch (e) {
       debugPrint(e.toString());
-      setError('Something went wrong during Google sign-in');
+      setError(AppStrings.googleSignInError);
     } finally {
       showLoading(false);
     }

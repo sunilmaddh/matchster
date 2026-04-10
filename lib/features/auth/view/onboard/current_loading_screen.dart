@@ -1,21 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:matchster/core/base/base_stateless_view.dart';
 import 'package:matchster/core/constants/app_assets.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_location_controller.dart';
 
-class CurrentLoadingScreen extends StatelessWidget {
-  CurrentLoadingScreen({super.key});
-
-  final _controller = Get.find<OnboardLocationController>();
+class CurrentLoadingScreen
+    extends BaseStatelessView<OnboardLocationController> {
+  const CurrentLoadingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    _controller.completeOnboarding();
+  Widget buildView(BuildContext context, OnboardLocationController controller) {
     return Scaffold(
       body: Center(
         child: Column(
@@ -30,7 +28,7 @@ class CurrentLoadingScreen extends StatelessWidget {
             ),
             30.hBox,
             CommonText.text(
-              "Please wait we are getting location",
+              AppStrings.fetchingLocation,
               fontWeight: FontWeight.w300,
             ),
           ],

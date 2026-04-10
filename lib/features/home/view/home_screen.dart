@@ -4,21 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
-import 'package:matchster/core/extentions/address_x_ext.dart';
-import 'package:matchster/core/utils/common_assets.dart';
 import 'package:matchster/core/utils/extentions.dart';
-import 'package:matchster/core/widgets/fields/common_card.dart';
-import 'package:matchster/core/widgets/fields/common_home_card.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/home/controller/home_controller.dart';
-import 'package:matchster/features/home/models/home_response.dart';
+import 'package:matchster/features/home/view/background_card.dart';
+import 'package:matchster/features/home/view/profile_details_section.dart';
 import 'package:matchster/features/home/widgets/dark_circle_widget.dart';
 import 'package:matchster/features/home/widgets/main_photo_card.dart';
 import 'package:matchster/features/home/widgets/no_more_profile_widget.dart';
-import 'package:matchster/features/profile/widgets/inshort_wrap_widget.dart';
-import 'package:matchster/features/profile/widgets/interest_wrap_widget.dart';
-import 'package:matchster/features/profile/widgets/looking_wrap_widget.dart';
-import 'package:matchster/features/profile/widgets/sub_common_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,44 +30,26 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    callGetProfileApi();
+    _homeController.callGetProfileApi();
   }
 
   void _onScroll() {
     if (!_scrollController.hasClients) return;
-
     final currentOffset = _scrollController.offset;
-
     final currentCardId =
         _homeController.currentProfile?.userId ??
         'card_${_homeController.profileList.indexOf(_homeController.currentProfile)}';
-
     final notifier = _arrowNotifiers.putIfAbsent(
       currentCardId,
       () => ValueNotifier(false),
     );
-
     const double threshold = 5.0;
-
     if (currentOffset - _lastOffset > threshold && !notifier.value) {
       notifier.value = true;
     } else if (_lastOffset - currentOffset > threshold && notifier.value) {
       notifier.value = false;
     }
-
     _lastOffset = currentOffset;
-  }
-
-  void callGetProfileApi() async {
-    if (_homeController.profileList.isEmpty) {
-      await _homeController.getProfileList(filterType: 'basic', filter: 10);
-    }
-  }
-
-  Future<void> callGetRetriveProfileApi() async {
-    if (_homeController.profileList.isEmpty) {
-      await _homeController.getRetriveProfileList();
-    }
   }
 
   @override
@@ -85,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
     for (var notifier in _arrowNotifiers.values) {
       notifier.dispose();
     }
-
     super.dispose();
   }
 
@@ -100,9 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: CircularProgressIndicator(color: AppColors.primary),
           );
         }
-
         final data = _homeController.currentProfile;
-
         return Column(
           children: [
             SafeArea(
@@ -146,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               _homeController.profileList.length
                       ? NoMoreProfileWidget(
                         retrieveProfileonTap: () {
-                          callGetRetriveProfileApi();
+                          _homeController.callGetRetriveProfileApi();
                         },
                       )
                       : SingleChildScrollView(
@@ -167,124 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 clipBehavior: Clip.none,
                                 children: [
                                   /// BACKGROUND CARD 2 (BOTTOM)
-                                  if (_homeController.profileList.length > 2)
-                                    Positioned(
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 0,
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                            0.80,
-                                        margin: EdgeInsets.only(
-                                          left: 16.w,
-                                          right: 16.w,
-                                          top: 16.h,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            40.r,
-                                          ),
-                                          // boxShadow: [
-                                          //   BoxShadow(
-                                          //     color: Colors.black.withOpacity(
-                                          //       0.1,
-                                          //     ),
-                                          //     blurRadius: 10,
-                                          //     offset: const Offset(0, 5),
-                                          //   ),
-                                          // ],
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(40.r),
-                                            topRight: Radius.circular(40.r),
-                                          ),
-                                          child: Obx(() {
-                                            final nextIndex =
-                                                _homeController
-                                                    .currentIndex
-                                                    .value +
-                                                2;
-                                            if (nextIndex <
-                                                _homeController
-                                                    .profileList
-                                                    .length) {
-                                              return CommonAssets.networkImage(
-                                                _homeController
-                                                        .profileList[nextIndex]
-                                                        .mainPhoto ??
-                                                    '',
-                                                fit: BoxFit.cover,
-                                              );
-                                            }
-                                            return Container(
-                                              color: Colors.white,
-                                            );
-                                          }),
-                                        ),
-                                      ),
-                                    ),
-
-                                  /// BACKGROUND CARD 1 (MIDDLE)
-                                  if (_homeController.profileList.length > 1)
-                                    Positioned(
-                                      top: 20,
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 0,
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                            0.90,
-                                        margin: EdgeInsets.only(
-                                          left: 8.w,
-                                          right: 8.w,
-                                          top: 8.h,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            40.r,
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(
-                                                0.15,
-                                              ),
-                                              blurRadius: 10,
-                                              offset: const Offset(0, 5),
-                                            ),
-                                          ],
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(40.r),
-                                            topRight: Radius.circular(40.r),
-                                          ),
-                                          child: Obx(() {
-                                            final nextIndex =
-                                                _homeController
-                                                    .currentIndex
-                                                    .value +
-                                                1;
-                                            if (nextIndex <
-                                                _homeController
-                                                    .profileList
-                                                    .length) {
-                                              return CommonAssets.networkImage(
-                                                _homeController
-                                                        .profileList[nextIndex]
-                                                        .mainPhoto ??
-                                                    '',
-                                                fit: BoxFit.cover,
-                                              );
-                                            }
-                                            return const SizedBox.shrink();
-                                          }),
-                                        ),
-                                      ),
-                                    ),
+                                  BackgroundCard(
+                                    homeController: _homeController,
+                                  ),
 
                                   /// CARD SWIPER (TOP)
                                   Positioned(
@@ -346,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           final showUpArrow = _arrowNotifiers
                                               .putIfAbsent(
                                                 cardId,
-                                                () => ValueNotifier(true),
+                                                () => ValueNotifier(false),
                                               );
                                           return MainPhotoCard(
                                             key: ValueKey(cardId),
@@ -389,21 +245,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
 
-                            /// PROFILE DETAILS (THIS PART SCROLLS)
-                            Transform.translate(
-                              offset: const Offset(0, -10),
-                              child: Container(
-                                width: double.infinity,
-                                padding:
-                                    40.verticalPadding + 15.horizontalPadding,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20.r),
-                                  ),
-                                ),
-                                child: _buildProfileDetails(data),
-                              ),
+                            ProfileDetailsSection(
+                              data: data,
+                              controller: _homeController,
                             ),
                           ],
                         ),
@@ -412,255 +256,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         );
       }),
-    );
-  }
-
-  Widget _buildProfileDetails(Profile data) {
-    return
-    //  Transform.translate(
-    //   offset: Offset(0, -20), // move upward
-    //   child: Container(
-    //     padding: 15.verticalPadding + 15.horizontalPadding,
-    //     decoration: BoxDecoration(
-    //       color: Colors.white,
-    //       borderRadius: BorderRadius.only(
-    //         topLeft: Radius.circular(20.0.r),
-    //         topRight: Radius.circular(20.0.r),
-    //       ),
-    //     ),
-    //  child:
-    Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: 20.horizontalPadding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: CommonText.text(
-                  "${data.name}, ${data.age}",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: "Caros",
-                  overflow: TextOverflow.fade,
-                ),
-              ),
-              // SvgPicture.asset(
-              //   AppAssets.shareAssets,
-              // ),
-            ],
-          ),
-        ),
-        10.hBox,
-
-        if (data.about != null && data.about!.isNotEmpty)
-          CommonHomeCard(
-            widget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText.text("In Short", color: AppColors.whiteColor),
-                CommonText.text(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: "Caros",
-                  maxLines: 7,
-                  fontStyle: FontStyle.italic,
-                  color: AppColors.whiteColor,
-                  "“${data.about}.”",
-                ),
-
-                20.hBox,
-
-                InshortWrapWidget(list: _homeController.inshortList),
-              ],
-            ),
-          ).paddingOnly(bottom: 15.h)
-        else
-          SizedBox.shrink(),
-
-        if (data.lookingFor != null && data.lookingFor!.isNotEmpty)
-          CommonHomeCard(
-            widget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText.text(
-                  "Looking For",
-                  color: AppColors.whiteColor,
-                  fontFamily: "Caros",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-                10.hBox,
-
-                LookingWrapWidget(list: data.lookingFor!),
-              ],
-            ),
-          ).paddingOnly(bottom: 15.h)
-        else
-          SizedBox.shrink(),
-
-        if (data.distance != null && data.distance!.isNotEmpty)
-          CommonHomeCard(
-            widget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText.text(
-                  "Location",
-                  color: AppColors.whiteColor,
-                  fontFamily: "Caros",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-                10.hBox,
-
-                // ),
-                CommonCard(
-                  widget: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: 7.allPadding,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xffF4F4F4),
-                        ),
-                        child: CommonText.text("📍"),
-                      ),
-                      5.wBox,
-                      CommonText.text(
-                        color: Color(0xffD90380),
-                        "${data.distance.toString()} km",
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14.sp,
-                      ),
-                      5.wBox,
-                      CommonText.text(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
-                        "away, ${data.currentAddress!.city}",
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-        else
-          SizedBox.shrink(),
-        15.hBox,
-        if (data.interests != null && data.interests!.isNotEmpty)
-          CommonCard(
-            widget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText.text(
-                  "My Interest",
-                  fontFamily: "Caros",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-                CommonText.text(
-                  "Express your interests to find your ideal match",
-                  fontFamily: "Caros",
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w300,
-                ),
-                10.hBox,
-                InterestWrapWidget(list: data.interests!),
-              ],
-            ),
-          ).paddingOnly(bottom: 15.h)
-        else
-          SizedBox.shrink(),
-
-        if (data.work != null && data.work!.isNotEmpty)
-          CommonCard(
-            widget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText.text(
-                  "Profession",
-                  fontFamily: "Caros",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-                5.hBox,
-                SubCommonCard(widget: CommonText.text(data.work!)),
-              ],
-            ),
-          )
-        else
-          SizedBox.shrink(),
-        15.hBox,
-        if (data.morePictures != null && data.morePictures!.isNotEmpty)
-          CommonCard(
-            widget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText.text(
-                  "More Picture",
-                  fontFamily: "Caros",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-                10.hBox,
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20.r),
-                  child: CommonAssets.networkImage(data.morePictures!.first),
-                ),
-              ],
-            ),
-          ).paddingOnly(bottom: 15.h)
-        else
-          const SizedBox.shrink(),
-
-        if (data.languages != null && data.languages!.isNotEmpty)
-          CommonCard(
-            widget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText.text(
-                  "Language",
-                  color: AppColors.blackColor,
-                  fontFamily: "Caros",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-                10.hBox,
-
-                InterestWrapWidget(list: data.languages!),
-              ],
-            ),
-          ).paddingOnly(bottom: 15.h)
-        else
-          SizedBox.shrink(),
-
-        if (data.morePictures != null && data.morePictures!.isNotEmpty)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Images list
-              Column(
-                children: List.generate(data.morePictures!.length - 1, (index) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 15.h),
-                    child: CommonCard(
-                      widget: ClipRRect(
-                        borderRadius: BorderRadius.circular(20.r),
-                        child: CommonAssets.networkImage(
-                          data.morePictures![index + 1],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ],
-          )
-        else
-          const SizedBox.shrink(),
-      ],
     );
   }
 }

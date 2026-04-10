@@ -148,7 +148,12 @@ class HallOfFame {
     position: UtilMethods.intParser(json["position"]),
   );
 
-  Map<String, dynamic> toJson() => {"url": url, "type": type, "_id": id, "position": position};
+  Map<String, dynamic> toJson() => {
+    "url": url,
+    "type": type,
+    "_id": id,
+    "position": position,
+  };
 }
 
 class Lifestyle {
@@ -245,13 +250,23 @@ class HomeTown {
   String? city;
   String? state;
   String? country;
+  String? countryCode;
+  String? stateCode;
 
-  HomeTown({this.city, this.state, this.country});
+  HomeTown({
+    this.city,
+    this.state,
+    this.country,
+    this.countryCode,
+    this.stateCode,
+  });
 
   factory HomeTown.fromJson(Map<String, dynamic> json) => HomeTown(
     city: UtilMethods.stringParser(json["city"]),
     state: UtilMethods.stringParser(json["state"]),
     country: UtilMethods.stringParser(json["country"]),
+    countryCode: UtilMethods.stringParser(json["countryCode"]),
+    stateCode: UtilMethods.stringParser(json["stateCode"]),
   );
   Map<String, dynamic> toJson() => {
     "city": city,
@@ -264,9 +279,7 @@ class Meta {
   int? progress;
   int? completedFields;
   int? totalFields;
-
   Meta({this.progress, this.completedFields, this.totalFields});
-
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
     progress: UtilMethods.intParser(json["progress"]),
     completedFields: UtilMethods.intParser(json["completedFields"]),
@@ -335,14 +348,14 @@ class Preferences {
   Preferences({this.lookingFor, this.visibility});
 
   factory Preferences.fromJson(Map<String, dynamic> json) => Preferences(
-        lookingFor: UtilMethods.stringParser(json["lookingFor"]),
-        visibility: UtilMethods.stringParser(json["visibility"]),
-      );
+    lookingFor: UtilMethods.stringParser(json["lookingFor"]),
+    visibility: UtilMethods.stringParser(json["visibility"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "lookingFor": lookingFor,
-        "visibility": visibility,
-      };
+    "lookingFor": lookingFor,
+    "visibility": visibility,
+  };
 
   Preferences copyWith({String? lookingFor, String? visibility}) {
     return Preferences(

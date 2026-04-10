@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
-import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/enum/enum.dart';
 import 'package:matchster/core/extentions/gender_enum_ext.dart';
 import 'package:matchster/core/extentions/height_enum_ext.dart';
@@ -16,28 +16,26 @@ import 'package:matchster/core/extentions/religion_level_ext.dart';
 import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/core/extentions/zodiac_enum_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
-import 'package:matchster/core/utils/app_toast_message.dart';
-import 'package:matchster/features/auth/widgets/photo_review_bottomsheet.dart';
+import 'package:matchster/core/widgets/bottomsheet/photo_review_bottomsheet.dart';
 import 'package:matchster/features/home/controller/home_controller.dart';
 import 'package:matchster/features/home/models/habit_option.dart';
 import 'package:matchster/features/home/models/inshort_list.dart';
 import 'package:matchster/features/profile/models/auto_complete_response.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
 import 'package:matchster/features/profile/models/place_details_response.dart';
-import 'package:matchster/features/profile/services/profile_services.dart';
+import 'package:matchster/features/profile/repositories/profile_repository.dart';
 import 'package:matchster/features/profile/view/location/add_location_screen.dart';
 import 'package:matchster/features/profile/view/profile_photo_preview_screen.dart';
 import 'package:matchster/routes/app_navigation.dart';
 
-class ProfileController extends GetxController {
-  final ProfileServices _profileServices = ProfileServices();
-  ProfileServices get profileServices => _profileServices;
-
+class ProfileController extends BaseController {
+  ProfileController({required this.profileRepository});
+  final ProfileRepository profileRepository;
   RxBool isSelected = false.obs;
   RxList<String> selectedItems = <String>[].obs;
   RxList<String> selectedInterests = <String>[].obs;
   RxList<String> selectedLanguage = <String>[].obs;
-  RxList<String> selectedLookingFor = <String>[].obs;
+  RxString selectedLookingFor = "".obs;
   RxString selectedWorkout = ''.obs;
   RxString selectedSmoke = ''.obs;
   RxString selectedDrinking = ''.obs;
@@ -71,10 +69,7 @@ class ProfileController extends GetxController {
   RxString qualification = ''.obs;
   final RxList<File> images = <File>[].obs;
   RxBool isProfileLoading = false.obs;
-  RxString selectedState = "".obs;
-  RxString selectedCountry = "".obs;
-  RxString selectedCountryCode = "".obs;
-  RxString selectedStateCode = "".obs;
+
   RxList<String> countryList = <String>[].obs;
   RxList<String> stateList = <String>[].obs;
   RxList<String> cityList = <String>[].obs;
@@ -94,15 +89,14 @@ class ProfileController extends GetxController {
   RxString heightController = "".obs;
   final TextEditingController jobTtileController = TextEditingController();
   final TextEditingController companyController = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
   final TextEditingController aboutController = TextEditingController();
   RxBool isResend = false.obs;
+  @override
   RxBool isLoading = false.obs;
   RxInt otpRebuildKey = 0.obs;
 
   void clearData() {
     jobTtileController.clear();
-    cityController.clear();
     companyController.clear();
     aboutController.clear();
     isAboutEnable.value = false;
@@ -112,7 +106,7 @@ class ProfileController extends GetxController {
     selectedItems.clear();
     selectedLanguage.clear();
     selectedLooking.value = "";
-    selectedLookingFor.clear();
+    selectedLookingFor.value = "";
     selectedReligion.value = "";
     selectedVisibility.value = "";
     selectedZodiac.value = "";
@@ -139,7 +133,7 @@ class ProfileController extends GetxController {
 
   Future<void> addWorkout({required String workout}) async {
     try {
-      final response = await _profileServices.addWorkout(
+      final response = await profileRepository.addWorkout(
         workout: workout.toLowerCase(),
       );
 
@@ -147,11 +141,7 @@ class ProfileController extends GetxController {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: response.message,
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -160,18 +150,14 @@ class ProfileController extends GetxController {
 
   Future<void> addDrinkking({required String drinking}) async {
     try {
-      final response = await _profileServices.addDrinking(
+      final response = await profileRepository.addDrinking(
         drinking: drinking.toLowerCase(),
       );
       if (response.success) {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -180,18 +166,14 @@ class ProfileController extends GetxController {
 
   Future<void> addSmoking({required String smoking}) async {
     try {
-      final response = await _profileServices.addSmoking(
+      final response = await profileRepository.addSmoking(
         smoking: smoking.toLowerCase(),
       );
       if (response.success) {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -200,7 +182,7 @@ class ProfileController extends GetxController {
 
   Future<void> addHeight() async {
     try {
-      final response = await _profileServices.addHieght(
+      final response = await profileRepository.addHeight(
         feet: feet.value,
         cm: cm.value,
       );
@@ -209,11 +191,7 @@ class ProfileController extends GetxController {
         AppNavigation.back();
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -222,18 +200,14 @@ class ProfileController extends GetxController {
 
   Future<void> addInterests({required List<String> interests}) async {
     try {
-      final response = await _profileServices.addInterests(
+      final response = await profileRepository.addInterests(
         interests: interests,
       );
       if (response.success) {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -242,18 +216,14 @@ class ProfileController extends GetxController {
 
   Future<void> addLanguages({required List<String> languages}) async {
     try {
-      final response = await _profileServices.addLanguages(
+      final response = await profileRepository.addLanguages(
         languages: languages,
       );
       if (response.success) {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -262,18 +232,14 @@ class ProfileController extends GetxController {
 
   Future<void> addZodiacsign({required String zodiacsign}) async {
     try {
-      final response = await _profileServices.addZodiacsign(
+      final response = await profileRepository.addZodiacsign(
         zodiacsign: zodiacsign,
       );
       if (response.success) {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -282,18 +248,14 @@ class ProfileController extends GetxController {
 
   Future<void> addReligion({required String religion}) async {
     try {
-      final response = await _profileServices.addReligion(
+      final response = await profileRepository.addReligion(
         religion: religion.toSnakeCaseLowerCase(),
       );
       if (response.success) {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -302,18 +264,14 @@ class ProfileController extends GetxController {
 
   Future<void> addVisibility({required String visibility}) async {
     try {
-      final response = await _profileServices.addVisibility(
+      final response = await profileRepository.addVisibility(
         visibility: visibility,
       );
       if (response.success) {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -322,29 +280,19 @@ class ProfileController extends GetxController {
 
   Future<void> addLookingFor({required String lookingFor}) async {
     try {
-      final response = await _profileServices.addLooking(
+      final response = await profileRepository.addLooking(
         lookingFor: lookingFor.toSnakeCaseLowerCase(),
       );
 
       debugPrint(response.success.toString());
       if (!response.success) {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: response.message,
-          isError: true,
-        );
+        setError(response.message);
       }
 
       if (response.success) {
         await getMyProfile(false);
-        selectedLookingFor.clear();
         AppNavigation.back();
-      } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        selectedLookingFor.value = "";
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -353,18 +301,14 @@ class ProfileController extends GetxController {
 
   Future<void> addQualification({required String qualification}) async {
     try {
-      final response = await _profileServices.addQualification(
+      final response = await profileRepository.addQualification(
         qualification: qualification,
       );
       if (response.success) {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -373,7 +317,7 @@ class ProfileController extends GetxController {
 
   Future<bool> uploadPhotoW({required String imagePath}) async {
     try {
-      final response = await _profileServices.uploadImageWithDio(imagePath);
+      final response = await profileRepository.uploadImageWithDio(imagePath);
       if (response!.success) {
         final image = response.data!.url ?? '';
         bool isSuccess = await addPhoto(url: image);
@@ -391,7 +335,7 @@ class ProfileController extends GetxController {
 
   Future<bool> deleteProfile({required String profileId}) async {
     try {
-      final response = await _profileServices.deleteProfile(
+      final response = await profileRepository.deleteProfile(
         profileId: profileId,
       );
       if (response.success) {
@@ -410,9 +354,9 @@ class ProfileController extends GetxController {
 
   Future<bool> addProfileImage({required String url}) async {
     try {
-      final response = await _profileServices.uploadProfileimage(url: url);
+      final response = await profileRepository.uploadImageWithDio(url);
 
-      if (response.success) {
+      if (response!.success) {
         return true;
       } else {
         Get.back();
@@ -426,7 +370,7 @@ class ProfileController extends GetxController {
 
   Future<bool> addPhoto({required String url}) async {
     try {
-      final response = await _profileServices.addPhoto(url: url);
+      final response = await profileRepository.addPhoto(url: url);
 
       if (response.success) {
         return true;
@@ -445,7 +389,7 @@ class ProfileController extends GetxController {
     required String company,
   }) async {
     try {
-      final response = await _profileServices.addWork(
+      final response = await profileRepository.addWork(
         jobTitle: jobTitle,
         company: company,
       );
@@ -453,11 +397,7 @@ class ProfileController extends GetxController {
         await getMyProfile(false);
         AppNavigation.back();
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: "Something went wrong",
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -466,9 +406,8 @@ class ProfileController extends GetxController {
 
   Future<void> addAout({required String about}) async {
     try {
-      final response = await _profileServices.addAbout(about: about);
+      final response = await profileRepository.addAbout(about: about);
       if (response.success) {
-        AppMethods.appPrint(message: response.message);
         await getMyProfile(false);
         isAboutEnable.value = false;
       } else {
@@ -476,31 +415,22 @@ class ProfileController extends GetxController {
       }
     } catch (e) {
       isAboutEnable.value = false;
-      AppMethods.appPrint(message: e.toString());
     }
   }
 
   Future<void> autoCompleteLocation({required String query}) async {
     try {
-      final response = await _profileServices.autoCompleteSearchLocation(
+      final response = await profileRepository.autoCompleteSearchLocation(
         query: query,
       );
       if (response.success) {
-        AppMethods.appPrint(message: "AutoComplete response ${response.data}");
         if (response.data != null) {
           autoCompleteResponse.value = response.data!;
-          AppMethods.appPrint(
-            message: "AutoComplete response ${response.data}",
-          );
         } else {
           autoCompleteResponse.clear();
         }
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: response.message,
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -509,16 +439,12 @@ class ProfileController extends GetxController {
 
   Future<void> placeDetailsLocation({required String placeId}) async {
     try {
-      final response = await _profileServices.placeDetails(placeId: placeId);
+      final response = await profileRepository.placeDetails(placeId: placeId);
       if (response.success) {
         placeDetails.value = response.data!;
         Get.to(AddLocationScreen());
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: response.message,
-          isError: true,
-        );
+        setError(response.message);
       }
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
@@ -527,18 +453,16 @@ class ProfileController extends GetxController {
 
   Future<void> getMyProfile(bool isMain) async {
     try {
-      print('👤 getMyProfile: Fetching profile...');
       if (isMain) {
         isProfileLoading(true);
       }
 
-      final response = await _profileServices.getMyProfile();
+      final response = await profileRepository.getMyProfile();
       if (response.success) {
         final data = response.data;
         if (data != null) {
           basicInfo.value = data.basicInfo!;
           final hallList = data.hallOfFame ?? [];
-          // If profilePic exists and is not already in hallOfFame, prepend it
           final profilePicUrl = data.basicInfo?.profilePic?.url;
           final profilePicId = data.basicInfo?.profilePic?.id;
           if (profilePicUrl != null &&
@@ -558,7 +482,6 @@ class ProfileController extends GetxController {
           }
           lifestyle.value = data.lifestyle!;
           prefeence.value = data.preferences!;
-          // await setLookingFromApi(data.preferences?.lookingFor);
           personal.value = data.personal!;
           professional.value = data.professional!;
           locations.value = data.locations!;
@@ -570,15 +493,8 @@ class ProfileController extends GetxController {
         }
         _updateInShort();
         isProfileLoading(false);
-        // await Future.delayed(Duration(seconds: 5), () {
-
-        // });
       } else {
-        AppToastMessage.show(
-          title: AppConstants.errorTitle,
-          message: response.message,
-          isError: true,
-        );
+        setError(response.message);
         isProfileLoading(false);
       }
     } catch (e) {
@@ -607,12 +523,6 @@ class ProfileController extends GetxController {
         faceRect.bottom >= imageSize.height - edgeMargin) {
       return false;
     }
-
-    // if ((face.headEulerAngleX ?? 0).abs() > 10 ||
-    //     (face.headEulerAngleY ?? 0).abs() > 10 ||
-    //     (face.headEulerAngleZ ?? 0).abs() > 10) {
-    //   return false;
-    // }
 
     if ((face.leftEyeOpenProbability ?? 1) < 0.5 ||
         (face.rightEyeOpenProbability ?? 1) < 0.5) {
@@ -653,11 +563,7 @@ class ProfileController extends GetxController {
       if (success) {
         Get.back(result: {'success': true});
       } else {
-        AppToastMessage.show(
-          title: "Error",
-          message: "Photo upload failed. Please try again.",
-          isError: true,
-        );
+        setError("Photo upload failed. Please try again.");
 
         PhotoReviewBottomsheet.show(
           onImageSelected: (selectedImage) {
@@ -697,22 +603,12 @@ class ProfileController extends GetxController {
 
   Future<bool> allOfFameUpload({required List<String> imageUrlList}) async {
     try {
-      // isPageLoading(true);
-      // final cleanedList = imageUrlList.where((e) => e.isNotEmpty).toList();
-      print("all $imageUrlList");
-      final response = await _profileServices.allOfFame(
+      final response = await profileRepository.allOfFame(
         imageUrlList: imageUrlList,
       );
       if (response.success) {
         return true;
-      } else {
-        // isPageLoading(false);
-        // AppToastMessage.show(
-        //   isError: true,
-        //   title: "Error",
-        //   message: "Success ${response.message}",
-        // );
-      }
+      } else {}
     } catch (e) {
       debugPrint(e.toString());
       return false;
@@ -720,114 +616,8 @@ class ProfileController extends GetxController {
     return false;
   }
 
-  Future<void> addHomeLocation({
-    required String city,
-    required String state,
-    required String country,
-  }) async {
-    try {
-      final response = await _profileServices.addHomeLocation(
-        city: city,
-        state: state,
-        country: country,
-      );
-      if (response.success) {
-        await getMyProfile(false);
-        Navigator.pop(Get.context!);
-      }
-    } catch (e) {
-      AppMethods.appPrint(message: e.toString());
-    }
-  }
-
-  // Maps country name -> isoCode
-  final Map<String, String> countryIsoMap = {};
-
-  Future<void> getCountry({String? search}) async {
-    try {
-      isLoadingCountries(true);
-      final response = await _profileServices.getCountries(search: search);
-      if (response.success && response.data != null) {
-        countryIsoMap.clear();
-        final names = <String>[];
-        for (final item in response.data!) {
-          final name = item['name'] ?? '';
-          final iso = item['isoCode'] ?? '';
-          if (name.isNotEmpty) {
-            names.add(name);
-            countryIsoMap[name] = iso;
-          }
-        }
-        countryList.assignAll(names);
-      }
-      isLoadingCountries(false);
-    } catch (e) {
-      isLoadingCountries(false);
-      AppMethods.appPrint(message: "Error fetching countries: $e");
-    }
-  }
-
-  Future<void> getState({required String country, String? search}) async {
-    try {
-      isLoadingStates(true);
-      final response = await _profileServices.getStates(
-        country: country,
-        search: search,
-      );
-      if (response.success && response.data != null) {
-        stateIsoMap.clear();
-        final names = <String>[];
-        for (final item in response.data!) {
-          final name = item['name'] ?? '';
-          final iso = item['isoCode'] ?? '';
-          if (name.isNotEmpty) {
-            names.add(name);
-            stateIsoMap[name] = iso;
-          }
-        }
-        stateList.assignAll(names);
-      }
-      isLoadingStates(false);
-    } catch (e) {
-      isLoadingStates(false);
-      AppMethods.appPrint(message: e.toString());
-    }
-  }
-
-  Future<void> getCity({
-    required String country,
-    required String state,
-    String? search,
-  }) async {
-    try {
-      isLoadingCities(true);
-      final response = await _profileServices.getCities(
-        country: country,
-        state: state,
-        search: search,
-      );
-      if (response.success && response.data != null) {
-        cityList.assignAll(
-          response.data!
-              .map((e) => e['name'] ?? '')
-              .where((n) => n.isNotEmpty)
-              .toList(),
-        );
-      }
-      isLoadingCities(false);
-    } catch (e) {
-      isLoadingCities(false);
-      AppMethods.appPrint(message: e.toString());
-    }
-  }
-
   RxList<InshortList> inshortList = <InshortList>[].obs;
   Future<void> _updateInShort() async {
-    // if (profile == null) {
-    //   inShortList.clear();
-    //   inshortList.clear();
-    //   return;
-    // }
     inshortList.clear();
     if (basicInfo.value.gender != null && basicInfo.value.gender!.isNotEmpty) {
       final vlaue = GenderEnumX.fromApi(basicInfo.value.gender!);
@@ -893,22 +683,6 @@ class ProfileController extends GetxController {
         );
       }
     }
-
-    // inshortList
-    //   ..clear()
-    //   ..addAll(
-    //     [
-
-    //          basicInfo.value.gender,
-    //          lifestyle.value.smoking,
-    //          lifestyle.value.drinking,
-    //          personal.value.religion,
-    //          personal.value.zodiacSign,
-    //          basicInfo.value.height
-    //         ]
-    //         .where((e) => e != null && e.toString().trim().isNotEmpty)
-    //         .cast<String>(),
-    //   );
   }
 
   Future<void> setInterestsFromApi(List<String>? apiList) async {
@@ -931,23 +705,21 @@ class ProfileController extends GetxController {
                       ? e[0].toUpperCase() + e.substring(1).toLowerCase()
                       : e,
             )
-            .toSet() // remove duplicates
+            .toSet()
             .toList();
 
     selectedLanguage
       ..clear()
       ..addAll(formattedList);
-
-    print("SelectedLanguage: $selectedLanguage");
   }
 
   Future<void> setLookingFromApi(String? apiValue) async {
     if (apiValue == null || apiValue.trim().isEmpty) return;
 
     final match = RelationshipIntentEnumX.fromApi(apiValue);
-    selectedLookingFor
-      ..clear()
-      ..add(match?.label ?? apiValue);
+    selectedLookingFor.value = match?.label ?? apiValue;
+    // ..clear()
+    // ..add(match?.label ?? apiValue);
   }
 
   Future<void> swapFames({
@@ -955,84 +727,13 @@ class ProfileController extends GetxController {
     required int position2,
   }) async {
     try {
-      await _profileServices.swapFames(
+      await profileRepository.swapFames(
         position1: position1,
         position2: position2,
       );
       await getMyProfile(false);
     } catch (e) {
       AppMethods.appPrint(message: e.toString());
-    }
-  }
-
-  Future<void> sendEmailOtp(String email) async {
-    try {
-      // if (isResend.isFalse) {
-      //   isLoading(true);
-      // }
-
-      final response = await _profileServices.sendEmailOtp(email: email);
-      if (response.success) {
-        debugPrint(response.message);
-        // AppToastMessage.show(title: "OTP", message: response.message);
-        // if (isResend.isFalse) {
-        //   NavigationHelper.push(OtpScreen());
-        // }
-      } else {
-        // AppToastMessage.show(
-        //   isError: true,
-        //   title: AppConstants.errorTitle,
-        //   message: response.message,
-        // );
-
-        isLoading(false);
-      }
-    } catch (e) {
-      isLoading(false);
-      debugPrint(e.toString());
-    } finally {
-      isResend(false);
-      isLoading(false);
-    }
-  }
-
-  Future<bool> verifyEmailOtp({
-    required String email,
-    required String otp,
-  }) async {
-    try {
-      isLoading(true);
-      final response = await _profileServices.verifyEmailOtp(
-        email: email,
-        otp: otp,
-      );
-      if (response.success) {
-        debugPrint(response.message);
-        return true;
-        // AppToastMessage.show(title: "Success", message: response.message);
-
-        // Debug: Check if token was saved
-      } else {
-        // AppMethods.appPrint(message: response.message.toString());
-        // AppToastMessage.show(
-        //   isError: true,
-        //   title: AppConstants.errorTitle,
-        //   message: response.message,
-        // );
-
-        otpValue.value = "";
-        otpRebuildKey++;
-        isOtpEnable.value = false;
-
-        isLoading(false);
-        return false;
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      isLoading(false);
-      return false;
-    } finally {
-      isLoading(false);
     }
   }
 

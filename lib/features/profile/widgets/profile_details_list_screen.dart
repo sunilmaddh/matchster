@@ -9,13 +9,9 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
 import 'package:matchster/features/profile/view/interest/looking_screen.dart';
-import 'package:matchster/features/profile/view/interest/religion_screen.dart';
-import 'package:matchster/features/profile/view/interest/visibility_screen.dart';
-import 'package:matchster/features/profile/view/interest/zodiac_screen.dart';
-import 'package:matchster/features/profile/view/profile/education_screen.dart';
-import 'package:matchster/features/profile/view/profile/height_screen.dart';
-import 'package:matchster/features/profile/view/profile/work_screen.dart';
 import 'package:matchster/features/profile/widgets/interest_card.dart';
+import 'package:matchster/routes/app_navigation.dart';
+import 'package:matchster/routes/app_routes.dart';
 
 class ProfileDetailsListScreen extends StatelessWidget {
   ProfileDetailsListScreen({
@@ -55,7 +51,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
               } else {
                 _controller.selectedZodiac.value = "";
               }
-              Get.to(() => ZodiacScreen());
+              AppNavigation.to(AppRoutes.zodiacScreen);
             },
             child: InterestCard(
               color: Color(0xffB4CADE),
@@ -76,7 +72,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
               } else {
                 _controller.selectedReligion.value = "";
               }
-              Get.to(() => ReligionScreen());
+              AppNavigation.to(AppRoutes.religionScreen);
             },
             child: InterestCard(
               color: Color(0xffB4DEC5),
@@ -96,7 +92,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
               } else {
                 _controller.selectedVisibility.value = "";
               }
-              Get.to(() => VisibilityScreen());
+              AppNavigation.to(AppRoutes.visibilityScreen);
             },
             child: InterestCard(
               color: Color(0xffDEDCB4),
@@ -117,7 +113,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
               } else {
                 _controller.selectedLookingFor();
               }
-              Get.to(() => LookingScreen());
+              AppNavigation.to(AppRoutes.lookingScreen);
             },
             child: Obx(
               () => InterestCard(
@@ -140,7 +136,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
               } else {
                 _controller.heightController.value = "";
               }
-              Get.to(() => HeightScreen());
+              AppNavigation.to(AppRoutes.heightScreen);
             },
             child: InterestCard(
               color: Color(0xffE5C3FF),
@@ -170,7 +166,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
               } else {
                 _controller.qualification.value = "";
               }
-              Get.to(() => EducationScreen());
+              AppNavigation.to(AppRoutes.educationScreen);
             },
             child: InterestCard(
               color: Color(0xff92C58F),
@@ -196,7 +192,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
                 _controller.companyController.clear();
               }
 
-              Get.to(() => WorkScreen());
+              AppNavigation.to(AppRoutes.workScreen);
             },
             child: InterestCard(
               color: Color(0xffA2D2FF),

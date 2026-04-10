@@ -10,13 +10,14 @@ import 'package:matchster/features/profile/models/auto_complete_response.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
 import 'package:matchster/features/profile/models/place_details_response.dart';
 
-class ProfileServices {
-  final BaseService _baseService = BaseService();
+class ProfileService {
+  ProfileService({required this.baseService});
+  final BaseService baseService;
 
   Future<BaseResponse<Map<String, dynamic>>> addWorkout({
     required String workout,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addWorkout,
       data: {"workout": workout},
       fromJsonT: (json) => json,
@@ -26,7 +27,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addSmoking({
     required String smoking,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addSmoking,
       data: {"smoking": smoking},
       fromJsonT: (json) => json,
@@ -36,7 +37,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addDrinking({
     required String drinking,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addDrinking,
       data: {"drinking": drinking},
       fromJsonT: (json) => json,
@@ -46,7 +47,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addInterests({
     required List interests,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addInterests,
       data: {"interests": interests},
       fromJsonT: (json) => json,
@@ -56,7 +57,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addLanguages({
     required List languages,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addLanguages,
       data: {"languages": languages},
       fromJsonT: (json) => json,
@@ -66,7 +67,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addZodiacsign({
     required String zodiacsign,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addZodiacsign,
       data: {"zodiacSign": zodiacsign},
       fromJsonT: (json) => json,
@@ -76,7 +77,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addReligion({
     required String religion,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addReligion,
       data: {"religion": religion},
       fromJsonT: (json) => json,
@@ -86,7 +87,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addVisibility({
     required String visibility,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addVisibility,
       data: {"visibility": visibility},
       fromJsonT: (json) => json,
@@ -96,7 +97,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addLooking({
     required String lookingFor,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addLookingfor,
       data: {"lookingFor": lookingFor},
       fromJsonT: (json) => json,
@@ -106,7 +107,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addQualification({
     required String qualification,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addQualification,
       data: {"qualification": qualification},
       fromJsonT: (json) => json,
@@ -117,7 +118,7 @@ class ProfileServices {
     required String jobTitle,
     required String company,
   }) async {
-    return await _baseService.postRequest<Work>(
+    return await baseService.postRequest<Work>(
       path: ApiEndpoints.addWork,
       data: {
         "work": {"jobTitle": jobTitle, "company": company},
@@ -130,7 +131,7 @@ class ProfileServices {
     required double feet,
     required double cm,
   }) async {
-    return _baseService.postRequest<AddHieghtResponse>(
+    return baseService.postRequest<AddHieghtResponse>(
       path: ApiEndpoints.addHieght,
       data: {
         "height": {"feet": feet, "cm": cm},
@@ -142,7 +143,7 @@ class ProfileServices {
   Future<BaseResponse<Map<String, dynamic>>> addAbout({
     required String about,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.addAbout,
       data: {"about": about},
       fromJsonT: (json) => json,
@@ -152,7 +153,7 @@ class ProfileServices {
   Future<BaseResponse<List<AutoCompleteResponse>>> autoCompleteSearchLocation({
     required String query,
   }) async {
-    return await _baseService.postRequest<List<AutoCompleteResponse>>(
+    return await baseService.postRequest<List<AutoCompleteResponse>>(
       path: "${ApiEndpoints.autoComplete}?input=$query",
       fromJsonT:
           (json) =>
@@ -165,38 +166,29 @@ class ProfileServices {
   Future<BaseResponse<PlaceDetailsResponse>> placeDetails({
     required String placeId,
   }) async {
-    return await _baseService.postRequest<PlaceDetailsResponse>(
+    return await baseService.postRequest<PlaceDetailsResponse>(
       path: "${ApiEndpoints.placeDetails}?placeId=$placeId",
       fromJsonT: (json) => PlaceDetailsResponse.fromJson(json),
     );
   }
 
   Future<BaseResponse<MyProfilResponse>> getMyProfile() async {
-    return await _baseService.getRequest<MyProfilResponse>(
+    return await baseService.getRequest<MyProfilResponse>(
       path: ApiEndpoints.myProfile,
       fromJsonT: (json) => MyProfilResponse.fromJson(json),
     );
   }
 
   Future<BaseResponse<void>> deleteProfile({required String profileId}) async {
-    return await _baseService.deleteRequest(
+    return await baseService.deleteRequest(
       path: "${ApiEndpoints.deleteProfile}/$profileId",
     );
   }
 
   Future<BaseResponse<void>> addPhoto({required String url}) async {
-    return await _baseService.postRequest<void>(
+    return await baseService.postRequest(
       path: ApiEndpoints.addProfilePicture,
       data: {'url': url},
-      fromJsonT: (json) => null,
-    );
-  }
-
-  Future<BaseResponse<void>> uploadProfileimage({required String url}) async {
-    return await _baseService.patchRequest<void>(
-      path: ApiEndpoints.uploadProfileimage,
-      data: {'url': url},
-      fromJsonT: (json) => null,
     );
   }
 
@@ -211,7 +203,7 @@ class ProfileServices {
         ),
       });
 
-      final response = await _baseService.postRequest<UploadPhotoResponse>(
+      final response = await baseService.postRequest<UploadPhotoResponse>(
         path: ApiEndpoints.uploadPhoto,
         data: formData,
         fromJsonT: (json) => UploadPhotoResponse.fromJson(json),
@@ -228,7 +220,7 @@ class ProfileServices {
   Future<BaseResponse<AddDateWithResponse>> allOfFame({
     required List imageUrlList,
   }) async {
-    return _baseService.postRequest<AddDateWithResponse>(
+    return baseService.postRequest<AddDateWithResponse>(
       path: ApiEndpoints.allOfFame,
       data: {"urls": imageUrlList},
     );
@@ -237,7 +229,7 @@ class ProfileServices {
   Future<BaseResponse<AddDateWithResponse>> addProfile({
     required List imageUrlList,
   }) async {
-    return _baseService.postRequest<AddDateWithResponse>(
+    return baseService.postRequest<AddDateWithResponse>(
       path: ApiEndpoints.allOfFame,
       data: {"urls": imageUrlList},
     );
@@ -248,7 +240,7 @@ class ProfileServices {
     required String state,
     required String country,
   }) async {
-    return _baseService.postRequest<AddDateWithResponse>(
+    return baseService.postRequest<AddDateWithResponse>(
       path: ApiEndpoints.addHomeTownLocation,
       data: {
         "homeTown": {"city": city, "state": state, "country": country},
@@ -256,76 +248,18 @@ class ProfileServices {
     );
   }
 
-  Future<BaseResponse<List<Map<String, String>>>> getCountries({
-    String? search,
-  }) async {
-    return await _baseService.getRequest<List<Map<String, String>>>(
-      path:
-          "${ApiEndpoints.cscCountry}${search != null ? '?search=$search' : ''}",
-      fromJsonT:
-          (json) =>
-              (json as List)
-                  .map(
-                    (e) => {
-                      'name': (e['name'] ?? '').toString(),
-                      'isoCode': (e['isoCode'] ?? '').toString(),
-                    },
-                  )
-                  .toList(),
-    );
-  }
-
-  /// Returns list of maps with 'name' and 'isoCode'
-  Future<BaseResponse<List<Map<String, String>>>> getStates({
-    required String country,
-    String? search,
-  }) async {
-    return await _baseService.getRequest<List<Map<String, String>>>(
-      path:
-          "${ApiEndpoints.cscState}?country=$country${search != null ? '&search=$search' : ''}",
-      fromJsonT:
-          (json) =>
-              (json as List)
-                  .map(
-                    (e) => {
-                      'name': (e['name'] ?? '').toString(),
-                      'isoCode': (e['isoCode'] ?? '').toString(),
-                    },
-                  )
-                  .toList(),
-    );
-  }
-
-  /// Returns list of maps with 'name'
-  Future<BaseResponse<List<Map<String, String>>>> getCities({
-    required String country,
-    required String state,
-    String? search,
-  }) async {
-    return await _baseService.getRequest<List<Map<String, String>>>(
-      path:
-          "${ApiEndpoints.cscCity}?country=$country&state=$state${search != null ? '&search=$search' : ''}",
-      fromJsonT:
-          (json) =>
-              (json as List)
-                  .map((e) => {'name': (e['name'] ?? '').toString()})
-                  .toList(),
-    );
-  }
-
   Future<BaseResponse<void>> swapFames({
     required int position1,
     required int position2,
   }) async {
-    return await _baseService.postRequest<void>(
+    return await baseService.postRequest<void>(
       path: ApiEndpoints.swapFames,
       data: {"position1": position1, "position2": position2},
-      fromJsonT: (json) => null,
     );
   }
 
   Future<BaseResponse<void>> sendEmailOtp({required String email}) async {
-    return _baseService.postRequest(
+    return baseService.postRequest(
       path: ApiEndpoints.sendEmailOtp,
       data: {"email": email},
     );
@@ -335,7 +269,7 @@ class ProfileServices {
     required String email,
     required String otp,
   }) async {
-    return await _baseService.postRequest(
+    return await baseService.postRequest(
       path: ApiEndpoints.verifyEmailOtp,
       data: {"email": email, "otp": otp},
     );
