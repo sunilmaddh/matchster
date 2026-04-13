@@ -15,17 +15,13 @@ class ConnectAccountsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.labelLarge(
             AppStrings.connectAccounts,
-            fontSize: 14.sp,
             fontWeight: FontWeight.w700,
-            fontFamily: "Caros",
           ),
-          CommonText.text(
+          CommonText.labelMedium(
             AppStrings.buildYourConnectionMore,
-            fontSize: 12.sp,
             fontWeight: FontWeight.w300,
-            fontFamily: "Caros",
           ),
           5.hBox,
           AddInstagramCard(),

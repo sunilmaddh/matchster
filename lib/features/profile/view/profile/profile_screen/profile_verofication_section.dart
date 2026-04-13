@@ -18,12 +18,7 @@ class ProfileVerificationSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
-            AppStrings.verifyYourProfile,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-            fontFamily: "Caros",
-          ),
+          CommonText.titleMedium(AppStrings.verifyYourProfile),
           5.hBox,
           Padding(
             padding: EdgeInsets.only(bottom: 15.h),

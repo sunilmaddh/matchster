@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:matchster/core/base/base_view.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/constants/app_constants.dart';
+import 'package:matchster/core/constants/app_font_type.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/core/widgets/buttons/app_button.dart';
@@ -39,12 +40,12 @@ class OtpScreen extends BaseView<LoginController> {
   }
 
   Widget _buildDescription() {
-    return CommonText.text(
+    return CommonText.titleMedium(
       AppConstants.otpDiscription,
-      fontFamily: 'DM Sans',
+      fontType: AppFontType.mono,
+
       textAlign: TextAlign.center,
       maxLines: 2,
-      fontSize: 16.sp,
       fontWeight: FontWeight.w400,
       color: const Color(0xff0C0C0C),
     );

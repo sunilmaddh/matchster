@@ -110,6 +110,36 @@ class AppStrings {
   static const String uploadFavoritePhotosDescription =
       'Upload 5-6 favorite photos to let your personality shine. Make sure your uploads are clear and capture the real you!';
   static const gallery = "Gallery";
+  static const String profilePreview = "Profile Preview";
+
+  // Verified card
+
+  static const String showYouAreReal = "Show others you’re real";
+
+  // Sections
+  static const String inShort = "In Short";
+  static const String lookingFor = "Looking For";
+  static const String myInterest = "My Interests";
+  static const String interestSubtitle =
+      "Express your interests to find your ideal match";
+  static const String profession = "Profession";
+  static const String morePictures = "More Pictures";
+  static const String language = "Languages";
+
+  static const String km = "km";
+  static const String away = "away";
+  static const String profileDetails = "Profile Details";
+
+  // Titles
+  static const String zodiacSign = "Zodiac Sign";
+  static const String religion = "Religion";
+  static const String profileVisibility = "Profile Visibility";
+  static const String height = "Height";
+  static const String education = "Education";
+  static const String work = "Work";
+
+  // Common
+  static const String notAvailable = "Not available";
 
   static final locationString = _LocationStrings();
 }

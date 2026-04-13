@@ -87,10 +87,13 @@ class _CountryList extends StatelessWidget {
             final country = list[index];
 
             return ListTile(
-              leading: CommonText.text(country.flagEmoji, fontSize: 35.sp),
-              title: CommonText.text(
+              leading: CommonText.text(
+                country.flagEmoji,
+                style: TextStyle(fontSize: 35.sp),
+              ),
+              title: CommonText.titleMedium(
                 "${country.name} +${country.phoneCode}",
-                fontSize: 16.sp,
+
                 fontWeight: FontWeight.w400,
               ),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_assets.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/constants/common_lists.dart';
 import 'package:matchster/core/extentions/snack_case.ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
@@ -8,7 +9,6 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/models/my_profile_response.dart';
-import 'package:matchster/features/profile/view/interest/looking_screen.dart';
 import 'package:matchster/features/profile/widgets/interest_card.dart';
 import 'package:matchster/routes/app_navigation.dart';
 import 'package:matchster/routes/app_routes.dart';
@@ -27,20 +27,25 @@ class ProfileDetailsListScreen extends StatelessWidget {
   final Professional professional;
   final BasicInfo basicInfo;
 
-  final _controller = Get.find<ProfileController>();
+  final ProfileController _controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
+    final String workTitle = professional.work?.jobTitle ?? '';
+    final String companyName = professional.work?.company ?? '';
+
+    final String workSubtitle = [
+      if (workTitle.isNotEmpty) AppMethods.capitalizeFirst(workTitle),
+      if (companyName.isNotEmpty) AppMethods.capitalizeFirst(companyName),
+    ].join(', ');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CommonText.text(
-          "Profile Details",
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
-          fontFamily: "Caros",
-        ),
+        CommonText.titleMedium(AppStrings.profileDetails),
         5.hBox,
+
+        /// Zodiac Sign
         Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: InkWell(
@@ -54,15 +59,17 @@ class ProfileDetailsListScreen extends StatelessWidget {
               AppNavigation.to(AppRoutes.zodiacScreen);
             },
             child: InterestCard(
-              color: Color(0xffB4CADE),
-              title: 'Zodiac Sign',
+              color: const Color(0xffB4CADE),
+              title: AppStrings.zodiacSign,
               subTitle: AppMethods.capitalizeFirst(
-                personal.zodiacSign ?? "Not available",
+                personal.zodiacSign ?? AppStrings.notAvailable,
               ),
               image: AppAssets.zodizcAssets,
             ),
           ),
         ),
+
+        /// Religion
         Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: InkWell(
@@ -75,13 +82,18 @@ class ProfileDetailsListScreen extends StatelessWidget {
               AppNavigation.to(AppRoutes.religionScreen);
             },
             child: InterestCard(
-              color: Color(0xffB4DEC5),
-              title: 'Religion',
-              subTitle: (personal.religion ?? "").removeSnakeAndCapitalize(),
+              color: const Color(0xffB4DEC5),
+              title: AppStrings.religion,
+              subTitle:
+                  (personal.religion ?? "").isNotEmpty
+                      ? (personal.religion ?? "").removeSnakeAndCapitalize()
+                      : AppStrings.notAvailable,
               image: AppAssets.religionAssest,
             ),
           ),
         ),
+
+        /// Profile Visibility
         Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: InkWell(
@@ -95,14 +107,18 @@ class ProfileDetailsListScreen extends StatelessWidget {
               AppNavigation.to(AppRoutes.visibilityScreen);
             },
             child: InterestCard(
-              color: Color(0xffDEDCB4),
-              title: 'Profile Visibility',
+              color: const Color(0xffDEDCB4),
+              title: AppStrings.profileVisibility,
               subTitle:
-                  (preference.visibility ?? "").removeSnakeAndCapitalize(),
+                  (preference.visibility ?? "").isNotEmpty
+                      ? (preference.visibility ?? "").removeSnakeAndCapitalize()
+                      : AppStrings.notAvailable,
               image: AppAssets.profileEditAssets,
             ),
           ),
         ),
+
+        /// Looking For
         Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: InkWell(
@@ -117,16 +133,20 @@ class ProfileDetailsListScreen extends StatelessWidget {
             },
             child: Obx(
               () => InterestCard(
-                color: Color(0xffB4CADE),
-                title: 'Looking For',
+                color: const Color(0xffB4CADE),
+                title: AppStrings.lookingFor,
                 subTitle:
-                    (_controller.prefeence.value.lookingFor ?? "")
-                        .removeSnakeAndCapitalize(),
+                    (_controller.prefeence.value.lookingFor ?? "").isNotEmpty
+                        ? (_controller.prefeence.value.lookingFor ?? "")
+                            .removeSnakeAndCapitalize()
+                        : AppStrings.notAvailable,
                 image: AppAssets.lookingAssets,
               ),
             ),
           ),
         ),
+
+        /// Height
         Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: InkWell(
@@ -139,15 +159,17 @@ class ProfileDetailsListScreen extends StatelessWidget {
               AppNavigation.to(AppRoutes.heightScreen);
             },
             child: InterestCard(
-              color: Color(0xffE5C3FF),
-              title: 'Height',
+              color: const Color(0xffE5C3FF),
+              title: AppStrings.height,
               subTitle: AppMethods.capitalizeFirst(
-                basicInfo.height ?? "Not available",
+                basicInfo.height ?? AppStrings.notAvailable,
               ),
               image: AppAssets.heightAssets,
             ),
           ),
         ),
+
+        /// Education
         Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: InkWell(
@@ -155,7 +177,7 @@ class ProfileDetailsListScreen extends StatelessWidget {
               if (personal.qualification != null &&
                   personal.qualification!.isNotEmpty) {
                 _controller.qualification.value = personal.qualification!;
-                int index = CommonLists.studieList.indexWhere(
+                final int index = CommonLists.studieList.indexWhere(
                   (element) =>
                       element.toLowerCase() ==
                       personal.qualification!
@@ -169,14 +191,19 @@ class ProfileDetailsListScreen extends StatelessWidget {
               AppNavigation.to(AppRoutes.educationScreen);
             },
             child: InterestCard(
-              color: Color(0xff92C58F),
-              title: 'Education',
+              color: const Color(0xff92C58F),
+              title: AppStrings.education,
               subTitle:
-                  (personal.qualification ?? "").removeSnakeAndCapitalize(),
+                  (personal.qualification ?? "").isNotEmpty
+                      ? (personal.qualification ?? "")
+                          .removeSnakeAndCapitalize()
+                      : AppStrings.notAvailable,
               image: AppAssets.educationAssets,
             ),
           ),
         ),
+
+        /// Work
         Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: InkWell(
@@ -195,10 +222,12 @@ class ProfileDetailsListScreen extends StatelessWidget {
               AppNavigation.to(AppRoutes.workScreen);
             },
             child: InterestCard(
-              color: Color(0xffA2D2FF),
-              title: 'Work',
+              color: const Color(0xffA2D2FF),
+              title: AppStrings.work,
               subTitle:
-                  "${AppMethods.capitalizeFirst(professional.work?.jobTitle ?? '')}, ${AppMethods.capitalizeFirst(professional.work?.company ?? '')}",
+                  workSubtitle.isNotEmpty
+                      ? workSubtitle
+                      : AppStrings.notAvailable,
               image: AppAssets.workAssets,
             ),
           ),

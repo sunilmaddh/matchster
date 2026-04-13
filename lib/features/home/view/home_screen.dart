@@ -7,7 +7,7 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/features/home/controller/home_controller.dart';
 import 'package:matchster/features/home/view/background_card.dart';
-import 'package:matchster/features/home/view/profile_details_section.dart';
+import 'package:matchster/features/home/view/home_profile_details_section.dart';
 import 'package:matchster/features/home/widgets/dark_circle_widget.dart';
 import 'package:matchster/features/home/widgets/main_photo_card.dart';
 import 'package:matchster/features/home/widgets/no_more_profile_widget.dart';
@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
 
-                            ProfileDetailsSection(
+                            HomeProfileDetailsSection(
                               data: data,
                               controller: _homeController,
                             ),

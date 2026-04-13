@@ -22,12 +22,7 @@ class ProfileLocationSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           10.hBox,
-          CommonText.text(
-            AppStrings.location,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-            fontFamily: "Caros",
-          ),
+          CommonText.titleMedium(AppStrings.location),
           5.hBox,
           InkWell(
             onTap: () {

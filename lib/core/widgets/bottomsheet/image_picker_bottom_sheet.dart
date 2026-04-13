@@ -54,9 +54,8 @@ class ImagePickerBottomSheet {
             10.hBox,
             TextButton(
               onPressed: Get.back,
-              child: CommonText.text(
+              child: CommonText.headlineSmall(
                 "Cancel",
-                fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -87,7 +86,7 @@ class _PickerOption extends StatelessWidget {
         children: [
           SvgPicture.asset(image),
           6.hBox,
-          CommonText.text(text, fontSize: 14.sp, fontWeight: FontWeight.w400),
+          CommonText.labelLarge(text, fontWeight: FontWeight.w400),
         ],
       ),
     );

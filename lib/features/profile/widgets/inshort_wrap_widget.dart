@@ -14,7 +14,7 @@ class InshortWrapWidget extends StatelessWidget {
       listWidget:
           list.map((v) {
             AppMethods.appPrint(message: list.toString());
-            // final intent = RelationshipIntentEnumX.fromString(v);
+
             return v != null
                 ? CommonWrapCard(text: v.label, img: v.emoji)
                 : SizedBox.shrink();

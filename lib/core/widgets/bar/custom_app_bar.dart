@@ -39,13 +39,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               )
               : SizedBox.shrink(),
-      title: CommonText.text(
-        title,
-
-        fontWeight: FontWeight.w500,
-        color: textColor,
-        fontSize: 16.sp,
-      ),
+      title: CommonText.titleMedium(title, color: textColor),
       centerTitle: isCenterTitle,
       actions: actions,
     );

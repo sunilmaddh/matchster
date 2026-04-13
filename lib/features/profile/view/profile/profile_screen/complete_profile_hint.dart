@@ -6,7 +6,7 @@ import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
 
 class CompleteProfileHint extends StatelessWidget {
-  const CompleteProfileHint();
+  const CompleteProfileHint({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,7 @@ class CompleteProfileHint extends StatelessWidget {
             child: CommonText.text(
               AppStrings.completeProfileHint,
               maxLines: 2,
-              fontSize: 11.sp,
-              fontWeight: FontWeight.normal,
-              color: AppColors.blackColor,
+              style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.normal),
             ),
           ),
         ],

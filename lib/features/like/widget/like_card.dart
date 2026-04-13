@@ -34,19 +34,8 @@ class LikeCard extends StatelessWidget {
             child: CommonAssets.networkImage(image, fit: BoxFit.cover),
           ),
           5.hBox,
-          CommonText.text(
-            text1,
-            fontFamily: "Caros",
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            color: Color(0xff1D48EF),
-          ),
-          CommonText.text(
-            text2,
-            fontFamily: "Caros",
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w700,
-          ),
+          CommonText.labelMedium(text1, color: Color(0xff1D48EF)),
+          CommonText.titleMedium(text2, fontWeight: FontWeight.w700),
         ],
       ),
     );

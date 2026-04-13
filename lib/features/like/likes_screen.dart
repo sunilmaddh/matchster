@@ -23,12 +23,7 @@ class LikesScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText.text(
-                  "Likes",
-                  fontFamily: "Caros",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                ),
+                CommonText.titleMedium("Likes", fontWeight: FontWeight.w700),
                 20.hBox,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,19 +34,15 @@ class LikesScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CommonText.text(
-                            fontFamily: "Caros",
+                          CommonText.labelLarge(
                             fontWeight: FontWeight.w300,
-                            fontSize: 14.sp,
+
                             maxLines: 5,
                             "You have got multiple matches. Find out who they are",
                           ),
                           Row(
                             children: [
-                              CommonText.text(
-                                fontFamily: "Caros",
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.sp,
+                              CommonText.titleMedium(
                                 maxLines: 5,
                                 color: Color(0xff1D48EF),
                                 "Explore",
@@ -72,14 +63,7 @@ class LikesScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CommonText.text(
-                      fontFamily: "Caros",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
-                      maxLines: 5,
-
-                      "Likes",
-                    ),
+                    CommonText.titleMedium(maxLines: 5, "Likes"),
                     Icon(Icons.filter_list, color: Color(0xff797979)),
                   ],
                 ),

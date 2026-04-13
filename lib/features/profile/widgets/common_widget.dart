@@ -101,15 +101,12 @@ class CommonWidget extends StatelessWidget {
                                 horizontal: 14.0,
                                 vertical: 10.0,
                               ),
-                              child: CommonText.text(
+                              child: CommonText.labelLarge(
                                 v,
                                 color:
                                     selected
                                         ? AppColors.whiteColor
                                         : AppColors.blackColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "Caros",
                               ),
                             ),
                           ),

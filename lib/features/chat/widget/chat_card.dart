@@ -54,18 +54,11 @@ class ChatCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CommonText.text(
-                text1,
-                fontSize: 24.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Caros",
-              ),
-              CommonText.text(
+              CommonText.displaySmall(text1, fontWeight: FontWeight.w500),
+              CommonText.titleMedium(
                 overflow: TextOverflow.ellipsis,
                 text2,
-                fontSize: 16.sp,
                 fontWeight: FontWeight.w300,
-                fontFamily: "Caros",
                 color: Colors.black.withAlpha(128),
               ),
             ],

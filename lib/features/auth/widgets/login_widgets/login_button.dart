@@ -32,10 +32,8 @@ class LoginButton extends StatelessWidget {
           children: [
             image.isNotEmpty ? SvgPicture.asset(image) : SizedBox.shrink(),
             10.wBox,
-            CommonText.text(
-              fontFamily: "Caros",
+            CommonText.titleMedium(
               fontWeight: FontWeight.w400,
-              fontSize: 16.sp,
               name,
               color: AppColors.whiteColor,
             ),

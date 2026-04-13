@@ -24,20 +24,18 @@ class PhotoReviewBottomsheet {
           50.hBox,
           Padding(
             padding: 15.horizontalPadding,
-            child: CommonText.text(
+            child: CommonText.labelLarge(
               AppConstants.photoReviewText,
-              fontSize: 24.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
 
           Padding(
             padding: 15.horizontalPadding,
-            child: CommonText.text(
+            child: CommonText.headlineSmall(
               textAlign: TextAlign.center,
               maxLines: 4,
               AppConstants.photoReviewDis,
-              fontSize: 18.sp,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -58,11 +56,10 @@ class PhotoReviewBottomsheet {
                 },
               );
             },
-            child: CommonText.text(
+            child: CommonText.headlineSmall(
               textAlign: TextAlign.center,
               maxLines: 4,
               AppConstants.uploadAnOtherPhoto,
-              fontSize: 18.sp,
               fontWeight: FontWeight.w400,
             ),
           ),

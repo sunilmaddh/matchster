@@ -19,12 +19,7 @@ class AboutSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           10.hBox,
-          CommonText.text(
-            AppStrings.makeItShortAndFunky,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-            fontFamily: "Caros",
-          ),
+          CommonText.titleMedium(AppStrings.makeItShortAndFunky),
           5.hBox,
           Container(
             height: 90.h,

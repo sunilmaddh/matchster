@@ -49,11 +49,9 @@ class WorkScreen extends StatelessWidget {
             children: [
               20.hBox,
 
-              CommonText.text(
+              CommonText.headlineMedium(
                 "What about your work?",
-                fontSize: 20.sp,
                 fontWeight: FontWeight.w500,
-                fontFamily: "Caros",
               ),
 
               20.hBox,

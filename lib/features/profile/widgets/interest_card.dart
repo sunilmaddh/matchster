@@ -43,18 +43,8 @@ class InterestCard extends StatelessWidget {
                   ? const Icon(Icons.email_outlined, color: Colors.white)
                   : SvgPicture.asset(image!),
         ),
-        title: CommonText.text(
-          title,
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w700,
-          fontFamily: "Caros",
-        ),
-        subtitle: CommonText.text(
-          subTitle,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w300,
-          fontFamily: "Caros",
-        ),
+        title: CommonText.labelLarge(title, fontWeight: FontWeight.w700),
+        subtitle: CommonText.labelMedium(subTitle, fontWeight: FontWeight.w300),
         trailing: showBackArrow ? Icon(Icons.arrow_forward_ios) : null,
       ),
     );

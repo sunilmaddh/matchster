@@ -32,13 +32,7 @@ class CircleWidget extends StatelessWidget {
             ),
           ),
           5.hBox,
-          CommonText.text(
-            fontFamily: "Caros",
-            fontWeight: FontWeight.w500,
-            fontSize: 10.sp,
-            text,
-            color: AppColors.whiteColor,
-          ),
+          CommonText.labelSmall(text, color: AppColors.whiteColor),
         ],
       ),
     );

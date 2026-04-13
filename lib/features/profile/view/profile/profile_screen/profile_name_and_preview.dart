@@ -24,10 +24,9 @@ class ProfileNameAndPreview extends StatelessWidget {
         Obx(
           () => Row(
             children: [
-              CommonText.text(
+              CommonText.titleMedium(
                 "${controller.basicInfo.value.name}, ${controller.basicInfo.value.age}",
-                fontSize: 16.sp,
-                fontFamily: "Caros",
+
                 fontWeight: FontWeight.w700,
                 color: AppColors.whiteColor,
               ),

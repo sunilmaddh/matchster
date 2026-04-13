@@ -28,19 +28,16 @@ class _LikeWidgetState extends State<LikeWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             AppConstants.likeTitle,
-            fontSize: 24.sp,
+
             fontWeight: FontWeight.w600,
-            fontFamily: "Caros",
           ),
           // 20.hBox,
-          CommonText.text(
+          CommonText.labelLarge(
             maxLines: 4,
             AppConstants.likeDescr,
-            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
-            fontFamily: "Caros",
           ),
           20.hBox,
           Wrap(
@@ -75,12 +72,11 @@ class _LikeWidgetState extends State<LikeWidget> {
                         children: [
                           SvgPicture.asset(v['image'], width: 24, height: 24),
                           5.wBox,
-                          CommonText.text(
+                          CommonText.titleLarge(
                             value,
                             color: AppColors.whiteColor,
-                            fontSize: 17.sp,
+
                             fontWeight: FontWeight.w600,
-                            fontFamily: "Caros",
                           ),
                         ],
                       ),
@@ -110,20 +106,17 @@ class _LanguageListWidgetState extends State<LanguageListWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             AppConstants.languageTitle,
-            fontSize: 24.sp,
+
             fontWeight: FontWeight.w600,
-            fontFamily: "Caros",
           ),
 
           // 20.hBox,
-          CommonText.text(
+          CommonText.labelLarge(
             maxLines: 3,
             AppConstants.langDescr,
-            fontSize: 14.sp,
             fontWeight: FontWeight.w400,
-            fontFamily: "Caros",
           ),
           20.hBox,
           Wrap(
@@ -152,12 +145,9 @@ class _LanguageListWidgetState extends State<LanguageListWidget> {
                                 : AppColors.circleGradiantColor,
                         borderRadius: BorderRadius.circular(20.r),
                       ),
-                      child: CommonText.text(
+                      child: CommonText.titleLarge(
                         v,
                         color: AppColors.whiteColor,
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Caros",
                       ),
                     ),
                   );
@@ -179,19 +169,17 @@ class ReligionWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             AppConstants.religionTitle,
-            fontSize: 24.sp,
+
             fontWeight: FontWeight.w600,
-            fontFamily: "Caros",
           ),
           // 10.hBox,
-          CommonText.text(
+          CommonText.labelLarge(
             maxLines: 3,
             AppConstants.relegionDesc,
-            fontSize: 14.sp,
+
             fontWeight: FontWeight.w400,
-            fontFamily: "Caros",
           ),
           20.hBox,
           Expanded(

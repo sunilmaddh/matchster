@@ -28,12 +28,7 @@ class PreferenceListWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        CommonText.text(
-          "Preferences",
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
-          fontFamily: "Caros",
-        ),
+        CommonText.titleMedium("Preferences"),
         5.hBox,
         Padding(
           padding: EdgeInsets.only(bottom: 15.h),

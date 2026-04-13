@@ -37,19 +37,15 @@ class HeightScreen extends StatelessWidget {
           children: [
             20.hBox,
 
-            CommonText.text(
+            CommonText.headlineMedium(
               "What is your height?",
-              fontSize: 20.sp,
               fontWeight: FontWeight.w500,
-              fontFamily: "Caros",
             ),
             10.hBox,
-            CommonText.text(
+            CommonText.titleMedium(
               maxLines: 2,
               "Share your height to help others to get to know you better",
-              fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              fontFamily: "Caros",
             ),
             20.hBox,
             InkWell(

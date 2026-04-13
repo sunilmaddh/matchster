@@ -21,19 +21,15 @@ class YourHeightWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText.text(
+          CommonText.displaySmall(
             AppConstants.whatYourHeight,
-            fontSize: 24.sp,
             fontWeight: FontWeight.w600,
-            fontFamily: "Caros",
           ),
           // 20.hBox,
-          CommonText.text(
+          CommonText.titleMedium(
             maxLines: 2,
             AppConstants.heightDescription,
-            fontSize: 16.sp,
             fontWeight: FontWeight.w400,
-            fontFamily: "Caros",
           ),
 
           20.hBox,

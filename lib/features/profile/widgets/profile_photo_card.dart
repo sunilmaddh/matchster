@@ -21,13 +21,7 @@ class ProfilePhotoCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.add, color: Color(0xff464646).withAlpha(112)),
-          CommonText.text(
-            "Add Photos",
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w500,
-            fontFamily: "Caros",
-            color: Color(0xff464646),
-          ),
+          CommonText.labelSmall("Add Photos", color: Color(0xff464646)),
         ],
       ),
     );

@@ -16,19 +16,16 @@ class GenderWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonText.text(
+            CommonText.displaySmall(
               AppConstants.whatYourGender,
-              fontSize: 24.sp,
+
               fontWeight: FontWeight.w600,
-              fontFamily: "Caros",
             ),
             // 20.hBox,
-            CommonText.text(
+            CommonText.titleMedium(
               maxLines: 2,
               AppConstants.genderDiscription,
-              fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              fontFamily: "Caros",
             ),
             40.hBox,
             ListView.builder(
@@ -57,12 +54,11 @@ class GenderWidget extends StatelessWidget {
                 Icon(Icons.info_outline, size: 20),
                 5.wBox,
                 Expanded(
-                  child: CommonText.text(
+                  child: CommonText.labelLarge(
                     maxLines: 3,
                     AppConstants.genderNote,
-                    fontSize: 14.sp,
+
                     fontWeight: FontWeight.w300,
-                    fontFamily: "Caros",
                   ),
                 ),
               ],

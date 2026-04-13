@@ -73,14 +73,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Spacer(),
                       Padding(
                         padding: 15.horizontalPadding,
-                        child: CommonText.text(
+                        child: CommonText.displayMedium(
                           AppConstants.discoverSolumates,
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.blackColor,
-                          fontSize: 28.sp,
-                          fontFamily: "Caros",
                         ),
                       ),
                       _controller.isAccessMyAccount.isTrue ? 5.hBox : 30.hBox,
