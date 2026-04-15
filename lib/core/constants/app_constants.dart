@@ -115,6 +115,8 @@ class AppConstants {
   static const String emailLabel = "Email";
   static const String emailHint = "Enter your email";
   static const String verifyButton = "Verify";
+  static const String readyTopButtonDescription =
+      "When you are ready, tap the button below and snap your gesture!";
 
   static const String enterEmailValidation = "Please enter email";
   static const String enterValidEmailValidation = "Enter a valid email";

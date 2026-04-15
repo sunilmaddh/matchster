@@ -67,6 +67,9 @@ extension LanguageEnumX on LanguageEnum {
     }
   }
 
+  static List<String> get list =>
+      LanguageEnum.values.map((e) => e.label).toList();
+
   /// Value for API / storage
   String get apiValue => name;
 }

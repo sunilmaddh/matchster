@@ -3,7 +3,8 @@ class AppAssets {
   static const String baseUrlPng = "$baseUrlAssets/png";
   static const String baseUrlSvg = "$baseUrlAssets/svg";
   static const String baseUrlVideo = "$baseUrlAssets/videos";
-  static const String baseUrlLottie = "$baseUrlAssets/lottie",
+  static const String baseUrlLottie = "$baseUrlAssets/lottie";
+  static const String modeltflit = "$baseUrlAssets/models",
       facebookAssets = "$baseUrlSvg/facebook.svg",
       googleAssets = "$baseUrlSvg/google.svg",
       loginHeader = "$baseUrlSvg/login_header.svg",
@@ -120,5 +121,8 @@ class AppAssets {
       settingAssets = "$baseUrlSvg/setting.svg",
       instagramAssets = "$baseUrlSvg/instagram.svg",
       userBadge = "$baseUrlPng/userBadge.png",
+      posture2 = "$baseUrlPng/hand_on_chin.png",
+      posture3 = "$baseUrlPng/ok_assets.png",
+      genderModelAssets = "$modeltflit/gender_model.tflite",
       verifyEmailIcon = 'assets/images/png/verify-email.png';
 }

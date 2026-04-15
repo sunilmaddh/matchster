@@ -137,11 +137,16 @@ class AppStrings {
   static const String height = "Height";
   static const String education = "Education";
   static const String work = "Work";
+  static const takeMyPhoto = 'Take My Photo';
+  static const postureGesture = 'Posture Gesture';
+  static const photoVerified = 'Your photo has been successfully verified';
+  static const String verifyPosture = "Verify Posture";
 
   // Common
   static const String notAvailable = "Not available";
 
   static final locationString = _LocationStrings();
+  static final filterString = _FilterStrings();
 }
 
 class _LocationStrings {
@@ -156,4 +161,36 @@ class _LocationStrings {
   final String selectCountryTitle = "Select Country";
   final String selectStateTitle = "Select State";
   final String selectCityTitle = "Select City";
+}
+
+class _FilterStrings {
+  final String workoutTitle = "Workout";
+  final String smokingTitle = "Smoking";
+  final String drinkingTitle = "Drinking";
+  final String lookingForTitle = "Looking for";
+  final String academicBackgroundTitle = "Academic Background";
+  final String occuptionTitle = "Occupation";
+  final String religionTitle = "Religion";
+  final String language = "Language";
+  final String workoutSub = "Do you prefer workout?";
+  final String smokingSub = "Do you prefer Smoking?";
+  final String drinkingSub = "Do you prefer Drinking";
+  final String lookingSub = "What you looking for?";
+  final String academicSub = "What's your education?";
+  final String occupationSub = "What's your occupation?";
+  final String religionSub = "What's your religion?";
+  final String languageSub = "What's your language?";
+  final String showVerifiedProfileOnly = "Show verified profiles only";
+  final String heightRange = "Height Range";
+  final String age = "Age";
+  final String distance = "Distance";
+  final String heigthSub = "What about your prefered height range?";
+  final String ageSub = "Set preferred age range?";
+  final String distanceSub = "How for away are they?";
+  final String showMeMoreProfile = "Show me more profile. if it run out";
+  final String preference = "Preference";
+  final String unlockMembership = "Unlock Membership";
+  final String reset = "Reset";
+  final String apply = "Apply";
+  final String preferenceSub = "Whom you want to date?";
 }

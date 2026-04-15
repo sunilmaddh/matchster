@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/card/switch_card.dart';
 import 'package:matchster/core/widgets/fields/common_card.dart';
@@ -26,8 +27,8 @@ class DistanceWidget extends StatelessWidget {
             children: [
               Flexible(
                 child: TextWithWidget(
-                  title: "Distance",
-                  subTitle: "How for away are they?",
+                  title: AppStrings.filterString.distance,
+                  subTitle: AppStrings.filterString.distanceSub,
                   widget: AnimatedSeekBar(value: 50, onChanged: (v) {}),
                 ),
               ),
@@ -45,7 +46,7 @@ class DistanceWidget extends StatelessWidget {
           15.hBox,
           Obx(
             () => SwitchCard(
-              text: "Show me more profiles if I run out.",
+              text: AppStrings.filterString.showMeMoreProfile,
               isSwitch: controller.isSwitchOn.value,
               onChanged: (value) {
                 controller.toggleSwitch(value);

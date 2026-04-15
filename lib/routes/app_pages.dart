@@ -4,10 +4,16 @@ import 'package:matchster/features/auth/view/login/login_field_screen.dart';
 import 'package:matchster/features/auth/view/login/login_screen.dart';
 import 'package:matchster/features/auth/view/onboard/current_loading_screen.dart';
 import 'package:matchster/features/auth/view/onboard/onboard_screen.dart';
+import 'package:matchster/features/filter/bindings/filter_binding.dart';
+import 'package:matchster/features/filter/view/filter_screen.dart';
 import 'package:matchster/features/landing/view/landing_screen.dart';
 import 'package:matchster/features/landing/bindings/landing_banding.dart';
+import 'package:matchster/features/posture/view/face_gender_screen.dart';
+import 'package:matchster/features/posture/view/hand_tracker_screen.dart';
+import 'package:matchster/features/posture/view/posture_gesture_screen.dart';
 import 'package:matchster/features/profile/bindings/email_binding.dart';
 import 'package:matchster/features/profile/bindings/location_binding.dart';
+import 'package:matchster/features/profile/bindings/posture_bindings.dart';
 import 'package:matchster/features/profile/view/interest/alcohal_screen.dart';
 import 'package:matchster/features/profile/view/interest/interest_screen.dart';
 import 'package:matchster/features/profile/view/interest/languages_screen.dart';
@@ -84,5 +90,18 @@ class AppPages {
     GetPage(name: AppRoutes.interestScreen, page: () => InterestScreen()),
     GetPage(name: AppRoutes.languagesScreen, page: () => LanguagesScreen()),
     GetPage(name: AppRoutes.loginFieldScreen, page: () => LoginFieldScreen()),
+    GetPage(name: AppRoutes.handTrackerScreen, page: () => HandTrackerScreen()),
+    GetPage(name: AppRoutes.faceGenderScreen, page: () => FaceGenderScreen()),
+    GetPage(
+      name: AppRoutes.filterScreen,
+      page: () => FilterScreen(),
+      binding: FilterBinding(),
+    ),
+
+    GetPage(
+      name: AppRoutes.postureGestureScreen,
+      page: () => PostureGestureScreen(),
+      binding: PostureBindings(),
+    ),
   ];
 }

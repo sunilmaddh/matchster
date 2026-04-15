@@ -129,3 +129,24 @@ enum HabitTypeEnum { workout, smoke, drinking, height }
 enum HeightEnum { height }
 
 enum FrequencyEnum { everyday, sometimes, often, never }
+
+enum GenderPreference { men, women, others, openToDateEverybody }
+
+enum FilterTab { basic, advance }
+
+enum WorkoutWrapPreference { doesntMatter, yes, sometimes, tookABreak, never }
+
+enum SmokDrinkPreference { doesntMatter, yes, socially, occasionally, never }
+
+enum LookingForPreference {
+  doesntMatter,
+  relationship,
+  casualRelationship,
+  friendship,
+  marriage,
+  dontKnowYet,
+}
+
+enum AcademicBackground { doesntMatter, diploma, graduation, pg, phd, others }
+
+enum Occupation { doesntMatter, doctor, engineer }

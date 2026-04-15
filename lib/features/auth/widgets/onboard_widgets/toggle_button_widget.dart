@@ -24,7 +24,7 @@ class ToggleWithText extends StatelessWidget {
         padding: EdgeInsets.all(4.r),
         decoration: BoxDecoration(
           color: const Color(0xffD5D5D5),
-          borderRadius: BorderRadius.circular(13.89.r),
+          borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(26),

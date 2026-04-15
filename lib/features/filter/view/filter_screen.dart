@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
-import 'package:matchster/features/filter/controller/filter_controller.dart';
-import 'package:matchster/features/filter/widget/widgets/age_widget.dart';
-import 'package:matchster/features/filter/widget/widgets/distance_widget.dart';
-import 'package:matchster/features/filter/widget/widgets/preference_widget.dart';
-import 'package:matchster/features/filter/widget/header_widget.dart';
+import 'package:matchster/core/widgets/bar/custom_tab_bar_view.dart';
+import 'package:matchster/features/filter/helper/filter_helper.dart';
+import 'package:matchster/routes/app_navigation.dart';
 
 class FilterScreen extends StatelessWidget {
-  FilterScreen({super.key});
-  final _filterController = Get.find<FilterController>();
+  const FilterScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(isCenterTitle: false, title: "Filter", onTop: () {}),
+      appBar: CustomAppBar(
+        isCenterTitle: false,
+        title: "Filter",
+        onTop: () {
+          AppNavigation.back();
+        },
+      ),
       body: Padding(
         padding: 20.horizontalPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            HeaderWidget(controller: _filterController),
-            30.hBox,
-            AgeWidget(controller: _filterController),
-            20.hBox,
-            DistanceWidget(controller: _filterController),
-            20.hBox,
-            PreferenceWidget(),
-          ],
+        child: CustomTabBarView(
+          tabWidgets: FilterHelper.filterTab,
+          tabBarWidgets: FilterHelper.barWidgets,
         ),
       ),
     );

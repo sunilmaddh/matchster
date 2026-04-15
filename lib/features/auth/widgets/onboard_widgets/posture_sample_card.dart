@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:matchster/core/constants/app_assets.dart';
 import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 
 class PostureSampleCard extends StatelessWidget {
-  const PostureSampleCard({super.key});
+  const PostureSampleCard({super.key, required this.image});
+
+  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class PostureSampleCard extends StatelessWidget {
         gradient: AppColors.gradiantPrimary,
         borderRadius: BorderRadius.circular(6.r),
       ),
-      child: Image.asset(AppAssets.posture1),
+      child: Image.asset(image),
     );
   }
 }

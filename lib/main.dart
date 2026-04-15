@@ -1,5 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/bindings/app_binding.dart';
@@ -14,10 +16,13 @@ import 'package:matchster/firebase_options.dart';
 import 'package:matchster/routes/app_pages.dart';
 import 'package:media_kit/media_kit.dart';
 
+late List<CameraDescription> camerasList;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MatchsterLocalStorage.instance.init();
   MediaKit.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  camerasList = await availableCameras();
   await Get.putAsync(
     () =>
         VideoService().init()

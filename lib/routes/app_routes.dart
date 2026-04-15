@@ -23,5 +23,9 @@ class AppRoutes {
       interestScreen = "/interest_screen",
       languagesScreen = "/languages_screen",
       loginFieldScreen = "/login_field_screen",
+      postureGestureScreen = "/posture_gesture_screen",
+      handTrackerScreen = "/hand_tracker_screen",
+      faceGenderScreen = "/face_gender_screen",
+      filterScreen = "/filter_screen",
       loginScreen = '/login_screen';
 }

@@ -59,4 +59,7 @@ extension ReligionEnumX on ReligionEnum {
       orElse: () => ReligionEnum.perfecttonotsay,
     );
   }
+
+  static List<String> get list =>
+      ReligionEnum.values.map((e) => e.label).toList();
 }
