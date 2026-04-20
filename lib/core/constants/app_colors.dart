@@ -48,7 +48,16 @@ class AppColors {
       filterCardColor = Color(0xffFBFAFF),
       loginTitleColor = Color(0xff2B2B2B),
       distenceSwitchTextColor = Color(0xff666666),
-      commonLightColor = Color(0xffBABABA);
+      commonLightColor = Color(0xffBABABA),
+      notificationGreyColor = Color(0xffB4B4B4),
+      notificationDividerColor = Color(0xffE6E6E6),
+      privacyColor = Color(0xffDEDCB4),
+      faqColor = Color(0xffE5C3FF),
+      privacyPolicyColor = Color(0xffA2D2FF),
+      termColor = Color(0xff92C58F),
+      settingCardColor = Color(0xffF5F5F5),
+      accountColor = Color(0xff85CFCF),
+      darkToggelColor = Color(0xff979797);
   static Color hintColor = Color(0xff000000).withAlpha(128);
   static Color loginBorderColor = Color(0xff000000).withAlpha(64);
 }

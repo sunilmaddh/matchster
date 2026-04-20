@@ -8,12 +8,14 @@ import 'package:matchster/features/filter/bindings/filter_binding.dart';
 import 'package:matchster/features/filter/view/filter_screen.dart';
 import 'package:matchster/features/landing/view/landing_screen.dart';
 import 'package:matchster/features/landing/bindings/landing_banding.dart';
+import 'package:matchster/features/notification/bindings/notification_binding.dart';
+import 'package:matchster/features/notification/view/notification_screen.dart';
 import 'package:matchster/features/posture/view/face_gender_screen.dart';
 import 'package:matchster/features/posture/view/hand_tracker_screen.dart';
 import 'package:matchster/features/posture/view/posture_gesture_screen.dart';
 import 'package:matchster/features/profile/bindings/email_binding.dart';
 import 'package:matchster/features/profile/bindings/location_binding.dart';
-import 'package:matchster/features/profile/bindings/posture_bindings.dart';
+import 'package:matchster/features/posture/bindings/posture_bindings.dart';
 import 'package:matchster/features/profile/view/interest/alcohal_screen.dart';
 import 'package:matchster/features/profile/view/interest/interest_screen.dart';
 import 'package:matchster/features/profile/view/interest/languages_screen.dart';
@@ -29,7 +31,8 @@ import 'package:matchster/features/profile/view/location/location_search_screen.
 import 'package:matchster/features/profile/view/profile/education_screen.dart';
 import 'package:matchster/features/profile/view/profile/height_screen.dart';
 import 'package:matchster/features/profile/view/profile/profile_screen/profile_preview_screen.dart';
-import 'package:matchster/features/profile/view/profile/setting_screen.dart';
+import 'package:matchster/features/setting/bindings/setting_binding.dart';
+import 'package:matchster/features/setting/view/setting_screen.dart';
 import 'package:matchster/features/profile/view/profile/work_screen.dart';
 import 'package:matchster/features/profile/view/email/verify_email_otp_screen.dart';
 import 'package:matchster/features/profile/view/email/verify_email_screen.dart';
@@ -68,7 +71,7 @@ class AppPages {
       page: () => AddHomeTownScreen(),
       binding: LocationBinding(),
     ),
-    GetPage(name: AppRoutes.setting, page: () => SettingScreen()),
+
     GetPage(
       name: AppRoutes.verifyEmailOtpScreen,
       page: () => VerifyEmailOtpScreen(),
@@ -93,6 +96,11 @@ class AppPages {
     GetPage(name: AppRoutes.handTrackerScreen, page: () => HandTrackerScreen()),
     GetPage(name: AppRoutes.faceGenderScreen, page: () => FaceGenderScreen()),
     GetPage(
+      name: AppRoutes.notificationScreen,
+      page: () => NotificationScreen(),
+      binding: NotificationBinding(),
+    ),
+    GetPage(
       name: AppRoutes.filterScreen,
       page: () => FilterScreen(),
       binding: FilterBinding(),
@@ -101,7 +109,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.postureGestureScreen,
       page: () => PostureGestureScreen(),
-      binding: PostureBindings(),
+      binding: PostureBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.settingScreen,
+      page: () => SettingScreen(),
+      binding: SettingBinding(),
     ),
   ];
 }

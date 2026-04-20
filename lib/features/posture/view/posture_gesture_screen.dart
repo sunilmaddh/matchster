@@ -134,21 +134,30 @@ class PostureGestureScreen extends BaseStatelessView<PostureController> {
                     ),
                     30.hBox,
                     Obx(
-                      () =>
-                          controller.isCameraInitialized.isTrue
-                              ? CircularProgressIndicator(
-                                color: AppColors.primary,
-                              )
-                              : AppButton(
-                                name:
-                                    controller.isPostureVerify.isTrue
-                                        ? "Continue"
-                                        : AppStrings.takeMyPhoto,
-                                onTop: () async {
-                                  controller.verifyAndNavigate();
-                                },
-                                isEnable: true,
-                              ),
+                      () => AppButton(
+                        name:
+                            controller.isPostureVerify.isTrue
+                                ? "Continue"
+                                : AppStrings.takeMyPhoto,
+                        onTop: () async {
+                          controller.verifyAndNavigate();
+                        },
+                        isEnable: true,
+                      ),
+                      // controller.isCameraInitialized.isTrue
+                      //     ? CircularProgressIndicator(
+                      //       color: AppColors.primary,
+                      //     )
+                      //     : AppButton(
+                      //       name:
+                      //           controller.isPostureVerify.isTrue
+                      //               ? "Continue"
+                      //               : AppStrings.takeMyPhoto,
+                      //       onTop: () async {
+                      //         controller.verifyAndNavigate();
+                      //       },
+                      //       isEnable: true,
+                      //     ),
                     ),
                   ],
                 ),

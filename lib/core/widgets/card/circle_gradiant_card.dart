@@ -7,15 +7,19 @@ class CircleGradiantCard extends StatelessWidget {
     super.key,
     this.isGradiant = true,
     required this.widget,
+    this.height = 50,
+    this.width = 50,
   });
   final bool isGradiant;
   final Widget widget;
+  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50.h,
-      width: 50.w,
+      height: height.h,
+      width: width.w,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient:

@@ -41,7 +41,7 @@ class ProfileScreen extends BaseView<ProfileController> {
             padding: 15.horizontalPadding,
             child: TextButton(
               onPressed: () {
-                controller.navigateTo(AppRoutes.setting);
+                controller.navigateTo(AppRoutes.settingScreen);
               },
               child: SvgPicture.asset(AppAssets.settingAssets),
             ),

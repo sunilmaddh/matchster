@@ -145,11 +145,15 @@ class AppStrings {
   // Common
   static const String notAvailable = "Not available";
 
-  static final locationString = _LocationStrings();
-  static final filterString = _FilterStrings();
+  static const locationString = _LocationStrings();
+  static const filterString = _FilterStrings();
+  static const postureString = _PostureStrings();
+  static const notificationString = _NotificationString();
+  static const settingString = _SettingString();
 }
 
 class _LocationStrings {
+  const _LocationStrings();
   final String hometown = "Hometown";
   final String whereAreYouFrom = "Where are you from?";
   final String country = "Country";
@@ -164,6 +168,7 @@ class _LocationStrings {
 }
 
 class _FilterStrings {
+  const _FilterStrings();
   final String workoutTitle = "Workout";
   final String smokingTitle = "Smoking";
   final String drinkingTitle = "Drinking";
@@ -193,4 +198,43 @@ class _FilterStrings {
   final String reset = "Reset";
   final String apply = "Apply";
   final String preferenceSub = "Whom you want to date?";
+}
+
+class _PostureStrings {
+  const _PostureStrings();
+  final String verifyPosture = "Verify Posture";
+  final String alignFace = "Align your face properly";
+  final String showCorrectGesture = "Show correct gesture";
+  final String faceGestureNotDetected = "Face & gesture not detected";
+  final String holdStill = "Hold still...";
+  final String capturing = "Capturing...";
+  final String capturedSuccessfully = "Captured successfully";
+  final String captureFailed = "Capture failed";
+  final String detectionFailed = "Detection failed";
+  final String cameraInitializationFailed = "Camera initialization failed";
+  final String stepVictory = "Show Victory Sign";
+  final String stepThumbOnChin = "Show Thumb on Chin";
+  final String stepOk = "Show OK Sign";
+  final String stepCompleted = "Completed";
+  final String faceLabel = "Face";
+  final String gestureLabel = "Gesture";
+}
+
+class _NotificationString {
+  const _NotificationString();
+  final String title = "Notifications";
+}
+
+class _SettingString {
+  const _SettingString();
+  final String privacySetting = "Privacy Settings";
+  final String accountSetting = "Account Settings";
+  final String darkMode = "Dard Mode";
+  final String pushNotification = "Push Notifications";
+  final String faq = "FAQ";
+  final String termConditions = "Term & Conditions";
+  final String privacyPolicy = "Privacy Policy";
+  final String settingTitle = "settings";
+  final String account = "Account";
+  final String logout = "Logout";
 }

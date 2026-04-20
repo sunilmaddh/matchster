@@ -150,3 +150,5 @@ enum LookingForPreference {
 enum AcademicBackground { doesntMatter, diploma, graduation, pg, phd, others }
 
 enum Occupation { doesntMatter, doctor, engineer }
+
+enum GestureStep { detectVictory, detectOk, detectThumbOnchin, completed }

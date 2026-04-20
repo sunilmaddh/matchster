@@ -7,7 +7,6 @@ class AppRoutes {
       profilePreviewScreen = "/profile_preview_screen",
       currentLocation = "/current_location",
       addHomeTownScreen = "/add_home_town_screen",
-      setting = "/setting",
       verifyEmailOtpScreen = "/verify_email_otp_screen",
       locationSearchScreen = "/location_search_screen",
       heightScreen = "/height_screen",
@@ -26,6 +25,8 @@ class AppRoutes {
       postureGestureScreen = "/posture_gesture_screen",
       handTrackerScreen = "/hand_tracker_screen",
       faceGenderScreen = "/face_gender_screen",
+      notificationScreen = "/notification_screen",
+      settingScreen = "/setting_screen",
       filterScreen = "/filter_screen",
       loginScreen = '/login_screen';
 }

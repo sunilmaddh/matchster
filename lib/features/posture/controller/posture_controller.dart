@@ -1,276 +1,255 @@
-import 'dart:math' as math;
-
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:hand_landmarker/hand_landmarker.dart';
 import 'package:matchster/core/base/base_controller.dart';
 import 'package:matchster/core/constants/app_assets.dart';
+import 'package:matchster/core/constants/app_strings.dart';
+import 'package:matchster/core/enum/enum.dart';
+import 'package:matchster/features/posture/repositories/i_posture_repository.dart';
 import 'package:matchster/main.dart';
 import 'package:matchster/routes/app_navigation.dart';
 import 'package:matchster/routes/app_routes.dart';
 
-enum GestureStep { detectVictory, detectOk, detectThumbOnchin, completed }
-
 class PostureController extends BaseController {
-  final currentStep = GestureStep.detectVictory.obs;
-  RxInt postureIndex = 0.obs;
+  PostureController({required this.repository});
+
+  final IPostureRepository repository;
+
+  final Rx<GestureStep> currentStep = GestureStep.detectVictory.obs;
+  final RxInt postureIndex = 0.obs;
+
   final List<String> postureList = [
     AppAssets.posture1,
     AppAssets.posture2,
     AppAssets.posture3,
   ];
-  RxBool isCameraInitialized = false.obs;
-  final handsLand = <Hand>[].obs;
-  RxBool isPostureVerify = false.obs;
 
-  final isDetecting = false.obs;
-  final isCapturing = false.obs;
-  CameraController? cameraController;
-  RxBool isInitialized = false.obs;
+  final RxBool isCameraInitialized = false.obs;
+  final RxBool isInitialized = false.obs;
+  final RxBool isPostureVerify = false.obs;
+  final RxBool isDetecting = false.obs;
+  final RxBool isCapturing = false.obs;
+  final RxBool showCameraLoader = true.obs;
 
-  final lastCapturedPath = RxnString();
+  final RxBool isFaceDetected = false.obs;
+  final RxBool isFaceValid = false.obs;
+  final RxBool isGestureValid = false.obs;
+
+  final RxString faceStatus = ''.obs;
+  final RxString gestureStatus = ''.obs;
+  final RxString combinedStatus = ''.obs;
+
+  final RxList<Hand> handsLand = <Hand>[].obs;
+  final RxnString lastCapturedPath = RxnString();
+
+  int _stableFrames = 0;
+  final int requiredFrames = 5;
+
+  CameraController? get cameraController => repository.cameraService.controller;
+
   bool get isCameraReady =>
-      cameraController != null &&
-      cameraController!.value.isInitialized &&
-      cameraController!.value.previewSize != null &&
-      isInitialized.value;
+      repository.cameraService.isReady && isInitialized.value;
+
+  Future<void> initialize() async {
+    try {
+      showCameraLoader.value = true;
+
+      final CameraDescription camera = camerasList.firstWhere(
+        (cam) => cam.lensDirection == CameraLensDirection.front,
+        orElse: () => camerasList.first,
+      );
+
+      await repository.initialize(camera);
+      await repository.startImageStream(processCameraImage);
+
+      isInitialized.value = true;
+      isCameraInitialized.value = true;
+
+      faceStatus.value = AppStrings.postureString.alignFace;
+      gestureStatus.value = AppStrings.postureString.showCorrectGesture;
+      combinedStatus.value = AppStrings.postureString.faceGestureNotDetected;
+
+      showCameraLoader.value = false;
+      update();
+    } catch (e) {
+      isInitialized.value = false;
+      isCameraInitialized.value = false;
+      combinedStatus.value =
+          AppStrings.postureString.cameraInitializationFailed;
+      showCameraLoader.value = false;
+      update();
+    }
+  }
+
+  Future<void> processCameraImage(CameraImage image) async {
+    if (_shouldSkipFrame()) return;
+
+    isDetecting.value = true;
+
+    try {
+      await _updateFaceState(image);
+      await _updateGestureState(image);
+      await _handleCaptureFlow();
+    } catch (_) {
+      combinedStatus.value = AppStrings.postureString.detectionFailed;
+    } finally {
+      isDetecting.value = false;
+    }
+  }
+
+  bool _shouldSkipFrame() {
+    return isDetecting.value ||
+        isCapturing.value ||
+        !isInitialized.value ||
+        cameraController == null;
+  }
+
+  Future<void> _updateFaceState(CameraImage image) async {
+    final faceResult = await repository.detectFace(
+      image: image,
+      sensorOrientation: cameraController!.description.sensorOrientation,
+    );
+
+    isFaceDetected.value = faceResult.isFaceDetected;
+    isFaceValid.value = faceResult.isFaceValid;
+    faceStatus.value = faceResult.status;
+  }
+
+  Future<void> _updateGestureState(CameraImage image) async {
+    final gestureResult = await repository.detectGesture(
+      image: image,
+      sensorOrientation: cameraController!.description.sensorOrientation,
+      step: currentStep.value,
+    );
+
+    isGestureValid.value = gestureResult.isGestureValid;
+    gestureStatus.value = gestureResult.status;
+    handsLand.assignAll(gestureResult.hands);
+  }
+
+  Future<void> _handleCaptureFlow() async {
+    if (isFaceValid.value && isGestureValid.value) {
+      _stableFrames++;
+      combinedStatus.value =
+          '${AppStrings.postureString.holdStill} $_stableFrames/$requiredFrames';
+
+      if (_stableFrames >= requiredFrames) {
+        _stableFrames = 0;
+        combinedStatus.value = AppStrings.postureString.capturing;
+        await Future.delayed(const Duration(milliseconds: 300));
+        await _captureAndStop();
+      }
+    } else {
+      _stableFrames = 0;
+      _updateCombinedStatus();
+    }
+  }
+
+  Future<void> _captureAndStop() async {
+    if (isCapturing.value) return;
+
+    try {
+      showLoading(true);
+      isCapturing.value = true;
+      showCameraLoader.value = true;
+
+      await repository.stopImageStream();
+
+      final XFile? file = await repository.takePicture();
+      if (file == null) {
+        showCameraLoader.value = false;
+        return;
+      }
+
+      lastCapturedPath.value = file.path;
+      isPostureVerify.value = true;
+      combinedStatus.value = AppStrings.postureString.capturedSuccessfully;
+
+      showCameraLoader.value = false;
+      AppNavigation.back();
+    } catch (_) {
+      combinedStatus.value = AppStrings.postureString.captureFailed;
+      showCameraLoader.value = false;
+    } finally {
+      showLoading(false);
+      isCapturing.value = false;
+    }
+  }
+
+  Future<void> restartDetection() async {
+    showCameraLoader.value = true;
+    _stableFrames = 0;
+    isCapturing.value = false;
+    isDetecting.value = false;
+    isPostureVerify.value = false;
+    isGestureValid.value = false;
+    lastCapturedPath.value = null;
+    handsLand.clear();
+
+    gestureStatus.value = AppStrings.postureString.showCorrectGesture;
+    _updateCombinedStatus();
+
+    await repository.startImageStream(processCameraImage);
+    await Future.delayed(const Duration(milliseconds: 200));
+
+    showCameraLoader.value = false;
+  }
+
   Future<void> moveToNextStep() async {
     isPostureVerify.value = false;
-    if (currentStep.value == GestureStep.detectVictory) {
-      currentStep.value = GestureStep.detectThumbOnchin;
-      postureIndex.value = 1;
-    } else if (currentStep.value == GestureStep.detectThumbOnchin) {
-      currentStep.value = GestureStep.detectOk;
-      postureIndex.value = 2;
-    } else {
-      currentStep.value = GestureStep.completed;
+    isGestureValid.value = false;
+    _stableFrames = 0;
+
+    switch (currentStep.value) {
+      case GestureStep.detectVictory:
+        currentStep.value = GestureStep.detectThumbOnchin;
+        postureIndex.value = 1;
+        break;
+      case GestureStep.detectThumbOnchin:
+        currentStep.value = GestureStep.detectOk;
+        postureIndex.value = 2;
+        break;
+      case GestureStep.detectOk:
+        currentStep.value = GestureStep.completed;
+        break;
+      case GestureStep.completed:
+        break;
     }
+
+    gestureStatus.value = AppStrings.postureString.showCorrectGesture;
+    _updateCombinedStatus();
   }
 
   Future<void> verifyAndNavigate() async {
-    if (currentStep.value == GestureStep.detectVictory &&
-        isPostureVerify.isTrue) {
+    if (isPostureVerify.isTrue) {
       await moveToNextStep();
       await restartDetection();
-    } else if (currentStep.value == GestureStep.detectVictory) {
-      navigateTo(AppRoutes.handTrackerScreen);
-    } else if (currentStep.value == GestureStep.detectThumbOnchin &&
-        isPostureVerify.isTrue) {
-      await moveToNextStep();
-      await restartDetection();
-    } else if (currentStep.value == GestureStep.detectThumbOnchin) {
-      restartDetection();
-      navigateTo(AppRoutes.handTrackerScreen);
-    } else if (currentStep.value == GestureStep.detectOk) {
-      restartDetection();
-      navigateTo(AppRoutes.handTrackerScreen);
+      return;
     }
-  }
 
-  HandLandmarkerPlugin? plugin;
-  int _stableFrames = 0;
-  int requiredFrames = 5;
-  Future<void> initialize() async {
-    final camera = camerasList.firstWhere(
-      (cam) => cam.lensDirection == CameraLensDirection.front,
-      orElse: () => camerasList.first,
-    );
-    cameraController = CameraController(
-      camera,
-      ResolutionPreset.medium,
-      enableAudio: false,
-    );
-
-    // Create an instance of our plugin with custom options.
-    plugin = HandLandmarkerPlugin.create(
-      numHands: 2,
-      minHandDetectionConfidence: 0.7,
-      delegate: HandLandmarkerDelegate.gpu,
-    );
-
-    await cameraController!.initialize();
-    await cameraController!.startImageStream(processCameraImage);
-
-    if (!isInitialized.value) {
-      isInitialized.value = true;
-      update();
-    } else {
-      isInitialized.value = false;
-      update();
-    }
+    await restartDetection();
+    navigateTo(AppRoutes.handTrackerScreen);
   }
 
   void resetImage() {
     lastCapturedPath.value = null;
   }
 
-  Future<void> restartDetection() async {
-    if (cameraController == null) return;
-    _stableFrames = 0;
-    isCapturing.value = false;
-    isDetecting.value = false;
-    lastCapturedPath.value = null;
-    // await cameraController!.startImageStream(processCameraImage);
-  }
-
-  Future<void> processCameraImage(CameraImage image) async {
-    if (isDetecting.value ||
-        !isInitialized.value ||
-        plugin == null ||
-        isCapturing.value)
-      return;
-
-    isDetecting.value = true;
-
-    try {
-      final hands = plugin!.detect(
-        image,
-        cameraController!.description.sensorOrientation,
-      );
-
-      handsLand.value = hands;
-
-      if (hands.isNotEmpty) {
-        final l = hands.first.landmarks;
-
-        if (currentStep.value == GestureStep.detectVictory) {
-          debugPrint("Is victory-1-${l.length}");
-          if (isVictory(l)) {
-            debugPrint("Is victory-2");
-            _stableFrames++;
-
-            if (_stableFrames >= requiredFrames) {
-              debugPrint("Is victory-3");
-              _stableFrames = 0;
-              await Future.delayed(Duration(seconds: 2));
-
-              await _captureAndStop();
-            }
-          } else {
-            _stableFrames = 0;
-            showLoading(false);
-          }
-        } else if (currentStep.value == GestureStep.detectThumbOnchin) {
-          debugPrint("Is victory-1-ok-${l.length}");
-          if (isThinkingPose(l)) {
-            debugPrint("Is victory-2-ok-thumb-${l.length}");
-            _stableFrames++;
-            debugPrint("Is victory-3-ok-thumb-$_stableFrames");
-            if (_stableFrames <= requiredFrames) {
-              debugPrint("Is victory-3-ok-thumb-${l.length}");
-              _stableFrames = 0;
-              await Future.delayed(Duration(seconds: 2));
-              await _captureAndStop();
-            }
-          } else {
-            _stableFrames = 0;
-          }
-        } else if (currentStep.value == GestureStep.detectOk) {
-          debugPrint("Is victory-1-ok-${l.length}");
-          if (isOkSign(l)) {
-            debugPrint("Is victory-2-ok-${l.length}");
-            _stableFrames++;
-            debugPrint("Is victory-3-ok-$_stableFrames");
-            if (_stableFrames <= requiredFrames) {
-              debugPrint("Is victory-3-ok-${l.length}");
-              _stableFrames = 0;
-              await Future.delayed(Duration(seconds: 2));
-              await _captureAndStop();
-            }
-          } else {
-            _stableFrames = 0;
-          }
-        }
-      }
-    } catch (e) {
-      debugPrint('Error detecting landmarks: $e');
-    } finally {
-      isDetecting.value = false;
+  void _updateCombinedStatus() {
+    if (!isFaceValid.value && !isGestureValid.value) {
+      combinedStatus.value = AppStrings.postureString.faceGestureNotDetected;
+    } else if (!isFaceValid.value) {
+      combinedStatus.value = faceStatus.value;
+    } else if (!isGestureValid.value) {
+      combinedStatus.value = gestureStatus.value;
+    } else {
+      combinedStatus.value = AppStrings.postureString.holdStill;
     }
   }
 
-  Future<void> _captureAndStop() async {
-    try {
-      showLoading(true);
-      // isCapturing.value = true;
-      await cameraController?.stopImageStream();
-      final XFile file = await cameraController!.takePicture();
-      lastCapturedPath.value = file.path;
-      isPostureVerify.value = true;
-      AppNavigation.back();
-      debugPrint("Saved: ${file.path}");
-    } catch (e) {
-      debugPrint("Capture error: $e");
-    } finally {
-      showLoading(false);
-      isCapturing.value = false;
-      // isPostureVerify.value = false;
-    }
-  }
-
-  bool isVictory(List<Landmark> l) {
-    final wrist = l[0];
-    double dist(int tip) => math.sqrt(
-      math.pow(l[tip].x - wrist.x, 2) + math.pow(l[tip].y - wrist.y, 2),
-    );
-    final indexFar = dist(8) > 0.23;
-    final middleFar = dist(12) > 0.23;
-    final ringClose = dist(16) < 0.20;
-    final pinkyClose = dist(20) < 0.20;
-    final fingersSeparated = (l[8].x - l[12].x).abs() > 0.03;
-    return indexFar && middleFar && ringClose && pinkyClose && fingersSeparated;
-  }
-
-  bool isOkSign(List<Landmark> l) {
-    final thumbTip = l[4];
-    final indexTip = l[8];
-    final wrist = l[0];
-    final circle = _distance(thumbTip, indexTip) < 0.05;
-    final indexNotFolded = _distance(indexTip, wrist) > 0.18;
-    bool isExtended(int tip) => _distance(l[tip], wrist) > 0.23;
-    final middleUp = isExtended(12);
-    final ringUp = isExtended(16);
-    final pinkyUp = isExtended(20);
-    return circle && indexNotFolded && middleUp && ringUp && pinkyUp;
-  }
-
-  // bool isThinkingPose(List<Landmark> l) {
-  //   double distance(Landmark a, Landmark b) =>
-  //       math.sqrt(math.pow(a.x - b.x, 2) + math.pow(a.y - b.y, 2));
-  //   final indexBent = distance(l[8], l[6]) < 0.06;
-  //   final thumbBent = distance(l[4], l[3]) < 0.06;
-  //   bool isClosed(int tip, int pip) => l[tip].y > l[pip].y;
-  //   final middleClosed = isClosed(12, 10);
-  //   final ringClosed = isClosed(16, 14);
-  //   final pinkyClosed = isClosed(20, 18);
-  //   return indexBent && thumbBent && middleClosed && ringClosed && pinkyClosed;
-  // }
-  bool isThinkingPose(List<Landmark> l) {
-    double distance(Landmark a, Landmark b) =>
-        math.sqrt(math.pow(a.x - b.x, 2) + math.pow(a.y - b.y, 2));
-
-    // 🔹 Palm size reference (scale normalization)
-    final palmSize = distance(l[0], l[9]);
-
-    // 🔹 Index bent (tip close to pip relative to palm)
-    final indexBent = distance(l[8], l[6]) < palmSize * 0.35;
-
-    // 🔹 Thumb bent
-    final thumbBent = distance(l[4], l[3]) < palmSize * 0.35;
-
-    // 🔹 Other fingers folded (tip closer to palm center)
-    bool isFolded(int tip) => distance(l[tip], l[0]) < palmSize * 1.2;
-
-    final middleClosed = isFolded(12);
-    final ringClosed = isFolded(16);
-    final pinkyClosed = isFolded(20);
-
-    return indexBent && thumbBent && middleClosed && ringClosed && pinkyClosed;
-  }
-
-  double _distance(Landmark a, Landmark b) {
-    return math.sqrt(math.pow(a.x - b.x, 2) + math.pow(a.y - b.y, 2));
+  @override
+  void onClose() {
+    repository.dispose();
+    super.onClose();
   }
 }

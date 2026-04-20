@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:matchster/core/base/base_stateless_view.dart';
 import 'package:matchster/core/constants/app_assets.dart';
+import 'package:matchster/core/constants/app_colors.dart';
+import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/storage/matchster_local_storage.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
@@ -9,10 +12,11 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
 import 'package:matchster/features/profile/widgets/dark_mode_card.dart';
 import 'package:matchster/features/profile/widgets/setting_card.dart';
+import 'package:matchster/features/setting/controller/setting_controller.dart';
 import 'package:matchster/routes/app_routes.dart';
 
 // ignore: must_be_immutable
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends BaseStatelessView<SettingController> {
   SettingScreen({super.key});
 
   RxBool isSwitchOn = true.obs;
@@ -25,7 +29,7 @@ class SettingScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildView(BuildContext context, SettingController controller) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
@@ -33,7 +37,7 @@ class SettingScreen extends StatelessWidget {
         child: Obx(() {
           final isLoading = isLoggingOut.value;
           return AppButton(
-            name: isLoading ? "Logging out..." : "Log out",
+            name: AppStrings.settingString.logout,
             onTop: () {
               if (!isLoading) logout();
             },
@@ -43,7 +47,7 @@ class SettingScreen extends StatelessWidget {
       ),
       appBar: CustomAppBar(
         isCenterTitle: false,
-        title: "Setting",
+        title: AppStrings.settingString.settingTitle,
         onTop: () {
           Get.back();
         },
@@ -51,43 +55,59 @@ class SettingScreen extends StatelessWidget {
       body: Padding(
         padding: 15.horizontalPadding,
         child: Column(
+          spacing: 20.h,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CommonText.text(
-              "Account",
+              AppStrings.settingString.account,
               fontSize: 16.sp,
               fontWeight: FontWeight.w300,
             ),
-            15.hBox,
+
             SettingCard(
+              color: AppColors.privacyColor,
               image: AppAssets.privacySettingAssets,
-              title: "Privacy Setting",
+              title: AppStrings.settingString.privacySetting,
               onTop: () {},
             ),
-            SizedBox(height: 20.h),
+
             SettingCard(
+              color: AppColors.accountColor,
               image: AppAssets.accountSettingAssets,
-              title: "Account Setting",
+              title: AppStrings.settingString.accountSetting,
               onTop: () {},
             ),
-            20.hBox,
+
             DarkModeCard(
               isSwitchOn: isSwitchOn.value,
               onChanged: (bool value) {},
-              text: 'Dark Mode',
+              text: AppStrings.settingString.darkMode,
             ),
-            20.hBox,
-            SettingCard(image: AppAssets.faqAssets, title: "FAQ", onTop: () {}),
-            20.hBox,
+
+            DarkModeCard(
+              isSwitchOn: !isSwitchOn.value,
+              onChanged: (bool value) {},
+              text: AppStrings.settingString.pushNotification,
+            ),
+
             SettingCard(
-              image: AppAssets.termAssets,
-              title: "Terms & Conditions",
+              color: AppColors.faqColor,
+              image: AppAssets.faqAssets,
+              title: AppStrings.settingString.faq,
               onTop: () {},
             ),
-            20.hBox,
+
             SettingCard(
+              color: AppColors.termColor,
+              image: AppAssets.termAssets,
+              title: AppStrings.settingString.termConditions,
+              onTop: () {},
+            ),
+
+            SettingCard(
+              color: AppColors.privacyPolicyColor,
               image: AppAssets.privacyPolicyAssets,
-              title: "Privacy Policy",
+              title: AppStrings.settingString.privacyPolicy,
               onTop: () {},
             ),
           ],

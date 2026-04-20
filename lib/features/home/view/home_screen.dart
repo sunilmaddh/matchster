@@ -93,7 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             Icons.notifications_outlined,
                             color: AppColors.whiteColor,
                           ),
-                          onTop: () {},
+                          onTop: () {
+                            AppNavigation.to(AppRoutes.notificationScreen);
+                          },
                         ),
                         10.wBox,
                         DarkCircleWidget(

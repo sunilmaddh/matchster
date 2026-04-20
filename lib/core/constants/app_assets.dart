@@ -87,11 +87,11 @@ class AppAssets {
       imageAssets8 = "$baseUrlPng/image_pr2.png",
       imageAssets9 = "$baseUrlPng/image_pr3.png",
       imageAssets10 = "$baseUrlPng/image_pr4.png",
-      privacySettingAssets = "$baseUrlSvg/privacy_setting.svg",
-      accountSettingAssets = "$baseUrlSvg/account_setting.svg",
+      privacySettingAssets = "$baseUrlSvg/privacy_assets.svg",
+      accountSettingAssets = "$baseUrlSvg/setting_assets.svg",
       privacyPolicyAssets = "$baseUrlSvg/privacy_policy.svg",
-      termAssets = "$baseUrlSvg/terms.svg",
-      faqAssets = "$baseUrlSvg/faq.svg",
+      termAssets = "$baseUrlSvg/term_assets.svg",
+      faqAssets = "$baseUrlSvg/faq_assets.svg",
       appLogoBg = "$baseUrlSvg/app_logo_bg.svg",
       sendAssets = "$baseUrlSvg/send_message.svg",
       loveAssets = "$baseUrlLottie/love_animation.json",
@@ -123,6 +123,7 @@ class AppAssets {
       userBadge = "$baseUrlPng/userBadge.png",
       posture2 = "$baseUrlPng/hand_on_chin.png",
       posture3 = "$baseUrlPng/ok_assets.png",
+      celebrationAssets = "$baseUrlPng/celebration.png",
       genderModelAssets = "$modeltflit/gender_model.tflite",
       verifyEmailIcon = 'assets/images/png/verify-email.png';
 }

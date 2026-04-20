@@ -40,10 +40,12 @@ class GradientSwitch extends StatelessWidget {
     super.key,
     required this.value,
     required this.onChanged,
+    this.color = Colors.white,
   });
 
   final bool value;
   final ValueChanged<bool> onChanged;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +71,11 @@ class GradientSwitch extends StatelessWidget {
           curve: Curves.easeInOut,
           alignment: value ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
-            width: 20,
-            height: 20,
-            decoration: const BoxDecoration(
+            width: 20.w,
+            height: 20.h,
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
+              color: color,
               boxShadow: [BoxShadow(blurRadius: 3, color: Colors.black26)],
             ),
           ),
