@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matchster/core/base/base_controller.dart';
+import 'package:matchster/core/error/app_exception.dart';
 import 'package:matchster/core/extentions/onboard_pages_ext.dart';
 import 'package:matchster/core/utils/app_methods.dart';
 import 'package:matchster/features/auth/auth_controller/onboard_photo_controller.dart';
@@ -103,16 +104,12 @@ class OnboardController extends BaseController {
       showLoading(true);
       clearError();
       clearSuccess();
-
-      final response = await onboardingRepository.addName(name: name);
-
-      if (!response.success) {
-        setError(response.message);
-        return false;
-      }
-
+      await onboardingRepository.addName(name: name);
       goToNextPage();
       return true;
+    } on AppException catch (e) {
+      setError(e.toString());
+      return false;
     } catch (e) {
       setError(e.toString());
       return false;
@@ -129,19 +126,15 @@ class OnboardController extends BaseController {
       showLoading(true);
       clearError();
       clearSuccess();
-
-      final response = await onboardingRepository.addGender(
+      await onboardingRepository.addGender(
         gender: gender,
         genderPreview: genderPreview,
       );
-
-      if (!response.success) {
-        setError(response.message);
-        return false;
-      }
-
       goToNextPage();
       return true;
+    } on AppException catch (e) {
+      setError(e.toString());
+      return false;
     } catch (e) {
       setError(e.toString());
       return false;
@@ -155,15 +148,12 @@ class OnboardController extends BaseController {
       showLoading(true);
       clearError();
       clearSuccess();
-
-      final response = await onboardingRepository.addDob(dob: dob);
-
-      if (!response.success) {
-        setError(response.message);
-        return false;
-      }
+      await onboardingRepository.addDob(dob: dob);
       goToNextPage();
       return true;
+    } on AppException catch (e) {
+      setError(e.toString());
+      return false;
     } catch (e) {
       setError(e.toString());
       return false;
@@ -177,15 +167,12 @@ class OnboardController extends BaseController {
       showLoading(true);
       clearError();
       clearSuccess();
-
-      final response = await onboardingRepository.addHeight(feet: feet, cm: cm);
-
-      if (!response.success) {
-        setError(response.message);
-        return false;
-      }
+      await onboardingRepository.addHeight(feet: feet, cm: cm);
       goToNextPage();
       return true;
+    } on AppException catch (e) {
+      setError(e.toString());
+      return false;
     } catch (e) {
       setError(e.toString());
       return false;
@@ -199,18 +186,12 @@ class OnboardController extends BaseController {
       showLoading(true);
       clearError();
       clearSuccess();
-
-      final response = await onboardingRepository.addDateWith(
-        dateWith: dateWith,
-      );
-
-      if (!response.success) {
-        setError(response.message);
-        return false;
-      }
-
+      await onboardingRepository.addDateWith(dateWith: dateWith);
       goToNextPage();
       return true;
+    } on AppException catch (e) {
+      setError(e.toString());
+      return false;
     } catch (e) {
       setError(e.toString());
       return false;
@@ -262,14 +243,12 @@ class OnboardController extends BaseController {
         }
       }
     }
-
     if (pagesValue.dob != null && pagesValue.dob!.isNotEmpty) {
       final dateValue = AppMethods.formatFromIso(pagesValue.dob!);
       dobController.value = dateValue['ui'] ?? '';
       selectedDob.value = dateValue['api'] ?? '';
       isDobSelected.value = true;
     }
-
     if (pagesValue.dateWith != null && pagesValue.dateWith!.isNotEmpty) {
       dateWithList
         ..clear()
@@ -286,14 +265,11 @@ class OnboardController extends BaseController {
 
       isDateSelectedP.value = dateWithList.isNotEmpty;
     }
-
     if (pagesValue.height != null && pagesValue.height!.feet != null) {
       isHeightSelected.value = true;
-
       final double height = pagesValue.height!.feet!;
       final int feetValue = height.floor();
       final int inchesValue = ((height - feetValue) * 10).round();
-
       heightController.value = '$feetValue feet $inchesValue inch';
       feet.value = feetValue.toDouble();
       cm.value = pagesValue.height!.cm ?? 0.0;

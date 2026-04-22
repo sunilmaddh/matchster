@@ -1,3 +1,4 @@
+import 'package:matchster/core/error/app_exception.dart';
 import 'package:matchster/core/network/base_response.dart';
 import 'package:matchster/features/auth/model/response/add_date_with_response.dart';
 import 'package:matchster/features/auth/model/response/add_dob_response.dart';
@@ -12,17 +13,25 @@ class OnboardingRepository {
   OnboardingRepository({required this.onboardingService});
   final OnboardingService onboardingService;
   Future<BaseResponse<AddNameResponse>> addName({required String name}) async {
-    return onboardingService.addName(name: name);
+    final response = await onboardingService.addName(name: name);
+    if (!response.success) {
+      throw AppException(response.message);
+    }
+    return response;
   }
 
   Future<BaseResponse<AddGenderResponse>> addGender({
     required String gender,
     required bool genderPreview,
   }) async {
-    return onboardingService.addGender(
+    final response = await onboardingService.addGender(
       gender: gender,
       genderPreview: genderPreview,
     );
+    if (!response.success) {
+      throw AppException(response.message);
+    }
+    return response;
   }
 
   Future<BaseResponse<AddDobResponse>> addDob({required String dob}) async {
@@ -33,19 +42,33 @@ class OnboardingRepository {
     required double feet,
     required double cm,
   }) async {
-    return onboardingService.addHieght(feet: feet, cm: cm);
+    final response = await onboardingService.addHieght(feet: feet, cm: cm);
+    if (!response.success) {
+      throw AppException(response.message);
+    }
+    return response;
   }
 
   Future<BaseResponse<AddDateWithResponse>> addDateWith({
     required List<String> dateWith,
   }) async {
-    return onboardingService.addDateWith(dateWith: dateWith);
+    final response = await onboardingService.addDateWith(dateWith: dateWith);
+    if (!response.success) {
+      throw AppException(response.message);
+    }
+    return response;
   }
 
   Future<BaseResponse<void>> allOfFame({
     required List<String> imageListUrl,
   }) async {
-    return onboardingService.allOfFame(imageUrlList: imageListUrl);
+    final response = await onboardingService.allOfFame(
+      imageUrlList: imageListUrl,
+    );
+    if (!response.success) {
+      throw AppException(response.message);
+    }
+    return response;
   }
 
   Future<BaseResponse<UploadPhotoResponse>?> uploadUserPhoto({
@@ -62,7 +85,7 @@ class OnboardingRepository {
     required String state,
     required String country,
   }) async {
-    return await onboardingService.addCurrentLocation(
+    final response = await onboardingService.addCurrentLocation(
       lat: lat,
       lng: lng,
       label: label,
@@ -70,6 +93,10 @@ class OnboardingRepository {
       state: state,
       country: country,
     );
+    if (!response.success) {
+      throw AppException(response.message);
+    }
+    return response;
   }
 
   Future<BaseResponse<AddDateWithResponse>> addHomeLocation({
@@ -80,7 +107,7 @@ class OnboardingRepository {
     required String state,
     required String country,
   }) async {
-    return await onboardingService.addHomeLocation(
+    final response = await onboardingService.addHomeLocation(
       lat: lat,
       lng: lng,
       label: label,
@@ -88,12 +115,20 @@ class OnboardingRepository {
       state: state,
       country: country,
     );
+    if (!response.success) {
+      throw AppException(response.message);
+    }
+    return response;
   }
 
   Future<BaseResponse<ReverseGeocodeResponse>> getAddress({
     required double lat,
     required double lng,
   }) async {
-    return await onboardingService.getAddress(lat: lat, lng: lng);
+    final response = await onboardingService.getAddress(lat: lat, lng: lng);
+    if (!response.success) {
+      throw AppException(response.message);
+    }
+    return response;
   }
 }
