@@ -124,6 +124,6 @@ class AppAssets {
       posture2 = "$baseUrlPng/hand_on_chin.png",
       posture3 = "$baseUrlPng/ok_assets.png",
       celebrationAssets = "$baseUrlPng/celebration.png",
-      genderModelAssets = "$modeltflit/gender_model.tflite",
+     
       verifyEmailIcon = 'assets/images/png/verify-email.png';
 }

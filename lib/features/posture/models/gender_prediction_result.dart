@@ -27,7 +27,7 @@ class GenderModelService {
   static const List<String> labels = ['Male', 'Female'];
 
   Future<void> loadModel() async {
-    _interpreter ??= await Interpreter.fromAsset(AppAssets.genderModelAssets);
+    // _interpreter ??= await Interpreter.fromAsset(AppAssets.genderModelAssets);
 
     _inputShape = _interpreter!.getInputTensor(0).shape;
     _outputShape = _interpreter!.getOutputTensor(0).shape;
