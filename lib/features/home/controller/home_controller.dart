@@ -46,8 +46,9 @@ class HomeController extends BaseController {
 
   Profile? get currentProfile {
     if (profileList.isEmpty) return null;
-    if (currentIndex.value < 0 || currentIndex.value >= profileList.length)
+    if (currentIndex.value < 0 || currentIndex.value >= profileList.length) {
       return null;
+    }
     return profileList[currentIndex.value];
   }
 

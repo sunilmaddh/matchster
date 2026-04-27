@@ -1,7 +1,6 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/core/extentions/date_x_ext.dart';
 
 class AppMethods {
@@ -46,7 +45,7 @@ class AppMethods {
   }
 
   static String? validateWorkText({required String value}) {
-    if (value == null || value.isEmpty) {
+    if (value.isEmpty) {
       return null;
     } else if (!isValid(value)) {
       return "Please enter valid text";

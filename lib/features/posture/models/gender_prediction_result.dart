@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:image/image.dart' as img;
-import 'package:matchster/core/constants/app_assets.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 class GenderPredictionResult {
@@ -31,12 +30,6 @@ class GenderModelService {
 
     _inputShape = _interpreter!.getInputTensor(0).shape;
     _outputShape = _interpreter!.getOutputTensor(0).shape;
-
-    print('Gender model loaded');
-    print('Input tensor shape: $_inputShape');
-    print('Output tensor shape: $_outputShape');
-    print('Input tensor type: ${_interpreter!.getInputTensor(0).type}');
-    print('Output tensor type: ${_interpreter!.getOutputTensor(0).type}');
   }
 
   Future<void> dispose() async {

@@ -11,6 +11,7 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/auth_controller/login_controller.dart';
 import 'package:matchster/features/auth/widgets/login_widgets/otp_widget.dart';
 
+// ignore: must_be_immutable
 class OtpScreen extends BaseView<LoginController> {
   OtpScreen({super.key});
 

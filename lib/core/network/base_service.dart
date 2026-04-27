@@ -22,7 +22,7 @@ class BaseService {
         onRequest: (options, handler) async {
           final token = await MatchsterLocalStorage.instance.getAccessToken();
 
-          if (token != null && token.toString().isNotEmpty) {
+          if (token.toString().isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
 
@@ -115,7 +115,8 @@ class BaseService {
     T Function(dynamic json)? fromJsonT,
   }) {
     return request<T>(
-      apiCall: () => _dio.patch(path, data: data, queryParameters: queryParameters),
+      apiCall:
+          () => _dio.patch(path, data: data, queryParameters: queryParameters),
       fromJsonT: fromJsonT,
     );
   }

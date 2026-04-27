@@ -10,7 +10,6 @@ import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/enum/enum.dart';
 import 'package:matchster/core/widgets/bar/custom_app_bar.dart';
 import 'package:matchster/features/posture/controller/posture_controller.dart';
-import 'package:matchster/features/posture/services/gesture/gesture_detection_service.dart';
 import 'package:matchster/routes/app_navigation.dart';
 
 // ignore: must_be_immutable

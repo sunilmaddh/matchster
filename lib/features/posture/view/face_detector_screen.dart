@@ -38,7 +38,7 @@ class _FaceCameraScreenState extends State<FaceDetectorScreen> {
     if (_isDetecting) return;
     _isDetecting = true;
 
-    final inputImage = InputImage.fromBytes(
+    InputImage.fromBytes(
       bytes: image.planes.first.bytes,
       metadata: InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
@@ -63,15 +63,6 @@ class _FaceCameraScreenState extends State<FaceDetectorScreen> {
     //   _faceService.dispose();
     //   super.dispose();
     // }
-
-    @override
-    Widget build(BuildContext context) {
-      if (!_controller.value.isInitialized) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      return Scaffold(body: Stack(children: [CameraPreview(_controller)]));
-    }
   }
 
   @override

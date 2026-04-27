@@ -632,28 +632,24 @@ class ProfileController extends BaseController {
     }
     if (lifestyle.value.smoking!.isNotEmpty) {
       final freq = frequencyFromApi(lifestyle.value.smoking!);
-      if (freq != null) {
-        final smokeOption = HabitOption(
-          type: HabitTypeEnum.smoke,
-          frequency: freq,
-        );
-        inshortList.add(
-          InshortList(text: smokeOption.label, img: smokeOption.emoji),
-        );
-      }
+      final smokeOption = HabitOption(
+        type: HabitTypeEnum.smoke,
+        frequency: freq,
+      );
+      inshortList.add(
+        InshortList(text: smokeOption.label, img: smokeOption.emoji),
+      );
     }
     if (lifestyle.value.drinking != null &&
         lifestyle.value.drinking!.isNotEmpty) {
       final freq = frequencyFromApi(lifestyle.value.drinking!);
-      if (freq != null) {
-        final drinkOption = HabitOption(
-          type: HabitTypeEnum.drinking,
-          frequency: freq,
-        );
-        inshortList.add(
-          InshortList(text: drinkOption.label, img: drinkOption.emoji),
-        );
-      }
+      final drinkOption = HabitOption(
+        type: HabitTypeEnum.drinking,
+        frequency: freq,
+      );
+      inshortList.add(
+        InshortList(text: drinkOption.label, img: drinkOption.emoji),
+      );
     }
 
     if (personal.value.religion != null &&
