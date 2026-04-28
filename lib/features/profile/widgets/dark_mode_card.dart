@@ -3,7 +3,6 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/card/switch_card.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/auth/widgets/onboard_widgets/switch_widget.dart';
 
 class DarkModeCard extends StatelessWidget {
   const DarkModeCard({

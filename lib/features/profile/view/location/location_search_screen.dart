@@ -6,6 +6,7 @@ import 'package:matchster/core/widgets/fields/custom_form_field.dart';
 import 'package:matchster/features/profile/controller/profile_location_controller.dart';
 import 'package:matchster/routes/app_navigation.dart';
 
+// ignore: must_be_immutable
 class LocationSearchScreen extends BaseView<ProfileLocationController> {
   String title = "";
   String type = "";
@@ -14,6 +15,8 @@ class LocationSearchScreen extends BaseView<ProfileLocationController> {
   final TextEditingController searchController = TextEditingController();
 
   RxList<String> filteredList = <String>[].obs;
+
+  LocationSearchScreen({super.key});
   @override
   void onInit(ProfileLocationController controller) {
     super.onInit(controller);

@@ -57,10 +57,7 @@ class DobWidget extends StatelessWidget {
                               if (_controller.isButtonEnabled.value) {
                                 _controller.isNextPageEnable.value = false;
                                 final current = _controller.currentIndex.value;
-                                final isSuccess = await _controller.submitStep(
-                                  current,
-                                );
-
+                                await _controller.submitStep(current);
                                 _controller.completeStep(current);
                               }
 

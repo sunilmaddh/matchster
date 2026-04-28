@@ -11,7 +11,6 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/view/location/search_location_screen.dart';
 
@@ -23,7 +22,6 @@ class HomeTownLocationScreen extends StatefulWidget {
 
 class _HomeTownLocationScreenState extends State<HomeTownLocationScreen> {
   final _profileController = Get.find<ProfileController>();
-  final _controller = Get.find<OnboardController>();
 
   late final TextEditingController homeAddressController;
   late final TextEditingController apartmentAreaController;
@@ -33,14 +31,9 @@ class _HomeTownLocationScreenState extends State<HomeTownLocationScreen> {
   @override
   void initState() {
     super.initState();
-    // homeAddressController = TextEditingController();
-    // apartmentAreaController = TextEditingController();
-    // bottomSheetScrollController = ScrollController();
-    // searchController = TextEditingController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
-      // await _controller.fetchLocation();
       await bottomSheetAddressChange();
     });
   }
@@ -103,26 +96,10 @@ class _HomeTownLocationScreenState extends State<HomeTownLocationScreen> {
     );
   }
 
-  // @override
-  // void dispose() {
-  //   homeAddressController.dispose();
-  //   apartmentAreaController.dispose();
-  //   bottomSheetScrollController.dispose();
-  //   searchController.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Scaffold(
-        // appBar: CustomAppBar(
-        //   isCenterTitle: false,
-        //   title: "Current Location",
-        //   onTop: () {
-        //     Get.back();
-        //   },
-        // ),
         body: Stack(
           children: [
             Align(
@@ -151,100 +128,18 @@ class _HomeTownLocationScreenState extends State<HomeTownLocationScreen> {
                 buildingsEnabled: false,
                 myLocationButtonEnabled: false,
                 mapToolbarEnabled: false,
-                onMapCreated: (controller) {
-                  // if (!_controllerCompleter.isCompleted) {
-                  //   _controllerCompleter.complete(controller);
-                  // }
-                },
+                onMapCreated: (controller) {},
                 initialCameraPosition: CameraPosition(
                   target: LatLng(lat.value, lng.value),
                   zoom: 14.0,
                 ),
-
-                // markers: provider.marker,
-                // polylines: provider.polyline,
-                // initialCameraPosition: CameraPosition(
-                //   target: provider.currentLocation,
-
-                //)
               );
             }),
 
             const Center(
               child: Icon(Icons.location_pin, size: 50, color: Colors.red),
             ),
-            // Consumer<MapProvider>(
-            //   builder: (context, provider, _) {
-            //     return AddressBottomSheet(
-            //       scrollController: bottomSheetScrollController,
-            //       currentAddress: provider.currentAddress,
-            //       homeAddressController: homeAddressController,
-            //       apartmentAreaController: apartmentAreaController,
-            //       initialChildSize: 0.25,
-            //       minChildSize: 0.1,
-            //       maxChildSize: 0.6,
-            //     );
-            //   },
-            // ),
-            // Positioned(
-            //   top: 40,
-            //   left: 16,
-            //   right: 16,
-            //   child: Material(
-            //     elevation: 8,
-            //     borderRadius: BorderRadius.circular(8),
-            //     child: Consumer<MapProvider>(
-            //       builder: (context, provider, _) {
-            //         return TypeAheadField<dynamic>(
-            //           controller: searchController,
-            //           focusNode: FocusNode(),
-            //           suggestionsCallback: (pattern) async {
-            //             await provider.fetchSuggestions(pattern);
-            //             return provider.placeSuggestions;
-            //           },
-            //           itemBuilder: (context, dynamic suggestion) {
-            //             return ListTile(
-            //               title: BrandText(data: suggestion['description']),
-            //             );
-            //           },
-            //           onSelected: (dynamic suggestion) {
-            //             provider.onSuggestionSelected(suggestion);
-            //           },
-            //           hideOnEmpty: true,
-            //           emptyBuilder: (context) => Padding(
-            //             padding: EdgeInsets.all(8),
-            //             child: BrandText(data: context.loc.no_location_found),
-            //           ),
-            //           builder:
-            //               (
-            //                 context,
-            //                 TextEditingController controller,
-            //                 FocusNode focusNode,
-            //               ) {
-            //                 return BrandTextField(
-            //                   controller: controller,
-            //                   focusNode: focusNode,
-            //                   decoration: InputDecoration(
-            //                     hintText: context.loc.search_location,
-            //                     border: OutlineInputBorder(
-            //                       borderRadius: BorderRadius.circular(8),
-            //                       borderSide: BorderSide.none,
-            //                     ),
-            //                     prefixIcon: const Icon(Icons.search),
-            //                     filled: true,
-            //                     fillColor: Colors.white,
-            //                     contentPadding: const EdgeInsets.symmetric(
-            //                       horizontal: 16,
-            //                       vertical: 0,
-            //                     ),
-            //                   ),
-            //                 );
-            //               },
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
+
             SafeArea(
               child: Padding(
                 padding: 5.horizontalPadding + 20.verticalPadding,
@@ -283,27 +178,6 @@ class _HomeTownLocationScreenState extends State<HomeTownLocationScreen> {
             ),
           ],
         ),
-
-        // floatingActionButton: Consumer<MapProvider>(
-        //   builder: (context, provider, _) {
-        //     return FloatingActionButton(
-        //       backgroundColor: AppColors.greyC7,
-        //       onPressed: () async {
-        //         await provider.updateCurrentLocation();
-        //         final controller = await _controllerCompleter.future;
-        //         await controller.animateCamera(
-        //           CameraUpdate.newCameraPosition(
-        //             CameraPosition(
-        //               target: provider.currentLocation,
-        //               zoom: provider.zoom,
-        //             ),
-        //           ),
-        //         );
-        //       },
-        //       child: const Icon(Icons.my_location, color: AppColors.primary),
-        //     );
-        //   },
-        // ),
       ),
     );
   }

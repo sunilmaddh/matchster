@@ -15,9 +15,7 @@ class InshortWrapWidget extends StatelessWidget {
           list.map((v) {
             AppMethods.appPrint(message: list.toString());
 
-            return v != null
-                ? CommonWrapCard(text: v.label, img: v.emoji)
-                : SizedBox.shrink();
+            return CommonWrapCard(text: v.label, img: v.emoji);
           }).toList(),
     );
   }

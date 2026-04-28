@@ -52,6 +52,7 @@ class _GridPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
+// ignore: must_be_immutable
 class PhotoPreviewScreen extends BaseView<OnboardPhotoController> {
   PhotoPreviewScreen({super.key, required this.imageFile, required this.index});
 

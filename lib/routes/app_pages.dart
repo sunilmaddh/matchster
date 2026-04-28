@@ -10,7 +10,7 @@ import 'package:matchster/features/landing/view/landing_screen.dart';
 import 'package:matchster/features/landing/bindings/landing_banding.dart';
 import 'package:matchster/features/notification/bindings/notification_binding.dart';
 import 'package:matchster/features/notification/view/notification_screen.dart';
-import 'package:matchster/features/posture/view/face_gender_screen.dart';
+
 import 'package:matchster/features/posture/view/hand_tracker_screen.dart';
 import 'package:matchster/features/posture/view/posture_gesture_screen.dart';
 import 'package:matchster/features/profile/bindings/email_binding.dart';
@@ -94,7 +94,7 @@ class AppPages {
     GetPage(name: AppRoutes.languagesScreen, page: () => LanguagesScreen()),
     GetPage(name: AppRoutes.loginFieldScreen, page: () => LoginFieldScreen()),
     GetPage(name: AppRoutes.handTrackerScreen, page: () => HandTrackerScreen()),
-    GetPage(name: AppRoutes.faceGenderScreen, page: () => FaceGenderScreen()),
+
     GetPage(
       name: AppRoutes.notificationScreen,
       page: () => NotificationScreen(),

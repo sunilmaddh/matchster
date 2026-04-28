@@ -76,7 +76,6 @@ flutter:
       - assets/images/png/
       - assets/images/lottie/
       - assets/images/videos/
-      - assets/images/models/
 
   # assets:
   #   - images/a_dot_burr.jpeg

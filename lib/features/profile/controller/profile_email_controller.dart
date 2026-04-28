@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:matchster/core/constants/app_constants.dart';
 import 'package:matchster/features/profile/controller/profile_base_controller.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/repositories/profile_repository.dart';

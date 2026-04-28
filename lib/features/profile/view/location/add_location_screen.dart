@@ -8,7 +8,6 @@ import 'package:matchster/core/constants/app_colors.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/bottomsheet/custom_bottomsheet.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/auth/auth_controller/onboard_controller.dart';
 import 'package:matchster/features/profile/controller/profile_controller.dart';
 import 'package:matchster/features/profile/view/location/search_location_screen.dart';
 
@@ -20,8 +19,6 @@ class AddLocationScreen extends StatefulWidget {
 
 class _AddLocationScreenState extends State<AddLocationScreen> {
   final _profileController = Get.find<ProfileController>();
-  final _controller = Get.find<OnboardController>();
-
   late final TextEditingController homeAddressController;
   late final TextEditingController apartmentAreaController;
   late final ScrollController bottomSheetScrollController;
@@ -69,32 +66,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
             25.hBox,
             Divider(height: 1),
             TextButton(
-              onPressed: () {
-                // _controller.addHomeLocation(
-                //   lat: _profileController.placeDetails.value.lat!,
-                //   lng: _profileController.placeDetails.value.lng!,
-                //   label:
-                //       _profileController
-                //           .placeDetails
-                //           .value
-                //           .placeDetails!
-                //           .label!,
-                //   city:
-                //       _profileController.placeDetails.value.placeDetails!.city!,
-                //   state:
-                //       _profileController
-                //           .placeDetails
-                //           .value
-                //           .placeDetails!
-                //           .state!,
-                //   country:
-                //       _profileController
-                //           .placeDetails
-                //           .value
-                //           .placeDetails!
-                //           .country!,
-                // );
-              },
+              onPressed: () {},
               child: CommonText.text(
                 "Confirm",
                 fontSize: 18.sp,
@@ -118,15 +90,6 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
       ),
     );
   }
-
-  // @override
-  // void dispose() {
-  //   homeAddressController.dispose();
-  //   apartmentAreaController.dispose();
-  //   bottomSheetScrollController.dispose();
-  //   searchController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -169,13 +132,6 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                   target: LatLng(lat!, lng!),
                   zoom: 14.0,
                 ),
-
-                // markers: provider.marker,
-                // polylines: provider.polyline,
-                // initialCameraPosition: CameraPosition(
-                //   target: provider.currentLocation,
-
-                //)
               );
             }),
 
@@ -211,78 +167,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                 ),
               ),
             ),
-            // Consumer<MapProvider>(
-            //   builder: (context, provider, _) {
-            //     return AddressBottomSheet(
-            //       scrollController: bottomSheetScrollController,
-            //       currentAddress: provider.currentAddress,
-            //       homeAddressController: homeAddressController,
-            //       apartmentAreaController: apartmentAreaController,
-            //       initialChildSize: 0.25,
-            //       minChildSize: 0.1,
-            //       maxChildSize: 0.6,
-            //     );
-            //   },
-            // ),
-            // Positioned(
-            //   top: 40,
-            //   left: 16,
-            //   right: 16,
-            //   child: Material(
-            //     elevation: 8,
-            //     borderRadius: BorderRadius.circular(8),
-            //     child: Consumer<MapProvider>(
-            //       builder: (context, provider, _) {
-            //         return TypeAheadField<dynamic>(
-            //           controller: searchController,
-            //           focusNode: FocusNode(),
-            //           suggestionsCallback: (pattern) async {
-            //             await provider.fetchSuggestions(pattern);
-            //             return provider.placeSuggestions;
-            //           },
-            //           itemBuilder: (context, dynamic suggestion) {
-            //             return ListTile(
-            //               title: BrandText(data: suggestion['description']),
-            //             );
-            //           },
-            //           onSelected: (dynamic suggestion) {
-            //             provider.onSuggestionSelected(suggestion);
-            //           },
-            //           hideOnEmpty: true,
-            //           emptyBuilder: (context) => Padding(
-            //             padding: EdgeInsets.all(8),
-            //             child: BrandText(data: context.loc.no_location_found),
-            //           ),
-            //           builder:
-            //               (
-            //                 context,
-            //                 TextEditingController controller,
-            //                 FocusNode focusNode,
-            //               ) {
-            //                 return BrandTextField(
-            //                   controller: controller,
-            //                   focusNode: focusNode,
-            //                   decoration: InputDecoration(
-            //                     hintText: context.loc.search_location,
-            //                     border: OutlineInputBorder(
-            //                       borderRadius: BorderRadius.circular(8),
-            //                       borderSide: BorderSide.none,
-            //                     ),
-            //                     prefixIcon: const Icon(Icons.search),
-            //                     filled: true,
-            //                     fillColor: Colors.white,
-            //                     contentPadding: const EdgeInsets.symmetric(
-            //                       horizontal: 16,
-            //                       vertical: 0,
-            //                     ),
-            //                   ),
-            //                 );
-            //               },
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
+
             SafeArea(
               child: Padding(
                 padding: 5.horizontalPadding + 20.verticalPadding,
@@ -321,27 +206,6 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
             ),
           ],
         ),
-
-        // floatingActionButton: Consumer<MapProvider>(
-        //   builder: (context, provider, _) {
-        //     return FloatingActionButton(
-        //       backgroundColor: AppColors.greyC7,
-        //       onPressed: () async {
-        //         await provider.updateCurrentLocation();
-        //         final controller = await _controllerCompleter.future;
-        //         await controller.animateCamera(
-        //           CameraUpdate.newCameraPosition(
-        //             CameraPosition(
-        //               target: provider.currentLocation,
-        //               zoom: provider.zoom,
-        //             ),
-        //           ),
-        //         );
-        //       },
-        //       child: const Icon(Icons.my_location, color: AppColors.primary),
-        //     );
-        //   },
-        // ),
       ),
     );
   }

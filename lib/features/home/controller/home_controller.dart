@@ -46,8 +46,9 @@ class HomeController extends BaseController {
 
   Profile? get currentProfile {
     if (profileList.isEmpty) return null;
-    if (currentIndex.value < 0 || currentIndex.value >= profileList.length)
+    if (currentIndex.value < 0 || currentIndex.value >= profileList.length) {
       return null;
+    }
     return profileList[currentIndex.value];
   }
 
@@ -307,27 +308,23 @@ class HomeController extends BaseController {
     }
     if (profile.drinking != null && profile.smoking!.isNotEmpty) {
       final freq = frequencyFromApi(profile.smoking!);
-      if (freq != null) {
-        final smokeOption = HabitOption(
-          type: HabitTypeEnum.smoke,
-          frequency: freq,
-        );
-        inshortList.add(
-          InshortList(text: smokeOption.label, img: smokeOption.emoji),
-        );
-      }
+      final smokeOption = HabitOption(
+        type: HabitTypeEnum.smoke,
+        frequency: freq,
+      );
+      inshortList.add(
+        InshortList(text: smokeOption.label, img: smokeOption.emoji),
+      );
     }
     if (profile.drinking != null && profile.drinking!.isNotEmpty) {
       final freq = frequencyFromApi(profile.drinking!);
-      if (freq != null) {
-        final drinkOption = HabitOption(
-          type: HabitTypeEnum.drinking,
-          frequency: freq,
-        );
-        inshortList.add(
-          InshortList(text: drinkOption.label, img: drinkOption.emoji),
-        );
-      }
+      final drinkOption = HabitOption(
+        type: HabitTypeEnum.drinking,
+        frequency: freq,
+      );
+      inshortList.add(
+        InshortList(text: drinkOption.label, img: drinkOption.emoji),
+      );
     }
 
     if (profile.religion != null && profile.religion!.isNotEmpty) {

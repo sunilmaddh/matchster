@@ -5,9 +5,7 @@ import 'package:matchster/core/constants/app_strings.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/card/switch_card.dart';
 import 'package:matchster/core/widgets/fields/common_card.dart';
-import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/filter/controller/filter_controller.dart';
-import 'package:matchster/features/filter/widget/seek_bar_widget.dart';
 import 'package:matchster/features/chat/widget/text_with_widget.dart';
 import 'package:matchster/features/filter/widget/widgets/animated_range_seek_bar.dart';
 

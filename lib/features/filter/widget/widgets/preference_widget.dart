@@ -6,7 +6,6 @@ import 'package:matchster/core/extentions/gender_preference_extension.dart';
 import 'package:matchster/core/utils/extentions.dart';
 import 'package:matchster/core/widgets/fields/common_card.dart';
 import 'package:matchster/core/widgets/fields/common_text.dart';
-import 'package:matchster/features/chat/widget/text_with_widget.dart';
 import 'package:matchster/features/filter/controller/filter_controller.dart';
 
 class GenderPreferenceWidget extends StatelessWidget {

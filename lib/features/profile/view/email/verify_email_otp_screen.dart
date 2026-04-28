@@ -10,6 +10,7 @@ import 'package:matchster/core/widgets/fields/common_text.dart';
 import 'package:matchster/features/auth/widgets/login_widgets/otp_widget.dart';
 import 'package:matchster/features/profile/controller/profile_email_controller.dart';
 
+// ignore: must_be_immutable
 class VerifyEmailOtpScreen extends BaseView<ProfileEmailController> {
   VerifyEmailOtpScreen({super.key});
 

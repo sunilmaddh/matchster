@@ -30,8 +30,6 @@ class SettingCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.settingCardColor,
           borderRadius: BorderRadius.circular(20.r),
-          // ignore: deprecated_member_use
-          // border: Border.all(width: 1.w, color: Colors.black.withOpacity(0.15)),
         ),
         child: ListTile(
           dense: true,
@@ -44,7 +42,7 @@ class SettingCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
             ),
             child:
-                image == null
+                image.isEmpty
                     ? const Icon(Icons.email_outlined, color: Colors.white)
                     : SvgPicture.asset(image),
           ),
